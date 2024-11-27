@@ -1,14 +1,14 @@
 /* Gaya Neobrutalisme */
 body {
     font-family: monospace; 
-    background-color: #f0f0f0 !important; 
+    background-color: #f0f0f0; 
 }
 
 .container {
     border: 2px solid black !important; 
     padding: 20px;
     margin-bottom: 20px; 
-    background-color: #f0f0f0;
+    background-color: white; 
 }
 
 h1, h2, h3 {

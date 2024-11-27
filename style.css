@@ -1,0 +1,136 @@
+/* Gaya Neobrutalisme */
+body {
+    font-family: monospace; 
+    background-color: #f0f0f0; 
+}
+
+.container {
+    border: 2px solid black !important; 
+    padding: 20px;
+    margin-bottom: 20px; 
+    background-color: white; 
+}
+
+h1, h2, h3 {
+    font-weight: bold;
+    text-align: left; 
+}
+
+a {
+    color: blue !important; 
+    text-decoration: underline;
+}
+
+p {
+    margin-bottom: 15px; 
+    text-align: left; 
+}
+
+/* Styling untuk tombol */
+.btn {
+    border: 2px solid black !important; 
+    font-weight: bold;
+    padding: 15px 30px; 
+    display: flex; 
+    align-items: center; 
+    justify-content: center; 
+    margin-bottom: 10px; 
+    color: white !important; 
+}
+
+.btn a {
+    text-decoration: none; 
+}
+
+/* Warna tombol */
+.btn-github { background-color: #007bff !important; }
+.btn-linkedin { background-color: #0077b5 !important; }
+.btn-facebook { background-color: #3b5998 !important; }
+.btn-instagram { background-color: #e4405f !important; }
+.btn-telegram { background-color: #0088cc !important; }
+.btn-hackerrank { background-color: #2ec866 !important; }
+.btn-codewars { background-color: #b91d19 !important; }
+.btn-whatsapp { background-color: #25D366 !important; }
+
+.btn.disabled, .btn:disabled {
+    opacity: 0.65; 
+    cursor: not-allowed;
+}
+
+.btn i {
+    margin-right: 10px; 
+}
+
+/* Styling untuk list */
+ul {
+    list-style: none; 
+    padding: 0;
+    padding-left: 20px; 
+}
+
+li {
+    margin-bottom: 10px; 
+    border: 2px solid black !important;
+    padding: 10px;
+    background-color: #f0f0f0 !important; 
+}
+
+#home, #pendidikan, #pengalaman, #skill {
+    background-color: white !important; 
+}
+
+.profile-pic {
+    width: 200px; 
+    height: 200px; 
+    border-radius: 50%; 
+    object-fit: cover; 
+    display: block; 
+    margin-left: auto;  
+    margin-right: auto; 
+    margin-bottom: 20px; 
+}
+
+/* Style untuk dark mode */
+@media (prefers-color-scheme: dark) {
+    body {
+        background-color: #121212 !important; 
+    }
+
+    .container {
+        background-color: #222222 !important; 
+        color: white; 
+        border-color: white !important; /* Ubah warna border container */ 
+    }
+
+    h1, h2, h3 {
+        color: white !important; /* Ubah warna teks heading */
+    }
+
+    a {
+        color: lightblue !important; /* Ubah warna link */
+    }
+
+    .btn {
+        color: black !important; 
+        border-color: white !important; /* Ubah warna border tombol */
+    }
+
+    li {
+        background-color: #222222 !important; 
+        color: white !important; 
+        border-color: white !important; /* Ubah warna border item list */ 
+    }
+}
+
+.navbar {
+  height: 100px;
+}
+
+.navbar-nav {
+  margin-top: 10px;
+}
+
+.navbar-brand {
+ font-weight: bold;
+ text-align: left;
+}

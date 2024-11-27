@@ -1,4 +1,5 @@
-const navLinks = document.querySelectorAll('.nav-link');
+const navLinks = document.querySelectorAll('.navbar-nav .nav-link');
+const navbarCollapse = document.querySelector('.navbar-collapse');
 const sections = document.querySelectorAll('section');
 
 sections.forEach(section => {
@@ -20,9 +21,6 @@ navLinks.forEach(link => {
     targetSection.style.display = 'block';
   });
 });
-
-const navLinks = document.querySelectorAll('.navbar-nav .nav-link');
-const navbarCollapse = document.querySelector('.navbar-collapse');
 
 navLinks.forEach(link => {
   link.addEventListener('click', () => {

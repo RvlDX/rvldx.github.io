@@ -134,22 +134,3 @@ li {
  font-weight: bold;
  text-align: left;
 }
-
-.container {
-    color: black !important;
-}
-
-li {
-    color: black !important;
-}
-
-/* Perbaikan warna untuk dark mode */
-@media (prefers-color-scheme: dark) {
-    body {
-        color: white !important;
-    }
-
-    li {
-        color: white !important;
-    }
-}

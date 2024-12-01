@@ -66,13 +66,13 @@ p {
 ul {
     list-style: none; 
     padding: 0;
-    padding-left: 10px; 
+    padding-left: 20px; 
 }
 
 li {
     margin-bottom: 10px; 
     border: 2px solid black !important;
-    padding: 5px;
+    padding: 10px;
     background-color: #f0f0f0 !important;
     border-radius: 10px;
 }

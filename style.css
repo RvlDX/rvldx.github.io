@@ -9,7 +9,7 @@ body {
     padding: 20px;
     margin-bottom: 20px; 
     background-color: white; 
-    border-radius : 20px
+    border-radius : 20px;
 }
 
 h1, h2, h3 {
@@ -73,7 +73,8 @@ li {
     margin-bottom: 10px; 
     border: 2px solid black !important;
     padding: 10px;
-    background-color: #f0f0f0 !important; 
+    background-color: #f0f0f0 !important;
+    border-radius: 20px;
 }
 
 .profile-pic {

@@ -9,6 +9,7 @@ body {
     padding: 20px;
     margin-bottom: 20px; 
     background-color: white; 
+    border-radius : 5px
 }
 
 h1, h2, h3 {
@@ -94,8 +95,7 @@ li {
 
     .container {
         background-color: #222222 !important; 
-        color: white; 
-        border-color: white !important; /* Ubah warna border container */ 
+        color: white;
     }
 
     h1, h2, h3 {

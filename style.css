@@ -114,15 +114,6 @@ li {
     margin-bottom: 10px; /* Beri jarak antar item */
 }
 
-.nav-link {
-    border: 2px solid black !important;
-    padding: 10px;
-    display: block; /* Pastikan nav-link memenuhi lebar nav-item */
-}
-
-
-
-
 /* Style untuk dark mode */
 @media (prefers-color-scheme: dark) {
     body {

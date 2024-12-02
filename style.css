@@ -91,7 +91,7 @@ li {
 
 .navbar { /* Atau selector untuk parent dari .navbar-brand dan .navbar-toggler */
   display: flex;
-  align-items: center; 
+  align-items: center;
 }
 
  

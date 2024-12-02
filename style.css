@@ -89,37 +89,6 @@ li {
     margin-bottom: 20px; 
 }
 
-/* Style untuk dark mode */
-@media (prefers-color-scheme: dark) {
-    body {
-        background-color: #121212 !important; 
-    }
-
-    .container {
-        background-color: #222222 !important; 
-        color: white;
-    }
-
-    h1, h2, h3 {
-        color: white !important; /* Ubah warna teks heading */
-    }
-
-    a {
-        color: lightblue !important; /* Ubah warna link */
-    }
-
-    .btn {
-        color: black !important; 
-        border-color: white !important; /* Ubah warna border tombol */
-    }
-
-    li {
-        background-color: #222222 !important; 
-        color: white !important; 
-        border-color: white !important; /* Ubah warna border item list */ 
-    }
-}
-
 .navbar {
   height: 100px;
 }

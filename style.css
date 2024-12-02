@@ -108,7 +108,6 @@ li {
 
 .navbar-nav {
   display: flex;
-  justify-content: center; /* Pusatkan menu secara horizontal */
   width: 100%; /* Lebar penuh agar bisa dipusatkan */
 }
 

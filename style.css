@@ -89,9 +89,11 @@ li {
     margin-bottom: 20px; 
 }
 
-.navbar {
-  height: 100px;
+.navbar { /* Atau selector untuk parent dari .navbar-brand dan .navbar-toggler */
+  display: flex;
+  align-items: center; 
 }
+
  
 .navbar-brand {
   display: flex; /* Agar bisa di-align secara fleksibel */

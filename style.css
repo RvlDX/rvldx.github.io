@@ -89,17 +89,19 @@ li {
     margin-bottom: 20px; 
 }
 
-.navbar { /* Atau selector untuk parent dari .navbar-brand dan .navbar-toggler */
-  display: flex;
-  align-items: center;
+.navbar { /* Hapus align-items: center */
+  display: flex; 
 }
 
- 
 .navbar-brand {
-  display: flex; /* Agar bisa di-align secara fleksibel */
-  width: 100%; /* Lebar penuh agar bisa dipusatkan */
-  text-align: left; /* Pusatkan teks */
+  display: flex; 
+  align-items: left; /* Tambahkan ini */
+  width: 100%; 
+  text-align: left; 
+  height: 50px; /* Contoh nilai, sesuaikan di Developer Tools */
 }
+
+/* ... kode CSS Anda lainnya ... */
 
 /* Optional: Atur ukuran font agar responsif */
 @media (max-width: 768px) { 

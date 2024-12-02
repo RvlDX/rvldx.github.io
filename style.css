@@ -105,7 +105,7 @@ li {
 
 .navbar-nav {
     display: flex;
-    flex-direction: column; /* Susun item secara vertikal */
+    flex-direction: row; /* Susun item secara vertikal */
     width: 100%; /* Pastikan navbar-nav memenuhi lebar container */
 }
 

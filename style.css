@@ -92,16 +92,32 @@ li {
 .navbar {
   height: 100px;
 }
+ 
+.navbar-brand {
+  display: flex; /* Agar bisa di-align secara fleksibel */
+  justify-content: center; /* Pusatkan horizontal di dalam navbar */
+  align-items: center; /* Pusatkan vertikal di dalam navbar */
+  width: 100%; /* Lebar penuh agar bisa dipusatkan */
+  text-align: center; /* Pusatkan teks */
+}
+
+/* Optional: Atur ukuran font agar responsif */
+@media (max-width: 768px) { 
+  .navbar-brand {
+    font-size: 1.2rem; 
+  }
+}
 
 .navbar-nav {
-  margin-top: 10px;
+  display: flex;
+  justify-content: center; /* Pusatkan menu secara horizontal */
+  width: 100%; /* Lebar penuh agar bisa dipusatkan */
 }
 
-.navbar-brand {
- font-weight: bold;
- text-align: left;
- color: white;
+.nav-item {
+  margin: 0 10px; /* Beri jarak 10px di kiri dan kanan setiap item */
 }
+
 
 /* Style untuk dark mode */
 @media (prefers-color-scheme: dark) {

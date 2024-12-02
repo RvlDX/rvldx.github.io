@@ -92,23 +92,28 @@ li {
 /* Penyesuaian Navbar */
 .navbar {
     display: flex;
-    align-items: center; /* Sejajarkan item secara vertikal */
+    align-items: center; 
+    justify-content: space-between; /* Meratakan elemen ke kiri dan kanan */
 }
 
 .navbar-brand {
     display: flex; 
-    align-items: center; /* Sejajarkan item di dalam navbar-brand */
-    height: 50px; /* Sesuaikan tinggi navbar sesuai kebutuhan */
+    align-items: center; 
+    height: 50px; 
+    width: 100%; /* Pastikan navbar-brand memenuhi lebar */
 }
 
 .navbar-nav {
     display: flex;
-    align-items: center; /* Sejajarkan item di dalam navbar-nav */
+    align-items: center; 
+    flex-direction: row; 
+    width: 100%; /* Pastikan navbar-nav memenuhi lebar */
 }
 
 .nav-item {
     margin: 0 10px; 
 }
+
 
 
 /* Style untuk dark mode */

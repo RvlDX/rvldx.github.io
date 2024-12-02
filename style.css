@@ -91,21 +91,25 @@ li {
 
 /* Penyesuaian Navbar */
 .navbar {
-    display: flex;
-    align-items: center; 
-    justify-content: space-between; /* Meratakan elemen ke kiri dan kanan */
+  display: grid;
+  grid-template-columns: auto 1fr; /* 1fr untuk membuat nav-item memenuhi sisa lebar */
+  align-items: center;
 }
 
 .navbar-brand {
-    display: flex; 
-    align-items: center; 
-    height: 50px; 
-    width: 100%; /* Pastikan navbar-brand memenuhi lebar */
+  grid-column: 1;
+  height: 50px; 
+  width: 100%;
+}
+
+.navbar-toggler {
+  grid-column: 2;
+  justify-self: end; /* Untuk meratakan toggler ke kanan */
 }
 
 .navbar-nav {
     display: flex;
-    flex-direction: column; /* Susun item secara vertikal */
+    flex-direction: column;
     width: 100%; /* Pastikan navbar-nav memenuhi lebar container */
 }
 

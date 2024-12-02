@@ -96,7 +96,7 @@ li {
 .navbar-brand {
   display: flex; /* Agar bisa di-align secara fleksibel */
   width: 100%; /* Lebar penuh agar bisa dipusatkan */
-  text-align: center; /* Pusatkan teks */
+  text-align: left; /* Pusatkan teks */
 }
 
 /* Optional: Atur ukuran font agar responsif */

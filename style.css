@@ -12,7 +12,7 @@ body {
     border-radius: 10px;
 }
 
-.navbar-brand,h1, h2, h3, h4{
+.navbar-brand, h1, h2, h3, h4{
     font-weight: bold;
     text-align: left; 
 }
@@ -92,30 +92,28 @@ li {
 /* Penyesuaian Navbar */
 .navbar {
   display: grid;
-  grid-template-columns: auto 1fr; /* 1fr untuk membuat nav-item memenuhi sisa lebar */
+  grid-template-columns: auto auto; /* Atau 1fr auto */
   align-items: center;
 }
 
 .navbar-brand {
   grid-column: 1;
   height: 50px; 
-  width: 100%;
 }
 
 .navbar-toggler {
-  grid-column: 2;
-  justify-self: end; /* Untuk meratakan toggler ke kanan */
+  grid-column: 2; 
 }
 
 .navbar-nav {
     display: flex;
-    flex-direction: column;
-    width: 100%; /* Pastikan navbar-nav memenuhi lebar container */
+    flex-direction: column; 
+    width: 100%; 
 }
 
 .nav-item {
-    width: 100%; /* Pastikan setiap nav-item memenuhi lebar container */
-    margin-bottom: 10px; /* Beri jarak antar item */
+    width: 100%; 
+    margin-bottom: 10px; 
 }
 
 /* Style untuk dark mode */

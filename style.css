@@ -105,14 +105,21 @@ li {
 
 .navbar-nav {
     display: flex;
-    align-items: center; 
-    flex-direction: row; 
-    width: 100%; /* Pastikan navbar-nav memenuhi lebar */
+    flex-direction: column; /* Susun item secara vertikal */
+    width: 100%; /* Pastikan navbar-nav memenuhi lebar container */
 }
 
 .nav-item {
-    margin: 0 10px; 
+    width: 100%; /* Pastikan setiap nav-item memenuhi lebar container */
+    margin-bottom: 10px; /* Beri jarak antar item */
 }
+
+.nav-link {
+    border: 2px solid black !important;
+    padding: 10px;
+    display: block; /* Pastikan nav-link memenuhi lebar nav-item */
+}
+
 
 
 

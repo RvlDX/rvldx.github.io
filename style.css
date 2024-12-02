@@ -106,7 +106,7 @@ li {
 }
 
 .navbar-nav {
-    display: flex;
+    display: grid;
     flex-direction: column; 
     width: 100%; 
 }

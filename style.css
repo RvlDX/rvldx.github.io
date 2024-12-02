@@ -91,18 +91,28 @@ li {
 
 /* Penyesuaian Navbar */
 .navbar {
-  display: grid;
-  grid-template-columns: auto auto; /* Atau 1fr auto */
-  align-items: center;
+    display: grid;
+    grid-template-columns: auto auto; /* Atau 1fr auto */
+    align-items: center;
+    /* Hapus padding dan margin yang tidak perlu */
+    padding: 0; 
+    margin: 0;
 }
 
 .navbar-brand {
-  grid-column: 1;
-  height: 50px; 
+    grid-column: 1;
+    height: 50px; 
+    /* Hapus margin dan padding yang tidak perlu */
+    margin: 0;
+    padding: 0;
 }
 
 .navbar-toggler {
-  grid-column: 2; 
+    grid-column: 2; 
+    /* Hapus margin dan padding yang tidak perlu */
+    margin: 0;
+    padding: 0;
+    width: 100%; /* Pastikan navbar-toggler memenuhi lebar */
 }
 
 .navbar-nav {

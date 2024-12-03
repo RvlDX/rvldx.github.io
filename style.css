@@ -6,10 +6,10 @@ body {
 
 .container {
     border: 2px solid black !important; 
-    padding: 20px;
-    margin-bottom: 20px; 
+    padding: 20px; 
     background-color: white;
     border-radius: 10px;
+    width: 100%;
 }
 
 .navbar-brand, h1, h2, h3, h4{
@@ -48,10 +48,6 @@ p {
 .btn-linkedin { background-color: #0077b5 !important; }
 .btn-facebook { background-color: #3b5998 !important; }
 .btn-instagram { background-color: #e4405f !important; }
-.btn-telegram { background-color: #0088cc !important; }
-.btn-hackerrank { background-color: #2ec866 !important; }
-.btn-codewars { background-color: #b91d19 !important; }
-.btn-whatsapp { background-color: #25D366 !important; }
 
 .btn.disabled, .btn:disabled {
     opacity: 0.65; 
@@ -91,14 +87,19 @@ li {
 
 /* Penyesuaian Navbar */
 .navbar {
-  display: grid;
+  display: flex;
   grid-template-columns: auto auto; /* Atau 1fr auto */
   align-items: center;
+  width: 100%;
 }
 
 .navbar-brand {
   grid-column: 1;
-  height: 50px; 
+  height: 60px; 
+  padding-top: 10px;
+  font-family: 'Press Start 2P'!important; /* Terapkan font pixel */
+  font-size: 24px; /* Sesuaikan ukuran font */
+  letter-spacing: 1px; /* Sesuaikan jarak antar huruf jika diperlukan */
 }
 
 .navbar-toggler {
@@ -113,7 +114,7 @@ li {
 
 .nav-item {
     width: 100%; 
-    margin-bottom: 10px; 
+    margin: 5px; 
 }
 
 /* Style untuk dark mode */
@@ -126,7 +127,7 @@ li {
         background-color: #222222 !important; 
         color: white;
         border: 2px;
-        border-color: white;
+        border-color: white !important;
     }
 
     h1, h2, h3 {
@@ -134,11 +135,11 @@ li {
     }
 
     a {
-        color: lightblue !important;
+        color: rgb(255, 255, 255) !important;
     }
 
     .btn {
-        color: black !important; 
+        color: rgb(255, 255, 255) !important; 
         border-color: white !important;
     }
 

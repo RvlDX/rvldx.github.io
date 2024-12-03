@@ -97,7 +97,6 @@ li {
   grid-column: 1;
   height: 60px; 
   padding-top: 10px;
-  font-family: 'Press Start 2P'!important; /* Terapkan font pixel */
   font-size: 24px; /* Sesuaikan ukuran font */
   letter-spacing: 1px; /* Sesuaikan jarak antar huruf jika diperlukan */
 }

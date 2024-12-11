@@ -160,4 +160,9 @@ li {
   .nav-link {
     padding: 10px;
   }
+
+  .container {
+  width: fit-content;
+  margin: auto;
+  }
 }

@@ -151,15 +151,13 @@ li {
 }
 
 @media (min-width: 768px) {
-  .navbar {
-    flex-direction: row;
-    justify-content: space-between;
-  }
   .navbar-nav {
     flex-direction: row;
-    margin-left: auto;
   }
   .nav-item {
-    margin: 0 10px;
+    margin-right: 20px;
+  }
+  .nav-link {
+    padding: 10px;
   }
 }

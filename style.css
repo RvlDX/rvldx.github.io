@@ -149,3 +149,17 @@ li {
         border-color: white !important; 
     }
 }
+
+@media (min-width: 768px) {
+  .navbar {
+    flex-direction: row;
+    justify-content: space-between;
+  }
+  .navbar-nav {
+    flex-direction: row;
+    margin-left: auto;
+  }
+  .nav-item {
+    margin: 0 10px;
+  }
+}

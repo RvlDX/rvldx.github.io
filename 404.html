@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>404 - RevolverDX</title>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary py-1">
+        <div class="container-fluid">
+            <a class="navbar-brand fs-4" href="/" style="padding: 0.25rem 0.5rem; border: 2px solid #000;">RevolverDX</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+        </div>
+    </nav>
+
+    <div class="container mt-5 text-center">
+        <div class="error-container p-5">
+            <div class="error-emoji" style="font-size: 8rem;">🤖</div>
+            <h1 class="mt-4" style="font-family: 'Press Start 2P', cursive; font-size: 4rem;">
+                4<span style="color: #007bff;">0</span>4
+            </h1>
+            <h2 class="mb-4">PAGE NOT FOUND</h2>
+            <p class="lead mb-4">Sepertinya Anda tersesat di cyberspace...</p>
+            <a href="/" class="btn btn-primary btn-lg">
+                <i class="fas fa-arrow-left me-2"></i>Kembali ke Homepage
+            </a>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <style>
+        .error-container {
+            border: 4px solid #000;
+            background: #fff;
+            position: relative;
+            margin-top: 2rem;
+        }
+        
+        .error-emoji {
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+            100% { transform: translateY(0px); }
+        }
+
+        @media (prefers-color-scheme: dark) {
+            .error-container {
+                background-color: #2d2d2d;
+                border-color: #fff;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .error-container {
+                padding: 2rem !important;
+            }
+            
+            .error-emoji {
+                font-size: 5rem !important;
+            }
+            
+            h1 {
+                font-size: 2.5rem !important;
+            }
+        }
+    </style>
+</body>
+</html>

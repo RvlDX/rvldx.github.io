@@ -136,3 +136,41 @@ body {
         height: 40px;
     }
 }
+
+/* Navbar Custom Styles */
+.navbar {
+    padding: 5px 0 !important;
+    border-bottom: 2px solid #000;
+}
+
+.nav-item .nav-link {
+    border: 2px solid #000 !important;
+    padding: 0.25rem 0.75rem !important;
+    margin: 0 2px;
+    background-color: #fff;
+    color: #000 !important;
+}
+
+.nav-item .nav-link.active {
+    background-color: #007bff !important;
+    color: #fff !important;
+}
+
+.navbar-nav {
+    gap: 0.5rem !important;
+}
+
+.navbar-toggler {
+    border: 2px solid #000 !important;
+}
+
+/* Alignment fixes */
+.navbar-collapse {
+    justify-content: flex-end;
+}
+
+.nav-item {
+    height: 100%;
+    display: flex;
+    align-items: center;
+}

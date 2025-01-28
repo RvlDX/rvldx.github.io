@@ -1,14 +1,8 @@
-/* Base Styles */
+/* ========== BASE STYLES ========== */
 body {
     font-family: monospace;
     line-height: 1.6;
     background-color: #f8f9fa;
-}
-
-/* Navbar */
-.navbar {
-  padding-top: 5px !important;
-  padding-bottom: 5px !important;
 }
 
 .container {
@@ -19,23 +13,57 @@ body {
     background: #fff;
 }
 
-/* Navigation */
+/* ========== NAVIGATION ========== */
+.navbar {
+    padding: 5px 0 !important;
+    border-bottom: 2px solid #000;
+}
+
 .navbar-brand {
     font-family: 'Press Start 2P', cursive;
     font-size: 1rem;
+    padding: 0.25rem 0.5rem;
+    border: 2px solid #000;
 }
 
-.nav-link {
-    padding: 0.5rem 1rem !important;
+.nav-item .nav-link {
+    border: 2px solid #000 !important;
+    padding: 0.25rem 0.75rem !important;
+    margin: 0 2px;
+    background-color: #fff;
+    color: #000 !important;
     border-radius: 5px;
     transition: all 0.3s ease;
 }
 
-.nav-link:hover {
+.nav-item .nav-link.active {
+    background-color: #007bff !important;
+    color: #fff !important;
+}
+
+.nav-item .nav-link:hover {
     background-color: rgba(255,255,255,0.1);
 }
 
-/* Cards */
+.navbar-nav {
+    gap: 0.5rem !important;
+}
+
+.navbar-toggler {
+    border: 2px solid #000 !important;
+}
+
+.navbar-collapse {
+    justify-content: flex-end;
+}
+
+.nav-item {
+    height: 100%;
+    display: flex;
+    align-items: center;
+}
+
+/* ========== CARDS ========== */
 .project-card,
 .edu-card,
 .skill-card,
@@ -54,12 +82,7 @@ body {
     box-shadow: 4px 4px 0 #000;
 }
 
-/* Skill Icons */
-.skill-card h3::before {
-    margin-right: 0.5rem;
-}
-
-/* Profile */
+/* ========== PROFILE SECTION ========== */
 .profile-pic {
     width: 180px;
     height: 180px;
@@ -67,7 +90,7 @@ body {
     object-fit: cover;
 }
 
-/* Social Buttons */
+/* ========== BUTTONS & BADGES ========== */
 .btn-circle {
     width: 45px;
     height: 45px;
@@ -78,7 +101,6 @@ body {
     justify-content: center;
 }
 
-/* Badges */
 .badge {
     background-color: #007bff;
     border: 1px solid #000;
@@ -86,7 +108,7 @@ body {
     margin: 2px;
 }
 
-/* Dark Mode */
+/* ========== DARK MODE ========== */
 @media (prefers-color-scheme: dark) {
     body {
         background-color: #121212;
@@ -111,7 +133,7 @@ body {
     }
 }
 
-/* Responsive Adjustments */
+/* ========== RESPONSIVE ADJUSTMENTS ========== */
 @media (max-width: 768px) {
     .navbar-brand {
         font-size: 1rem;
@@ -135,42 +157,4 @@ body {
         width: 40px;
         height: 40px;
     }
-}
-
-/* Navbar Custom Styles */
-.navbar {
-    padding: 5px 0 !important;
-    border-bottom: 2px solid #000;
-}
-
-.nav-item .nav-link {
-    border: 2px solid #000 !important;
-    padding: 0.25rem 0.75rem !important;
-    margin: 0 2px;
-    background-color: #fff;
-    color: #000 !important;
-}
-
-.nav-item .nav-link.active {
-    background-color: #007bff !important;
-    color: #fff !important;
-}
-
-.navbar-nav {
-    gap: 0.5rem !important;
-}
-
-.navbar-toggler {
-    border: 2px solid #000 !important;
-}
-
-/* Alignment fixes */
-.navbar-collapse {
-    justify-content: flex-end;
-}
-
-.nav-item {
-    height: 100%;
-    display: flex;
-    align-items: center;
 }

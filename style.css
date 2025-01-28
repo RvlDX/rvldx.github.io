@@ -5,6 +5,12 @@ body {
     background-color: #f8f9fa;
 }
 
+/* Navbar */
+.navbar {
+  padding-top: 5px !important;
+  padding-bottom: 5px !important;
+}
+
 .container {
     border: 2px solid #000;
     padding: 0.5rem;

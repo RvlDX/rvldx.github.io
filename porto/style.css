@@ -1,24 +1,28 @@
 :root {
-    --primary-color: #2c3e50;
-    --secondary-color: #3498db;
-    --light-color: #ecf0f1;
-    --dark-color: #2c3e50;
+    --primary-bg: #f9fafb;
+    --primary-color: #1a1a1a;
+    --accent-color: #f87171;
+    --border-color: #1a1a1a;
+    --shadow: 6px 6px 0 0 var(--border-color);
 }
 
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-family: 'Space Grotesk', sans-serif;
 }
 
 body {
-    background-color: var(--light-color);
-    color: var(--dark-color);
+    background-color: var(--primary-bg);
+    color: var(--primary-color);
+    border: 3px solid var(--border-color);
+    min-height: 100vh;
 }
 
 .navbar {
-    background-color: var(--primary-color);
+    background-color: var(--primary-bg);
+    border-bottom: 3px solid var(--border-color);
     padding: 1rem;
     position: fixed;
     width: 100%;
@@ -28,107 +32,125 @@ body {
 
 .navbar ul {
     display: flex;
-    justify-content: center;
     list-style: none;
+    gap: 1rem;
 }
 
 .navbar ul li a {
-    color: white;
+    color: var(--primary-color);
     text-decoration: none;
-    padding: 1rem 2rem;
-    transition: all 0.3s ease;
+    padding: 0.5rem 1rem;
+    border: 2px solid var(--border-color);
+    background-color: var(--primary-bg);
+    box-shadow: var(--shadow);
+    transition: all 0.2s ease;
 }
 
 .navbar ul li a:hover,
 .navbar ul li a.active {
-    background-color: var(--secondary-color);
-    color: white;
+    background-color: var(--accent-color);
+    transform: translate(2px, 2px);
+    box-shadow: 3px 3px 0 0 var(--border-color);
+}
+
+.hamburger {
+    display: none;
+    cursor: pointer;
+    padding: 0.5rem;
+    border: 2px solid var(--border-color);
+    background: var(--primary-bg);
+    box-shadow: var(--shadow);
+}
+
+.hamburger span {
+    display: block;
+    width: 25px;
+    height: 3px;
+    background-color: var(--primary-color);
+    margin: 4px 0;
 }
 
 .content-section {
     padding: 6rem 2rem 2rem;
     min-height: 100vh;
     display: none;
+    border: 3px solid var(--border-color);
+    margin: 3px;
 }
 
 .content-section.active {
     display: block;
 }
 
-.skills-container {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 1rem;
-    padding: 1rem;
-}
-
+/* Neobrutalism Components */
 .skill-card {
-    background-color: white;
-    padding: 2rem;
-    border-radius: 10px;
-    text-align: center;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-    transition: transform 0.3s ease;
-}
-
-.skill-card:hover {
-    transform: translateY(-5px);
-}
-
-.profile {
-    text-align: center;
-    max-width: 600px;
-    margin: 0 auto;
+    background-color: var(--primary-bg);
+    border: 3px solid var(--border-color);
+    padding: 1.5rem;
+    box-shadow: var(--shadow);
+    margin: 1rem 0;
 }
 
 .profile img {
-    border-radius: 50%;
-    margin-bottom: 1rem;
-}
-
-.social-links {
-    margin-top: 1rem;
-}
-
-.social-links a {
-    margin: 0 1rem;
-    text-decoration: none;
-}
-
-.timeline {
-    border-left: 2px solid var(--secondary-color);
-    padding-left: 2rem;
-    margin-left: 1rem;
+    border: 3px solid var(--border-color);
+    box-shadow: var(--shadow);
+    margin: 1rem;
 }
 
 .timeline-item {
-    position: relative;
-    padding: 1rem;
-    margin-bottom: 2rem;
-    background-color: white;
-    border-radius: 5px;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    border: 3px solid var(--border-color);
+    padding: 1.5rem;
+    margin: 1rem 0;
+    box-shadow: var(--shadow);
 }
 
-.timeline-item::before {
-    content: '';
-    position: absolute;
-    left: -2.7rem;
-    top: 1rem;
-    width: 20px;
-    height: 20px;
-    background-color: var(--secondary-color);
-    border-radius: 50%;
-}
-
+/* Responsive Design */
 @media (max-width: 768px) {
     .navbar ul {
+        display: none;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        background-color: var(--primary-bg);
+        border: 3px solid var(--border-color);
+        padding: 1rem;
         flex-direction: column;
+    }
+
+    .navbar ul.active {
+        display: flex;
+    }
+
+    .hamburger {
+        display: block;
+    }
+
+    .navbar ul li a {
+        width: 100%;
         text-align: center;
     }
-    
-    .navbar ul li a {
-        padding: 0.5rem;
-        display: block;
+}
+
+@media (min-width: 769px) {
+    .navbar {
+        width: 250px;
+        height: 100vh;
+        left: 0;
+        border-right: 3px solid var(--border-color);
+        border-bottom: none;
+    }
+
+    .navbar ul {
+        flex-direction: column;
+        margin-top: 2rem;
+    }
+
+    .content-section {
+        margin-left: 250px;
+    }
+
+    .hamburger {
+        display: none;
     }
 }

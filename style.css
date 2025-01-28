@@ -1,167 +1,132 @@
-/* Gaya Neobrutalisme */
+/* Base Styles */
 body {
-    font-family: monospace; 
-    background-color: #f0f0f0; 
+    font-family: 'Segoe UI', system-ui, sans-serif;
+    line-height: 1.6;
+    background-color: #f8f9fa;
 }
 
 .container {
-    border: 2px solid black !important; 
-    padding: 20px; 
-    background-color: white;
-    border-radius: 10px;
-    width: 100%;
+    border: 2px solid #000;
+    padding: 2rem;
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+    background: #fff;
 }
 
-.navbar-brand, h1, h2, h3, h4{
-    font-weight: bold;
-    text-align: left; 
-}
-
-a {
-    color: blue !important; 
-    text-decoration: underline;
-}
-
-p {
-    margin-bottom: 15px; 
-    text-align: left; 
-}
-
-/* Styling untuk tombol */
-.btn {
-    border: 2px solid black !important; 
-    font-weight: bold;
-    padding: 15px 30px; 
-    display: flex; 
-    align-items: center; 
-    justify-content: center; 
-    margin-bottom: 10px; 
-    color: white !important; 
-}
-
-.btn a {
-    text-decoration: none; 
-}
-
-/* Warna tombol */
-.btn-github { background-color: #007bff !important; }
-.btn-linkedin { background-color: #0077b5 !important; }
-.btn-facebook { background-color: #3b5998 !important; }
-.btn-instagram { background-color: #e4405f !important; }
-
-.btn.disabled, .btn:disabled {
-    opacity: 0.65; 
-    cursor: not-allowed;
-}
-
-.btn i {
-    margin-right: 10px; 
-}
-
-/* Styling untuk list */
-ul {
-    list-style: none; 
-    padding: 0;
-    padding-left: 15px; 
-}
-
-li {
-    margin-bottom: 10px; 
-    border: 2px solid black !important;
-    padding: 10px;
-    background-color: #f0f0f0 !important; 
-    border-radius: 10px;
-}
-
-.profile-pic {
-    width: 200px; 
-    height: 200px; 
-    border-radius: 50%; 
-    object-fit: cover; 
-    display: block; 
-    margin-left: auto;  
-    margin-right: auto;
-    margin-top: 20px;
-    margin-bottom: 20px; 
-}
-
-/* Penyesuaian Navbar */
-.navbar {
-  display: flex;
-  grid-template-columns: auto auto; /* Atau 1fr auto */
-  align-items: center;
-  width: 100%;
-}
-
+/* Navigation */
 .navbar-brand {
-  grid-column: 1;
-  height: 60px; 
-  padding-top: 10px;
-  font-family: 'Press Start 2P', cursive;
-  font-size: 20px; /* Sesuaikan ukuran font */
-  letter-spacing: 1px; /* Sesuaikan jarak antar huruf jika diperlukan */
+    font-family: 'Press Start 2P', cursive;
+    font-size: 1.25rem;
 }
 
-.navbar-toggler {
-  grid-column: 2; 
+.nav-link {
+    padding: 0.5rem 1rem !important;
+    border-radius: 5px;
+    transition: all 0.3s ease;
 }
 
-.navbar-nav {
-    display: grid;
-    flex-direction: column; 
-    width: 100%; 
+.nav-link:hover {
+    background-color: rgba(255,255,255,0.1);
 }
 
-.nav-item {
-    width: 100%; 
-    margin: 5px; 
+/* Cards */
+.project-card,
+.edu-card,
+.skill-card,
+.exp-card {
+    border: 2px solid #000;
+    border-radius: 8px;
+    background: #fff;
+    transition: transform 0.2s ease;
 }
 
-/* Style untuk dark mode */
+.project-card:hover,
+.edu-card:hover,
+.skill-card:hover,
+.exp-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 4px 4px 0 #000;
+}
+
+/* Skill Icons */
+.skill-card h3::before {
+    margin-right: 0.5rem;
+}
+
+/* Profile */
+.profile-pic {
+    width: 180px;
+    height: 180px;
+    border: 2px solid #000;
+    object-fit: cover;
+}
+
+/* Social Buttons */
+.btn-circle {
+    width: 45px;
+    height: 45px;
+    border-radius: 50% !important;
+    padding: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Badges */
+.badge {
+    background-color: #007bff;
+    border: 1px solid #000;
+    font-weight: 500;
+    margin: 2px;
+}
+
+/* Dark Mode */
 @media (prefers-color-scheme: dark) {
     body {
-        background-color: #121212 !important; 
+        background-color: #121212;
+        color: #fff;
     }
-
+    
     .container {
-        background-color: #222222 !important; 
-        color: white;
-        border: 2px;
-        border-color: white !important;
+        background-color: #1e1e1e;
+        border-color: #fff;
     }
-
-    h1, h2, h3 {
-        color: white !important; 
+    
+    .project-card,
+    .edu-card,
+    .skill-card,
+    .exp-card {
+        background-color: #2d2d2d;
+        border-color: #fff;
     }
-
-    a {
-        color: rgb(255, 255, 255) !important;
-    }
-
-    .btn {
-        color: rgb(255, 255, 255) !important; 
-        border-color: white !important;
-    }
-
-    li {
-        background-color: #222222 !important; 
-        color: white !important; 
-        border-color: white !important; 
+    
+    .badge {
+        border-color: #fff;
     }
 }
 
-@media (min-width: 768px) {
-  .navbar-nav {
-    flex-direction: grid;
-  }
-  .nav-item {
-    margin-right: 20px;
-  }
-  .nav-link {
-    padding: 10px;
-  }
-  .container {
-    width: fit-content;
-    margin: auto;
-  }
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    .navbar-brand {
+        font-size: 1rem;
+    }
+    
+    .profile-pic {
+        width: 120px;
+        height: 120px;
+    }
+    
+    .container {
+        padding: 1.5rem;
+        margin-top: 1rem;
+    }
+    
+    h1 {
+        font-size: 2rem;
+    }
+    
+    .btn-circle {
+        width: 40px;
+        height: 40px;
+    }
 }

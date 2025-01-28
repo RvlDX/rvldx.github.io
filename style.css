@@ -1,6 +1,6 @@
 /* Base Styles */
 body {
-    font-family: 'monospace','Segoe UI'
+    font-family: monospace;
     line-height: 1.6;
     background-color: #f8f9fa;
 }

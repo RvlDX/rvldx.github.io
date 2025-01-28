@@ -34,17 +34,16 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     });
-});
 
-    // Auto-close navbar mobile dengan animasi
+    // Auto-close navbar mobile dengan animasi (PINDahkan KE DALAM DOMContentLoaded)
     document.querySelectorAll('.nav-link').forEach(link => {
         link.addEventListener('click', () => {
             const navbarCollapse = document.querySelector('.navbar-collapse');
             const bsCollapse = bootstrap.Collapse.getInstance(navbarCollapse);
             
             if(bsCollapse && navbarCollapse.classList.contains('show')) {
-                bsCollapse.hide(); // Menutup dengan animasi Bootstrap
+                bsCollapse.hide();
             }
         });
     });
-});
+}); // Hanya SATU penutupan event listener di sini

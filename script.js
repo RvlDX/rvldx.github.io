@@ -35,3 +35,15 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 });
+
+// Auto-close navbar mobile saat diklik
+document.querySelectorAll('.nav-link').forEach(link => {
+    link.addEventListener('click', () => {
+        const navbarCollapse = document.querySelector('.navbar-collapse');
+        if(navbarCollapse.classList.contains('show')) {
+            navbarCollapse.classList.remove('show');
+        }
+    });
+});
+
+// Tambahkan ini di dalam event listener yang sudah ada

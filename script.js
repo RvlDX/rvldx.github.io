@@ -36,14 +36,15 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
-// Auto-close navbar mobile saat diklik
-document.querySelectorAll('.nav-link').forEach(link => {
-    link.addEventListener('click', () => {
-        const navbarCollapse = document.querySelector('.navbar-collapse');
-        if(navbarCollapse.classList.contains('show')) {
-            navbarCollapse.classList.remove('show');
-        }
+    // Auto-close navbar mobile dengan animasi
+    document.querySelectorAll('.nav-link').forEach(link => {
+        link.addEventListener('click', () => {
+            const navbarCollapse = document.querySelector('.navbar-collapse');
+            const bsCollapse = bootstrap.Collapse.getInstance(navbarCollapse);
+            
+            if(bsCollapse && navbarCollapse.classList.contains('show')) {
+                bsCollapse.hide(); // Menutup dengan animasi Bootstrap
+            }
+        });
     });
 });
-
-// Tambahkan ini di dalam event listener yang sudah ada

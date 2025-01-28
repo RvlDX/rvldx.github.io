@@ -5,7 +5,25 @@ function loadNavbar() {
         .then(data => {
             document.getElementById('navbar-placeholder').innerHTML = data;
             setActiveLink();
+            addMobileMenuListeners();
         });
+}
+
+// Fungsi toggle menu mobile
+function toggleMenu() {
+    const menu = document.querySelector('.navbar ul');
+    menu.classList.toggle('active');
+}
+
+// Fungsi untuk menutup menu mobile saat klik link
+function addMobileMenuListeners() {
+    document.querySelectorAll('.navbar ul li a').forEach(link => {
+        link.addEventListener('click', () => {
+            if (window.innerWidth <= 768) {
+                document.querySelector('.navbar ul').classList.remove('active');
+            }
+        });
+    });
 }
 
 // Fungsi untuk menampilkan section

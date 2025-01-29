@@ -154,18 +154,9 @@ body {
 
 /* Responsive Adjustments */
 @media (max-width: 768px) {
-    .navbar-brand {
-        font-size: 1rem;
-    }
-    
     .profile-pic {
         width: 120px;
         height: 120px;
-    }
-    
-    .container {
-        padding: 1.5rem;
-        margin-top: 1rem;
     }
     
     h1 {

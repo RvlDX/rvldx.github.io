@@ -3,86 +3,73 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Portfolio</title>
+    <title>Neo-Brutalist Portfolio</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <nav>
-        <div class="nav-container">
-            <a href="#" class="logo">RDX</a>
-            <ul>
-                <li><a href="#home">Home</a></li>
-                <li><a href="#skills">Skills</a></li>
-                <li><a href="#experience">Experience</a></li>
-                <li><a href="#education">Education</a></li>
-                <li><a href="#about">About</a></li>
-            </ul>
+        <div class="logo">Your Name</div>
+        <div class="hamburger">
+            <div class="bar"></div>
+            <div class="bar"></div>
+            <div class="bar"></div>
         </div>
+        <ul class="nav-links">
+            <li><a href="#home" data-section="home">Home</a></li>
+            <li><a href="#skills" data-section="skills">Skills</a></li>
+            <li><a href="#experience" data-section="experience">Experience</a></li>
+            <li><a href="#education" data-section="education">Education</a></li>
+            <li><a href="#about" data-section="about">About</a></li>
+        </ul>
     </nav>
 
-    <section id="home" class="section">
-        <div class="container">
-            <h1>Welcome</h1>
-            <p>A brief, impactful introduction about yourself and your work.</p>
-            <div class="project-grid">
-                <div class="project">
-                    <img src="placeholder.jpg" alt="Project 1">
-                    <h3>Project Title 1</h3>
-                    <p>Short project description.</p>
-                </div>
-                </div>
+    <section id="home" class="section active">
+        <h2>Home</h2>
+        <p>Brief description about yourself and your work.</p>
+        <div class="projects">
+            <h3>Projects</h3>
+            <p>List your projects here.</p>
         </div>
     </section>
 
     <section id="skills" class="section">
-        <div class="container">
-            <h2>Skills</h2>
-            <ul class="skill-list">
-                <li>HTML</li>
-                <li>CSS</li>
-                <li>JavaScript</li>
-                </ul>
-        </div>
+        <h2>Skills</h2>
+        <p>List your skills here.</p>
     </section>
 
     <section id="experience" class="section">
-        <div class="container">
-            <h2>Experience</h2>
-            <div class="timeline">
-                <div class="entry">
-                    <h3>University (2020-2024)</h3>
-                    <p>Relevant coursework, projects, etc.</p>
-                </div>
-                <div class="entry">
-                    <h3>SMA (2017-2020)</h3>
-                    <p>Activities, achievements, etc.</p>
-                </div>
-                </div>
+        <h2>Experience</h2>
+        <div class="experience-item">
+            <h3>Elementary School</h3>
+            <p>Details about your elementary school experience.</p>
+        </div>
+        <div class="experience-item">
+            <h3>Junior High School</h3>
+            <p>Details about your junior high school experience.</p>
+        </div>
+        <div class="experience-item">
+            <h3>High School</h3>
+            <p>Details about your high school experience.</p>
+        </div>
+        <div class="experience-item">
+            <h3>University</h3>
+            <p>Details about your university experience.</p>
         </div>
     </section>
 
     <section id="education" class="section">
-        <div class="container">
-            <h2>Education</h2>
-            <ul>
-              <li>University Name</li>
-              <li>SMA Name</li>
-              <li>SMP Name</li>
-              <li>SD Name</li>
-            </ul>
-        </div>
+        <h2>Education</h2>
+        <p>Your education details.</p>
     </section>
 
     <section id="about" class="section">
-        <div class="container">
-            <h2>About Me</h2>
-            <p>A short bio about yourself.</p>
-            <div class="social-links">
-                <a href="#"><img src="instagram.png" alt="Instagram"></a>
-                <a href="#"><img src="facebook.png" alt="Facebook"></a>
-                <a href="#"><img src="github.png" alt="GitHub"></a>
-                <a href="#"><img src="linkedin.png" alt="LinkedIn"></a>
-            </div>
+        <h2>About</h2>
+        <p>Short profile about yourself.</p>
+        <div class="social-links">
+            <a href="#" target="_blank">Instagram</a>
+            <a href="#" target="_blank">Facebook</a>
+            <a href="#" target="_blank">GitHub</a>
+            <a href="#" target="_blank">LinkedIn</a>
         </div>
     </section>
 

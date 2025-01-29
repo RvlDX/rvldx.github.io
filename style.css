@@ -56,6 +56,7 @@ body {
 .p {
     font-size: 15px;
     text-align: justify !important;
+    font-color: white !important;
 }
 
 /* Cards */

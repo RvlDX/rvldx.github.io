@@ -42,7 +42,8 @@ body {
 }
 
 .nav-link {
-    padding: 1rem 1rem !important;
+    margin-top: 0.5rem;
+    padding: 0.5rem 1rem !important;
     border-radius: 5px;
     transition: all 0.3s ease;
 }

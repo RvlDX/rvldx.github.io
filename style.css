@@ -48,7 +48,7 @@ body {
 }
 
 .p {
-    font-size: 10px !important;
+    font-size: 10px ;
     text-align: justify;
 }
 
@@ -156,7 +156,7 @@ body {
 
     /* Perbaikan Ukuran Teks Paragraph */
     p {
-        font-size: 1rem;
+        font-size: 10px;
         line-height: 1.5;
     }
 

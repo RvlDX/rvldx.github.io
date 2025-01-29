@@ -1,60 +1,87 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Portfolio</title>
+    <title>My Portfolio</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <!-- Navbar akan dimuat di sini -->
-    <div id="navbar-placeholder"></div>
+    <nav>
+        <div class="nav-container">
+            <a href="#" class="logo">My Portfolio</a>
+            <ul>
+                <li><a href="#home">Home</a></li>
+                <li><a href="#skills">Skills</a></li>
+                <li><a href="#experience">Experience</a></li>
+                <li><a href="#education">Education</a></li>
+                <li><a href="#about">About</a></li>
+            </ul>
+        </div>
+    </nav>
 
-    <!-- Section konten -->
-    <section id="home" class="content-section active">
-        <h1>Selamat Datang di Portfolio Saya</h1>
-        <p>Ini adalah halaman utama portfolio saya</p>
-    </section>
-
-    <section id="skills" class="content-section">
-        <h2>Skills</h2>
-        <div class="skills-container">
-            <div class="skill-card">HTML</div>
-            <div class="skill-card">CSS</div>
-            <div class="skill-card">JavaScript</div>
-            <div class="skill-card">UI/UX</div>
+    <section id="home" class="section">
+        <div class="container">
+            <h1>Welcome</h1>
+            <p>A brief, impactful introduction about yourself and your work.</p>
+            <div class="project-grid">
+                <div class="project">
+                    <img src="placeholder.jpg" alt="Project 1">
+                    <h3>Project Title 1</h3>
+                    <p>Short project description.</p>
+                </div>
+                </div>
         </div>
     </section>
 
-    <section id="pendidikan" class="content-section">
-        <h2>Pendidikan</h2>
-        <div class="timeline">
-            <div class="timeline-item">
-                <h3>Universitas Bina Sarana Informatika</h3>
-                <p>Jurusan Teknik Informatika</p>
-                <p>2023-2027</p>
-            </div>
+    <section id="skills" class="section">
+        <div class="container">
+            <h2>Skills</h2>
+            <ul class="skill-list">
+                <li>HTML</li>
+                <li>CSS</li>
+                <li>JavaScript</li>
+                </ul>
         </div>
     </section>
 
-    <section id="pengalaman" class="content-section">
-        <h2>Pengalaman</h2>
-        <div class="experience-item">
-            <h3>Perusahaan Contoh</h3>
-            <p>Frontend Developer</p>
-            <p>2022-Sekarang</p>
+    <section id="experience" class="section">
+        <div class="container">
+            <h2>Experience</h2>
+            <div class="timeline">
+                <div class="entry">
+                    <h3>University (2020-2024)</h3>
+                    <p>Relevant coursework, projects, etc.</p>
+                </div>
+                <div class="entry">
+                    <h3>SMA (2017-2020)</h3>
+                    <p>Activities, achievements, etc.</p>
+                </div>
+                </div>
         </div>
     </section>
 
-    <section id="about" class="content-section">
-        <div class="profile">
-            <img src="https://via.placeholder.com/150" alt="Profil">
-            <h2>Tentang Saya</h2>
-            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, voluptatum.</p>
+    <section id="education" class="section">
+        <div class="container">
+            <h2>Education</h2>
+            <ul>
+              <li>University Name</li>
+              <li>SMA Name</li>
+              <li>SMP Name</li>
+              <li>SD Name</li>
+            </ul>
+        </div>
+    </section>
+
+    <section id="about" class="section">
+        <div class="container">
+            <h2>About Me</h2>
+            <p>A short bio about yourself.</p>
             <div class="social-links">
-                <a href="#"><img src="github-icon.png" alt="GitHub"></a>
-                <a href="#"><img src="linkedin-icon.png" alt="LinkedIn"></a>
-                <a href="#"><img src="instagram-icon.png" alt="Instagram"></a>
+                <a href="#"><img src="instagram.png" alt="Instagram"></a>
+                <a href="#"><img src="facebook.png" alt="Facebook"></a>
+                <a href="#"><img src="github.png" alt="GitHub"></a>
+                <a href="#"><img src="linkedin.png" alt="LinkedIn"></a>
             </div>
         </div>
     </section>

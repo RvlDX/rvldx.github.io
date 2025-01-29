@@ -10,8 +10,8 @@ body {
 
 /* Navbar */
 .navbar {
-  padding-top: 5px !important;
-  padding-bottom: 5px !important;
+  padding-top: 3px !important;
+  padding-bottom: 3px !important;
   position: -webkit-sticky;
   position: sticky;
   top: 0;

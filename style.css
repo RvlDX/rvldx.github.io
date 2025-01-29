@@ -57,7 +57,7 @@ p {
     font-size: 15px;
     text-align: justify !important;
     font-color: white !important;
-    word-spacing: normal !important;
+    word-spacing: 1px !important;
 }
 
 /* Cards */

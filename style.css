@@ -48,7 +48,7 @@ body {
 }
 
 .p {
-    font-size: 10px ;
+    font-size: 15px ;
     text-align: justify;
 }
 
@@ -152,12 +152,6 @@ body {
         width: calc(100% - 1rem); /* Hitung lebar dengan margin */
         left: 0;
         right: 0;
-    }
-
-    /* Perbaikan Ukuran Teks Paragraph */
-    p {
-        font-size: 10px;
-        line-height: 1.5;
     }
 
     .profile-pic {

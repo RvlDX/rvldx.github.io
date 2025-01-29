@@ -27,7 +27,7 @@ body {
     margin: 1rem auto; /* Atas-bawah 1rem, kiri-kanan otomatis */
     padding: 1.5rem;
     border: 2px solid #000;
-    border-radius: 8px;
+    border-radius: 8px !important;
     background: #fff;
     box-sizing: border-box;
     position: relative; /* Tambahkan ini untuk positioning yang konsisten */

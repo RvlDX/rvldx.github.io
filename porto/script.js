@@ -1,18 +1,31 @@
-// script.js (Add any JavaScript functionality here)
+// script.js
+const hamburger = document.querySelector('.hamburger');
+const navLinks = document.querySelector('.nav-links');
+const sections = document.querySelectorAll('.section');
+const navLinksA = document.querySelectorAll('.nav-links a');
 
-// Example: Smooth scrolling for navigation links
-document.querySelectorAll('nav a').forEach(anchor => {
-    anchor.addEventListener('click', function (e) {
-        e.preventDefault();
+hamburger.addEventListener('click', () => {
+    navLinks.classList.toggle('active');
+});
 
-        const targetId = this.getAttribute('href').substring(1);
-        const targetElement = document.getElementById(targetId);
+navLinksA.forEach(link => {
+    link.addEventListener('click', (event) => {
+        event.preventDefault();
+        const targetSectionId = link.dataset.section;
 
-        window.scrollTo({
-            top: targetElement.offsetTop,
-            behavior: 'smooth'
+        sections.forEach(section => {
+            section.classList.remove('active');
         });
+
+        document.getElementById(targetSectionId).classList.add('active');
+
+        if (window.innerWidth <= 768) { // Close menu on mobile after link click
+             navLinks.classList.remove('active');
+        }
     });
 });
 
-// Add more JavaScript as needed (e.g., animations, form handling, etc.)
+
+// Show the Home section initially
+document.getElementById('home').classList.add('active');
+

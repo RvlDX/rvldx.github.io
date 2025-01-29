@@ -1,37 +1,33 @@
-//start
-const hamburger = document.querySelector('.hamburger');
-const navLinks = document.querySelector('.nav-links');
-const sections = document.querySelectorAll('.section');
-const navLinksA = document.querySelectorAll('.nav-links a');
+document.addEventListener("DOMContentLoaded", function () {
+    const links = document.querySelectorAll("nav a");
+    const sections = document.querySelectorAll("section");
+    const hamburger = document.getElementById("hamburger");
+    const navLinks = document.getElementById("nav-links");
 
-hamburger.addEventListener('click', () => {
-    navLinks.classList.toggle('active');
-});
+    // Fungsi untuk menampilkan section yang diklik
+    function showSection(event) {
+        event.preventDefault();
+        const target = event.target.getAttribute("data-section");
 
-navLinksA.forEach(link => {
-    link.addEventListener('click', (event) => {
-        event.preventDefault(); // Prevent default link behavior
-
-        const targetSectionId = link.getAttribute('data-section');
-
-        // Hide all sections
         sections.forEach(section => {
-            section.classList.remove('active');
+            if (section.id === target) {
+                section.classList.add("active");
+            } else {
+                section.classList.remove("active");
+            }
         });
 
-        // Show the target section
-        const targetSection = document.getElementById(targetSectionId);
-        if (targetSection) {
-            targetSection.classList.add('active');
-        }
+        // Tutup menu saat di mode mobile
+        navLinks.classList.remove("active");
+    }
 
-        // Close the menu on smaller screens after clicking
-        if (window.innerWidth <= 768) {
-            navLinks.classList.remove('active');
-        }
+    // Tambahkan event listener ke semua link navbar
+    links.forEach(link => {
+        link.addEventListener("click", showSection);
+    });
+
+    // Event listener untuk hamburger menu
+    hamburger.addEventListener("click", function () {
+        navLinks.classList.toggle("active");
     });
 });
-
-// Show the home section by default on load
-document.getElementById('home').classList.add('active');
-

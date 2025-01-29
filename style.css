@@ -25,7 +25,7 @@ body {
 .container {
     max-width: 1200px;
     margin: 1rem auto; /* Atas-bawah 1rem, kiri-kanan otomatis */
-    padding: 2rem;
+    padding: 1.5rem;
     border: 2px solid #000;
     border-radius: 8px;
     background: #fff;

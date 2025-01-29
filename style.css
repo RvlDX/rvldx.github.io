@@ -90,6 +90,7 @@ p {
     height: 180px;
     border: 2px solid #000;
     object-fit: cover;
+    border-radius: 8px;
 }
 
 /* Social Buttons */

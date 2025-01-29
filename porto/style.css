@@ -1,129 +1,110 @@
 /* style.css */
 body {
-    font-family: sans-serif; /* Use a clean, modern font */
-    background-color: #f0f0f0; /* Light background */
-    color: #333; /* Dark text for contrast */
+    font-family: monospace; /* Neo-Brutalist font */
     margin: 0;
-    padding: 0;
+    background-color: #f0f0f0; /* Bright background */
+    color: #222; /* Dark text color */
 }
 
-.nav-container {
+nav {
+    background-color: #ddd; /* Slightly darker nav background */
+    padding: 1rem;
     display: flex;
-    justify-content: space-between; /* Space logo and nav items */
+    justify-content: space-between;
     align-items: center;
-    padding: 20px;
-    background-color: #fff; /* White navbar background */
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Subtle shadow */
 }
 
-nav ul {
+.logo {
+    font-weight: bold;
+}
+
+.hamburger {
+    display: none;
+    cursor: pointer;
+}
+
+.bar {
+    width: 25px;
+    height: 3px;
+    background-color: #222;
+    margin: 5px 0;
+}
+
+.nav-links {
     list-style: none;
     margin: 0;
     padding: 0;
     display: flex;
 }
 
-nav li {
+.nav-links li {
     margin-left: 20px;
 }
 
-nav a {
+.nav-links a {
     text-decoration: none;
-    color: #333;
+    color: #222;
+    padding: 5px;
+}
+
+.section {
+    padding: 2rem;
+    display: none; /* Initially hidden */
+    opacity: 0; /* For animation */
+    transition: opacity 0.5s ease-in-out; /* Animation */
+}
+
+.section.active {
+    display: block;
+    opacity: 1;
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+    .nav-links {
+        display: none;
+        flex-direction: column;
+        position: absolute;
+        top: 60px; /* Adjust as needed */
+        left: 0;
+        width: 100%;
+        background-color: #ddd;
+        text-align: center;
+    }
+
+    .nav-links.active {
+        display: flex;
+    }
+
+    .nav-links li {
+        margin: 10px 0;
+    }
+
+    .hamburger {
+        display: block;
+    }
+}
+
+/* Neo-Brutalist styling (add more as needed) */
+.section h2 {
     font-weight: bold;
-    transition: color 0.3s ease; /* Smooth color transition */
+    margin-bottom: 1rem;
 }
 
-nav a:hover {
-    color: #007bff; /* Highlight color on hover */
+.projects {
+    border: 2px solid #222;
+    padding: 1rem;
 }
 
-.section {
-    padding: 40px;
-    background-color: #fff; /* White section background */
-    margin-bottom: 20px; /* Space between sections */
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+.experience-item {
+    border: 1px solid #222;
+    padding: 1rem;
+    margin-bottom: 1rem;
 }
 
-.container {
-    max-width: 960px;
-    margin: 0 auto;
+.social-links a {
+    display: inline-block;
+    margin-right: 10px;
+    color: #222;
+    text-decoration: none;
 }
-
-.project-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* Responsive grid */
-    gap: 20px;
-}
-
-.project img {
-    width: 100%;
-    height: auto;
-}
-
-.skill-list {
-    list-style: none;
-    padding: 0;
-    display: flex;
-    flex-wrap: wrap; /* Skills wrap to the next line */
-    gap: 10px;
-}
-
-.skill-list li {
-    background-color: #eee; /* Light gray skill background */
-    padding: 5px 10px;
-    border-radius: 5px;
-}
-
-.timeline { /* Basic timeline styling */
-    position: relative;
-    border-left: 2px solid #ccc;
-}
-
-.entry {
-    padding-left: 20px;
-    margin-bottom: 20px;
-}
-
-.entry h3 {
-    margin-bottom: 5px;
-}
-
-.social-links {
-    display: flex;
-    gap: 10px;
-}
-
-.social-links img {
-    width: 30px;
-    height: 30px;
-}
-
-/* Basic Neobrutalism styling: */
-body {
-  font-family: 'Arial', sans-serif; /* Example font */
-  background-color: #f0f0f0; /* Light gray background */
-  color: #333; /* Dark gray text */
-}
-
-.section {
-  background-color: #fff; /* White panels */
-  border: 2px solid #ccc; /* Thick borders */
-  padding: 2rem; /* Generous padding */
-  margin-bottom: 1rem; /* Spacing between sections */
-  box-shadow: 4px 4px 0 #ccc; /* Offset shadows */
-  border-radius: 0; /* Square corners */
-}
-
-/* ... (Other styles) */
-
-/* Animations */
-.project img {
-    transition: transform 0.3s ease;
-}
-
-.project img:hover {
-    transform: scale(1.05); /* Slight zoom on hover */
-}
-
-

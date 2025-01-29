@@ -19,6 +19,10 @@ body {
   height: 30px;
 }
 
+.navbar-toggler {
+
+}
+
 .container {
     max-width: 1200px;
     margin: 1rem auto; /* Atas-bawah 1rem, kiri-kanan otomatis */

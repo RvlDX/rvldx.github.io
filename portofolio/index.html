@@ -3,17 +3,73 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Portofolio Saya</title>
-    <link rel="stylesheet" href="css/style.css">
-</head>
+    <title>My Portfolio</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">  </head>
 <body>
-  <div id="navbar-container"></div> 
-    <section id="home">
-        <h1>Halo, Saya Muhammad Awaluddin Azhari Ihsan</h1>
-        <p>Selamat datang di portofolio saya.</p>
+    <nav>
+        <div class="logo">My Logo</div>
+        <div class="hamburger">
+            <div class="bar"></div>
+            <div class="bar"></div>
+            <div class="bar"></div>
+        </div>
+        <ul class="nav-links">
+            <li><a href="#home" data-section="home">Home</a></li>
+            <li><a href="#skills" data-section="skills">Skills</a></li>
+            <li><a href="#experience" data-section="experience">Experience</a></li>
+            <li><a href="#education" data-section="education">Education</a></li>
+            <li><a href="#about" data-section="about">About</a></li>
+        </ul>
+    </nav>
+
+    <section id="home" class="section active">
+       <h2>Home</h2>
+        <p>Welcome to my portfolio!</p>
+        <div class="project">
+            <img src="project1.jpg" alt="Project 1">
+            <h3>Project 1</h3>
+            <p>Short description of project 1.</p>
+        </div>
+        </section>
+
+    <section id="skills" class="section">
+        <h2>Skills</h2>
+        <div class="skill">
+            <i class="fab fa-html5"></i>
+            <h3>HTML5</h3>
+            <p>Description of HTML skills.</p>
+        </div>
+        </section>
+
+    <section id="experience" class="section">
+        <h2>Experience</h2>
+        <div class="experience-item">
+            <h3>Job Title</h3>
+            <p>Company Name (Dates)</p>
+        </div>
     </section>
 
-    <script src="js/script.js"></script>
+    <section id="education" class="section">
+        <h2>Education</h2>
+        <div class="education-item">
+            <h3>Degree</h3>
+            <p>School Name (Dates)</p>
+        </div>
+    </section>
+
+    <section id="about" class="section">
+        <h2>About Me</h2>
+        <p>Short bio...</p>
+        <div class="social-links">
+            <a href="#"><i class="fab fa-instagram"></i></a>
+            <a href="#"><i class="fab fa-facebook"></i></a>
+            <a href="#"><i class="fab fa-github"></i></a>
+            <a href="#"><i class="fab fa-linkedin"></i></a>
+        </div>
+    </section>
+
+
+    <script src="script.js"></script>
 </body>
 </html>
-

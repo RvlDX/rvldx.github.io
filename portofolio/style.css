@@ -1,0 +1,103 @@
+/* style.css */
+body {
+    font-family: sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+nav {
+    display: flex;
+    justify-content: space-between; /* Distribute space between logo and links */
+    align-items: center;
+    padding: 1rem;
+    background-color: #f0f0f0; /* Example background color */
+}
+
+.logo {
+    font-weight: bold;
+}
+
+.hamburger {
+    display: none; /* Hidden by default on larger screens */
+    cursor: pointer;
+}
+
+.bar {
+    width: 25px;
+    height: 3px;
+    background-color: #333;
+    margin: 5px 0;
+}
+
+.nav-links {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+}
+
+.nav-links li {
+    margin-left: 20px;
+}
+
+.nav-links a {
+    text-decoration: none;
+    color: #333;
+}
+
+.section {
+    display: none; /* Initially hidden */
+    padding: 20px;
+    min-height: 80vh; /* Ensure sections take up viewport height */
+    opacity: 0; /* For transition effect */
+    transform: translateY(20px); /* For transition effect */
+    transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.section.active {
+    display: block;
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+    .nav-links {
+        display: none;
+        flex-direction: column;
+        position: absolute;
+        top: 60px; /* Adjust as needed */
+        left: 0;
+        width: 100%;
+        background-color: #f0f0f0;
+        text-align: center;
+    }
+
+    .nav-links.active {
+        display: flex;
+    }
+
+    .nav-links li {
+        margin: 10px 0;
+    }
+
+    .hamburger {
+        display: block;
+    }
+}
+
+/* Project, Skill, Experience, Education styles (Add your styles here) */
+.project img {
+    max-width: 200px; /* Adjust as needed */
+    height: auto;
+}
+
+.skill i { /* Style for skill icons */
+    font-size: 2em;
+    margin-right: 10px;
+}
+.social-links a {
+    margin: 0 10px;
+    font-size: 1.5em;
+    color: #333;
+}

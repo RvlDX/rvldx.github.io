@@ -39,6 +39,7 @@ body {
 .navbar-brand {
     font-family: 'Press Start 2P', cursive;
     font-size: 13px;
+    padding-left: 15px;
 }
 
 .nav-link {

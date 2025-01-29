@@ -117,7 +117,7 @@ body {
 
 /* ... (Other styles) */
 
-/* Animations (Example - Add more as needed) */
+/* Animations */
 .project img {
     transition: transform 0.3s ease;
 }

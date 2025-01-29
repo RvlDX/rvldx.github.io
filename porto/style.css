@@ -1,156 +1,129 @@
-:root {
-    --primary-bg: #f9fafb;
-    --primary-color: #1a1a1a;
-    --accent-color: #f87171;
-    --border-color: #1a1a1a;
-    --shadow: 6px 6px 0 0 var(--border-color);
-}
-
-* {
+/* style.css */
+body {
+    font-family: sans-serif; /* Use a clean, modern font */
+    background-color: #f0f0f0; /* Light background */
+    color: #333; /* Dark text for contrast */
     margin: 0;
     padding: 0;
-    box-sizing: border-box;
-    font-family: 'Space Grotesk', sans-serif;
 }
 
-body {
-    background-color: var(--primary-bg);
-    color: var(--primary-color);
-    border: 3px solid var(--border-color);
-    min-height: 100vh;
-}
-
-.navbar {
-    background-color: var(--primary-bg);
-    border-bottom: 3px solid var(--border-color);
-    padding: 1rem;
-    position: fixed;
-    width: 100%;
-    top: 0;
-    z-index: 1000;
-}
-
-.navbar ul {
+.nav-container {
     display: flex;
+    justify-content: space-between; /* Space logo and nav items */
+    align-items: center;
+    padding: 20px;
+    background-color: #fff; /* White navbar background */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+}
+
+nav ul {
     list-style: none;
-    gap: 1rem;
+    margin: 0;
+    padding: 0;
+    display: flex;
 }
 
-.navbar ul li a {
-    color: var(--primary-color);
+nav li {
+    margin-left: 20px;
+}
+
+nav a {
     text-decoration: none;
-    padding: 0.5rem 1rem;
-    border: 2px solid var(--border-color);
-    background-color: var(--primary-bg);
-    box-shadow: var(--shadow);
-    transition: all 0.2s ease;
+    color: #333;
+    font-weight: bold;
+    transition: color 0.3s ease; /* Smooth color transition */
 }
 
-.navbar ul li a:hover,
-.navbar ul li a.active {
-    background-color: var(--accent-color);
-    transform: translate(2px, 2px);
-    box-shadow: 3px 3px 0 0 var(--border-color);
+nav a:hover {
+    color: #007bff; /* Highlight color on hover */
 }
 
-.hamburger {
-    display: none;
-    cursor: pointer;
-    padding: 0.5rem;
-    border: 2px solid var(--border-color);
-    background: var(--primary-bg);
-    box-shadow: var(--shadow);
+.section {
+    padding: 40px;
+    background-color: #fff; /* White section background */
+    margin-bottom: 20px; /* Space between sections */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Subtle shadow */
 }
 
-.hamburger span {
-    display: block;
-    width: 25px;
-    height: 3px;
-    background-color: var(--primary-color);
-    margin: 4px 0;
+.container {
+    max-width: 960px;
+    margin: 0 auto;
 }
 
-.content-section {
-    padding: 6rem 2rem 2rem;
-    min-height: 100vh;
-    display: none;
-    border: 3px solid var(--border-color);
-    margin: 3px;
+.project-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* Responsive grid */
+    gap: 20px;
 }
 
-.content-section.active {
-    display: block;
+.project img {
+    width: 100%;
+    height: auto;
 }
 
-/* Neobrutalism Components */
-.skill-card {
-    background-color: var(--primary-bg);
-    border: 3px solid var(--border-color);
-    padding: 1.5rem;
-    box-shadow: var(--shadow);
-    margin: 1rem 0;
+.skill-list {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap; /* Skills wrap to the next line */
+    gap: 10px;
 }
 
-.profile img {
-    border: 3px solid var(--border-color);
-    box-shadow: var(--shadow);
-    margin: 1rem;
+.skill-list li {
+    background-color: #eee; /* Light gray skill background */
+    padding: 5px 10px;
+    border-radius: 5px;
 }
 
-.timeline-item {
-    border: 3px solid var(--border-color);
-    padding: 1.5rem;
-    margin: 1rem 0;
-    box-shadow: var(--shadow);
+.timeline { /* Basic timeline styling */
+    position: relative;
+    border-left: 2px solid #ccc;
 }
 
-/* Responsive Design */
-@media (max-width: 768px) {
-    .navbar ul {
-        display: none;
-        position: absolute;
-        top: 100%;
-        left: 0;
-        right: 0;
-        background-color: var(--primary-bg);
-        border: 3px solid var(--border-color);
-        padding: 1rem;
-        flex-direction: column;
-    }
-
-    .navbar ul.active {
-        display: flex;
-    }
-
-    .hamburger {
-        display: block;
-    }
-
-    .navbar ul li a {
-        width: 100%;
-        text-align: center;
-    }
+.entry {
+    padding-left: 20px;
+    margin-bottom: 20px;
 }
 
-@media (min-width: 769px) {
-    .navbar {
-        width: 250px;
-        height: 100vh;
-        left: 0;
-        border-right: 3px solid var(--border-color);
-        border-bottom: none;
-    }
-
-    .navbar ul {
-        flex-direction: column;
-        margin-top: 2rem;
-    }
-
-    .content-section {
-        margin-left: 250px;
-    }
-
-    .hamburger {
-        display: none;
-    }
+.entry h3 {
+    margin-bottom: 5px;
 }
+
+.social-links {
+    display: flex;
+    gap: 10px;
+}
+
+.social-links img {
+    width: 30px;
+    height: 30px;
+}
+
+/* Basic Neobrutalism styling: */
+body {
+  font-family: 'Arial', sans-serif; /* Example font */
+  background-color: #f0f0f0; /* Light gray background */
+  color: #333; /* Dark gray text */
+}
+
+.section {
+  background-color: #fff; /* White panels */
+  border: 2px solid #ccc; /* Thick borders */
+  padding: 2rem; /* Generous padding */
+  margin-bottom: 1rem; /* Spacing between sections */
+  box-shadow: 4px 4px 0 #ccc; /* Offset shadows */
+  border-radius: 0; /* Square corners */
+}
+
+/* ... (Other styles) */
+
+/* Animations (Example - Add more as needed) */
+.project img {
+    transition: transform 0.3s ease;
+}
+
+.project img:hover {
+    transform: scale(1.05); /* Slight zoom on hover */
+}
+
+

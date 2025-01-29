@@ -16,7 +16,6 @@ body {
   position: sticky;
   top: 0;
   z-index: 1020;
-  height: 30px;
 }
 
 .navbar-toggler {

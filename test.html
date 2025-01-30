@@ -1,272 +1,58 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Portfolio - John Doe</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <title>Portfolio</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
-        /* Base Styles */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', sans-serif;
+        /* Custom Styles */
+        :root {
+            --primary-color: #2A2A2A;
+            --secondary-color: #007bff;
         }
 
         body {
-            background: #f8f9fa;
-            color: #2c3e50;
-            line-height: 1.6;
+            font-family: 'Segoe UI', sans-serif;
+            scroll-behavior: smooth;
         }
 
-        /* Navigation */
         .navbar {
-            display: flex;
-            justify-content: space-between;
-            padding: 1.5rem 5%;
-            background: #fff;
-            box-shadow: 0 2px 15px rgba(0,0,0,0.1);
-            position: fixed;
-            width: 100%;
-            top: 0;
-            z-index: 1000;
+            background: rgba(255, 255, 255, 0.95);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
         }
 
-        .brand {
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: #3498db;
-        }
-
-        .nav-links {
-            display: flex;
-            gap: 2rem;
-            list-style: none;
-        }
-
-        .nav-links a {
-            text-decoration: none;
-            color: #34495e;
-            font-weight: 500;
-            transition: color 0.3s;
-        }
-
-        .nav-links a:hover {
-            color: #3498db;
-        }
-
-        .hamburger {
-            display: none;
-            cursor: pointer;
-            font-size: 1.5rem;
-        }
-
-        /* Sections */
-        .section {
-            padding: 8rem 5% 4rem;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-        }
-
-        .section-title {
-            text-align: center;
-            margin-bottom: 3rem;
-            font-size: 2.5rem;
-            color: #2c3e50;
-        }
-
-        /* Home Section */
-        #home {
+        .hero-section {
             background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
-        }
-
-        .hero {
-            text-align: center;
-            margin-bottom: 4rem;
-        }
-
-        .hero h1 {
-            font-size: 3rem;
-            margin-bottom: 1rem;
-            color: #2c3e50;
-            animation: slideUp 1s ease;
-        }
-
-        .hero p {
-            font-size: 1.2rem;
-            color: #7f8c8d;
-            animation: fadeIn 2s ease;
-        }
-
-        .project-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-            margin-top: 2rem;
-        }
-
-        .project-card {
-            background: #fff;
-            border-radius: 15px;
-            padding: 1.5rem;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-            transition: transform 0.3s;
-        }
-
-        .project-card:hover {
-            transform: translateY(-10px);
-        }
-
-        /* Skills Section */
-        .skills-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 2rem;
+            padding: 120px 0;
+            animation: fadeIn 1s ease-in;
         }
 
         .skill-card {
-            background: #fff;
-            padding: 2rem;
-            border-radius: 15px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-            transition: transform 0.3s;
+            transition: transform 0.3s, box-shadow 0.3s;
         }
 
         .skill-card:hover {
-            transform: scale(1.05);
-        }
-
-        /* Pendidikan Section */
-        .timeline {
-            position: relative;
-            max-width: 800px;
-            margin: 0 auto;
+            transform: translateY(-10px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
         }
 
         .timeline-item {
-            background: #fff;
-            padding: 2rem;
-            margin: 2rem 0;
-            border-radius: 15px;
-            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
-            opacity: 0;
-            transform: translateX(-50px);
-            transition: all 0.5s;
-        }
-
-        .timeline-item.active {
-            opacity: 1;
-            transform: translateX(0);
-        }
-
-        /* Pengalaman Section */
-        .experience-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 2rem;
-        }
-
-        .flip-card {
-            background-color: transparent;
-            perspective: 1000px;
-            height: 200px;
-        }
-
-        .flip-card-inner {
             position: relative;
-            width: 100%;
-            height: 100%;
-            transition: transform 0.6s;
-            transform-style: preserve-3d;
+            padding-left: 30px;
+            margin-bottom: 40px;
         }
 
-        .flip-card:hover .flip-card-inner {
-            transform: rotateY(180deg);
-        }
-
-        .flip-front, .flip-back {
+        .timeline-item::before {
+            content: '';
             position: absolute;
-            width: 100%;
-            height: 100%;
-            backface-visibility: hidden;
-            border-radius: 15px;
-            padding: 2rem;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .flip-front {
-            background: #fff;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-        }
-
-        .flip-back {
-            background: #3498db;
-            color: white;
-            transform: rotateY(180deg);
-        }
-
-        /* About Section */
-        .about-content {
-            display: flex;
-            align-items: center;
-            gap: 4rem;
-            flex-wrap: wrap;
-            justify-content: center;
-        }
-
-        .profile-img {
-            width: 300px;
-            height: 300px;
+            left: 0;
+            top: 5px;
+            width: 15px;
+            height: 15px;
+            background: var(--secondary-color);
             border-radius: 50%;
-            object-fit: cover;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-        }
-
-        .bio {
-            max-width: 600px;
-        }
-
-        .social-links {
-            margin-top: 2rem;
-            display: flex;
-            gap: 1.5rem;
-        }
-
-        .social-icon {
-            font-size: 2rem;
-            color: #34495e;
-            transition: color 0.3s;
-        }
-
-        .social-icon:hover {
-            color: #3498db;
-        }
-
-        /* Footer */
-        footer {
-            text-align: center;
-            padding: 2rem;
-            background: #2c3e50;
-            color: white;
-        }
-
-        /* Animations */
-        @keyframes slideUp {
-            from {
-                transform: translateY(50px);
-                opacity: 0;
-            }
-            to {
-                transform: translateY(0);
-                opacity: 1;
-            }
         }
 
         @keyframes fadeIn {
@@ -274,190 +60,136 @@
             to { opacity: 1; }
         }
 
-        /* Responsive Design */
+        .hover-zoom {
+            transition: transform 0.3s;
+        }
+
+        .hover-zoom:hover {
+            transform: scale(1.05);
+        }
+
+        footer {
+            background: var(--primary-color);
+            color: white;
+            padding: 30px 0;
+        }
+
         @media (max-width: 768px) {
-            .nav-links {
-                display: none;
-                position: absolute;
-                top: 100%;
-                left: 0;
-                right: 0;
-                background: #fff;
-                flex-direction: column;
-                padding: 2rem;
-                text-align: center;
-                box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-            }
-
-            .nav-links.active {
-                display: flex;
-            }
-
-            .hamburger {
-                display: block;
-            }
-
-            .hero h1 {
-                font-size: 2rem;
-            }
-
-            .section {
-                padding: 6rem 5% 2rem;
+            .navbar-collapse {
+                background: white;
+                padding: 20px;
+                margin-top: 10px;
             }
         }
     </style>
 </head>
 <body>
-    <nav class="navbar">
-        <div class="brand">John Doe</div>
-        <ul class="nav-links">
-            <li><a href="#home">Home</a></li>
-            <li><a href="#skills">Skills</a></li>
-            <li><a href="#education">Education</a></li>
-            <li><a href="#experience">Experience</a></li>
-            <li><a href="#about">About</a></li>
-        </ul>
-        <div class="hamburger">☰</div>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg fixed-top">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="#">Portfolio</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="#home">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#skills">Skills</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#education">Pendidikan</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#experience">Pengalaman</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#about">About</a></li>
+                </ul>
+            </div>
+        </div>
     </nav>
 
-    <section id="home" class="section">
-        <div class="hero">
-            <h1>Full Stack Developer</h1>
-            <p>Building digital solutions for modern challenges</p>
-        </div>
-        <div class="project-grid">
-            <div class="project-card">
-                <h3>E-Commerce Platform</h3>
-                <p>React & Node.js Project</p>
-                <a href="#" class="btn">View Project →</a>
+    <!-- Home Section -->
+    <section id="home" class="hero-section">
+        <div class="container text-center">
+            <h1 class="display-4 mb-4 animate__animated animate__fadeIn">[Deskripsi Singkat]</h1>
+            
+            <!-- Project Preview Carousel -->
+            <div class="row g-4 mb-5">
+                <!-- Add project images here -->
             </div>
-            <div class="project-card">
-                <h3>Network Monitoring Tool</h3>
-                <p>Python & Networking</p>
-                <a href="#" class="btn">View Project →</a>
+
+            <!-- Badges -->
+            <div class="badge-container mb-4">
+                <img src="https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white" alt="Python">
+                <img src="https://img.shields.io/badge/Java-007396?style=for-the-badge&logo=java&logoColor=white" alt="Java">
+                <img src="https://img.shields.io/badge/Network-CC2927?style=for-the-badge&logo=cisco&logoColor=white" alt="Networking">
             </div>
         </div>
     </section>
 
-    <section id="skills" class="section">
-        <h2 class="section-title">Technical Skills</h2>
-        <div class="skills-container">
-            <div class="skill-card">
-                <h3>Programming</h3>
-                <ul>
-                    <li>JavaScript</li>
-                    <li>Python</li>
-                    <li>Java</li>
-                </ul>
-            </div>
-            <div class="skill-card">
-                <h3>Networking</h3>
-                <ul>
-                    <li>TCP/IP</li>
-                    <li>Network Security</li>
-                    <li>CCNA Basics</li>
-                </ul>
-            </div>
-            <div class="skill-card">
-                <h3>Other</h3>
-                <ul>
-                    <li>Project Management</li>
-                    <li>Technical Writing</li>
-                </ul>
-            </div>
-        </div>
-    </section>
-
-    <section id="education" class="section">
-        <h2 class="section-title">Education</h2>
-        <div class="timeline">
-            <div class="timeline-item">
-                <h3>University of Technology</h3>
-                <p>Computer Science (2020-2024)</p>
-            </div>
-            <div class="timeline-item">
-                <h3>Senior High School</h3>
-                <p>Natural Science (2017-2020)</p>
-            </div>
-        </div>
-    </section>
-
-    <section id="experience" class="section">
-        <h2 class="section-title">Experience</h2>
-        <div class="experience-grid">
-            <div class="flip-card">
-                <div class="flip-card-inner">
-                    <div class="flip-front">
-                        <h3>Hackathon Winner</h3>
-                        <p>2022 National Competition</p>
-                    </div>
-                    <div class="flip-back">
-                        <p>Developed AI-powered logistics solution</p>
+    <!-- Skills Section -->
+    <section id="skills" class="py-5">
+        <div class="container">
+            <h2 class="text-center mb-5">Skills</h2>
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <div class="skill-card p-4 rounded shadow">
+                        <h4><i class="fas fa-code me-2"></i>Programming</h4>
+                        <ul>
+                            <li>Python</li>
+                            <li>Java</li>
+                        </ul>
                     </div>
                 </div>
+                <!-- Add other skill cards -->
             </div>
         </div>
     </section>
 
-    <section id="about" class="section">
-        <h2 class="section-title">About Me</h2>
-        <div class="about-content">
-            <img src="https://via.placeholder.com/300" alt="Profile" class="profile-img">
-            <div class="bio">
-                <p>Passionate developer with 3+ years experience in full stack development and network infrastructure. Specialized in creating efficient web solutions and secure network systems.</p>
-                <div class="social-links">
-                    <a href="#"><i class="fab fa-linkedin social-icon"></i></a>
-                    <a href="#"><i class="fab fa-github social-icon"></i></a>
-                    <a href="#"><i class="fab fa-twitter social-icon"></i></a>
+    <!-- Pendidikan Section -->
+    <section id="education" class="py-5 bg-light">
+        <div class="container">
+            <h2 class="text-center mb-5">Pendidikan</h2>
+            <div class="timeline">
+                <div class="timeline-item">
+                    <h4>SDIT Salsabila 5 Purworejo</h4>
+                    <p>2009-2015</p>
                 </div>
+                <!-- Add other education timeline items -->
             </div>
         </div>
     </section>
 
-    <footer>
-        <p>&copy; 2023 John Doe. All rights reserved.</p>
+    <!-- Pengalaman Section -->
+    <section id="experience" class="py-5">
+        <div class="container">
+            <h2 class="text-center mb-5">Pengalaman</h2>
+            <div class="row g-4">
+                <div class="col-md-6">
+                    <div class="card hover-zoom h-100">
+                        <div class="card-body">
+                            <h4 class="card-title">Juara 3 LKS IT Network</h4>
+                            <p class="card-text">Kabupaten Purworejo</p>
+                        </div>
+                    </div>
+                </div>
+                <!-- Add other experience cards -->
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="py-5 bg-light">
+        <div class="container text-center">
+            <h2 class="mb-4">Tentang Saya</h2>
+            <p class="mb-4">[Deskripsi Singkat]</p>
+            <div class="social-links">
+                <a href="#" class="btn btn-outline-dark mx-2"><i class="fab fa-instagram"></i></a>
+                <a href="#" class="btn btn-outline-dark mx-2"><i class="fab fa-github"></i></a>
+                <!-- Add other social links -->
+            </div>
+        </div>
+    </section>
+
+    <footer class="text-center">
+        <p>&copy; 2025 RDX. All rights reserved.</p>
     </footer>
 
-    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-    <script>
-        // Mobile Menu
-        const hamburger = document.querySelector('.hamburger');
-        const navLinks = document.querySelector('.nav-links');
-
-        hamburger.addEventListener('click', () => {
-            navLinks.classList.toggle('active');
-        });
-
-        // Smooth Scroll
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function(e) {
-                e.preventDefault();
-                document.querySelector(this.getAttribute('href')).scrollIntoView({
-                    behavior: 'smooth'
-                });
-                navLinks.classList.remove('active');
-            });
-        });
-
-        // Scroll Animation
-        window.addEventListener('scroll', () => {
-            const timelineItems = document.querySelectorAll('.timeline-item');
-            const windowHeight = window.innerHeight;
-
-            timelineItems.forEach(item => {
-                const itemTop = item.getBoundingClientRect().top;
-                if (itemTop < windowHeight - 100) {
-                    item.classList.add('active');
-                }
-            });
-        });
-
-        // Initialize AOS
-        AOS.init({
-            duration: 1000,
-            once: true,
-            offset: 150
-        });
-    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

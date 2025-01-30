@@ -42,56 +42,57 @@
             animation: fadeIn 1s ease-in;
         }
 
-        .skill-card {
+        .skill-card, .edu-card {
             transition: transform 0.3s, box-shadow 0.3s;
             border: none !important;
+            border-radius: 15px !important;
         }
 
-        .skill-card:hover {
-            transform: translateY(-10px);
+        .skill-card:hover, .edu-card:hover {
+            transform: translateY(-5px);
             box-shadow: 0 10px 20px rgba(0,0,0,0.1);
         }
 
-        .timeline-item {
-            position: relative;
-            padding-left: 30px;
-            margin-bottom: 40px;
-            border-left: 2px solid #eee;
+        .project-card {
+            border: 2px solid #000;
+            border-radius: 15px;
+            transition: all 0.3s ease;
+            height: 100%;
         }
 
-        .timeline-item::before {
-            content: '';
-            position: absolute;
-            left: -8px;
-            top: 5px;
-            width: 15px;
-            height: 15px;
-            background: var(--secondary-color);
-            border-radius: 50%;
+        .project-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 8px 8px 0 #000;
         }
 
-        .hover-zoom {
-            transition: transform 0.3s;
+        .tech-tag {
+            display: inline-block;
+            padding: 5px 15px;
+            background: #f0f0f0;
+            border-radius: 20px;
+            margin: 5px 3px;
+            font-size: 0.9em;
         }
 
-        .hover-zoom:hover {
-            transform: scale(1.03);
+        .code-link {
+            text-decoration: none;
+            border: 2px solid #000;
+            padding: 5px 20px;
+            border-radius: 20px;
+            display: inline-flex;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+
+        .code-link:hover {
+            background: #000;
+            color: white !important;
         }
 
         footer {
             background: var(--primary-color);
             color: white;
             padding: 30px 0;
-        }
-
-        .social-btn {
-            width: 45px;
-            height: 45px;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 50%;
-            transition: all 0.3s;
         }
 
         @media (max-width: 768px) {
@@ -120,6 +121,7 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto gap-lg-2">
                     <li class="nav-item"><a class="nav-link" href="#home">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#projects">Proyek</a></li>
                     <li class="nav-item"><a class="nav-link" href="#skills">Skills</a></li>
                     <li class="nav-item"><a class="nav-link" href="#education">Pendidikan</a></li>
                     <li class="nav-item"><a class="nav-link" href="#experience">Pengalaman</a></li>
@@ -132,66 +134,78 @@
     <!-- Home Section -->
     <section id="home" class="hero-section">
         <div class="container text-center">
-            <h1 class="display-5 mb-3 fw-bold">Professional Network Engineer & Developer</h1>
-            <p class="lead mb-4">Spesialis jaringan komputer dan pengembangan aplikasi dengan pengalaman 3+ tahun</p>
-            
-            <div class="row g-4 mb-5 justify-content-center">
-                <div class="col-md-4">
-                    <div class="card hover-zoom h-100">
-                        <img src="https://via.placeholder.com/300x200" class="card-img-top" alt="Project 1">
-                        <div class="card-body">
-                            <h5 class="card-title">Sistem Monitoring Jaringan</h5>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="card hover-zoom h-100">
-                        <img src="https://via.placeholder.com/300x200" class="card-img-top" alt="Project 2">
-                        <div class="card-body">
-                            <h5 class="card-title">Aplikasi Inventory IT</h5>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <h1 class="display-5 mb-3 fw-bold">Fabric</h1>
+            <p class="lead mb-4">Mahasiswa TI yang bersemangat dalam pengembangan web dan jaringan</p>
+        </div>
+    </section>
 
-            <div class="badge-container mb-4">
-                <img src="https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white" alt="Python">
-                <img src="https://img.shields.io/badge/Java-007396?style=for-the-badge&logo=java&logoColor=white" alt="Java">
-                <img src="https://img.shields.io/badge/Network-CC2927?style=for-the-badge&logo=cisco&logoColor=white" alt="Networking">
-                <img src="https://img.shields.io/badge/English-B2-blue?style=for-the-badge" alt="English">
+    <!-- Projects Section -->
+    <section id="projects" class="py-5">
+        <div class="container">
+            <h2 class="text-center mb-5">Proyek Terbaru</h2>
+            <div class="row g-4">
+                <div class="col-md-6">
+                    <div class="project-card p-4">
+                        <h3>Portfolio Website</h3>
+                        <p class="text-muted">Website portfolio dengan gaya neobrutalisme</p>
+                        <div class="mb-3">
+                            <span class="tech-tag">HTML5</span>
+                            <span class="tech-tag">CSS3</span>
+                            <span class="tech-tag">Bootstrap</span>
+                        </div>
+                        <a href="#" class="code-link text-dark">
+                            <i class="fas fa-code me-2"></i>Lihat Kode
+                        </a>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="project-card p-4">
+                        <h3>Network Monitor</h3>
+                        <p class="text-muted">Tools monitoring jaringan dengan Python</p>
+                        <div class="mb-3">
+                            <span class="tech-tag">Python</span>
+                            <span class="tech-tag">SNMP</span>
+                            <span class="tech-tag">Linux</span>
+                        </div>
+                        <a href="#" class="code-link text-dark">
+                            <i class="fas fa-check-circle me-2 text-success"></i>Kode Tersedia
+                        </a>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
 
     <!-- Skills Section -->
-    <section id="skills" class="py-5">
+    <section id="skills" class="py-5 bg-light">
         <div class="container">
             <h2 class="text-center mb-5">Skills</h2>
             <div class="row g-4">
                 <div class="col-md-4">
-                    <div class="skill-card p-4 rounded-3 bg-white shadow">
-                        <h4><i class="fas fa-laptop-code me-2 text-primary"></i>Programming</h4>
+                    <div class="skill-card p-4 bg-white shadow">
+                        <h4><i class="fas fa-laptop-code me-2"></i>Programming</h4>
                         <ul class="list-unstyled">
-                            <li><i class="fas fa-check-circle me-2 text-success"></i>Python (Advanced)</li>
-                            <li><i class="fas fa-check-circle me-2 text-success"></i>Java (Intermediate)</li>
+                            <li>Python</li>
+                            <li>Java</li>
                         </ul>
                     </div>
                 </div>
                 <div class="col-md-4">
-                    <div class="skill-card p-4 rounded-3 bg-white shadow">
-                        <h4><i class="fas fa-network-wired me-2 text-primary"></i>Networking</h4>
+                    <div class="skill-card p-4 bg-white shadow">
+                        <h4><i class="fas fa-network-wired me-2"></i>Networking</h4>
                         <ul class="list-unstyled">
-                            <li><i class="fas fa-check-circle me-2 text-success"></i>LAN Management</li>
-                            <li><i class="fas fa-check-circle me-2 text-success"></i>WLAN Configuration</li>
+                            <li>LAN</li>
+                            <li>WLAN</li>
                         </ul>
                     </div>
                 </div>
                 <div class="col-md-4">
-                    <div class="skill-card p-4 rounded-3 bg-white shadow">
-                        <h4><i class="fas fa-star me-2 text-primary"></i>Lainnya</h4>
+                    <div class="skill-card p-4 bg-white shadow">
+                        <h4><i class="fas fa-star me-2"></i>Lainnya</h4>
                         <ul class="list-unstyled">
-                            <li><i class="fas fa-check-circle me-2 text-success"></i>Bahasa Inggris (Intermediate)</li>
-                            <li><i class="fas fa-check-circle me-2 text-success"></i>Manajemen Proyek</li>
+                            <li>Bahasa Inggris</li>
+                            <li>Manajemen Proyek</li>
                         </ul>
                     </div>
                 </div>
@@ -200,58 +214,61 @@
     </section>
 
     <!-- Pendidikan Section -->
-    <section id="education" class="py-5 bg-light">
+    <section id="education" class="py-5">
         <div class="container">
             <h2 class="text-center mb-5">Riwayat Pendidikan</h2>
-            <div class="timeline">
-                <div class="timeline-item">
-                    <h4>SDIT Salsabila 5 Purworejo</h4>
-                    <p class="text-muted mb-0">2012 - 2017</p>
+            <div class="row g-4">
+                <div class="col-md-3">
+                    <div class="edu-card p-3 bg-white shadow text-center">
+                        <h5>SDIT Salsabila 5 Purworejo</h5>
+                        <p class="text-muted mb-0">2011-2017</p>
+                    </div>
                 </div>
-                <div class="timeline-item">
-                    <h4>MTs Negeri 1 Purworejo</h4>
-                    <p class="text-muted mb-0">2017 - 2020</p>
+                <div class="col-md-3">
+                    <div class="edu-card p-3 bg-white shadow text-center">
+                        <h5>MTs Negeri 1 Purworejo</h5>
+                        <p class="text-muted mb-0">2017-2020</p>
+                    </div>
                 </div>
-                <div class="timeline-item">
-                    <h4>SMK TI Kartika Cendekia Purworejo</h4>
-                    <p class="text-muted mb-0">2020 - 2023 | Jurusan Teknik Komputer dan Jaringan</p>
+                <div class="col-md-3">
+                    <div class="edu-card p-3 bg-white shadow text-center">
+                        <h5>SMK TI Kartika Cendekia Purworejo</h5>
+                        <p class="text-muted mb-0">2020-2023</p>
+                    </div>
                 </div>
-                <div class="timeline-item">
-                    <h4>Universitas Bina Sarana Informatika</h4>
-                    <p class="text-muted mb-0">2023 - Sekarang | Sistem Informasi</p>
+                <div class="col-md-3">
+                    <div class="edu-card p-3 bg-white shadow text-center">
+                        <h5>Universitas Bina Sarana Informatika</h5>
+                        <p class="text-muted mb-0">2023-Sekarang</p>
+                    </div>
                 </div>
             </div>
         </div>
     </section>
 
     <!-- Pengalaman Section -->
-    <section id="experience" class="py-5">
+    <section id="experience" class="py-5 bg-light">
         <div class="container">
             <h2 class="text-center mb-5">Pengalaman</h2>
             <div class="row g-4">
                 <div class="col-md-6">
-                    <div class="card hover-zoom h-100 shadow-sm">
-                        <div class="card-body">
-                            <h4 class="card-title">Juara 3 LKS IT Network</h4>
-                            <p class="card-subtitle mb-2 text-muted">Kabupaten Purworejo (2020)</p>
-                            <ul class="list-unstyled">
-                                <li><i class="fas fa-trophy me-2 text-warning"></i>Kompetisi Nasional Bidang Jaringan</li>
-                                <li><i class="fas fa-cogs me-2 text-primary"></i>Membangun infrastruktur jaringan enterprise</li>
-                            </ul>
-                        </div>
+                    <div class="skill-card p-4 bg-white shadow">
+                        <h4><i class="fas fa-trophy me-2"></i>Juara 3 LKS IT Network System Administrator</h4>
+                        <p class="text-muted">Kabupaten Purworejo</p>
+                        <ul class="list-unstyled">
+                            <li>Kompetisi Nasional Bidang Jaringan</li>
+                            <li>Tahun 2023</li>
+                        </ul>
                     </div>
                 </div>
                 <div class="col-md-6">
-                    <div class="card hover-zoom h-100 shadow-sm">
-                        <div class="card-body">
-                            <h4 class="card-title">Pengalaman Organisasi</h4>
-                            <p class="card-subtitle mb-2 text-muted">2015 - 2021</p>
-                            <ul class="list-unstyled">
-                                <li><i class="fas fa-users me-2 text-success"></i>Anggota OSIS MTs N 1 Purworejo</li>
-                                <li><i class="fas fa-campground me-2 text-info"></i>Dewan Ambalan Pramuka</li>
-                                <li><i class="fas fa-project-diagram me-2 text-danger"></i>Koordinator Projek IT School Club</li>
-                            </ul>
-                        </div>
+                    <div class="skill-card p-4 bg-white shadow">
+                        <h4><i class="fas fa-users me-2"></i>Organisasi</h4>
+                        <p class="text-muted">Pengalaman Organisasi</p>
+                        <ul class="list-unstyled">
+                            <li>OSIS MTs Negeri 1 Purworejo</li>
+                            <li>Dewan Ambalan SMK TI Kartika Cendekia</li>
+                        </ul>
                     </div>
                 </div>
             </div>
@@ -259,33 +276,29 @@
     </section>
 
     <!-- About Section -->
-    <section id="about" class="py-5 bg-light">
+    <section id="about" class="py-5">
         <div class="container text-center">
             <h2 class="mb-4">Tentang Saya</h2>
             <p class="mb-4 lead mx-auto" style="max-width: 600px;">
-                Seorang profesional IT yang bersemangat dalam bidang jaringan komputer dan pengembangan perangkat lunak. 
-                Memiliki kemampuan problem-solving yang baik dan senang belajar teknologi baru. 
-                Berpengalaman dalam memimpin tim proyek dan membangun sistem jaringan enterprise.
+                Mahasiswa Teknik Informatika yang antusias dengan pengembangan web dan jaringan komputer. 
+                Memiliki pengalaman dalam membangun aplikasi web dan mengelola infrastruktur jaringan.
             </p>
             <div class="social-links">
-                <a href="https://instagram.com" class="social-btn btn-outline-dark mx-2">
+                <a href="#" class="btn btn-outline-dark mx-2 rounded-circle p-3">
                     <i class="fab fa-instagram"></i>
                 </a>
-                <a href="https://facebook.com" class="social-btn btn-outline-dark mx-2">
-                    <i class="fab fa-facebook-f"></i>
-                </a>
-                <a href="https://github.com" class="social-btn btn-outline-dark mx-2">
+                <a href="#" class="btn btn-outline-dark mx-2 rounded-circle p-3">
                     <i class="fab fa-github"></i>
                 </a>
-                <a href="https://linkedin.com" class="social-btn btn-outline-dark mx-2">
-                    <i class="fab fa-linkedin-in"></i>
+                <a href="#" class="btn btn-outline-dark mx-2 rounded-circle p-3">
+                    <i class="fab fa-linkedin"></i>
                 </a>
             </div>
         </div>
     </section>
 
     <footer class="text-center">
-        <p class="mb-0">&copy; 2024 [Nama Anda]. All rights reserved</p>
+        <p class="mb-0">&copy; 2025 RDX. All rights reserved</p>
     </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>

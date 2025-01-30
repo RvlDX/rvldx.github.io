@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RDX TopUp - Mobile Legends Items Marketplace</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Reset CSS */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+
+        /* Navbar Styles */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 5%;
+            background: #1a1a1a;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .logo {
+            height: 40px;
+            transition: transform 0.3s ease;
+        }
+
+        .logo:hover {
+            transform: scale(1.05);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .hover-anim:hover {
+            color: #ff4654;
+            transform: translateY(-2px);
+        }
+
+        /* Hero Section */
+        .hero {
+            padding: 120px 5% 60px;
+            background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)),
+                        url('mobile-legends-bg.jpg') center/cover;
+            color: white;
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        /* Items Grid */
+        .items-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            padding: 4rem 5%;
+        }
+
+        .item-card {
+            background: white;
+            border-radius: 10px;
+            padding: 1.5rem;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+            text-align: center;
+        }
+
+        .item-card:hover {
+            transform: translateY(-10px);
+        }
+
+        .item-card img {
+            width: 100%;
+            max-width: 200px;
+            height: auto;
+            margin: 0 auto 1rem;
+        }
+
+        .price {
+            color: #ff4654;
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin: 1rem 0;
+        }
+
+        .buy-btn {
+            background: #ff4654;
+            color: white;
+            border: none;
+            padding: 0.8rem 2rem;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        /* Payment Section */
+        .payment-section {
+            padding: 4rem 5%;
+            text-align: center;
+        }
+
+        .payment-methods {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            flex-wrap: wrap;
+            margin-top: 2rem;
+        }
+
+        .payment-icon {
+            height: 50px;
+            transition: transform 0.3s ease;
+        }
+
+        .payment-icon:hover {
+            transform: scale(1.1);
+        }
+
+        /* About Section */
+        .about-section {
+            padding: 4rem 5%;
+            background: #f9f9f9;
+            text-align: center;
+        }
+
+        /* Contact Section */
+        .contact-section {
+            padding: 4rem 5%;
+        }
+
+        .contact-form {
+            max-width: 600px;
+            margin: 2rem auto;
+        }
+
+        .contact-form input,
+        .contact-form textarea {
+            width: 100%;
+            padding: 1rem;
+            margin: 0.5rem 0;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        .submit-btn {
+            background: #1a1a1a;
+            color: white;
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        /* Footer */
+        footer {
+            background: #1a1a1a;
+            color: white;
+            text-align: center;
+            padding: 2rem 5%;
+        }
+
+        .social-links {
+            margin-bottom: 1rem;
+        }
+
+        .social-links a {
+            color: white;
+            font-size: 1.5rem;
+            margin: 0 1rem;
+            transition: color 0.3s ease;
+        }
+
+        .social-links a:hover {
+            color: #ff4654;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                background: #1a1a1a;
+                flex-direction: column;
+                padding: 1rem;
+            }
+
+            .nav-links.active {
+                display: flex;
+            }
+
+            .menu-toggle {
+                display: block;
+                color: white;
+                font-size: 1.5rem;
+                cursor: pointer;
+            }
+
+            .hero h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="logo-container">
+            <img src="INSERT_LOGO_URL_HERE" alt="RDX TopUp Logo" class="logo">
+        </div>
+        
+        <ul class="nav-links">
+            <li><a href="#home" class="hover-anim">Home</a></li>
+            <li><a href="#items" class="hover-anim">Buy/Sell</a></li>
+            <li><a href="#about" class="hover-anim">About</a></li>
+            <li><a href="#contact" class="hover-anim">Contact</a></li>
+            <li class="social-dropdown">
+                <a href="#" class="hover-anim">Follow Us <i class="fas fa-chevron-down"></i></a>
+                <div class="dropdown-content">
+                    <a href="INSERT_INSTAGRAM_URL_HERE" target="_blank"><i class="fab fa-instagram"></i></a>
+                    <a href="INSERT_WHATSAPP_URL_HERE" target="_blank"><i class="fab fa-whatsapp"></i></a>
+                </div>
+            </li>
+        </ul>
+        <i class="fas fa-bars menu-toggle"></i>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero">
+        <h1>Mobile Legends Top-Up & Trading</h1>
+        <p>Instant Diamonds • Secure Transactions • 24/7 Support</p>
+    </section>
+
+    <!-- Items Grid -->
+    <section id="items" class="items-grid">
+        <div class="item-card">
+            <img src="diamond-pack.png" alt="Diamonds Pack">
+            <h3>500 Diamonds</h3>
+            <p class="price">$10.99</p>
+            <button class="buy-btn hover-anim">Buy Now</button>
+        </div>
+        <!-- Add more item cards as needed -->
+    </section>
+
+    <!-- Payment Methods -->
+    <section class="payment-section">
+        <h2>Accepted Payment Methods</h2>
+        <div class="payment-methods">
+            <img src="qris-icon.png" alt="QRIS" class="payment-icon">
+            <img src="dana-icon.png" alt="DANA" class="payment-icon">
+            <img src="gopay-icon.png" alt="GoPay" class="payment-icon">
+            <img src="ovo-icon.png" alt="OVO" class="payment-icon">
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="about-section">
+        <h2>About RDX TopUp</h2>
+        <p>INSERT_ABOUT_CONTENT_HERE</p>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="contact-section">
+        <h2>Contact Us</h2>
+        <div class="contact-info">
+            <p>INSERT_CONTACT_INFORMATION_HERE</p>
+            <form class="contact-form">
+                <input type="text" placeholder="Name" required>
+                <input type="email" placeholder="Email" required>
+                <textarea placeholder="Message" rows="5" required></textarea>
+                <button type="submit" class="submit-btn hover-anim">Send Message</button>
+            </form>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="social-links">
+            <a href="INSERT_INSTAGRAM_URL_HERE" target="_blank"><i class="fab fa-instagram"></i></a>
+            <a href="INSERT_WHATSAPP_URL_HERE" target="_blank"><i class="fab fa-whatsapp"></i></a>
+        </div>
+        <div class="copyright">
+            © <span id="year"></span> RDX TopUp. All rights reserved.
+        </div>
+    </footer>
+
+    <script>
+        // Mobile Menu Toggle
+        document.querySelector('.menu-toggle').addEventListener('click', () => {
+            document.querySelector('.nav-links').classList.toggle('active');
+        });
+
+        // Update Copyright Year
+        document.getElementById('year').textContent = new Date().getFullYear();
+
+        // Smooth Scroll
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+    </script>
+</body>
+</html>

@@ -44,7 +44,7 @@ body {
 }
 
 .nav-link {
-    padding: 0.5rem 1rem !important;
+    padding: 0.5rem 1.5rem !important;
     border-radius: 5px;
     transition: all 0.3s ease;
 }

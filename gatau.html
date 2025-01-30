@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ardi Portfolio</title>
+    <style>
+        :root {
+            --network-blue: #00a8ff;
+            --node-color: #2ecc71;
+            --packet-color: #e74c3c;
+            --bg-color: #0a1929;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+
+        body {
+            background: var(--bg-color);
+            color: white;
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Network Background Elements */
+        .network-node {
+            position: absolute;
+            width: 12px;
+            height: 12px;
+            background: var(--node-color);
+            border-radius: 50%;
+            animation: node-pulse 2s infinite;
+        }
+
+        .data-packet {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            background: var(--packet-color);
+            border-radius: 50%;
+            animation: move-packets 4s linear infinite;
+        }
+
+        nav {
+            background: rgba(0,0,0,0.8);
+            padding: 1rem;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            backdrop-filter: blur(5px);
+        }
+
+        nav ul {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            transition: all 0.3s;
+        }
+
+        nav a:hover {
+            background: var(--network-blue);
+        }
+
+        section {
+            padding: 5rem 2rem;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .profile-img {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            border: 3px solid var(--network-blue);
+            margin: 2rem 0;
+            box-shadow: 0 0 30px rgba(0, 168, 255, 0.3);
+        }
+
+        .card {
+            background: rgba(0,0,0,0.3);
+            padding: 2rem;
+            border-radius: 10px;
+            border: 1px solid var(--network-blue);
+            margin: 1rem 0;
+            width: 80%;
+            backdrop-filter: blur(5px);
+        }
+
+        .timeline {
+            border-left: 2px solid var(--network-blue);
+            padding-left: 2rem;
+            margin-left: 1rem;
+        }
+
+        .skill-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            width: 100%;
+        }
+
+        .skill-category {
+            background: rgba(0,0,0,0.2);
+            padding: 1.5rem;
+            border-radius: 10px;
+            border: 1px solid var(--node-color);
+        }
+
+        footer {
+            background: rgba(0,0,0,0.8);
+            text-align: center;
+            padding: 1rem;
+            border-top: 1px solid var(--network-blue);
+        }
+
+        @keyframes node-pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(1); }
+        }
+
+        @keyframes move-packets {
+            0% { transform: translateY(0); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { transform: translateY(-100vh); opacity: 0; }
+        }
+
+        @media (max-width: 768px) {
+            .card {
+                width: 95%;
+            }
+            
+            nav ul {
+                flex-wrap: wrap;
+                gap: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Network Elements -->
+    <div class="network-node" style="top: 15%; left: 20%"></div>
+    <div class="data-packet" style="left: 21%; animation-delay: 0.5s"></div>
+    
+    <nav>
+        <ul>
+            <li><a href="#home">Home</a></li>
+            <li><a href="#skills">Skills</a></li>
+            <li><a href="#education">Education</a></li>
+            <li><a href="#experience">Experience</a></li>
+            <li><a href="#about">About</a></li>
+        </ul>
+    </nav>
+
+    <!-- Home Section -->
+    <section id="home">
+        <img src="https://via.placeholder.com/200" alt="Ardi" class="profile-img">
+        <div class="card">
+            <h1>Network Engineer & Developer</h1>
+            <p>IP Address: 192.168.1.ardi</p>
+            <p>Status: Connected <span style="color: #2ecc71;">●</span></p>
+        </div>
+    </section>
+
+    <!-- Skills Section -->
+    <section id="skills">
+        <div class="card">
+            <h2>Skills</h2>
+            <div class="skill-grid">
+                <div class="skill-category">
+                    <h3>Programming</h3>
+                    <ul>
+                        <li>Python</li>
+                        <li>JavaScript</li>
+                        <li>HTML/CSS</li>
+                    </ul>
+                </div>
+                <div class="skill-category">
+                    <h3>Networking</h3>
+                    <ul>
+                        <li>CCNA</li>
+                        <li>Network Security</li>
+                        <li>TCP/IP</li>
+                    </ul>
+                </div>
+                <div class="skill-category">
+                    <h3>Other</h3>
+                    <ul>
+                        <li>Linux Administration</li>
+                        <li>Cloud Computing</li>
+                        <li>Cyber Security</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Education Section -->
+    <section id="education">
+        <div class="card">
+            <h2>Education</h2>
+            <div class="timeline">
+                <h3>SD Negeri 01 Jakarta</h3>
+                <p>2009-2015</p>
+                <h3>SMP Negeri 12 Jakarta</h3>
+                <p>2015-2018</p>
+                <h3>SMK Teknologi Jakarta</h3>
+                <p>2018-2021 | Jurusan: Teknik Komputer dan Jaringan</p>
+                <h3>Universitas Teknologi Indonesia</h3>
+                <p>2021-Sekarang | Teknik Informatika</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Experience Section -->
+    <section id="experience">
+        <div class="card">
+            <h2>Experience</h2>
+            <div class="skill-grid">
+                <div class="skill-category">
+                    <h3>Organisasi</h3>
+                    <ul>
+                        <li>Ketua OSIS (2019-2020)</li>
+                        <li>Anggota Club Jaringan</li>
+                        <li>Koordinator Event IT</li>
+                    </ul>
+                </div>
+                <div class="skill-category">
+                    <h3>Lomba</h3>
+                    <ul>
+                        <li>Juara 1 Lomba Jaringan Tingkat Nasional</li>
+                        <li>Finalis CTF Competition</li>
+                        <li>Peserta Hackathon 2023</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about">
+        <div class="card">
+            <h2>About</h2>
+            <div class="skill-grid">
+                <div class="skill-category">
+                    <h3>Profil</h3>
+                    <p>Nama: Ardi<br>
+                    Umur: 20 Tahun<br>
+                    Spesialisasi: Jaringan & Keamanan Siber</p>
+                </div>
+                <div class="skill-category">
+                    <h3>Tentang</h3>
+                    <p>Seorang profesional di bidang jaringan komputer dan pengembangan sistem keamanan.</p>
+                </div>
+                <div class="skill-category">
+                    <h3>Sosial Media</h3>
+                    <ul>
+                        <li><a href="https://discord.com" style="color: var(--network-blue);">Discord</a></li>
+                        <li><a href="https://tiktok.com" style="color: var(--network-blue);">TikTok</a></li>
+                        <li><a href="https://instagram.com" style="color: var(--network-blue);">Instagram</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <p>&copy; 2025 RDX Network. All rights reserved.</p>
+    </footer>
+</body>
+</html>

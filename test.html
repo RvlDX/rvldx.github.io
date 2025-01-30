@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Name | Professional Portfolio</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        /* Base Styles & Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .section { animation: fadeIn 1s ease-out; }
+        .hover-scale { transition: transform 0.3s ease; }
+        .hover-scale:hover { transform: scale(1.05); }
+    </style>
+</head>
+<body>
+    <!-- Responsive Navigation -->
+    <nav class="navbar">
+        <div class="logo">YourLogo</div>
+        <ul class="nav-links">
+            <li><a href="#home">Home</a></li>
+            <li><a href="#skills">Skills</a></li>
+            <li><a href="#education">Education</a></li>
+            <li><a href="#experience">Experience</a></li>
+            <li><a href="#about">About</a></li>
+        </ul>
+    </nav>
+
+    <!-- Home Section -->
+    <section id="home" class="section">
+        <div class="hero">
+            <h1>Front-End Developer & Network Specialist</h1>
+            <p class="tagline">Creating digital solutions that bridge technology and business needs</p>
+            <div class="project-preview">
+                <!-- Interactive Project Cards -->
+                <div class="project-card hover-scale">
+                    <img src="project1-thumb.jpg" alt="Project 1">
+                    <h3>E-Commerce Platform</h3>
+                    <a href="#" class="project-link">View Case Study →</a>
+                </div>
+                <!-- Repeat for other projects -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Skills Section -->
+    <section id="skills" class="section">
+        <h2>Technical Expertise</h2>
+        <div class="skills-grid">
+            <div class="skill-category">
+                <h3><i class="fas fa-code"></i> Programming</h3>
+                <ul class="animated-list">
+                    <li>HTML5/CSS3</li>
+                    <li>JavaScript (ES6+)</li>
+                    <li>Python</li>
+                </ul>
+            </div>
+            <!-- Repeat for Networking and Other categories -->
+        </div>
+    </section>
+
+    <!-- Education Section -->
+    <section id="education" class="section">
+        <h2>Education Timeline</h2>
+        <div class="timeline">
+            <div class="timeline-item hover-scale">
+                <h3>University Name</h3>
+                <p>Computer Science Bachelor's Degree</p>
+                <span class="timeline-date">2019-2023</span>
+            </div>
+            <!-- Add other education levels -->
+        </div>
+    </section>
+
+    <!-- Experience Section -->
+    <section id="experience" class="section">
+        <div class="experience-tabs">
+            <button class="tab-btn active">Competitions</button>
+            <button class="tab-btn">Organizations</button>
+            
+            <div class="tab-content active">
+                <div class="experience-card hover-scale">
+                    <h3>National Coding Competition 2022</h3>
+                    <p>1st Place Winner</p>
+                </div>
+            </div>
+            <!-- Add organization experiences -->
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="section">
+        <div class="about-content">
+            <img src="profile-pic.jpg" alt="Profile Picture" class="profile-img hover-scale">
+            <p class="bio">Passionate developer with expertise in full-stack web development...</p>
+            <div class="social-links">
+                <a href="#"><i class="fab fa-linkedin hover-scale"></i></a>
+                <a href="#"><i class="fab fa-github hover-scale"></i></a>
+                <!-- Add other social media -->
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <p>&copy; 2024 Your Name. All rights reserved.</p>
+    </footer>
+
+    <script>
+        // Interactive Navbar Scroll Effect
+        window.addEventListener('scroll', () => {
+            const navbar = document.querySelector('.navbar');
+            if (window.scrollY > 50) {
+                navbar.style.backgroundColor = 'rgba(255,255,255,0.95)';
+            } else {
+                navbar.style.backgroundColor = 'transparent';
+            }
+        });
+
+        // Tab Functionality for Experience Section
+        document.querySelectorAll('.tab-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                // Tab switching logic
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ardi - Neon Links</title>
+    <style>
+        :root {
+            --neon-blue: #0ff;
+            --neon-pink: #f0f;
+            --neon-green: #0f0;
+            --bg-color: #000;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Courier New', monospace;
+        }
+
+        body {
+            background: var(--bg-color);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 2rem;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 600px;
+            width: 90%;
+            text-align: center;
+            position: relative;
+        }
+
+        .profile-img {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            border: 3px solid var(--neon-blue);
+            margin-bottom: 2rem;
+            box-shadow: 0 0 20px var(--neon-blue);
+            filter: drop-shadow(0 0 5px var(--neon-blue));
+            animation: glitch 2s infinite;
+        }
+
+        h1 {
+            font-size: 2.8rem;
+            margin-bottom: 2rem;
+            color: var(--neon-pink);
+            text-shadow: 0 0 10px var(--neon-pink);
+            animation: text-flicker 1s infinite;
+        }
+
+        .links-container {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            margin: 3rem 0;
+        }
+
+        .social-link {
+            background: rgba(0, 0, 0, 0.8);
+            padding: 1.5rem;
+            border-radius: 5px;
+            text-decoration: none;
+            color: white;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            position: relative;
+            border: 2px solid var(--neon-green);
+            clip-path: polygon(10% 0, 100% 0, 90% 100%, 0 100%);
+            animation: matrix 5s linear infinite;
+        }
+
+        .social-link:hover {
+            transform: scale(1.05);
+            background: rgba(255,255,255,0.1);
+            box-shadow: 0 0 25px var(--neon-green);
+        }
+
+        .social-link::before {
+            content: '>';
+            position: absolute;
+            left: 10px;
+            color: var(--neon-blue);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .social-link:hover::before {
+            opacity: 1;
+        }
+
+        .discord { border-color: #7289da; color: #7289da; }
+        .tiktok { border-color: #ff0050; color: #ff0050; }
+        .instagram { border-color: #e1306c; color: #e1306c; }
+
+        .copyright {
+            margin-top: 3rem;
+            color: var(--neon-blue);
+            font-size: 0.9rem;
+            position: relative;
+        }
+
+        .copyright::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--neon-blue), transparent);
+            bottom: -5px;
+            left: 0;
+        }
+
+        @keyframes glitch {
+            0% { transform: translate(0); }
+            20% { transform: translate(-2px, 2px); }
+            40% { transform: translate(-2px, -2px); }
+            60% { transform: translate(2px, 2px); }
+            80% { transform: translate(2px, -2px); }
+            100% { transform: translate(0); }
+        }
+
+        @keyframes text-flicker {
+            0% { opacity: 0.9; }
+            50% { opacity: 0.7; }
+            100% { opacity: 0.9; }
+        }
+
+        @keyframes matrix {
+            0% { background-position: 0 0; }
+            100% { background-position: 0 100%; }
+        }
+
+        @media (max-width: 480px) {
+            h1 { font-size: 2rem; }
+            .social-link { padding: 1.2rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <img src="https://via.placeholder.com/150" alt="Ardi" class="profile-img">
+        <h1>ARDI</h1>
+        
+        <div class="links-container">
+            <a href="https://discord.com" class="social-link discord" target="_blank">DISCORD</a>
+            <a href="https://tiktok.com" class="social-link tiktok" target="_blank">TIKTOK</a>
+            <a href="https://instagram.com" class="social-link instagram" target="_blank">INSTAGRAM</a>
+        </div>
+
+        <p class="copyright">COPYRIGHT 2025 RDX</p>
+    </div>
+</body>
+</html>

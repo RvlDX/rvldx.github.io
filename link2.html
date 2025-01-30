@@ -3,157 +3,170 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ardi - Neon Links</title>
+    <title>Ardi - Dev & Network</title>
     <style>
         :root {
-            --neon-blue: #0ff;
-            --neon-pink: #f0f;
-            --neon-green: #0f0;
-            --bg-color: #000;
+            --terminal-green: #4AF626;
+            --code-blue: #5CCFE6;
+            --background: #011627;
+            --node-purple: #C792EA;
         }
 
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Courier New', monospace;
+            font-family: 'Fira Code', monospace;
         }
 
         body {
-            background: var(--bg-color);
+            background-color: var(--background);
             min-height: 100vh;
             display: flex;
             flex-direction: column;
             align-items: center;
             padding: 2rem;
-            overflow-x: hidden;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Network Nodes Animation */
+        .network-node {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            background: var(--node-purple);
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(0.8); opacity: 0.5; }
+            50% { transform: scale(1.2); opacity: 1; }
+            100% { transform: scale(0.8); opacity: 0.5; }
         }
 
         .container {
-            max-width: 600px;
+            max-width: 800px;
             width: 90%;
             text-align: center;
-            position: relative;
+            z-index: 1;
         }
 
         .profile-img {
             width: 150px;
             height: 150px;
             border-radius: 50%;
-            border: 3px solid var(--neon-blue);
-            margin-bottom: 2rem;
-            box-shadow: 0 0 20px var(--neon-blue);
-            filter: drop-shadow(0 0 5px var(--neon-blue));
-            animation: glitch 2s infinite;
+            border: 3px solid var(--terminal-green);
+            margin-bottom: 1.5rem;
+            box-shadow: 0 0 25px var(--terminal-green);
         }
 
         h1 {
-            font-size: 2.8rem;
+            font-size: 2.5rem;
             margin-bottom: 2rem;
-            color: var(--neon-pink);
-            text-shadow: 0 0 10px var(--neon-pink);
-            animation: text-flicker 1s infinite;
+            color: var(--code-blue);
+            position: relative;
+        }
+
+        h1::after {
+            content: '_';
+            animation: cursor 1s infinite;
+            color: var(--terminal-green);
         }
 
         .links-container {
-            display: flex;
-            flex-direction: column;
+            display: grid;
             gap: 1.5rem;
             margin: 3rem 0;
         }
 
         .social-link {
-            background: rgba(0, 0, 0, 0.8);
-            padding: 1.5rem;
-            border-radius: 5px;
+            background: rgba(255,255,255,0.05);
+            padding: 1.2rem;
+            border-radius: 4px;
             text-decoration: none;
-            color: white;
-            font-weight: bold;
+            color: var(--terminal-green);
+            border: 1px solid var(--terminal-green);
             transition: all 0.3s ease;
             position: relative;
-            border: 2px solid var(--neon-green);
-            clip-path: polygon(10% 0, 100% 0, 90% 100%, 0 100%);
-            animation: matrix 5s linear infinite;
+            overflow: hidden;
         }
 
         .social-link:hover {
-            transform: scale(1.05);
-            background: rgba(255,255,255,0.1);
-            box-shadow: 0 0 25px var(--neon-green);
+            background: rgba(74, 246, 38, 0.1);
+            box-shadow: 0 0 15px var(--terminal-green);
+            transform: translateY(-3px);
         }
 
         .social-link::before {
-            content: '>';
+            content: '➜';
+            margin-right: 10px;
+            color: var(--code-blue);
+        }
+
+        .social-link:hover::after {
+            content: '';
             position: absolute;
-            left: 10px;
-            color: var(--neon-blue);
-            opacity: 0;
-            transition: opacity 0.3s;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, 
+                transparent 0%, 
+                rgba(74, 246, 38, 0.1) 50%, 
+                transparent 100%);
+            animation: scan 2s linear infinite;
         }
-
-        .social-link:hover::before {
-            opacity: 1;
-        }
-
-        .discord { border-color: #7289da; color: #7289da; }
-        .tiktok { border-color: #ff0050; color: #ff0050; }
-        .instagram { border-color: #e1306c; color: #e1306c; }
 
         .copyright {
             margin-top: 3rem;
-            color: var(--neon-blue);
+            color: var(--code-blue);
             font-size: 0.9rem;
-            position: relative;
+            opacity: 0.8;
         }
 
-        .copyright::after {
-            content: '';
-            position: absolute;
-            width: 100%;
-            height: 2px;
-            background: linear-gradient(90deg, transparent, var(--neon-blue), transparent);
-            bottom: -5px;
-            left: 0;
+        /* Animations */
+        @keyframes cursor {
+            0% { opacity: 0; }
+            50% { opacity: 1; }
+            100% { opacity: 0; }
         }
 
-        @keyframes glitch {
-            0% { transform: translate(0); }
-            20% { transform: translate(-2px, 2px); }
-            40% { transform: translate(-2px, -2px); }
-            60% { transform: translate(2px, 2px); }
-            80% { transform: translate(2px, -2px); }
-            100% { transform: translate(0); }
+        @keyframes scan {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
         }
 
-        @keyframes text-flicker {
-            0% { opacity: 0.9; }
-            50% { opacity: 0.7; }
-            100% { opacity: 0.9; }
-        }
-
-        @keyframes matrix {
-            0% { background-position: 0 0; }
-            100% { background-position: 0 100%; }
-        }
-
-        @media (max-width: 480px) {
-            h1 { font-size: 2rem; }
-            .social-link { padding: 1.2rem; }
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .social-link {
+                padding: 1rem;
+                font-size: 0.9rem;
+            }
         }
     </style>
 </head>
 <body>
+    <!-- Network Nodes -->
+    <div class="network-node" style="top: 10%; left: 15%"></div>
+    <div class="network-node" style="top: 30%; right: 20%"></div>
+    <div class="network-node" style="bottom: 20%; left: 25%"></div>
+    
     <div class="container">
         <img src="https://via.placeholder.com/150" alt="Ardi" class="profile-img">
-        <h1>ARDI</h1>
+        <h1>ardi@network:~$</h1>
         
         <div class="links-container">
-            <a href="https://discord.com" class="social-link discord" target="_blank">DISCORD</a>
-            <a href="https://tiktok.com" class="social-link tiktok" target="_blank">TIKTOK</a>
-            <a href="https://instagram.com" class="social-link instagram" target="_blank">INSTAGRAM</a>
+            <a href="https://discord.com" class="social-link" target="_blank">connect discord</a>
+            <a href="https://tiktok.com" class="social-link" target="_blank">stream tiktok</a>
+            <a href="https://instagram.com" class="social-link" target="_blank">update instagram</a>
         </div>
 
-        <p class="copyright">COPYRIGHT 2025 RDX</p>
+        <p class="copyright">Copyright 2025 RDX | Status: Connected ✓</p>
     </div>
 </body>
 </html>

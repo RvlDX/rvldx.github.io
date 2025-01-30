@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ardi - Social Links</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #1a1a1a, #2d2d2d);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 2rem;
+            color: white;
+        }
+
+        .container {
+            max-width: 600px;
+            width: 90%;
+            text-align: center;
+        }
+
+        .profile-img {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            border: 3px solid #fff;
+            margin-bottom: 1.5rem;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+            color: #fff;
+            text-shadow: 0 0 10px rgba(255,255,255,0.3);
+            animation: fadeIn 1s ease-in;
+        }
+
+        .links-container {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .social-link {
+            background: rgba(255,255,255,0.1);
+            padding: 1.2rem;
+            border-radius: 15px;
+            text-decoration: none;
+            color: white;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            transform: scale(1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.2);
+            animation: slideUp 0.5s ease-out forwards;
+            opacity: 0;
+        }
+
+        .social-link:nth-child(1) { animation-delay: 0.2s; }
+        .social-link:nth-child(2) { animation-delay: 0.4s; }
+        .social-link:nth-child(3) { animation-delay: 0.6s; }
+
+        .social-link:hover {
+            transform: scale(1.05);
+            background: rgba(255,255,255,0.2);
+        }
+
+        .social-link.discord:hover {
+            color: #7289da;
+            box-shadow: 0 0 15px #7289da;
+        }
+
+        .social-link.tiktok:hover {
+            color: #ff0050;
+            box-shadow: 0 0 15px #ff0050;
+        }
+
+        .social-link.instagram:hover {
+            color: transparent;
+            background: linear-gradient(45deg, #405de6, #833ab4, #ffdc80);
+            -webkit-background-clip: text;
+            background-clip: text;
+            box-shadow: 0 0 15px #833ab4;
+        }
+
+        .copyright {
+            margin-top: 3rem;
+            opacity: 0.7;
+            font-size: 0.9rem;
+            animation: fadeIn 2s ease-in;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .social-link {
+                padding: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <img src="https://via.placeholder.com/150" alt="Profile Picture" class="profile-img">
+        <h1>Ardi</h1>
+        
+        <div class="links-container">
+            <a href="https://discord.com" class="social-link discord" target="_blank">Discord</a>
+            <a href="https://tiktok.com" class="social-link tiktok" target="_blank">TikTok</a>
+            <a href="https://instagram.com" class="social-link instagram" target="_blank">Instagram</a>
+        </div>
+
+        <p class="copyright">Copyright 2025 RDX</p>
+    </div>
+</body>
+</html>

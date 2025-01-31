@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Portofolio RevolverDX</title>
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         :root {
@@ -25,125 +26,108 @@
             background: var(--bg-color);
             color: white;
             min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding-top: 4rem;
+            position: relative;
             overflow-x: hidden;
         }
 
-        /* Navbar */
-        .navbar {
+        /* Network Elements */
+        .network-node {
             position: fixed;
-            width: 100%;
-            top: 0;
-            left: 0;
-            background: rgba(0, 168, 255, 0.2);
+            width: 12px;
+            height: 12px;
+            background: var(--node-color);
+            border-radius: 50%;
+            animation: node-pulse 2s infinite;
+            z-index: 1;
+        }
+
+        .data-packet {
+            position: fixed;
+            width: 8px;
+            height: 8px;
+            background: var(--packet-color);
+            border-radius: 50%;
+            animation: move-packets 4s linear infinite;
+            z-index: 1;
+        }
+
+        .navbar {
+            background: rgba(0, 0, 0, 0.4) !important;
             backdrop-filter: blur(10px);
-            padding: 0.5rem 1rem;
+            border-bottom: 2px solid var(--network-blue);
             z-index: 1000;
         }
 
-        .navbar-brand {
-            font-size: 1.5rem;
-            font-weight: bold;
-            color: var(--network-blue);
-        }
-
-        .navbar-nav .nav-link {
-            color: white;
-            transition: 0.3s;
-        }
-
-        .navbar-nav .nav-link:hover,
-        .navbar-nav .nav-link.active {
-            color: var(--network-blue);
-            text-shadow: 0 0 10px rgba(0, 168, 255, 0.7);
-        }
-
-        .container {
-            max-width: 900px;
-            text-align: center;
-            z-index: 2;
-            padding: 2rem;
-        }
-
-        .profile-img {
-            width: 150px;
-            height: 150px;
-            border-radius: 50%;
-            border: 3px solid var(--network-blue);
-            margin-bottom: 1.5rem;
-            box-shadow: 0 0 30px rgba(0, 168, 255, 0.3);
-            background-image: url("1676983876035.jpg");
-            background-size: cover;
-            background-position: center;
-        }
-
-        h1 {
-            font-size: 2.5rem;
-            color: var(--network-blue);
-            margin-bottom: 1rem;
+        .navbar-brand, .nav-link {
+            color: white !important;
             text-shadow: 0 0 15px rgba(0, 168, 255, 0.4);
         }
 
-        .links-container {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 1rem;
-            margin: 2rem 0;
-        }
-
-        .network-button {
-            background: rgba(0, 0, 0, 0.3);
-            padding: 1rem 2rem;
-            border-radius: 5px;
-            border: 2px solid var(--network-blue);
-            color: white;
-            text-decoration: none;
-            transition: 0.3s;
-            position: relative;
-            backdrop-filter: blur(5px);
-        }
-
-        .network-button:hover {
-            background: rgba(0, 168, 255, 0.1);
-            transform: translateY(-3px);
-            box-shadow: 0 0 25px rgba(0, 168, 255, 0.3);
+        .nav-link:hover {
+            color: var(--network-blue) !important;
         }
 
         section {
-            display: none;
+            padding: 4rem 0;
+            position: relative;
+            z-index: 2;
         }
 
-        #home {
-            display: block;
+        .project-card, .edu-card, .skill-card, .exp-card {
+            background: rgba(0, 0, 0, 0.3) !important;
+            border: 2px solid var(--network-blue);
+            border-radius: 5px;
+            backdrop-filter: blur(5px);
+            transition: all 0.3s ease;
         }
 
-        /* Footer */
-        footer {
-            margin-top: 2rem;
-            color: #7f8c8d;
-            text-align: center;
+        .project-card:hover, .edu-card:hover, .skill-card:hover, .exp-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 0 25px rgba(0, 168, 255, 0.3);
         }
 
-        @media (max-width: 768px) {
-            h1 { font-size: 2rem; }
-            .network-button { padding: 0.8rem 1.5rem; }
+        .btn-primary {
+            background: var(--network-blue) !important;
+            border: none;
+        }
+
+        .profile-pic {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            border: 3px solid var(--network-blue);
+            box-shadow: 0 0 30px rgba(0, 168, 255, 0.3);
+        }
+
+        @keyframes node-pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(1); }
+        }
+
+        @keyframes move-packets {
+            0% { transform: translateY(0); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { transform: translateY(-100vh); opacity: 0; }
         }
     </style>
 </head>
 <body>
+    <!-- Network Elements -->
+    <div class="network-node" style="top: 15%; left: 20%"></div>
+    <div class="network-node" style="top: 40%; right: 25%"></div>
+    <div class="data-packet" style="left: 21%; animation-delay: 0.5s"></div>
+    <div class="data-packet" style="left: 36%; animation-delay: 1.2s"></div>
 
-    <nav class="navbar navbar-expand-lg">
+    <nav class="navbar fixed-top navbar-expand-lg navbar-dark">
         <div class="container">
-            <a class="navbar-brand" href="#">RDX</a>
+            <a class="navbar-brand fs-4" href="https://rvldx.github.io/">RDX</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon">☰</span>
+                <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto">
+                <ul class="navbar-nav ms-auto gap-2">
                     <li class="nav-item"><a class="nav-link active" href="#home">Home</a></li>
                     <li class="nav-item"><a class="nav-link" href="#pendidikan">Pendidikan</a></li>
                     <li class="nav-item"><a class="nav-link" href="#skill">Skill</a></li>
@@ -154,75 +138,227 @@
         </div>
     </nav>
 
-    <section id="home">
-        <div class="container">
-            <div class="profile-img"></div>
-            <h1>Portofolio RevolverDX</h1>
-            <p class="lead">Mahasiswa TI yang bersemangat dalam pengembangan web dan jaringan</p>
-            
-            <div class="links-container">
-                <a href="https://github.com/rvldx" class="network-button" target="_blank">Github</a>
-                <a href="https://linkedin.com/in/rvldx" class="network-button" target="_blank">LinkedIn</a>
-                <a href="https://instagram.com/muhawlddn_024" class="network-button" target="_blank">Instagram</a>
+    <section id="home" class="container mt-5">
+        <div class="row align-items-center">
+            <div class="col-lg-8">
+                <h1 class="display-4 mb-3">Selamat Datang di Portofolio Saya</h1>
+                <p class="lead">Mahasiswa TI yang bersemangat dalam pengembangan web dan jaringan</p>
+            </div>
+        </div>
+        
+        <div class="projects mt-5">
+            <h2 class="mb-4">Proyek Terbaru</h2>
+            <div class="row row-cols-1 row-cols-md-2 g-4">
+                <div class="col">
+                    <div class="project-card h-100 p-4">
+                        <h3 class="mb-3">Portfolio Website</h3>
+                        <p class="text-muted">Website portfolio dengan gaya neobrutalisme</p>
+                        <div class="tech-stack mb-3">
+                            <span class="badge bg-primary">HTML5</span>
+                            <span class="badge bg-primary">CSS3</span>
+                            <span class="badge bg-primary">Bootstrap</span>
+                        </div>
+                        <a href="https://github.com/rvldx/portfolio" class="btn btn-primary btn-sm" target="_blank">
+                            <i class="fab fa-github me-2"></i>Lihat Kode
+                        </a>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="project-card h-100 p-4">
+                        <h3 class="mb-3">Network Monitor</h3>
+                        <p class="text-muted">Tools monitoring jaringan dengan Python</p>
+                        <div class="tech-stack mb-3">
+                            <span class="badge bg-primary">Python</span>
+                            <span class="badge bg-primary">SNMP</span>
+                            <span class="badge bg-primary">Linux</span>
+                        </div>
+                        <a href="https://github.com/rvldx/network-monitor" class="btn btn-primary btn-sm" target="_blank">
+                            <i class="fab fa-github me-2"></i>Lihat Kode
+                        </a>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
 
-    <section id="pendidikan">
-        <div class="container">
-            <h2>Pendidikan</h2>
-            <p>SDIT Salsabila 5 Purworejo</p>
-            <p>MTs Negeri 1 Purworejo</p>
-            <p>SMK TI Kartika Cendekia Purworejo - TKJ</p>
-            <p>Universitas BSI - Teknologi Informasi</p>
+    <section id="pendidikan" class="container mt-5">
+        <h2 class="mb-4">Pendidikan</h2>
+        <div class="row g-4">
+            <div class="col-12">
+                <div class="edu-card p-4">
+                    <h3>📚 SD</h3>
+                    <p class="mb-0">SDIT Salsabila 5 Purworejo</p>
+                </div>
+            </div>
+            <div class="col-12">
+                <div class="edu-card p-4">
+                    <h3>🎓 SMP</h3>
+                    <p class="mb-0">MTs Negeri 1 Purworejo</p>
+                </div>
+            </div>
+            <div class="col-12">
+                <div class="edu-card p-4">
+                    <h3>🏫 SMA</h3>
+                    <p class="mb-0">SMK TI Kartika Cendekia Purworejo - TKJ</p>
+                </div>
+            </div>
+            <div class="col-12">
+                <div class="edu-card p-4">
+                    <h3>🎓 Universitas</h3>
+                    <p class="mb-0">Universitas Bina Sarana Informatika - Teknologi Informasi</p>
+                </div>
+            </div>
         </div>
     </section>
 
-    <section id="skill">
-        <div class="container">
-            <h2>Skill</h2>
-            <p>HTML, CSS, JavaScript, Python, Java</p>
-            <p>Networking, Subnetting, Mikrotik</p>
-            <p>Linux, Windows, Troubleshooting</p>
+    <section id="skill" class="container mt-5">
+        <h2 class="mb-4">Skill</h2>
+        <div class="row g-4">
+            <div class="col-md-6 col-lg-3">
+                <div class="skill-card p-4">
+                    <h3 class="h5">💻 Programming</h3>
+                    <ul class="list-unstyled">
+                        <li>HTML/CSS</li>
+                        <li>JavaScript</li>
+                        <li>Python</li>
+                        <li>Java</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-3">
+                <div class="skill-card p-4">
+                    <h3 class="h5">🌐 Networking</h3>
+                    <ul class="list-unstyled">
+                        <li>Mikrotik</li>
+                        <li>TCP/IP</li>
+                        <li>VLAN</li>
+                        <li>Subnetting</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-3">
+                <div class="skill-card p-4">
+                    <h3 class="h5">🖥️ Sistem</h3>
+                    <ul class="list-unstyled">
+                        <li>Windows</li>
+                        <li>Linux</li>
+                        <li>Hardware</li>
+                        <li>Troubleshooting</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-3">
+                <div class="skill-card p-4">
+                    <h3 class="h5">🌍 Lainnya</h3>
+                    <ul class="list-unstyled">
+                        <li>English Intermediate</li>
+                        <li>Git Version Control</li>
+                        <li>UI/UX Dasar</li>
+                    </ul>
+                </div>
+            </div>
         </div>
     </section>
 
-    <section id="pengalaman">
-        <div class="container">
-            <h2>Pengalaman</h2>
-            <p>Juara 3 LKS IT Network System Administration Kabupaten Purworejo</p>
-            <p>OSIS MTs Negeri 1 Purworejo, Dewan Ambalan SMK TI Kartika Cendekia</p>
+    <section id="pengalaman" class="container mt-5">
+        <h2 class="mb-4">Pengalaman</h2>
+        <div class="row g-4">
+            <div class="col-md-6">
+                <div class="exp-card p-4">
+                    <h3 class="h5">🏆 Lomba</h3>
+                    <ul class="list-unstyled">
+                        <li>Juara 3 LKS IT Network System Administration Kabupaten Purworejo</li>
+                   </ul>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="exp-card p-4">
+                    <h3 class="h5">👥 Organisasi</h3>
+                    <ul class="list-unstyled">
+                        <li>OSIS MTs Negeri 1 Purworejo</li>
+                        <li>Dewan Ambalan SMK TI Kartika Cendekia Purworejo</li>
+                    </ul>
+                </div>
+            </div>
         </div>
     </section>
 
-    <section id="about">
-        <div class="container">
-            <h2>Tentang Saya</h2>
-            <p>Mahasiswa TI yang antusias dengan pengembangan web dan jaringan.</p>
+    <section id="about" class="container mt-5 mb-5">
+        <div class="text-center">
+            <img src="1676983876035.jpg" alt="Profil" class="profile-pic mb-4">
+            <h2 class="mb-3">Tentang Saya</h2>
+            <p class="lead mx-auto">Mahasiswa TI yang antusias dengan pengembangan web dan jaringan komputer.Senang belajar teknologi baru dan berkolaborasi dalam proyek kreatif.</p>
+            <div class="social-links d-flex justify-content-center gap-3 mt-4">
+                <a href="https://github.com/rvldx" class="btn btn-primary btn-circle">
+                    <i class="fab fa-github"></i>
+                </a>
+                <a href="https://linkedin.com/in/rvldx" class="btn btn-primary btn-circle">
+                    <i class="fab fa-linkedin"></i>
+                </a>
+                <a href="https://facebook.com/muhawaluddin.azhariihsan" class="btn btn-primary btn-circle">
+                    <i class="fab fa-facebook"></i>
+                </a>
+                <a href="https://instagram.com/muhawlddn_024" class="btn btn-primary btn-circle">
+                    <i class="fab fa-instagram"></i>
+                </a>
+            </div>
         </div>
     </section>
 
-    <footer>
-        <p>&copy; 2025 RDX Network | Status: Online</p>
-    </footer>
-
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const sections = document.querySelectorAll('section');
             const navLinks = document.querySelectorAll('.nav-link');
+            const navbarCollapse = document.querySelector('.navbar-collapse');
+            
+            sections.forEach(section => {
+                if(section.id !== 'home') section.style.display = 'none';
+            });
 
             navLinks.forEach(link => {
                 link.addEventListener('click', function(e) {
                     e.preventDefault();
-                    sections.forEach(sec => sec.style.display = 'none');
-                    document.querySelector(this.getAttribute('href')).style.display = 'block';
-
+                    const targetId = this.getAttribute('href');
+                    
+                    sections.forEach(section => {
+                        section.style.display = 'none';
+                    });
+                    
+                    document.querySelector(targetId).style.display = 'block';
+                    
                     navLinks.forEach(link => link.classList.remove('active'));
                     this.classList.add('active');
+                    
+                    if(window.innerWidth < 768) {
+                        const bsCollapse = bootstrap.Collapse.getInstance(navbarCollapse);
+                        
+                        const scrollToSection = () => {
+                            window.scrollTo({
+                                top: document.querySelector(targetId).offsetTop,
+                                behavior: 'smooth'
+                            });
+                        };
+
+                        if(bsCollapse && navbarCollapse.classList.contains('show')) {
+                            navbarCollapse.addEventListener('hidden.bs.collapse', scrollToSection, {once: true});
+                            bsCollapse.hide();
+                        } else {
+                            scrollToSection();
+                        }
+                    }
+                });
+            });
+
+            navLinks.forEach(link => {
+                link.addEventListener('click', () => {
+                    const bsCollapse = bootstrap.Collapse.getInstance(navbarCollapse);
+                    if(bsCollapse && navbarCollapse.classList.contains('show')) {
+                        bsCollapse.hide();
+                    }
                 });
             });
         });
     </script>
-
 </body>
 </html>

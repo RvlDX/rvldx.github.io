@@ -129,8 +129,8 @@
 
         /* Animasi status */
         .profile-pic-wrapper {
-            display: inline-block;
             position: relative;
+            display: inline-block;
         }
 
         .status-indicator {
@@ -142,8 +142,14 @@
             background: #2ecc71;
             border-radius: 50%;
             border: 2px solid var(--bg-color);
-            box-shadow: 0 0 5px rgba(0,0,0,0.3);
-            animation: breath 1.5s infinite;
+            box-shadow: 0 0 8px rgba(46, 204, 113, 0.5);
+            animation: breath 1.5s infinite ease-in-out;
+        }
+
+        @keyframes breath {
+            0% { transform: scale(0.9); opacity: 0.7; }
+            50% { transform: scale(1.2); opacity: 1; }
+           100% { transform: scale(0.9); opacity: 0.7; }
         }
 
        .traffic-stats {
@@ -345,10 +351,13 @@
     </section>
 
     <section id="about" class="container mt-5 mb-5">
-       <div class="profile-pic-wrapper position-relative d-inline-block text-center">
-        <img src="1676983876035.jpg" alt="Profil" class="profile-pic mb-4">
-        <div class="status-indicator"></div>
-       </div>
+         <div class="text-center">
+               <div class="profile-pic-wrapper position-relative d-inline-block">
+                    <img src="1676983876035.jpg" alt="Profil" class="profile-pic mb-4">
+                    <div class="status-indicator"></div>
+               </div>
+        </div>
+
             <h2 class="mb-3">Tentang Saya</h2>
             <p class="lead mx-auto">Mahasiswa TI yang antusias dengan pengembangan web dan jaringan komputer.Senang belajar teknologi baru dan berkolaborasi dalam proyek kreatif.</p>
             <div class="social-links d-flex justify-content-center gap-3 mt-4">

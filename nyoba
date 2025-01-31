@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portofolio RevolverDX</title>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --network-blue: #00a8ff;
+            --node-color: #2ecc71;
+            --packet-color: #e74c3c;
+            --bg-color: #0a1929;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+
+        body {
+            background: var(--bg-color);
+            color: white;
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Network Elements */
+        .network-node {
+            position: fixed;
+            width: 12px;
+            height: 12px;
+            background: var(--node-color);
+            border-radius: 50%;
+            animation: node-pulse 2s infinite;
+        }
+
+        .data-packet {
+            position: fixed;
+            width: 8px;
+            height: 8px;
+            background: var(--packet-color);
+            border-radius: 50%;
+            animation: move-packets 4s linear infinite;
+        }
+
+        .navbar {
+            background: rgba(0, 0, 0, 0.4) !important;
+            backdrop-filter: blur(10px);
+            border-bottom: 2px solid var(--network-blue);
+        }
+
+        .navbar-brand, .nav-link {
+            color: white !important;
+            text-shadow: 0 0 15px rgba(0, 168, 255, 0.4);
+        }
+
+        .nav-link:hover {
+            color: var(--network-blue) !important;
+        }
+
+        section {
+            padding: 4rem 0;
+            position: relative;
+            z-index: 2;
+        }
+
+        .project-card, .edu-card, .skill-card, .exp-card {
+            background: rgba(0, 0, 0, 0.3) !important;
+            border: 2px solid var(--network-blue);
+            border-radius: 5px;
+            backdrop-filter: blur(5px);
+            transition: all 0.3s ease;
+        }
+
+        .project-card:hover, .edu-card:hover, .skill-card:hover, .exp-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 0 25px rgba(0, 168, 255, 0.3);
+        }
+
+        .btn-primary {
+            background: var(--network-blue) !important;
+            border: none;
+        }
+
+        .profile-pic {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            border: 3px solid var(--network-blue);
+            box-shadow: 0 0 30px rgba(0, 168, 255, 0.3);
+        }
+
+        @keyframes node-pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(1); }
+        }
+
+        @keyframes move-packets {
+            0% { transform: translateY(0); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { transform: translateY(-100vh); opacity: 0; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Network Elements -->
+    <div class="network-node" style="top: 15%; left: 20%"></div>
+    <div class="network-node" style="top: 40%; right: 25%"></div>
+    <div class="data-packet" style="left: 21%; animation-delay: 0.5s"></div>
+    <div class="data-packet" style="left: 36%; animation-delay: 1.2s"></div>
+
+    <nav class="navbar fixed-top navbar-expand-lg navbar-dark">
+        <div class="container">
+            <a class="navbar-brand fs-4" href="#">RDX</a>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto gap-2">
+                    <li class="nav-item"><a class="nav-link active" href="#home">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#pendidikan">Pendidikan</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#skill">Skill</a></li>
+                    <li class="nav-item"><a class="nav-link" href#pengalaman">Pengalaman</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#about">About</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+        <section id="home" class="container mt-5">
+        <div class="row align-items-center">
+            <div class="col-lg-8">
+                <h1 class="display-4 mb-3">Selamat Datang di Portofolio Saya</h1>
+                <p class="lead">Mahasiswa TI yang bersemangat dalam pengembangan web dan jaringan</p>
+            </div>
+        </div>
+        
+        <div class="projects mt-5">
+            <h2 class="mb-4">Proyek Terbaru</h2>
+            <div class="row row-cols-1 row-cols-md-2 g-4">
+                <div class="col">
+                    <div class="project-card h-100 p-4">
+                        <h3 class="mb-3">Portfolio Website</h3>
+                        <p class="text-muted">Website portfolio dengan gaya neobrutalisme</p>
+                        <div class="tech-stack mb-3">
+                            <span class="badge">HTML5</span>
+                            <span class="badge">CSS3</span>
+                            <span class="badge">Bootstrap</span>
+                        </div>
+                        <a href="https://github.com/rvldx/portfolio" class="btn btn-primary btn-sm" target="_blank">
+                            <i class="fab fa-github me-2"></i>Lihat Kode
+                        </a>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="project-card h-100 p-4">
+                        <h3 class="mb-3">Network Monitor</h3>
+                        <p class="text-muted">Tools monitoring jaringan dengan Python</p>
+                        <div class="tech-stack mb-3">
+                            <span class="badge">Python</span>
+                            <span class="badge">SNMP</span>
+                            <span class="badge">Linux</span>
+                        </div>
+                        <a href="https://github.com/rvldx/network-monitor" class="btn btn-primary btn-sm" target="_blank">
+                            <i class="fab fa-github me-2"></i>Lihat Kode
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Bagian Pendidikan -->
+    <section id="pendidikan" class="container mt-5">
+        <h2 class="mb-4">Pendidikan</h2>
+        <div class="row g-4">
+            <div class="col-12">
+                <div class="edu-card p-4">
+                    <h3>📚 SD</h3>
+                    <p class="mb-0">SDIT Salsabila 5 Purworejo</p>
+                </div>
+            </div>
+            <div class="col-12">
+                <div class="edu-card p-4">
+                    <h3>🎓 SMP</h3>
+                    <p class="mb-0">MTs Negeri 1 Purworejo</p>
+                </div>
+            </div>
+            <div class="col-12">
+                <div class="edu-card p-4">
+                    <h3>🏫 SMA</h3>
+                    <p class="mb-0">SMK TI Kartika Cendekia Purworejo - TKJ</p>
+                </div>
+            </div>
+            <div class="col-12">
+                <div class="edu-card p-4">
+                    <h3>🎓 Universitas</h3>
+                    <p class="mb-0">Universitas Bina Sarana Informatika - Teknologi Informasi</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Bagian Skill -->
+    <section id="skill" class="container mt-5">
+        <h2 class="mb-4">Skill</h2>
+        <div class="row g-4">
+            <div class="col-md-6 col-lg-3">
+                <div class="skill-card p-4">
+                    <h3 class="h5">💻 Programming</h3>
+                    <ul class="list-unstyled">
+                        <li>HTML/CSS</li>
+                        <li>JavaScript</li>
+                        <li>Python</li>
+                        <li>Java</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-3">
+                <div class="skill-card p-4">
+                    <h3 class="h5">🌐 Networking</h3>
+                    <ul class="list-unstyled">
+                        <li>Mikrotik</li>
+                        <li>TCP/IP</li>
+                        <li>VLAN</li>
+                        <li>Subnetting</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-3">
+                <div class="skill-card p-4">
+                    <h3 class="h5">🖥️ Sistem</h3>
+                    <ul class="list-unstyled">
+                        <li>Windows</li>
+                        <li>Linux</li>
+                        <li>Hardware</li>
+                        <li>Troubleshooting</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-3">
+                <div class="skill-card p-4">
+                    <h3 class="h5">🌍 Lainnya</h3>
+                    <ul class="list-unstyled">
+                        <li>English Intermediate</li>
+                        <li>Git Version Control</li>
+                        <li>UI/UX Dasar</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Bagian Pengalaman -->
+    <section id="pengalaman" class="container mt-5">
+        <h2 class="mb-4">Pengalaman</h2>
+        <div class="row g-4">
+            <div class="col-md-6">
+                <div class="exp-card p-4">
+                    <h3 class="h5">🏆 Lomba</h3>
+                    <ul class="list-unstyled">
+                        <li>Juara 3 LKS IT Network System Administration Kabupaten Purworejo</li>
+                   </ul>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="exp-card p-4">
+                    <h3 class="h5">👥 Organisasi</h3>
+                    <ul class="list-unstyled">
+                        <li>OSIS MTs Negeri 1 Purworejo</li>
+                        <li>Dewan Ambalan SMK TI Kartika Cendekia Purworejo</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Bagian About -->
+    <section id="about" class="container mt-5 mb-5">
+        <div class="text-center">
+            <img src="1676983876035.jpg" alt="Profil" class="profile-pic mb-4">
+            <h2 class="mb-3">Tentang Saya</h2>
+            <p class="lead mx-auto">Mahasiswa TI yang antusias dengan pengembangan web dan jaringan komputer.Senang belajar teknologi baru dan berkolaborasi dalam proyek kreatif.</p>
+            <div class="social-links d-flex justify-content-center gap-3 mt-4">
+                <a href="https://github.com/rvldx" class="btn btn-primary btn-circle">
+                    <i class="fab fa-github"></i>
+                </a>
+                <a href="https://linkedin.com/in/rvldx" class="btn btn-primary btn-circle">
+                    <i class="fab fa-linkedin"></i>
+                </a>
+                <a href="https://facebook.com/muhawaluddin.azhariihsan" class="btn btn-primary btn-circle">
+                    <i class="fab fa-facebook"></i>
+                </a>
+                <a href="https://instagram.com/muhawlddn_024" class="btn btn-primary btn-circle">
+                    <i class="fab fa-instagram"></i>
+                </a>
+            </div>
+        </div>
+    </section>
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

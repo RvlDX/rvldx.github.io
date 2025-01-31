@@ -30,27 +30,6 @@
             overflow-x: hidden;
         }
 
-        /* Network Elements */
-        .network-node {
-            position: fixed;
-            width: 12px;
-            height: 12px;
-            background: var(--node-color);
-            border-radius: 50%;
-            animation: node-pulse 2s infinite;
-            z-index: 1;
-        }
-
-        .data-packet {
-            position: fixed;
-            width: 8px;
-            height: 8px;
-            background: var(--packet-color);
-            border-radius: 50%;
-            animation: move-packets 4s linear infinite;
-            z-index: 1;
-        }
-
         .navbar {
             background: rgba(0, 0, 0, 0.4) !important;
             backdrop-filter: blur(10px);
@@ -58,11 +37,19 @@
             z-index: 1000;
         }
 
+        .navbar-toggler {
+            border-color: rgba(255,255,255,0.5);
+        }
+
+        .navbar-toggler-icon {
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba(255, 255, 255, 0.8)' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+        }
+
         .navbar-brand, .nav-link{
             color: white !important;
             padding-left: 15px;
             text-shadow: 0 0 15px rgba(0, 168, 255, 0.4);
-            font-weight: 500 !important;
+            font-weight: 700 !important;
         }
 
         .nav-link:hover {
@@ -82,6 +69,11 @@
             border-radius: 5px;
             backdrop-filter: blur(5px);
             transition: all 0.3s ease;
+        }
+        
+        .text-muted {
+            color: #fff !important;
+            opacity: 0.8;
         }
 
         .project-card:hover, .edu-card:hover, .skill-card:hover, .exp-card:hover {
@@ -123,11 +115,16 @@
         }
 
        footer {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
             text-align: center;
-            font-weight: bold;
-            justify-content: center;
+            padding: 1rem;
+            background: rgba(0,0,0,0.5);
+            border-top: 1px solid var(--network-blue);
        }
-        }
+}
     </style>
 </head>
 <body>

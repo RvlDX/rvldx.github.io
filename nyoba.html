@@ -114,6 +114,30 @@
             gap: 2rem;
         }
 
+/* Animasi status */
+.status-indicator {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    background: #2ecc71;
+    border-radius: 50%;
+    margin-right: 8px;
+    animation: breath 1.5s infinite;
+}
+
+@keyframes breath {
+    0% { transform: scale(0.9); opacity: 0.7; }
+    50% { transform: scale(1.2); opacity: 1; }
+    100% { transform: scale(0.9); opacity: 0.7; }
+}
+
+/* Update footer
+footer .traffic-stats {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+} */
+
        footer {
             position: fixed;
             bottom: 0;
@@ -300,6 +324,7 @@
     <section id="about" class="container mt-5 mb-5">
         <div class="text-center">
             <img src="1676983876035.jpg" alt="Profil" class="profile-pic mb-4">
+                 <div class="status-indicator"></div>
             <h2 class="mb-3">Tentang Saya</h2>
             <p class="lead mx-auto">Mahasiswa TI yang antusias dengan pengembangan web dan jaringan komputer.Senang belajar teknologi baru dan berkolaborasi dalam proyek kreatif.</p>
             <div class="social-links d-flex justify-content-center gap-3 mt-4">

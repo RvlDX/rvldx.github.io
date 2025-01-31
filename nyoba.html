@@ -114,29 +114,22 @@
             gap: 2rem;
         }
 
-/* Animasi status */
-.status-indicator {
-    display: inline-block;
-    width: 10px;
-    height: 10px;
-    background: #2ecc71;
-    border-radius: 50%;
-    margin-right: 8px;
-    animation: breath 1.5s infinite;
-}
+        /* Animasi status */
+        .status-indicator {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            background: #2ecc71;
+            border-radius: 50%;
+            margin-right: 8px;
+            animation: breath 1.5s infinite;
+        }
 
-@keyframes breath {
-    0% { transform: scale(0.9); opacity: 0.7; }
-    50% { transform: scale(1.2); opacity: 1; }
-    100% { transform: scale(0.9); opacity: 0.7; }
-}
-
-/* Update footer
-footer .traffic-stats {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-} */
+        @keyframes breath {
+            0% { transform: scale(0.9); opacity: 0.7; }
+            50% { transform: scale(1.2); opacity: 1; }
+            100% { transform: scale(0.9); opacity: 0.7; }
+        }
 
        footer {
             position: fixed;
@@ -150,9 +143,11 @@ footer .traffic-stats {
             background: rgba(0,0,0,0.5);
             border-top: 1px solid var(--network-blue);
        }
+
 }
     </style>
 </head>
+
 <body>
     <!-- Network Elements -->
     <div class="network-node" style="top: 15%; left: 20%"></div>

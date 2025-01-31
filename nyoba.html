@@ -38,10 +38,21 @@
 
         .navbar-toggler {
             border-color: rgba(255,255,255,0.5);
+            transition: transform 0.3s ease;
+        }
+
+        .navbar-toggler[aria-expanded="true"] {
+            transform: rotate(90deg);
         }
 
         .navbar-toggler-icon {
             background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba(255, 255, 255, 0.8)' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+            transition: transform 0.3s ease;
+        }
+
+        .navbar-toggler[aria-expanded="true"] .navbar-toggler-icon {
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba(255, 255, 255, 0.8)' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M6 6L24 24M24 6L6 24'/%3e%3c/svg%3e");
+            transform: rotate(180deg);
         }
 
         .navbar-brand, .nav-link{
@@ -117,14 +128,30 @@
         }
 
         /* Animasi status */
-        .status-indicator {
+        .profile-pic-wrapper {
             display: inline-block;
-            width: 10px;
-            height: 10px;
+            position: relative;
+        }
+
+        .status-indicator {
+            position: absolute;
+            bottom: 15px;
+            right: 15px;
+            width: 15px;
+            height: 15px;
             background: #2ecc71;
             border-radius: 50%;
-            margin-right: 8px;
+            border: 2px solid var(--bg-color);
+            box-shadow: 0 0 5px rgba(0,0,0,0.3);
             animation: breath 1.5s infinite;
+        }
+
+       .traffic-stats {
+            padding: 0 1rem;
+            text-align: center;
+            margin: 0;
+            color: #7f8c8d;
+            font-size: 0.9rem;
         }
 
         @keyframes breath {

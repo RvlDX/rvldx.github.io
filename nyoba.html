@@ -27,7 +27,7 @@
             min-height: 100vh;
             position: relative;
             overflow-x: hidden;
-            padding-bottom: 10px;
+            padding-bottom: 70px;
         }
 
         .navbar {
@@ -476,9 +476,18 @@
     </script>
 </body>
 
-<footer class="d-flex align-items-center justify-content-center text-center">
+/* <footer class="d-flex align-items-center justify-content-center text-center">
     <div class="traffic-stats">
         &copy; 2025 RDX | Status: Online
+    </div>
+</footer> */
+<footer class="d-flex align-items-center justify-content-center text-center fixed-bottom">
+    <div class="traffic-stats">
+        &copy; 2025 RDX | Status: Online
+        <span class="divider">|</span>
+        <span class="connection-status">
+            <i class="fas fa-signal me-1"></i>Connected
+        </span>
     </div>
 </footer>
 </html>

@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gangguan Routing - RevolverDX</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --network-blue: #00a8ff;
+            --node-color: #2ecc71;
+            --packet-color: #e74c3c;
+            --bg-color: #0a1929;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+
+        body {
+            background: var(--bg-color);
+            color: white;
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        .navbar {
+            background: rgba(0, 0, 0, 0.4) !important;
+            backdrop-filter: blur(10px);
+            border-bottom: 2px solid var(--network-blue);
+            z-index: 1000;
+        }
+
+        .navbar-brand {
+            color: white !important;
+            padding-left: 15px;
+            text-shadow: 0 0 15px rgba(0, 168, 255, 0.4);
+            font-weight: 700 !important;
+        }
+
+        .network-node {
+            position: fixed;
+            width: 15px;
+            height: 15px;
+            background: var(--node-color);
+            border-radius: 50%;
+            animation: node-pulse 2s infinite;
+        }
+
+        .data-packet {
+            position: fixed;
+            width: 8px;
+            height: 8px;
+            background: var(--packet-color);
+            border-radius: 2px;
+            animation: move-packets 8s linear infinite;
+        }
+
+        @keyframes node-pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(1); }
+        }
+
+        @keyframes move-packets {
+            0% { transform: translateY(0); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { transform: translateY(-100vh); opacity: 0; }
+        }
+
+        .error-container {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 2rem;
+            text-align: center;
+            position: relative;
+            z-index: 2;
+        }
+
+        .error-code {
+            font-size: 15rem;
+            font-weight: 900;
+            text-shadow: 0 0 30px rgba(0, 168, 255, 0.4);
+            line-height: 1;
+            margin-bottom: 2rem;
+            position: relative;
+        }
+
+        .error-code::after {
+            content: "ROUTING ERROR";
+            font-size: 1.5rem;
+            position: absolute;
+            bottom: -1.5rem;
+            left: 50%;
+            transform: translateX(-50%);
+            color: var(--network-blue);
+            letter-spacing: 2px;
+        }
+
+        .error-message {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .error-details {
+            letter-spacing: 0.5px;
+            line-height: 1.7;
+            opacity: 0.9;
+            margin: 1.5rem 0;
+        }
+
+        .network-status {
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid var(--network-blue);
+            border-radius: 8px;
+            padding: 1rem;
+            margin: 1.5rem 0;
+        }
+
+        .protocol-code {
+            font-family: 'Courier New', monospace;
+            color: var(--node-color);
+            background: rgba(0, 0, 0, 0.2);
+            padding: 2px 5px;
+            border-radius: 3px;
+        }
+
+        .btn-primary {
+            background: var(--network-blue) !important;
+            border: none;
+            padding: 12px 25px;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            border-radius: 8px;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 168, 255, 0.4);
+        }
+
+        footer {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(0,0,0,0.5);
+            border-top: 1px solid var(--network-blue);
+            padding: 15px 0;
+            z-index: 1000;
+        }
+
+        .traffic-stats {
+            color: #7f8c8d;
+            font-size: 0.9rem;
+            margin: 0;
+        }
+
+        @media (max-width: 768px) {
+            .error-code {
+                font-size: 8rem;
+            }
+            
+            .error-code::after {
+                font-size: 1rem;
+                bottom: -1rem;
+            }
+            
+            .error-details {
+                font-size: 0.95rem;
+            }
+            
+            .btn-primary {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Network Elements -->
+    <div class="network-node" style="top: 25%; left: 15%"></div>
+    <div class="network-node" style="top: 65%; right: 20%"></div>
+    <div class="data-packet" style="left: 18%; animation-delay: 0.8s"></div>
+    <div class="data-packet" style="left: 40%; animation-delay: 2.5s"></div>
+
+    <nav class="navbar fixed-top navbar-expand-lg navbar-dark">
+        <div class="container">
+            <a class="navbar-brand fs-4" href="https://rvldx.github.io/">
+                <i class="fas fa-satellite-dish me-2"></i>REVOLVERDX
+            </a>
+        </div>
+    </nav>
+
+    <div class="error-container">
+        <div class="error-code">404</div>
+        <div class="error-message">
+            <i class="fas fa-exclamation-triangle fa-beat text-warning mb-4" style="font-size: 3.5rem;"></i>
+            <h2 class="mb-3">Gangguan Routing Terdeteksi</h2>
+            
+            <div class="error-details">
+                <p class="mb-3">
+                    <span class="protocol-code">[HTTP/1.1 404 Not Found]</span><br>
+                    Target resource tidak ditemukan dalam jaringan.<br>
+                    Sistem mendeteksi kemungkinan kesalahan dalam packet routing.
+                </p>
+                
+                <div class="network-status">
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <i class="fas fa-server me-2"></i>Status Server: 
+                            <span class="text-success">Online</span>
+                        </div>
+                        <div class="col-md-6">
+                            <i class="fas fa-shield-alt me-2"></i>Firewall: 
+                            <span class="text-success">Aktif</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <a href="https://rvldx.github.io/" class="btn btn-lg btn-primary">
+                <i class="fas fa-redo-alt me-2"></i>Inisialisasi Ulang Koneksi
+            </a>
+        </div>
+    </div>
+
+    <footer class="d-flex align-items-center justify-content-center text-center">
+        <div class="traffic-stats">
+            <i class="fas fa-network-wired me-2"></i>
+            Jaringan RDX v2.3.5 | 
+            <i class="fas fa-clock me-2"></i>
+            Ping: 32ms | 
+            <i class="fas fa-database me-2"></i>
+            Uptime: 99.92%
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

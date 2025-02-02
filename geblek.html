@@ -617,11 +617,11 @@
         // Mobile Menu Toggle
         const menuToggle = document.querySelector('.menu-toggle');
         const navLinks = document.querySelector('.nav-links');
-
+        
         menuToggle.addEventListener('click', () => {
             navLinks.classList.toggle('active');
         });
-
+        
         // Smooth Scroll
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function(e) {
@@ -632,12 +632,12 @@
                 navLinks.classList.remove('active');
             });
         });
-
+        
         // Scroll Animation
         const observerOptions = {
             threshold: 0.1
         };
-
+        
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
@@ -646,40 +646,12 @@
                 }
             });
         }, observerOptions);
-
+        
         document.querySelectorAll('section, .process-card, .gallery-item, .testimonial-card').forEach(element => {
             element.style.opacity = "0";
             element.style.transform = "translateY(20px)";
             element.style.transition = "all 0.6s ease-out";
             observer.observe(element);
-        });
-
-        // Update Observer untuk semua element
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('visible');
-                    
-                    // Animasi khusus untuk process cards
-                    if (entry.target.id === 'process') {
-                        const cards = entry.target.querySelectorAll('.process-card');
-                        cards.forEach(card => card.classList.add('visible'));
-                    }
-                }
-            });
-        }, { threshold: 0.2 });
-
-        // Observe semua section
-        document.querySelectorAll('section').forEach(section => {
-            observer.observe(section);
-        });
-
-        // Smooth scroll untuk social media
-        document.querySelectorAll('.social-floating a').forEach(link => {
-            link.addEventListener('click', (e) => {
-                e.preventDefault();
-                // Tambahkan logika untuk halaman social media
-            });
         });
     </script>
 </body>

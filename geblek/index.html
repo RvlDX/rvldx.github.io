@@ -1,0 +1,690 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Geblek Sokoagung - Traditional Indonesian Snack</title>
+    <style>
+        :root {
+            --primary: #FF6B35;
+            --secondary: #FFF3E6;
+            --accent: #2EC4B6;
+            --dark: #261C15;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            margin: 0;
+            padding: 0;
+            background-color: var(--secondary);
+            color: var(--dark);
+            overflow-x: hidden;
+        }
+
+        /* Animated Navigation Bar */
+        .navbar {
+            background: var(--primary);
+            padding: 1rem 5%;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            animation: slideDown 0.5s ease-out;
+        }
+
+        @keyframes slideDown {
+            from { transform: translateY(-100%); }
+            to { transform: translateY(0); }
+        }
+
+        .nav-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .logo {
+            font-family: 'Lobster', cursive;
+            color: white;
+            font-size: 1.5rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+            transition: transform 0.3s;
+        }
+
+        .logo:hover {
+            transform: scale(1.05);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            position: relative;
+            padding: 5px 0;
+            transition: 0.3s;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: 0;
+            left: 0;
+            background: white;
+            transition: 0.3s;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        /* Hero Section */
+        .hero {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 0 5%;
+            margin-top: 60px;
+            background: linear-gradient(rgba(255,107,53,0.9), rgba(255,107,53,0.8)),
+                        url('https://source.unsplash.com/random/1920x1080/?indonesian-food');
+            background-size: cover;
+            background-position: center;
+            animation: slideIn 1s ease-out;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(50px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .hero-content {
+            max-width: 800px;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            color: white;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            animation: fadeInUp 1s ease-out;
+        }
+
+        .hero p {
+            color: var(--secondary);
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            animation: fadeInUp 1s ease-out 0.2s;
+            animation-fill-mode: backwards;
+        }
+
+        /* Sections Common Styles */
+        section {
+            padding: 2rem 5%;
+            scroll-margin-top: 80px;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 2rem;
+            color: var(--primary);
+            position: relative;
+            animation: fadeIn 1s ease-out;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 50px;
+            height: 3px;
+            background: var(--accent);
+        }
+
+        /* About Section */
+        .about-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            align-items: center;
+            max-width: 1200px; /* Batasi lebar maksimum */
+            margin: 0 auto; /* Pusatkan grid */
+        }
+
+        .about-text p {
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+            animation: fadeInLeft 1s ease-out;
+            text-align: justify;
+        }
+
+        .about-image {
+            border-radius: 10px;
+            overflow: hidden;
+            transition: transform 0.3s;
+            animation: fadeInRight 1s ease-out;
+            display: grid;
+            align-items: center;
+            justify-content: center;
+            max-width: 100%;
+        }
+
+        .about-image:hover {
+            transform: scale(1.0);
+        }
+
+        /* Process Section */
+        .process-steps {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .process-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            text-align: center;
+            transition: transform 0.3s;
+            animation: fadeInUp 1s ease-out;
+        }
+
+        .process-card:hover {
+            transform: translateY(-10px);
+        }
+
+        .process-card i {
+            font-size: 2.5rem;
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+
+        /* Product Gallery */
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .gallery-item {
+            position: relative;
+            overflow: hidden;
+            border-radius: 10px;
+            cursor: pointer;
+            animation: fadeIn 1s ease-out;
+            transform-style: preserve-3d;
+            animation: rotate3D 20s linear infinite paused;
+        }
+
+        .gallery-item img {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            transition: transform 0.3s;
+        }
+
+        .gallery-item:hover img {
+            transform: scale(1.1);
+            animation-play-state: running;
+        }
+
+        /* Testimonials */
+        .testimonials-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .testimonial-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            animation: fadeInUp 1s ease-out;
+            transition: all 0.4s;
+        }
+
+        .testimonial-card:hover {
+            transform: rotate(1deg) scale(1.02);
+        }
+
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+            margin-top: 1rem;
+        }
+
+        .author-image {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            margin-right: 1rem;
+        }
+
+        /* Contact Section */
+        .contact-content {
+            margin: 0 auto;
+            text-align: center;
+            padding: 0 !important; /* Reduced padding */
+            max-width: 600px;
+        }
+
+        .whatsapp-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 1px !important;
+            background: #25D366;
+            color: white;
+            padding: 1rem 2rem !important;
+            border-radius: 40px;
+            margin: 0.5rem 0 !important;
+            text-decoration: none;
+            transition: transform 0.3s;
+            animation: pulse 2s infinite;
+        }
+
+        .whatsapp-btn:hover {
+            transform: translateY(-3px);
+        }
+
+        .address {
+            margin: 1.5rem 0;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        .map-container {
+            height: 300px;
+            width: 100%;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-top: 2rem;
+            animation: fadeInUp 1s ease-out;
+        }
+
+        /* Footer */
+        footer {
+            background: var(--dark);
+            color: white;
+            text-align: center;
+            padding: 1rem 5%;            
+            animation: fadeInUp 1s ease-out;
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeInLeft {
+            from { opacity: 0; transform: translateX(-30px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        @keyframes fadeInRight {
+            from { opacity: 0; transform: translateX(30px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        .menu-toggle {
+            display: none;
+        }
+
+        @media (min-width: 769px) {
+            .about-image {
+                margin: 0 auto; /* Pusatkan gambar */
+            }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .nav-links {
+                position: fixed;
+                top: 0;
+                right: -100%;
+                height: 100vh;
+                width: 70%;
+                background: var(--primary);
+                flex-direction: column;
+                padding: 6rem 2rem;
+                transition: 0.5s;
+            }
+
+            .nav-links.active {
+                right: 0;
+                box-shadow: -5px 0 15px rgba(0,0,0,0.2);
+            }
+
+            .menu-toggle {
+                color: white;
+                font-size: 1.5rem;
+                cursor: pointer;
+                border: none;
+                z-index: 1001;
+            }
+
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .about-content {
+                grid-template-columns: 1fr; /* Satu kolom pada mobile */
+                text-align: center; /* Pusatkan teks */
+            }
+        
+            .about-image {
+                margin: 0 auto; /* Pusatkan gambar */
+            }
+            .process-steps {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            section {
+                padding: 3rem 5%;
+            }
+
+            .gallery {
+                grid-template-columns: 1fr;
+            }
+        }
+
+                /* Tambahan Animasi */
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        /* Social Media Floating */
+        .social-floating {
+            position: fixed;
+            bottom:60px;
+            right: 15px;
+            display: flex;
+            gap: 0.8rem;
+            z-index: 1000;
+            flex-direction: column;
+        }
+
+        .social-floating a {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            background: var(--accent); /* Changed color to accent */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            text-decoration: none;
+            transition: all 0.3s;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .social-floating a:hover {
+            background: var(--accent);
+            transform: scale(1.2);
+        }
+
+        /* Perbaikan Animasi Process Section */
+        .process-card {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.5s ease-out;
+        }
+
+        .process-card.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .process-card:nth-child(1) { transition-delay: 0.2s; }
+        .process-card:nth-child(2) { transition-delay: 0.4s; }
+        .process-card:nth-child(3) { transition-delay: 0.6s; }
+
+        .process-card:hover i {
+            animation: rotate 1s linear infinite;
+        }
+
+        /* Animasi untuk Semua Section */
+        section {
+            opacity: 0;
+            transform: translateY(50px);
+            transition: all 0.8s ease-out;
+        }
+
+        section.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-content">
+            <div class="logo">Geblek Sokoagung</div>
+            <div class="nav-links">
+                <a href="#home">Home</a>
+                <a href="#about">About</a>
+                <a href="#process">Process</a>
+                <a href="#gallery">Gallery</a>
+                <a href="#testimonials">Testimonials</a>
+                <a href="#contact">Contact</a>
+            </div>
+            <i class="fas fa-bars menu-toggle"></i>
+        </div>
+    </nav>
+
+    <section class="hero" id="home">
+        <div class="hero-content">
+            <h1>Geblek Tradisional Asli</h1>
+            <p>Renyah, Gurih, dan Lezat</p>
+        </div>
+    </section>
+
+    <div class="social-floating">
+        <a href="#"><i class="fab fa-instagram"></i></a>
+        <a href="#"><i class="fab fa-facebook"></i></a>
+        <a href="#"><i class="fab fa-tiktok"></i></a>
+    </div>
+    
+    <section id="about">
+        <h2 class="section-title">Tentang Geblek</h2>
+        <div class="about-content">
+            <div class="about-text">
+                <p>Geblek adalah makanan tradisional yang terbuat dari tepung ubi kayu atau tapioka dan bumbu bawang goreng. Geblek berbentuk bulat seperti angka delapan dan berwarna putih. Geblek merupakan makanan khas dari Kabupaten Kulon Progo, Kabupaten Purworejo, dan Kabupaten Wonosobo.</p>
+                <p>Geblek memiliki tekstur kenyal dan rasa gurih. Geblek biasanya disajikan saat masih panas, karena jika sudah dingin geblek akan terasa lebih keras dan kehilangan rasa gurihnya. </p>
+            </div>
+            <img src="img/geblek.jpg" alt="Traditional Geblek" class="about-image">
+        </div>
+    </section>
+
+    <section id="process">
+        <h2 class="section-title">Proses Pembuatan Tradisional</h2>
+        <div class="process-steps">
+            <div class="process-card">
+                <i class="fas fa-seedling"></i>
+                <h3>Bahan Baku Segar</h3>
+                <p>Menggunakan Singkong Asli</p>
+            </div>
+            <div class="process-card">
+                <i class="fas fa-mortar-pestle"></i>
+                <h3>Pembuatan Tradisional</h3>
+                <p>Dibuat dengan tangan menggunakan metode tradisional</p>
+            </div>
+            <div class="process-card">
+                <i class="fas fa-fire"></i>
+                <h3>Tergoreng Sempurna</h3>
+                <p>Masak pada suhu optimal agar renyah</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="gallery">
+        <h2 class="section-title">Gallery</h2>
+        <div class="gallery">
+            <div class="gallery-item">
+                <img src="https://source.unsplash.com/random/601x400/?indonesian-snack" alt="Geblek Package">
+            </div>
+            <div class="gallery-item">
+                <img src="https://source.unsplash.com/random/602x400/?indonesian-snack" alt="Geblek Closeup">
+            </div>
+            <div class="gallery-item">
+                <img src="https://source.unsplash.com/random/603x400/?indonesian-snack" alt="Geblek Preparation">
+            </div>
+        </div>
+    </section>
+
+    <section id="testimonials">
+        <h2 class="section-title">Apa yang orang katakan?</h2>
+        <div class="testimonials-container">
+            <div class="testimonial-card">
+                <p>"Geblek terbaik yang pernah saya rasakan! Tekstur dan rasa yang sempurna."</p>
+                <div class="testimonial-author">
+                    <img src="img/11.jpg" alt="Customer" class="author-image">
+                    <div>
+                        <h4>Sarah Wijaya</h4>
+                        <p>Jakarta</p>
+                    </div>
+                </div>
+            </div>
+            <div class="testimonial-card">
+                <p>"Rasa otentik yang mengingatkan saya pada masa kecil saya. Sangat direkomendasikan!"</p>
+                <div class="testimonial-author">
+                    <img src="img/10.jpg" alt="Customer" class="author-image">
+                    <div>
+                        <h4>Budi Santoso</h4>
+                        <p>Yogyakarta</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="contact">
+        <h2 class="section-title">Kontak Kami</h2>
+        <div class="contact-content">
+            <a href="https://wa.me/6285338864770" class="whatsapp-btn">
+                <i class="fab fa-whatsapp"></i> Order via WhatsApp
+            </a>
+            <div class="address">
+                <h3>Lokasi Kami</h3>
+                <p>Sokoagung, Bagelen, Purworejo, Jawa Tengah</p>
+            </div>
+            <div class="map-container">
+                <iframe src="https://maps.google.com/maps?q=-7.794755,110.045386&output=embed" 
+                        width="100%" 
+                        height="100%" 
+                        style="border:0;" 
+                        allowfullscreen="" 
+                        loading="lazy">
+                </iframe>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <p>&copy; 2025 Geblek Sokoagung. All rights reserved.</p>
+    </footer>
+
+    <script>
+       // Modified JavaScript for mobile menu
+        const menuToggle = document.querySelector('.menu-toggle');
+        const navLinks = document.querySelector('.nav-links');
+        
+        // Only add event listener if on mobile
+        function checkMobile() {
+            if (window.innerWidth <= 768) {
+                menuToggle.addEventListener('click', () => {
+                    navLinks.classList.toggle('active');
+                });
+            } else {
+                menuToggle.removeEventListener('click', () => {});
+            }
+        }
+        
+        // Initial check
+        checkMobile();
+        
+        // Update on resize
+        window.addEventListener('resize', checkMobile);
+        
+        // Smooth Scroll
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+                navLinks.classList.remove('active');
+            });
+        });
+
+        // Scroll Animation
+        const observerOptions = {
+            threshold: 0.1
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = "1";
+                    entry.target.style.transform = "translateY(0)";
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('section, .process-card, .gallery-item, .testimonial-card').forEach(element => {
+            element.style.opacity = "0";
+            element.style.transform = "translateY(20px)";
+            element.style.transition = "all 0.6s ease-out";
+            observer.observe(element);
+        });
+
+    </script>
+</body>
+</html>

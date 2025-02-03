@@ -53,6 +53,10 @@
             margin: 0 auto;
         }
 
+        .nav-content i{
+            display: none;
+        }
+
         .logo {
             font-family: 'Lobster', cursive;
             color: white;
@@ -188,7 +192,7 @@
         }
 
         .about-image:hover {
-            transform: scale(1.0);
+            transform: scale(1.03);
         }
 
         /* Process Section */
@@ -364,11 +368,16 @@
         @media (min-width: 769px) {
             .about-image {
                 margin: 0 auto; /* Pusatkan gambar */
+                 /* Batasi lebar gambar */
             }
         }
 
         /* Responsive Design */
         @media (max-width: 768px) {
+            .nav-content i{
+            display: block;
+            }
+
             .nav-links {
                 position: fixed;
                 top: 0;
@@ -506,7 +515,7 @@
             <div class="nav-links">
                 <a href="#home">Home</a>
                 <a href="#about">About</a>
-                <a href="#process">Process</a>
+                <a href="#process">Advantages</a>
                 <a href="#gallery">Gallery</a>
                 <a href="#testimonials">Testimonials</a>
                 <a href="#contact">Contact</a>
@@ -540,7 +549,7 @@
     </section>
 
     <section id="process">
-        <h2 class="section-title">Proses Pembuatan Tradisional</h2>
+        <h2 class="section-title">Kelebihan Produk Kami</h2>
         <div class="process-steps">
             <div class="process-card">
                 <i class="fas fa-seedling"></i>
@@ -659,12 +668,12 @@
                 navLinks.classList.remove('active');
             });
         });
-
+        
         // Scroll Animation
         const observerOptions = {
             threshold: 0.1
         };
-
+        
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
@@ -673,14 +682,14 @@
                 }
             });
         }, observerOptions);
-
+        
         document.querySelectorAll('section, .process-card, .gallery-item, .testimonial-card').forEach(element => {
             element.style.opacity = "0";
             element.style.transform = "translateY(20px)";
             element.style.transition = "all 0.6s ease-out";
             observer.observe(element);
         });
-
+        
     </script>
 </body>
 </html>

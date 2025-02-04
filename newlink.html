@@ -1,288 +1,565 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Portofolio RDX</title>
-  <!-- Link CDN Font Awesome versi 6 -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" 
-        integrity="sha512-papN2I1eK+0c8usMExgODhG5W6G2D2a8hvhTge6Rm4OG9B4YHn2NZ5+5UqXczf8FEiC2rX9cPnE1T+G1gD6u4g==" 
-        crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Portofolio RevolverDX</title>
+  <link rel="icon" href="img/iconweb.ico" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
   <style>
-    /* Reset dasar */
+    :root {
+      /* Variabel warna untuk tema terang */
+      --network-blue: #00a8ff; /* aksen biru */
+      --node-color: #2ecc71;
+      --packet-color: #e74c3c;
+      --bg-color: #ffffff; /* background putih */
+      --text-color: #333333; /* teks gelap */
+      --card-bg: rgba(255, 255, 255, 0.9); /* latar kartu yang terang */
+    }
+
     * {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
+      font-family: 'SF Mono', monospace;
     }
+
     body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: #f4f4f4;
-      scroll-behavior: smooth;
-      line-height: 1.6;
-      color: #333;
+      background: var(--bg-color);
+      color: var(--text-color);
+      min-height: 100vh;
+      position: relative;
+      overflow-x: hidden;
+      padding-bottom: 70px;
     }
-    p {
-      text-align: justify;
-    }
-    /* Container global */
-    .container {
-      width: 90%;
-      max-width: 1000px;
-      margin: auto;
-      padding-top: 80px; /* kompensasi header fixed */
-    }
-    /* Header & Navbar */
-    header {
-      background: #222;
-      color: #fff;
-      position: fixed;
-      top: 0;
-      width: 100%;
-      z-index: 1000;
-      padding: 10px 0;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-    }
+
     .navbar {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      width: 90%;
-      max-width: 1000px;
-      margin: auto;
+      background: rgba(255, 255, 255, 0.8) !important;
+      backdrop-filter: blur(10px);
+      border-bottom: 2px solid var(--network-blue);
+      z-index: 1000;
     }
-    .navbrand {
-      font-size: 1.5em;
-      font-weight: bold;
-      letter-spacing: 1px;
+
+    .navbar-toggler {
+      border-color: rgba(0, 0, 0, 0.5);
+      transition: transform 0.3s ease;
+      border: none !important;
     }
-    nav ul {
-      list-style: none;
-      display: flex;
-      align-items: center;
-      transition: max-height 0.3s ease;
+
+    .navbar-toggler[aria-expanded="true"] {
+      transform: rotate(90deg);
     }
-    nav ul li {
-      margin: 0 10px;
-    }
-    nav ul li a {
-      color: #fff;
-      text-decoration: none;
-      font-size: 1em;
-      padding: 5px 10px;
-      transition: color 0.3s ease, background 0.3s ease;
-    }
-    nav ul li a:hover {
-      color: #f39c12;
-      background: rgba(243,156,18,0.2);
-      border-radius: 4px;
-    }
-    /* Toggle menu untuk mobile */
-    .menu-toggle {
-      display: none;
-      font-size: 1.8em;
-      cursor: pointer;
-      color: #fff;
-    }
-    @media(max-width: 768px) {
-      .menu-toggle {
-        display: block;
-      }
-      nav ul {
-        flex-direction: column;
-        width: 100%;
-        display: none;
-        background: #222;
-      }
-      nav ul.active {
-        display: block;
-      }
-      nav ul li {
-        margin: 10px 0;
-        text-align: center;
-      }
-    }
-    /* Animasi Section */
-    section {
-      padding: 60px 0;
-      opacity: 0;
-      transform: translateY(30px);
-      animation: fadeInUp 1s forwards;
-    }
-    section:nth-of-type(1) { animation-delay: 0.2s; }
-    section:nth-of-type(2) { animation-delay: 0.4s; }
-    section:nth-of-type(3) { animation-delay: 0.6s; }
-    section:nth-of-type(4) { animation-delay: 0.8s; }
-    section:nth-of-type(5) { animation-delay: 1s; }
-    @keyframes fadeInUp {
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-    /* Section Home */
-    #home h2 {
-      text-align: center;
-      margin-bottom: 20px;
-    }
-    .card {
-      background: #fff;
-      padding: 20px;
-      margin: 20px 0;
-      border-radius: 8px;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+
+    .navbar-toggler-icon {
+      background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba(0, 0, 0, 0.8)' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
       transition: transform 0.3s ease;
     }
-    .card:hover {
+
+    .navbar-toggler[aria-expanded="true"] .navbar-toggler-icon {
+      background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba(0, 0, 0, 0.8)' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M6 6L24 24M24 6L6 24'/%3e%3c/svg%3e");
+      transform: rotate(180deg);
+    }
+
+    .navbar-toggler:focus,
+    .navbar-toggler:focus-visible {
+      box-shadow: none !important;
+      outline: none !important;
+      border: none !important;
+    }
+
+    .navbar-brand,
+    .nav-link {
+      color: var(--text-color) !important;
+      padding-left: 15px;
+      text-shadow: none;
+      font-weight: 700 !important;
+    }
+
+    .nav-link:hover {
+      color: var(--network-blue) !important;
+      padding-left: 20px;
+    }
+
+    section {
+      padding: 4rem 0;
+      position: relative;
+      z-index: 2;
+    }
+
+    .project-card,
+    .edu-card,
+    .skill-card,
+    .exp-card {
+      background: var(--card-bg) !important;
+      border: 2px solid var(--network-blue);
+      border-radius: 5px;
+      backdrop-filter: blur(5px);
+      transition: all 0.3s ease;
+      color: var(--text-color);
+    }
+
+    .text-muted {
+      color: #555 !important;
+    }
+
+    .project-card:hover,
+    .edu-card:hover,
+    .skill-card:hover,
+    .exp-card:hover {
       transform: translateY(-5px);
+      box-shadow: 0 0 25px rgba(0, 168, 255, 0.3);
     }
-    .badges {
-      margin-top: 10px;
+
+    .btn-primary {
+      background: var(--network-blue) !important;
+      border: none;
+      transition: transform 0.2s ease-in-out;
     }
-    .badge {
-      display: inline-block;
-      background: #3498db;
-      color: #fff;
-      padding: 5px 10px;
-      border-radius: 20px;
-      font-size: 0.8em;
-      margin: 5px 5px 0 0;
+
+    .btn-primary:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 0 25px rgba(0, 168, 255, 0.3);
     }
-    .links {
-      margin-top: 15px;
-    }
-    .btn {
-      display: inline-block;
-      padding: 8px 15px;
-      background: #f39c12;
-      color: #fff;
-      text-decoration: none;
-      border-radius: 4px;
-      transition: background 0.3s ease;
-      margin-right: 10px;
-      margin-top: 10px;
-    }
-    .btn:hover {
-      background: #e67e22;
-    }
-    /* Pendidikan, Skill, Pengalaman */
-    ul.education, ul.skills, ul.experiences {
-      list-style: none;
-      margin: 20px 0;
-      padding: 0;
-    }
-    ul.education li, ul.skills li, ul.experiences li {
-      background: #fff;
-      margin-bottom: 10px;
-      padding: 10px 15px;
-      border-left: 4px solid #3498db;
-      border-radius: 4px;
-    }
-    /* Section About */
-    #about {
-      text-align: center;
-    }
+
     .profile-pic {
-      width: 150px;
-      height: 150px;
+      width: 200px;
+      height: 200px;
       border-radius: 50%;
-      object-fit: cover;
-      display: block;
-      margin: 0 auto 20px;
-      border: 4px solid #3498db;
+      border: 3px solid var(--network-blue);
+      box-shadow: 0 0 30px rgba(0, 168, 255, 0.3);
     }
-    /* Border untuk tulisan About agar mirip dengan project card */
+
+    @keyframes node-pulse {
+      0% {
+        transform: scale(1);
+      }
+      50% {
+        transform: scale(1.2);
+      }
+      100% {
+        transform: scale(1);
+      }
+    }
+
+    @keyframes move-packets {
+      0% {
+        transform: translateY(0);
+        opacity: 0;
+      }
+      10% {
+        opacity: 1;
+      }
+      90% {
+        opacity: 1;
+      }
+      100% {
+        transform: translateY(-100vh);
+        opacity: 0;
+      }
+    }
+
+    /* Animasi status */
+    .profile-pic-wrapper {
+      position: relative;
+      display: inline-block;
+    }
+
+    .status-indicator {
+      position: absolute;
+      bottom: 34px;
+      right: 34px;
+      width: 15px;
+      height: 15px;
+      background: #2ecc71;
+      border-radius: 50%;
+      border: 2px solid var(--bg-color);
+      box-shadow: 0 0 8px rgba(46, 204, 113, 0.5);
+      animation: status-pulse 1.5s infinite;
+    }
+
+    @keyframes breath {
+      0% {
+        transform: scale(0.9);
+        opacity: 0.7;
+      }
+      50% {
+        transform: scale(1.2);
+        opacity: 1;
+      }
+      100% {
+        transform: scale(0.9);
+        opacity: 0.7;
+      }
+    }
+
+    .traffic-stats {
+      padding: 0 1rem;
+      text-align: center;
+      margin: 0;
+      color: #7f8c8d;
+      font-size: 0.9rem;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    footer {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: rgba(255, 255, 255, 0.8);
+      border-top: 2px solid var(--network-blue);
+      height: 50px;
+      z-index: 1000;
+      backdrop-filter: blur(10px);
+    }
+
     .about-content {
-      background: #fff;
-      padding: 20px;
-      border-radius: 8px;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      background: var(--card-bg);
+      border-radius: 10px;
+      border: 2px solid var(--network-blue);
+      backdrop-filter: blur(5px);
+    }
+
+    .interest-list li {
+      padding: 6px 10px;
+      background: rgba(0, 0, 0, 0.03);
+      border-radius: 5px;
+      transition: all 0.3s ease;
+    }
+
+    .interest-list li:hover {
+      transform: translateX(10px);
+      background: rgba(0, 168, 255, 0.1);
+    }
+
+    .lead {
+      line-height: 1.8;
+      margin-bottom: 1.5rem;
+    }
+
+    .text-justify {
       text-align: justify;
-      margin-top: 20px;
-    }
-    .social-links a {
-      margin: 0 10px;
-      text-decoration: none;
-      color: #333;
-      font-size: 1.5em;
-      transition: color 0.3s ease;
-    }
-    .social-links a:hover {
-      color: #f39c12;
+      hyphens: auto;
+      -webkit-hyphens: auto;
+      -ms-hyphens: auto;
     }
   </style>
 </head>
 <body>
-  <!-- Header & Navbar -->
-  <header>
-    <div class="navbar">
-      <div class="navbrand">RDX</div>
-      <!-- Menggunakan kelas "fa-solid" untuk ikon toggler -->
-      <div class="menu-toggle" id="mobile-menu"><i class="fa-solid fa-bars"></i></div>
-      <nav>
-        <ul id="navbar">
-          <li><a href="#home">Home</a></li>
-          <li><a href="#pendidikan">Pendidikan</a></li>
-          <li><a href="#skill">Skill</a></li>
-          <li><a href="#pengalaman">Pengalaman</a></li>
-          <li><a href="#about">About</a></li>
+  <!-- Elemen Jaringan (jika diperlukan, bisa diubah styling-nya) -->
+  <div class="network-node" style="top: 15%; left: 20%"></div>
+  <div class="network-node" style="top: 40%; right: 25%"></div>
+  <div class="data-packet" style="left: 21%; animation-delay: 0.5s"></div>
+  <div class="data-packet" style="left: 36%; animation-delay: 1.2s"></div>
+
+  <nav class="navbar fixed-top navbar-expand-lg">
+    <div class="container">
+      <a class="navbar-brand fs-4 font-bold" href="https://rvldx.github.io/">RDX</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto gap-2">
+          <li class="nav-item"><a class="nav-link active" href="#home">Home</a></li>
+          <li class="nav-item"><a class="nav-link" href="#pendidikan">Pendidikan</a></li>
+          <li class="nav-item"><a class="nav-link" href="#skill">Skill</a></li>
+          <li class="nav-item"><a class="nav-link" href="#pengalaman">Pengalaman</a></li>
+          <li class="nav-item"><a class="nav-link" href="#about">About</a></li>
         </ul>
-      </nav>
+      </div>
     </div>
-  </header>
-  
-  <div class="container">
-    <!-- Home Section -->
-    <section id="home">
-      <h2>Home</h2>
-      <div class="card">
-        <h3>Project Portfolio</h3>
-        <p>Deskripsi singkat mengenai project ini. Project ini menggunakan beberapa bahasa pemrograman dan teknologi terkini untuk menghasilkan solusi yang efisien dan responsif.</p>
-        <div class="badges">
-          <span class="badge">HTML</span>
-          <span class="badge">CSS</span>
-          <span class="badge">JavaScript</span>
+  </nav>
+
+  <section id="home" class="container mt-5">
+    <div class="row align-items-center">
+      <div class="col-lg-8 mx-auto text-center">
+        <h1 class="display-4 mb-3">Selamat Datang di Portofolio Saya</h1>
+        <p class="lead mb-3">
+          Seorang Network Administrator dan IT Enthusiast dengan spesialisasi:<br>
+          <span class="text-primary">► Administrasi Jaringan</span> |
+          <span class="text-primary">► Infrastruktur Sistem</span> |
+          <span class="text-primary">► Hardware & Software</span>
+        </p>
+      </div>
+    </div>
+
+    <div class="projects mt-5">
+      <h2 class="mb-4">Proyek Terbaru</h2>
+      <div class="row row-cols-1 row-cols-md-2 g-4">
+        <div class="col">
+          <div class="project-card h-100 p-4">
+            <h3 class="mb-3">Direct Link Website</h3>
+            <p class="text-muted">Website direct link sosmed</p>
+            <div class="tech-stack mb-3">
+              <span class="badge bg-primary">HTML</span>
+              <span class="badge bg-primary">CSS</span>
+            </div>
+            <a href="https://github.com/RvlDX/Ardi" class="btn btn-primary btn-sm" target="_blank">
+              <i class="fab fa-github me-2"></i>Lihat Kode
+            </a>
+            <a href="https://truffleard.vercel.app/" class="btn btn-primary btn-sm" target="_blank">
+              <i class="fa-solid fa-globe me-2"></i>Demo
+            </a>
+          </div>
         </div>
-        <div class="links">
-          <a href="#" class="btn" target="_blank">Demo</a>
-          <a href="#" class="btn" target="_blank">Source Code</a>
+        <div class="col">
+          <div class="project-card h-100 p-4">
+            <h3 class="mb-3">Network Monitor</h3>
+            <p class="text-muted">Tools monitoring jaringan dengan Python</p>
+            <div class="tech-stack mb-3">
+              <span class="badge bg-primary">Python</span>
+              <span class="badge bg-primary">SNMP</span>
+              <span class="badge bg-primary">Linux</span>
+            </div>
+            <a href="https://github.com/rvldx/network-monitor" class="btn btn-primary btn-sm" target="_blank">
+              <i class="fab fa-github me-2"></i>Lihat Kode
+            </a>
+          </div>
         </div>
       </div>
-    </section>
-    
-    <!-- Pendidikan Section -->
-    <section id="pendidikan">
-      <h2>Pendidikan</h2>
-      <ul class="education">
-        <li><strong>SD:</strong> SD Negeri 01</li>
-        <li><strong>SMP:</strong> SMP Negeri 02</li>
-        <li><strong>SMK:</strong> SMK Teknologi Informasi</li>
-        <li><strong>Kuliah:</strong> Universitas Contoh – Teknik Informatika</li>
-      </ul>
-    </section>
-    
-    <!-- Skill Section -->
-    <section id="skill">
-      <h2>Skill</h2>
-      <ul class="skills">
-        <li><strong>Pemrograman:</strong> HTML, CSS, JavaScript, Python, Java</li>
-        <li><strong>Networking:</strong> CCNA, Jaringan Komputer, Keamanan Jaringan</li>
-        <li><strong>Lainnya:</strong> Desain Grafis, Administrasi Sistem</li>
-      </ul>
-    </section>
-    
-    <!-- Pengalaman Section -->
-    <section id="pengalaman">
-      <h2>Pengalaman</h2>
-      <ul class="experiences">
-        <li><strong>Lomba:</strong> Lomba Pemrograman Nasional 2023</li>
-        <li><strong>Organisasi:</strong> Himpunan Mahasiswa Informatika</li>
-      </ul>
-    </section>
-    
-    <!-- About Section -->
-    <section id="about">
-      <h2>About</h2>
-      <!-- Foto profil bulat -->
-      <img src="https://via.placeholder.com/150" alt="Foto Profil" class="profile-pic">
-      <!-- Konten About denga
+    </div>
+  </section>
+
+  <section id="pendidikan" class="container mt-5">
+    <h2 class="mb-4">Pendidikan</h2>
+    <div class="row g-4">
+      <div class="col-12">
+        <div class="edu-card p-4">
+          <h3>📚 SD</h3>
+          <p class="mb-0">SDIT Salsabila 5 Purworejo</p>
+        </div>
+      </div>
+      <div class="col-12">
+        <div class="edu-card p-4">
+          <h3>🎓 SMP</h3>
+          <p class="mb-0">MTs Negeri 1 Purworejo</p>
+        </div>
+      </div>
+      <div class="col-12">
+        <div class="edu-card p-4">
+          <h3>🏫 SMA</h3>
+          <p class="mb-0">SMK TI Kartika Cendekia Purworejo - TKJ</p>
+        </div>
+      </div>
+      <div class="col-12">
+        <div class="edu-card p-4">
+          <h3>🎓 Universitas</h3>
+          <p class="mb-0">Universitas Bina Sarana Informatika - Teknologi Informasi</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="skill" class="container mt-5">
+    <h2 class="mb-4">Skill</h2>
+    <div class="row g-4">
+      <div class="col-md-6 col-lg-3">
+        <div class="skill-card p-4">
+          <h3 class="h5">💻 Programming</h3>
+          <ul class="list-unstyled">
+            <li>HTML/CSS</li>
+            <li>JavaScript</li>
+            <li>Python</li>
+            <li>Java</li>
+          </ul>
+        </div>
+      </div>
+      <div class="col-md-6 col-lg-3">
+        <div class="skill-card p-4">
+          <h3 class="h5">🌐 Networking</h3>
+          <ul class="list-unstyled">
+            <li>Mikrotik</li>
+            <li>TCP/IP</li>
+            <li>VLAN</li>
+            <li>Subnetting</li>
+          </ul>
+        </div>
+      </div>
+      <div class="col-md-6 col-lg-3">
+        <div class="skill-card p-4">
+          <h3 class="h5">🖥️ Sistem</h3>
+          <ul class="list-unstyled">
+            <li>Windows</li>
+            <li>Linux</li>
+            <li>Hardware</li>
+            <li>Troubleshooting</li>
+          </ul>
+        </div>
+      </div>
+      <div class="col-md-6 col-lg-3">
+        <div class="skill-card p-4">
+          <h3 class="h5">🌍 Lainnya</h3>
+          <ul class="list-unstyled">
+            <li>English Intermediate</li>
+            <li>Git Version Control</li>
+            <li>UI/UX Dasar</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="pengalaman" class="container mt-5">
+    <h2 class="mb-4">Pengalaman</h2>
+    <div class="row g-4">
+      <div class="col-md-6">
+        <div class="exp-card p-4">
+          <h3 class="h5">🏆 Lomba</h3>
+          <ul class="list-unstyled">
+            <li>Juara 3 LKS IT Network System Administration Kabupaten Purworejo</li>
+          </ul>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="exp-card p-4">
+          <h3 class="h5">👥 Organisasi</h3>
+          <ul class="list-unstyled">
+            <li>OSIS MTs Negeri 1 Purworejo</li>
+            <li>Dewan Ambalan SMK TI Kartika Cendekia Purworejo</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="about" class="container mt-5 mb-5">
+    <div class="text-center">
+      <div class="profile-pic-wrapper position-relative d-inline-block">
+        <img src="1676983876035.jpg" alt="Profil" class="profile-pic mb-4" />
+        <div class="status-indicator"></div>
+      </div>
+    </div>
+
+    <div class="row justify-content-center">
+      <div class="col-lg-8">
+        <h2 class="mb-4 text-center">Tentang Saya</h2>
+        <div class="about-content p-4 project-card">
+          <p class="text-justify mb-3">
+            Sebagai mahasiswa Teknologi Informasi di <strong>Universitas Bina Sarana Informatika</strong>,
+            saya memiliki ketertarikan yang besar dalam dunia teknologi digital. Fokus utama saya meliputi:
+          </p>
+
+          <div class="interest-list row justify-content-center">
+            <div class="col-md-6">
+              <ul class="list-unstyled">
+                <li class="mb-3">
+                  <i class="fas fa-network-wired me-2 text-primary"></i>
+                  Jaringan Komputer & Sistem Administrasi
+                </li>
+                <li class="mb-3">
+                  <i class="fas fa-microchip me-2 text-primary"></i>
+                  Hardware & Troubleshooting
+                </li>
+                <li class="mb-3">
+                  <i class="fas fa-code me-2 text-primary"></i>
+                  Perangkat Lunak
+                </li>
+              </ul>
+            </div>
+            <div class="col-md-6">
+              <ul class="list-unstyled">
+                <li class="mb-3">
+                  <i class="fas fa-chart-line me-2 text-primary"></i>
+                  Perkembangan Teknologi Terkini
+                </li>
+                <li class="mb-3">
+                  <i class="fas fa-server me-2 text-primary"></i>
+                  Sistem Operasi & Infrastruktur IT
+                </li>
+                <li class="mb-3">
+                  <i class="fas fa-shield-alt me-2 text-primary"></i>
+                  Keamanan Jaringan
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          <p class="text-justify mb-0">
+            Senang berkolaborasi dalam proyek kreatif dan terus mengembangkan kemampuan di bidang sistem jaringan,
+            cloud computing, dan pengembangan solusi teknologi inovatif.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="social-links d-flex justify-content-center gap-3 mt-4">
+      <a href="https://github.com/rvldx" class="btn btn-primary btn-circle">
+        <i class="fab fa-github"></i>
+      </a>
+      <a href="https://linkedin.com/in/rvldx" class="btn btn-primary btn-circle">
+        <i class="fab fa-linkedin"></i>
+      </a>
+      <a href="https://facebook.com/muhawaluddin.azhariihsan" class="btn btn-primary btn-circle">
+        <i class="fab fa-facebook"></i>
+      </a>
+      <a href="https://instagram.com/muhawlddn_024" class="btn btn-primary btn-circle">
+        <i class="fab fa-instagram"></i>
+      </a>
+    </div>
+  </section>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const sections = document.querySelectorAll('section');
+      const navLinks = document.querySelectorAll('.nav-link');
+      const navbarCollapse = document.querySelector('.navbar-collapse');
+
+      sections.forEach(section => {
+        if (section.id !== 'home') section.style.display = 'none';
+      });
+
+      navLinks.forEach(link => {
+        link.addEventListener('click', function(e) {
+          e.preventDefault();
+          const targetId = this.getAttribute('href');
+
+          sections.forEach(section => {
+            section.style.display = 'none';
+          });
+
+          document.querySelector(targetId).style.display = 'block';
+
+          navLinks.forEach(link => link.classList.remove('active'));
+          this.classList.add('active');
+
+          if (window.innerWidth < 768) {
+            const bsCollapse = bootstrap.Collapse.getInstance(navbarCollapse);
+
+            const scrollToSection = () => {
+              window.scrollTo({
+                top: document.querySelector(targetId).offsetTop,
+                behavior: 'smooth'
+              });
+            };
+            if (bsCollapse && navbarCollapse.classList.contains('show')) {
+              navbarCollapse.addEventListener('hidden.bs.collapse', scrollToSection, { once: true });
+              bsCollapse.hide();
+            } else {
+              scrollToSection();
+            }
+          }
+        });
+      });
+
+      navLinks.forEach(link => {
+        link.addEventListener('click', () => {
+          const bsCollapse = bootstrap.Collapse.getInstance(navbarCollapse);
+          if (bsCollapse && navbarCollapse.classList.contains('show')) {
+            bsCollapse.hide();
+          }
+        });
+      });
+    });
+  </script>
+</body>
+<footer class="d-flex align-items-center justify-content-center text-center">
+  <div class="traffic-stats">
+    &copy; 2025 <a href="https://rvldx.github.io/sosmed"> RDX </a> | Status: Online
+  </div>
+</footer>
+</html>

@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TeknoHub</title>
+    <style>
+        /* Global Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+
+        body {
+            background-color: #f9f9f9;
+            color: #222;
+            text-align: center;
+            overflow-x: hidden;
+        }
+
+        /* Navbar */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 30px;
+            background: rgba(255, 255, 255, 0.9);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            left: 0;
+            z-index: 1000;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 20px;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #222;
+            font-size: 18px;
+            transition: 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: #007bff;
+        }
+
+        /* Sections */
+        section {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.6s ease-in-out;
+        }
+
+        section.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        /* Interactive Effects */
+        .tech-animation {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background: #007bff;
+            border-radius: 50%;
+            opacity: 0.7;
+            animation: float 4s infinite ease-in-out;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+            100% { transform: translateY(0); }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+                flex-direction: column;
+                position: absolute;
+                top: 60px;
+                right: 30px;
+                background: white;
+                padding: 10px;
+                box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            }
+
+            .nav-links.show {
+                display: flex;
+            }
+
+            .hamburger {
+                display: block;
+                cursor: pointer;
+                font-size: 24px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="logo">TeknoHub</div>
+        <div class="hamburger">&#9776;</div>
+        <div class="nav-links">
+            <a href="#" data-target="home">Home</a>
+            <a href="#" data-target="skills">Skills</a>
+            <a href="#" data-target="experience">Experience</a>
+            <a href="#" data-target="education">Education</a>
+            <a href="#" data-target="about">About</a>
+        </div>
+    </nav>
+
+    <!-- Sections -->
+    <section id="home" class="active">
+        <h1>Selamat Datang di TeknoHub</h1>
+        <p>Eksplorasi dunia teknologi dengan inovasi dan kreativitas.</p>
+    </section>
+
+    <section id="skills" class="hidden">
+        <h1>Skills</h1>
+        <p>HTML, CSS, JavaScript, Python, dan lainnya.</p>
+    </section>
+
+    <section id="experience" class="hidden">
+        <h1>Experience</h1>
+        <p>Berbagai pengalaman dalam dunia teknologi dan pengembangan web.</p>
+    </section>
+
+    <section id="education" class="hidden">
+        <h1>Education</h1>
+        <p>Pendidikan formal dan pengalaman belajar seputar teknologi.</p>
+    </section>
+
+    <section id="about" class="hidden">
+        <h1>About</h1>
+        <p>TeknoHub adalah tempat untuk berbagi dan belajar teknologi.</p>
+    </section>
+
+    <script>
+        // Navbar Toggle for Mobile
+        const hamburger = document.querySelector('.hamburger');
+        const navLinks = document.querySelector('.nav-links');
+
+        hamburger.addEventListener('click', () => {
+            navLinks.classList.toggle('show');
+        });
+
+        // Smooth Scrolling and Section Activation
+        const links = document.querySelectorAll('.nav-links a');
+        const sections = document.querySelectorAll('section');
+
+        links.forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                const target = document.getElementById(e.target.dataset.target);
+
+                sections.forEach(section => section.classList.add('hidden'));
+                target.classList.remove('hidden');
+                target.classList.add('active');
+            });
+        });
+
+        // Floating Animation Effects
+        function createTechEffect() {
+            const techAnimation = document.createElement('div');
+            techAnimation.classList.add('tech-animation');
+            document.body.appendChild(techAnimation);
+
+            const size = Math.random() * 8 + 5;
+            techAnimation.style.width = `${size}px`;
+            techAnimation.style.height = `${size}px`;
+
+            techAnimation.style.left = Math.random() * window.innerWidth + 'px';
+            techAnimation.style.top = Math.random() * window.innerHeight + 'px';
+
+            setTimeout(() => {
+                techAnimation.remove();
+            }, 5000);
+        }
+
+        setInterval(createTechEffect, 500);
+    </script>
+
+</body>
+</html>

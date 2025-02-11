@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RDX Network Hub</title>
+    <style>
+        :root {
+            --network-blue: #00a8ff;
+            --node-color: #2ecc71;
+            --packet-color: #e74c3c;
+            --bg-color: #0a1929;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+
+        body {
+            background: var(--bg-color);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 2rem;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* Network Visualization */
+        .network-line {
+            position: absolute;
+            background: rgba(46, 204, 113, 0.1);
+            transform-origin: left;
+        }
+
+        .network-node {
+            position: absolute;
+            width: 12px;
+            height: 12px;
+            background: var(--node-color);
+            border-radius: 50%;
+            animation: node-pulse 2s infinite;
+        }
+
+        .data-packet {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            background: var(--packet-color);
+            border-radius: 50%;
+            animation: move-packets 4s linear infinite;
+        }
+
+        .profile-img {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            border: 3px solid var(--network-blue);
+            margin: 0 auto 1.5rem; /* Perubahan disini */
+            box-shadow: 0 0 30px rgba(0, 168, 255, 0.3);
+            position: relative;
+            display: block; /* Tambahkan ini */
+            background-image: url("img/ppsosmed.jpg");
+            background-size: cover; /* Scales image to cover the container */
+            background-position: center; /* Centers the image within the container */
+        }
+
+       .container {
+            max-width: 800px;
+            width: 90%;
+            text-align: center;
+            z-index: 2;
+        }
+
+        .status-indicator {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            width: 15px;
+            height: 15px;
+            background: #2ecc71;
+            border-radius: 50%;
+            animation: status-pulse 1.5s infinite;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            color: var(--network-blue);
+            margin-bottom: 1rem;
+            text-shadow: 0 0 15px rgba(0, 168, 255, 0.4);
+        }
+
+        .ip-address {
+            color: #95a5a6;
+            margin-bottom: 2rem;
+            font-family: 'Courier New', monospace;
+        }
+
+        .links-container {
+            display: grid;
+            gap: 1.5rem;
+            margin: 3rem 0;
+        }
+
+        .network-button {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 1.2rem;
+            border-radius: 5px;
+            border: 2px solid var(--network-blue);
+            color: white;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            backdrop-filter: blur(5px);
+        }
+
+        .network-button:hover {
+            background: rgba(0, 168, 255, 0.1);
+            transform: translateY(-3px);
+            box-shadow: 0 0 25px rgba(0, 168, 255, 0.3);
+        }
+
+        .network-button::before {
+            content: '▶';
+            position: absolute;
+            left: 15px;
+            color: var(--network-blue);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .network-button:hover::before {
+            opacity: 1;
+        }
+
+        .traffic-stats {
+            margin-top: 2rem;
+            color: #7f8c8d;
+            font-size: 0.9rem;
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+        }
+
+        @keyframes node-pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(1); }
+        }
+
+        @keyframes move-packets {
+            0% { transform: translateY(0); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { transform: translateY(-100vh); opacity: 0; }
+        }
+
+        @keyframes status-pulse {
+            0% { box-shadow: 0 0 0 0 rgba(46, 204, 113, 0.4); }
+            70% { box-shadow: 0 0 0 10px rgba(46, 204, 113, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(46, 204, 113, 0); }
+        }
+
+        @media (max-width: 768px) {
+            h1 { font-size: 2rem; }
+            .network-button { padding: 1rem; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Network Visualization Elements -->
+    <div class="network-node" style="top: 15%; left: 20%"></div>
+    <div class="network-node" style="top: 40%; right: 25%"></div>
+    <div class="network-node" style="bottom: 30%; left: 35%"></div>
+
+    <div class="data-packet" style="left: 21%; animation-delay: 0.5s"></div>
+    <div class="data-packet" style="left: 36%; animation-delay: 1.2s"></div>
+    <div class="data-packet" style="right: 26%; animation-delay: 0.8s"></div>
+
+    <div class="container">
+        <div class="profile-img">
+            <div class="status-indicator"></div>
+        </div>
+
+        <h1>Network Hub</h1>
+        <div class="ip-address">192.168.1.rdx</div>
+
+        <div class="links-container">
+            <a href="https://discord.gg/rnbAmkRX/" class="network-button" target="_blank">Discord</a>
+            <a href="https://www.facebook.com/muhawaluddin.azharihsan" class="network-button" target="_blank">Facebook</a>
+            <a href="https://instagram.com/muhawlddn_024" class="network-button" target="_blank">Instagram</a>
+            <a href="https://github.com/rvldx" class="network-button" target="_blank">Github</a>
+        </div>
+
+        <div class="traffic-stats">
+            <span>▲ 245 Kbps</span>
+            <span>▼ 512 Mbps</span>
+            <span>Ping: 15ms</span>
+        </div>
+    </div>
+</body>
+
+<footer>
+        <div class="traffic-stats" style="margin-top: 1rem;">
+            &copy; 2025 RDX Network | Status: Online
+        </div>
+</footer>
+
+</html>

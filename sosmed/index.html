@@ -170,6 +170,18 @@
             h1 { font-size: 2rem; }
             .network-button { padding: 1rem; }
         }
+
+        footer {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(0,0,0,0.5);
+            border-top: 2px solid var(--network-blue);
+            height: 50px;
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+        }
     </style>
 </head>
 <body>
@@ -205,10 +217,9 @@
     </div>
 </body>
 
-<footer>
-        <div class="traffic-stats" style="margin-top: 1rem;">
-            &copy; 2025 RDX Network | Status: Online
-        </div>
+<footer class="d-flex align-items-center justify-content-center text-center">
+    <div class="traffic-stats">
+        &copy; 2025 <a href="https://rvldx.my.id/sosmed"> RDX </a> | Status: Online
+    </div>
 </footer>
-
 </html>

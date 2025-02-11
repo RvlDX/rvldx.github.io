@@ -30,13 +30,7 @@
             position: relative;
         }
 
-        /* Network Visualization */
-        .network-line {
-            position: absolute;
-            background: rgba(46, 204, 113, 0.1);
-            transform-origin: left;
-        }
-
+        /* Network Visualization Elements */
         .network-node {
             position: absolute;
             width: 12px;
@@ -60,16 +54,15 @@
             height: 150px;
             border-radius: 50%;
             border: 3px solid var(--network-blue);
-            margin: 0 auto 1.5rem; /* Perubahan disini */
+            margin: 0 auto 1.5rem;
             box-shadow: 0 0 30px rgba(0, 168, 255, 0.3);
             position: relative;
-            display: block; /* Tambahkan ini */
             background-image: url("img/ppsosmed.jpg");
-            background-size: cover; /* Scales image to cover the container */
-            background-position: center; /* Centers the image within the container */
+            background-size: cover;
+            background-position: center;
         }
 
-       .container {
+        .container {
             max-width: 800px;
             width: 90%;
             text-align: center;
@@ -147,6 +140,27 @@
             gap: 2rem;
         }
 
+        footer {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(0,0,0,0.5);
+            border-top: 2px solid var(--network-blue);
+            height: 50px;
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        footer a {
+            color: var(--network-blue);
+            text-decoration: none;
+            margin: 0 5px;
+        }
+
         @keyframes node-pulse {
             0% { transform: scale(1); }
             50% { transform: scale(1.2); }
@@ -169,31 +183,22 @@
         @media (max-width: 768px) {
             h1 { font-size: 2rem; }
             .network-button { padding: 1rem; }
-        }
-
-        footer {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background: rgba(0,0,0,0.5);
-            border-top: 2px solid var(--network-blue);
-            height: 50px;
-            z-index: 1000;
-            backdrop-filter: blur(10px);
+            .traffic-stats { flex-direction: column; gap: 0.5rem; }
         }
     </style>
 </head>
 <body>
-    <!-- Network Visualization Elements -->
+    <!-- Network Nodes -->
     <div class="network-node" style="top: 15%; left: 20%"></div>
     <div class="network-node" style="top: 40%; right: 25%"></div>
     <div class="network-node" style="bottom: 30%; left: 35%"></div>
 
+    <!-- Data Packets -->
     <div class="data-packet" style="left: 21%; animation-delay: 0.5s"></div>
     <div class="data-packet" style="left: 36%; animation-delay: 1.2s"></div>
     <div class="data-packet" style="right: 26%; animation-delay: 0.8s"></div>
 
+    <!-- Main Content -->
     <div class="container">
         <div class="profile-img">
             <div class="status-indicator"></div>
@@ -215,11 +220,11 @@
             <span>Ping: 15ms</span>
         </div>
     </div>
-</body>
 
-<footer class="d-flex align-items-center justify-content-center text-center">
-    <div class="traffic-stats">
-        &copy; 2025 <a href="https://rvldx.my.id/sosmed"> RDX </a> | Status: Online
-    </div>
-</footer>
+    <footer>
+        <div class="traffic-stats">
+            &copy; 2025 <a href="https://rvldx.my.id/sosmed">RDX</a> | Status: Online
+        </div>
+    </footer>
+</body>
 </html>

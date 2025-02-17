@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gameverse Community - Hubungan Gamers</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+
+        :root {
+            --primary-color: #2a2a2a;
+            --accent-color: #ff4655;
+            --text-color: #ffffff;
+        }
+
+        body {
+            background-color: var(--primary-color);
+            color: var(--text-color);
+        }
+
+        .navbar {
+            background-color: rgba(0, 0, 0, 0.9);
+            padding: 1rem 5%;
+            position: sticky;
+            top: 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            color: var(--accent-color);
+            font-weight: bold;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            color: var(--text-color);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: var(--accent-color);
+        }
+
+        .hero {
+            height: 80vh;
+            background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)),
+                        url('https://source.unsplash.com/1600x900/?gaming');
+            background-size: cover;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 0 5%;
+        }
+
+        .hero-content h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .games-section {
+            padding: 4rem 5%;
+        }
+
+        .games-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .game-card {
+            background: #1a1a1a;
+            border-radius: 10px;
+            overflow: hidden;
+            transition: transform 0.3s;
+        }
+
+        .game-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .game-card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .game-info {
+            padding: 1rem;
+        }
+
+        .forum-section {
+            padding: 4rem 5%;
+            background: #1a1a1a;
+        }
+
+        .events-section {
+            padding: 4rem 5%;
+        }
+
+        .footer {
+            background: #000;
+            padding: 2rem 5%;
+            text-align: center;
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+            
+            .hero-content h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="logo">GAMEVERSE</div>
+        <div class="nav-links">
+            <a href="#home">Home</a>
+            <a href="#games">Games</a>
+            <a href="#forum">Forum</a>
+            <a href="#events">Events</a>
+            <a href="#login">Login</a>
+        </div>
+    </nav>
+
+    <section class="hero" id="home">
+        <div class="hero-content">
+            <h1>Welcome to Gameverse Community</h1>
+            <p>Join millions of gamers discussing Valorant, Genshin Impact, Wuthering Waves, and more!</p>
+        </div>
+    </section>
+
+    <section class="games-section" id="games">
+        <h2>Featured Games</h2>
+        <div class="games-grid">
+            <div class="game-card">
+                <img src="https://source.unsplash.com/400x300/?valorant" alt="Valorant">
+                <div class="game-info">
+                    <h3>Valorant</h3>
+                    <p>Join tactical shooter discussions</p>
+                </div>
+            </div>
+            <div class="game-card">
+                <img src="https://source.unsplash.com/400x300/?genshin-impact" alt="Genshin Impact">
+                <div class="game-info">
+                    <h3>Genshin Impact</h3>
+                    <p>Explore Teyvat together</p>
+                </div>
+            </div>
+            <div class="game-card">
+                <img src="https://source.unsplash.com/400x300/?anime-game" alt="Wuthering Waves">
+                <div class="game-info">
+                    <h3>Wuthering Waves</h3>
+                    <p>New adventures await</p>
+                </div>
+            </div>
+            <div class="game-card">
+                <img src="https://source.unsplash.com/400x300/?sci-fi-game" alt="Honkai Star Rail">
+                <div class="game-info">
+                    <h3>Honkai: Star Rail</h3>
+                    <p>Galactic journey begins</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="forum-section" id="forum">
+        <h2>Community Forum</h2>
+        <div class="forum-categories">
+            <div class="category">
+                <h3>General Discussion</h3>
+                <p>Latest posts: 1,234</p>
+            </div>
+            <div class="category">
+                <h3>Game Guides</h3>
+                <p>Latest posts: 892</p>
+            </div>
+            <div class="category">
+                <h3>Team Finder</h3>
+                <p>Latest posts: 567</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="events-section" id="events">
+        <h2>Upcoming Events</h2>
+        <div class="events-grid">
+            <div class="event-card">
+                <h3>Valorant Tournament</h3>
+                <p>June 15, 2024</p>
+            </div>
+            <div class="event-card">
+                <h3>Genshin Impact Fan Art Contest</h3>
+                <p>June 20, 2024</p>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <p>&copy; 2024 Gameverse Community. All rights reserved.</p>
+        <div class="social-links">
+            <a href="#">Discord</a> | 
+            <a href="#">Twitter</a> | 
+            <a href="#">Instagram</a>
+        </div>
+    </footer>
+</body>
+</html>

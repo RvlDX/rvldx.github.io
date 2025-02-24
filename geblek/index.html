@@ -85,16 +85,17 @@
         .nav-links a::after {
             content: '';
             position: absolute;
-            width: 0;
-            height: 2px;
             bottom: 0;
-            left: 0;
+            left: 50%;
+            right: 50%;
+            height: 2px;
             background: white;
-            transition: 0.3s;
+            transition: all 0.3s ease-in-out;
         }
-
+        
         .nav-links a:hover::after {
-            width: 100%;
+            left: 0;
+            right: 0;
         }
 
         /* Hero Section */

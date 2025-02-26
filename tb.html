@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tebak Kata Jepang</title>
+    <title>Tebak Kata Jepang Online</title>
     <style>
         * {
             box-sizing: border-box;
@@ -108,6 +108,14 @@
             transition: width 0.3s;
         }
 
+        .loading {
+            text-align: center;
+            color: #3d5467;
+            font-size: 1.2em;
+            display: none;
+            padding: 20px;
+        }
+
         @media (max-width: 480px) {
             .question {
                 font-size: 1.5em;
@@ -128,6 +136,7 @@
         <div class="progress-bar">
             <div class="progress" id="progress"></div>
         </div>
+        <div class="loading" id="loading">Memuat kata-kata...</div>
         <div id="game">
             <div class="question" id="word"></div>
             <div class="options-container" id="options"></div>
@@ -140,27 +149,61 @@
     </div>
 
     <script>
-        const words = [
-            { word: "sakura", meaning: "bunga ceri", wrongs: ["angin", "gunung", "matahari"] },
-            { word: "tempura", meaning: "makanan goreng", wrongs: ["sup", "panggang", "kukus"] },
-            { word: "sensei", meaning: "guru", wrongs: ["murid", "dokter", "insinyur"] },
-            { word: "ramen", meaning: "mi Jepang", wrongs: ["nasi", "roti", "kue"] },
-            { word: "kawaii", meaning: "imut", wrongs: ["besar", "jelek", "tua"] },
-            { word: "samurai", meaning: "ksatria", wrongs: ["petani", "pedagang", "nelayan"] }
-        ];
-
         let currentQuestion = null;
         let score = 0;
         let lives = 3;
         let totalQuestions = 0;
+        let wordPool = [];
 
-        function initGame() {
-            showQuestion();
-            updateDisplay();
+        async function fetchWords() {
+            try {
+                showLoading();
+                const response = await fetch(`https://jisho.org/api/v1/search/words?keyword=%23common&page=${Math.floor(Math.random()*10)}`);
+                const data = await response.json();
+                
+                wordPool = data.data
+                    .filter(entry => 
+                        entry.japanese[0].reading &&
+                        entry.senses[0] &&
+                        entry.senses[0].english_definitions[0]
+                    )
+                    .map(entry => ({
+                        word: entry.japanese[0].reading,
+                        meaning: entry.senses[0].english_definitions[0]
+                    }))
+                    .slice(0, 20);
+                
+                hideLoading();
+                showQuestion();
+            } catch (error) {
+                alert('Gagal memuat data. Coba refresh halaman.');
+                console.error(error);
+            }
+        }
+
+        function getRandomWrongAnswers(correctMeaning) {
+            const wrongs = [];
+            const usedMeanings = new Set([correctMeaning]);
+            
+            while (wrongs.length < 3) {
+                const randomWord = wordPool[Math.floor(Math.random() * wordPool.length)];
+                if (randomWord && !usedMeanings.has(randomWord.meaning)) {
+                    wrongs.push(randomWord.meaning);
+                    usedMeanings.add(randomWord.meaning);
+                }
+            }
+            return wrongs;
         }
 
         function showQuestion() {
-            currentQuestion = words[Math.floor(Math.random() * words.length)];
+            if (wordPool.length < 4) {
+                fetchWords();
+                return;
+            }
+
+            currentQuestion = wordPool.splice(Math.floor(Math.random() * wordPool.length), 1)[0];
+            currentQuestion.wrongs = getRandomWrongAnswers(currentQuestion.meaning);
+            
             totalQuestions++;
             
             const options = [currentQuestion.meaning, ...currentQuestion.wrongs];
@@ -168,8 +211,10 @@
             
             document.getElementById('word').textContent = currentQuestion.word;
             document.getElementById('options').innerHTML = shuffledOptions
-                .map(opt => `<button class="option" onclick="checkAnswer('${opt}')">${opt}</button>`)
+                .map(opt => `<button class="option" onclick="checkAnswer('${opt.replace(/'/g, "\\'")}')">${opt}</button>`)
                 .join('');
+            
+            updateDisplay();
         }
 
         function checkAnswer(answer) {
@@ -224,10 +269,21 @@
             totalQuestions = 0;
             document.getElementById('game').style.display = 'block';
             document.getElementById('gameOver').style.display = 'none';
-            initGame();
+            fetchWords();
         }
 
-        initGame();
+        function showLoading() {
+            document.getElementById('loading').style.display = 'block';
+            document.getElementById('game').style.display = 'none';
+        }
+
+        function hideLoading() {
+            document.getElementById('loading').style.display = 'none';
+            document.getElementById('game').style.display = 'block';
+        }
+
+        // Initialize game
+        fetchWords();
     </script>
 </body>
 </html>

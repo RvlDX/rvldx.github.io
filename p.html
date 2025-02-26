@@ -3,312 +3,269 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Portofolio RevolverDX</title>
-    <link rel="icon" href="img/iconweb.ico">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <title>RevolverDX - RPG Portfolio</title>
+    <link href="https://fonts.googleapis.com/css2?family=MedievalSharp&family=UnifrakturMaguntia&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         :root {
-            --primary-blue: #00a8ff;
-            --bg-dark: #0a1929;
-            --card-bg: rgba(255, 255, 255, 0.03);
-            --border-color: rgba(0, 168, 255, 0.2);
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            --primary-gold: #FFD700;
+            --dark-bg: #1a120b;
+            --parchment: #f0e6d3;
+            --metal-border: #63594e;
+            --health-red: #cc0000;
         }
 
         body {
-            background: var(--bg-dark);
-            color: white;
+            background: url('https://img.freepik.com/free-photo/old-brown-paper-texture-background_1373-431.jpg') fixed;
+            font-family: 'MedievalSharp', cursive;
+            color: #3d2f1f;
             min-height: 100vh;
-            position: relative;
-            overflow-x: hidden;
-            padding-bottom: 70px;
         }
 
-        /* Navbar Calculator Style */
+        /* RPG Style Navbar */
         .navbar {
-            background: rgba(0, 8, 29, 0.98) !important;
-            backdrop-filter: blur(10px);
-            border-bottom: 1px solid var(--border-color);
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            background: rgba(26, 18, 11, 0.9) !important;
+            border-bottom: 3px solid var(--primary-gold);
+            box-shadow: 0 0 20px rgba(0,0,0,0.5);
         }
 
         .navbar-brand {
-            font-weight: 700;
-            letter-spacing: 1px;
-            padding: 10px 20px;
-            border-radius: 8px;
-            transition: all 0.3s ease;
+            font-family: 'UnifrakturMaguntia', cursive;
+            font-size: 2.5rem;
+            color: var(--primary-gold) !important;
+            text-shadow: 2px 2px 2px #000;
         }
 
         .nav-link {
-            color: white !important;
-            padding: 10px 25px !important;
-            border-radius: 8px;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            color: var(--parchment) !important;
+            font-size: 1.2rem;
+            position: relative;
+            margin: 0 15px;
         }
 
-        .nav-link:hover {
-            background: rgba(0, 168, 255, 0.1);
-            transform: translateY(-2px);
+        .nav-link::before {
+            content: '⚔';
+            margin-right: 8px;
         }
 
-        /* Card Style */
-        .project-card, .edu-card, .skill-card, .exp-card {
-            background: var(--card-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-            padding: 1.5rem;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        /* Character Sheet Style */
+        .character-sheet {
+            background: url('https://www.transparenttextures.com/patterns/old-paper.png');
+            border: 15px solid transparent;
+            border-image: url('https://www.freeiconspng.com/uploads/gold-frame-png-5.png') 30 round;
+            box-shadow: 0 0 30px rgba(0,0,0,0.5);
+            margin: 2rem auto;
+            padding: 2rem;
         }
 
-        .project-card:hover, .edu-card:hover, .skill-card:hover, .exp-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 16px rgba(0, 168, 255, 0.15);
-            border-color: var(--primary-blue);
+        /* Stats Container */
+        .stats-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+            padding: 1rem;
+            background: rgba(0,0,0,0.7);
+            border: 3px solid var(--metal-border);
         }
 
-        /* Button Style */
-        .btn-primary {
-            background: rgba(0, 168, 255, 0.9);
-            border: none;
-            border-radius: 8px;
-            padding: 12px 24px;
-            font-weight: 600;
+        .stat-card {
+            background: rgba(240, 230, 211, 0.9);
+            padding: 1rem;
+            border: 2px solid var(--metal-border);
+            position: relative;
+        }
+
+        .stat-card h3 {
+            color: var(--health-red);
+            border-bottom: 2px solid var(--metal-border);
+            padding-bottom: 0.5rem;
+        }
+
+        /* Skill Tree */
+        .skill-tree {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+            padding: 2rem;
+            background: rgba(0,0,0,0.5);
+        }
+
+        .skill-node {
+            background: url('https://www.transparenttextures.com/patterns/black-paper.png');
+            border: 2px solid var(--primary-gold);
+            padding: 1rem;
+            text-align: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .skill-node:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 15px var(--primary-gold);
+        }
+
+        /* Health Bar */
+        .health-bar {
+            width: 100%;
+            height: 20px;
+            background: #444;
+            border: 2px solid #000;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+
+        .health-fill {
+            height: 100%;
+            background: linear-gradient(to right, #cc0000, #ff4444);
+            transition: width 0.5s ease;
+        }
+
+        /* Quest Log */
+        .quest-log {
+            background: rgba(0,0,0,0.8);
+            border: 3px solid var(--metal-border);
+            padding: 1rem;
+            color: var(--parchment);
+        }
+
+        .quest-entry {
+            padding: 1rem;
+            border-bottom: 1px solid var(--metal-border);
+        }
+
+        /* RPG Buttons */
+        .btn-rpg {
+            background: linear-gradient(to bottom, #63594e, #3d2f1f);
+            border: 2px solid var(--primary-gold);
+            color: var(--primary-gold);
+            padding: 10px 25px;
+            font-size: 1.1rem;
+            text-transform: uppercase;
             transition: all 0.3s ease;
         }
 
-        .btn-primary:hover {
-            background: rgba(0, 168, 255, 1);
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(0, 168, 255, 0.2);
+        .btn-rpg:hover {
+            background: linear-gradient(to bottom, #3d2f1f, #63594e);
+            box-shadow: 0 0 15px var(--primary-gold);
         }
 
-        /* Profile Section */
-        .profile-pic {
-            width: 200px;
-            height: 200px;
-            border-radius: 50%;
-            border: 3px solid var(--primary-blue);
-            box-shadow: 0 0 30px rgba(0, 168, 255, 0.3);
-        }
-
-        .status-indicator {
-            position: absolute;
-            bottom: 30px;
-            right: 30px;
-            width: 15px;
-            height: 15px;
-            background: #2ecc71;
-            border-radius: 50%;
-            border: 2px solid var(--bg-dark);
-            animation: status-pulse 1.5s infinite;
-        }
-
-        @keyframes status-pulse {
-            0% { box-shadow: 0 0 0 0 rgba(46, 204, 113, 0.4); }
-            70% { box-shadow: 0 0 0 10px rgba(46, 204, 113, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(46, 204, 113, 0); }
-        }
-
-        /* Section Layout */
-        section {
-            padding: 4rem 0;
-            margin: 2rem 0;
-        }
-
-        h1, h2, h3 {
-            color: var(--primary-blue);
-            text-shadow: 0 0 15px rgba(0, 168, 255, 0.2);
-            margin-bottom: 1.5rem;
-        }
-
-        /* Responsive Design */
-        @media (max-width: 768px) {
-            .navbar-collapse {
-                background: rgba(0, 8, 29, 0.95);
-                padding: 1rem;
-                border-radius: 0 0 12px 12px;
-            }
-            
-            .nav-link {
-                margin: 5px 0;
-            }
-        }
-
-        /* Animations */
-        @keyframes cardEntrance {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .project-card, .edu-card, .skill-card, .exp-card {
-            animation: cardEntrance 0.6s ease forwards;
-            opacity: 0;
+        /* Profile Image Frame */
+        .profile-frame {
+            border: 15px solid transparent;
+            border-image: url('https://www.freeiconspng.com/uploads/gold-frame-png-5.png') 30 round;
+            padding: 10px;
+            background: #fff;
         }
     </style>
 </head>
-
 <body>
-    <nav class="navbar fixed-top navbar-expand-lg navbar-dark">
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
         <div class="container">
-            <a class="navbar-brand" href="#">RDX</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <a class="navbar-brand" href="#">RevolverDX</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
-                    <li class="nav-item"><a class="nav-link active" href="#home">Home</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#pendidikan">Pendidikan</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#skill">Skill</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#pengalaman">Pengalaman</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#about">About</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#stats">Character Sheet</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#skills">Skill Tree</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#quests">Quest Log</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#inventory">Inventory</a></li>
                 </ul>
             </div>
         </div>
     </nav>
 
-    <!-- Home Section -->
-    <section id="home" class="container mt-5">
-        <div class="row align-items-center">
-            <div class="col-lg-8 mx-auto text-center">
-                <h1 class="display-5 mb-4">Portofolio RevolverDX</h1>
-                <p class="lead mb-4">
-                    Network Administrator & IT Enthusiast<br>
-                    <span class="text-primary">► Network Systems</span> | 
-                    <span class="text-primary">► IT Infrastructure</span> | 
-                    <span class="text-primary">► Hardware Specialist</span>
-                </p>
+    <main class="container mt-5">
+        <!-- Character Sheet Section -->
+        <section id="stats" class="character-sheet mt-5">
+            <div class="text-center mb-4">
+                <div class="profile-frame d-inline-block">
+                    <img src="your-profile.jpg" alt="Character Avatar" class="img-fluid" style="max-width: 200px;">
+                </div>
+                <h2 class="mt-3">Level 99 Network Archmage</h2>
+                <div class="health-bar mx-auto" style="width: 300px;">
+                    <div class="health-fill" style="width: 100%"></div>
+                </div>
             </div>
-        </div>
 
-        <div class="projects mt-5">
-            <h2>Proyek Terbaru</h2>
-            <div class="row row-cols-1 row-cols-md-2 g-4 mt-3">
-                <div class="col">
-                    <div class="project-card h-100 p-4">
-                        <h3 class="mb-3">Direct Link Website</h3>
-                        <p class="text-muted">Website direktori link sosial media</p>
-                        <div class="d-flex gap-2 mt-4">
-                            <a href="#" class="btn btn-primary">Lihat Kode</a>
-                            <a href="#" class="btn btn-primary">Demo</a>
-                        </div>
-                    </div>
+            <div class="stats-container">
+                <div class="stat-card">
+                    <h3>⚔ Core Skills</h3>
+                    <ul>
+                        <li>Network Sorcery ★★★★★</li>
+                        <li>System Alchemy ★★★★☆</li>
+                        <li>Cyber Defense ★★★★☆</li>
+                    </ul>
                 </div>
-                <div class="col">
-                    <div class="project-card h-100 p-4">
-                        <h3 class="mb-3">Network Monitor</h3>
-                        <p class="text-muted">Monitoring jaringan berbasis Python</p>
-                        <div class="d-flex gap-2 mt-4">
-                            <a href="#" class="btn btn-primary">Lihat Kode</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
 
-    <!-- Pendidikan Section -->
-    <section id="pendidikan" class="container">
-        <h2>Pendidikan</h2>
-        <div class="row g-4 mt-3">
-            <div class="col-md-6">
-                <div class="edu-card p-4">
-                    <h3>🎓 SMA</h3>
-                    <p class="mb-0">SMK TI Kartika Cendekia Purworejo - TKJ</p>
+                <div class="stat-card">
+                    <h3>🎓 Education</h3>
+                    <ul>
+                        <li>Guild of BSI (2021-Now)</li>
+                        <li>SMK TI Kartika (2018-2021)</li>
+                    </ul>
                 </div>
-            </div>
-            <div class="col-md-6">
-                <div class="edu-card p-4">
-                    <h3>🏫 Universitas</h3>
-                    <p class="mb-0">Bina Sarana Informatika - Teknologi Informasi</p>
-                </div>
-            </div>
-        </div>
-    </section>
 
-    <!-- Skill Section -->
-    <section id="skill" class="container">
-        <h2>Skill</h2>
-        <div class="row g-4 mt-3">
-            <div class="col-md-6 col-lg-3">
-                <div class="skill-card p-4">
-                    <h3>💻 Programming</h3>
-                    <ul class="list-unstyled mt-3">
-                        <li>HTML/CSS</li>
-                        <li>JavaScript</li>
-                        <li>Python</li>
+                <div class="stat-card">
+                    <h3>🏆 Achievements</h3>
+                    <ul>
+                        <li>LKS Network Champion</li>
+                        <li>1000+ Bugs Vanquished</li>
                     </ul>
                 </div>
             </div>
-            <div class="col-md-6 col-lg-3">
-                <div class="skill-card p-4">
-                    <h3>🌐 Networking</h3>
-                    <ul class="list-unstyled mt-3">
-                        <li>Mikrotik</li>
-                        <li>TCP/IP</li>
-                        <li>VLAN</li>
-                    </ul>
-                </div>
-            </div>
-            <div class="col-md-6 col-lg-3">
-                <div class="skill-card p-4">
-                    <h3>🖥️ Sistem</h3>
-                    <ul class="list-unstyled mt-3">
-                        <li>Windows Server</li>
-                        <li>Linux</li>
-                        <li>Troubleshooting</li>
-                    </ul>
-                </div>
-            </div>
-            <div class="col-md-6 col-lg-3">
-                <div class="skill-card p-4">
-                    <h3>📚 Lainnya</h3>
-                    <ul class="list-unstyled mt-3">
-                        <li>English Intermediate</li>
-                        <li>Git Version Control</li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </section>
+        </section>
 
-    <!-- Footer -->
-    <footer class="d-flex align-items-center justify-content-center">
-        <div class="text-muted">
-            &copy; 2024 RDX Portfolio | Status: <span class="text-success">Online</span>
-        </div>
-    </footer>
+        <!-- Skill Tree Section -->
+        <section id="skills" class="skill-tree mt-5">
+            <div class="skill-node">
+                <h4>Network Mastery</h4>
+                <div class="progress mt-2" style="height: 5px;">
+                    <div class="progress-bar bg-danger" style="width: 90%"></div>
+                </div>
+                <p class="mt-2">Mikrotik • TCP/IP • VLAN</p>
+            </div>
 
+            <div class="skill-node">
+                <h4>System Craft</h4>
+                <div class="progress mt-2" style="height: 5px;">
+                    <div class="progress-bar bg-warning" style="width: 85%"></div>
+                </div>
+                <p class="mt-2">Windows • Linux • Hardware</p>
+            </div>
+
+            <div class="skill-node">
+                <h4>Code Magic</h4>
+                <div class="progress mt-2" style="height: 5px;">
+                    <div class="progress-bar bg-info" style="width: 80%"></div>
+                </div>
+                <p class="mt-2">HTML/CSS • Python • JavaScript</p>
+            </div>
+        </section>
+
+        <!-- Quest Log Section -->
+        <section id="quests" class="quest-log mt-5">
+            <h2 class="text-center mb-4">Active Quests</h2>
+            <div class="quest-entry">
+                <h4>🎯 Current Mission: Cloud Migration</h4>
+                <p>Objective: Master AWS/Azure infrastructure</p>
+                <div class="progress">
+                    <div class="progress-bar" style="width: 65%">65%</div>
+                </div>
+            </div>
+
+            <div class="quest-entry">
+                <h4>⚔ Ongoing Battle: Cybersecurity</h4>
+                <p>Defeat 1000+ malware attacks</p>
+                <div class="progress">
+                    <div class="progress-bar bg-danger" style="width: 82%">823/1000</div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script>
-        // Script untuk navigasi dan animasi
-        document.addEventListener('DOMContentLoaded', function() {
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.style.opacity = 1;
-                    }
-                });
-            });
-
-            document.querySelectorAll('.project-card, .edu-card, .skill-card').forEach((el) => {
-                observer.observe(el);
-            });
-        });
-    </script>
 </body>
 </html>

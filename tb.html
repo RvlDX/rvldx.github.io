@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tebak Kata Jepang Online</title>
     <style>
+        /* CSS tetap sama seperti versi sebelumnya */
         * {
             box-sizing: border-box;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -116,6 +117,13 @@
             padding: 20px;
         }
 
+        .error-message {
+            color: #e74c3c;
+            text-align: center;
+            padding: 20px;
+            display: none;
+        }
+
         @media (max-width: 480px) {
             .question {
                 font-size: 1.5em;
@@ -137,6 +145,7 @@
             <div class="progress" id="progress"></div>
         </div>
         <div class="loading" id="loading">Memuat kata-kata...</div>
+        <div class="error-message" id="errorMessage"></div>
         <div id="game">
             <div class="question" id="word"></div>
             <div class="options-container" id="options"></div>
@@ -149,35 +158,67 @@
     </div>
 
     <script>
+        // Konfigurasi API
+        const API_URL = 'https://tangorin.com/api/v1/words';
+        const FALLBACK_WORDS = [
+            { word: "sakura", meaning: "cherry blossom" },
+            { word: "tempura", meaning: "fried food" },
+            { word: "ramen", meaning: "japanese noodles" },
+            { word: "sensei", meaning: "teacher" },
+            { word: "kawaii", meaning: "cute" }
+        ];
+
         let currentQuestion = null;
         let score = 0;
         let lives = 3;
         let totalQuestions = 0;
         let wordPool = [];
+        let retryCount = 0;
+        const MAX_RETRIES = 3;
 
         async function fetchWords() {
             try {
                 showLoading();
-                const response = await fetch(`https://jisho.org/api/v1/search/words?keyword=%23common&page=${Math.floor(Math.random()*10)}`);
+                const response = await fetch(`${API_URL}?query=common&page=${Math.floor(Math.random()*10)}`);
+                
+                if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+                
                 const data = await response.json();
                 
-                wordPool = data.data
-                    .filter(entry => 
-                        entry.japanese[0].reading &&
-                        entry.senses[0] &&
-                        entry.senses[0].english_definitions[0]
+                wordPool = data.words
+                    .filter(word => 
+                        word.kana && 
+                        word.senses[0]?.english &&
+                        word.senses[0].english[0]
                     )
-                    .map(entry => ({
-                        word: entry.japanese[0].reading,
-                        meaning: entry.senses[0].english_definitions[0]
+                    .map(word => ({
+                        word: word.kana,
+                        meaning: word.senses[0].english[0]
                     }))
                     .slice(0, 20);
+
+                if(wordPool.length < 3) throw new Error('Not enough valid words');
                 
                 hideLoading();
+                retryCount = 0;
                 showQuestion();
             } catch (error) {
-                alert('Gagal memuat data. Coba refresh halaman.');
-                console.error(error);
+                handleFetchError(error);
+            }
+        }
+
+        function handleFetchError(error) {
+            console.error('Fetch error:', error);
+            hideLoading();
+            
+            if(retryCount < MAX_RETRIES) {
+                retryCount++;
+                showError(`Gagal memuat data. Mencoba lagi (${retryCount}/${MAX_RETRIES})...`);
+                setTimeout(fetchWords, 2000);
+            } else {
+                showError('Server sibuk. Menggunakan data offline...');
+                wordPool = [...FALLBACK_WORDS];
+                showQuestion();
             }
         }
 
@@ -280,6 +321,13 @@
         function hideLoading() {
             document.getElementById('loading').style.display = 'none';
             document.getElementById('game').style.display = 'block';
+        }
+
+        function showError(message) {
+            const errorElement = document.getElementById('errorMessage');
+            errorElement.textContent = message;
+            errorElement.style.display = 'block';
+            setTimeout(() => errorElement.style.display = 'none', 3000);
         }
 
         // Initialize game

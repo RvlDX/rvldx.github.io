@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Status Portofolio - Shadow Networker</title>
+    <style>
+        :root {
+            --neon-blue: #00f3ff;
+            --dark-bg: #0a0a0a;
+            --text-glow: 0 0 10px var(--neon-blue);
+        }
+
+        body {
+            background: var(--dark-bg);
+            color: var(--neon-blue);
+            font-family: 'Courier New', monospace;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .status-container {
+            background: rgba(0,0,0,0.9);
+            border: 3px solid var(--neon-blue);
+            box-shadow: 0 0 30px rgba(0,243,255,0.2);
+            padding: 2rem;
+            width: 100%;
+            max-width: 400px;
+            position: relative;
+        }
+
+        .status-header {
+            text-align: center;
+            border-bottom: 2px solid var(--neon-blue);
+            padding-bottom: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .status-title {
+            font-size: 1.8rem;
+            text-shadow: var(--text-glow);
+            letter-spacing: 2px;
+        }
+
+        .player-name {
+            font-size: 1.5rem;
+            margin: 0.5rem 0;
+            color: #fff;
+        }
+
+        .class-title {
+            color: var(--neon-blue);
+            font-size: 1.2rem;
+            text-shadow: var(--text-glow);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+
+        .stat-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.5rem;
+            border-bottom: 1px solid rgba(0,243,255,0.3);
+        }
+
+        .stat-label {
+            color: #fff;
+        }
+
+        .stat-value {
+            color: var(--neon-blue);
+            text-shadow: var(--text-glow);
+            font-weight: bold;
+        }
+
+        .level-container {
+            text-align: center;
+            margin-top: 2rem;
+        }
+
+        .level-bar {
+            width: 100%;
+            height: 20px;
+            background: #000;
+            border: 2px solid var(--neon-blue);
+            margin: 0.5rem 0;
+            position: relative;
+        }
+
+        .level-progress {
+            width: 78%;
+            height: 100%;
+            background: linear-gradient(90deg, 
+                rgba(106,0,255,0.8), 
+                rgba(0,243,255,0.8));
+            box-shadow: 0 0 10px var(--neon-blue);
+        }
+
+        @media (max-width: 480px) {
+            .status-container {
+                padding: 1.5rem;
+            }
+            
+            .status-title {
+                font-size: 1.5rem;
+            }
+            
+            .player-name {
+                font-size: 1.2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="status-container">
+        <div class="status-header">
+            <div class="status-title">STATUS</div>
+            <div class="player-name">REVOLVERDX</div>
+            <div class="class-title">NETWORK SHADOW ARCHITECT</div>
+        </div>
+
+        <div class="stats-grid">
+            <div class="stat-item">
+                <span class="stat-label">STR</span>
+                <span class="stat-value">48</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-label">VIT</span>
+                <span class="stat-value">27</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-label">AGI</span>
+                <span class="stat-value">27</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-label">INT</span>
+                <span class="stat-value">27</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-label">PER</span>
+                <span class="stat-value">27</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-label">LUK</span>
+                <span class="stat-value">12</span>
+            </div>
+        </div>
+
+        <div class="level-container">
+            <div class="class-title">LEVEL</div>
+            <div class="level-bar">
+                <div class="level-progress"></div>
+            </div>
+            <div class="stat-value">78</div>
+        </div>
+    </div>
+</body>
+</html>

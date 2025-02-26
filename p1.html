@@ -3,97 +3,130 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RevolverDX - Shadow Monarch System</title>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500&family=Rajdhani:wght@500&display=swap" rel="stylesheet">
+    <title>Player System - Shadow Monarch</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500&family=Electrolize&display=swap" rel="stylesheet">
     <style>
         :root {
-            --neon-blue: #00f3ff;
-            --shadow-purple: #6a00ff;
-            --dark-bg: #0a0a12;
-            --hud-glow: 0 0 15px var(--neon-blue);
+            --system-blue: #00f3ff;
+            --system-purple: #6a00ff;
+            --dark-layer: rgba(0,0,0,0.95);
+            --hud-glow: 0 0 15px var(--system-blue);
         }
 
         body {
-            background: var(--dark-bg);
-            color: white;
-            font-family: 'Rajdhani', sans-serif;
+            background: #000 url('https://i.imgur.com/X3q7o7Q.png') fixed;
+            color: var(--system-blue);
+            font-family: 'Electrolize', sans-serif;
             min-height: 100vh;
             overflow-x: hidden;
         }
 
-        /* System Header */
-        .system-header {
-            background: linear-gradient(45deg, #000428, #004e92);
-            border-bottom: 3px solid var(--neon-blue);
+        /* System Interface */
+        .system-container {
+            background: var(--dark-layer);
+            border: 2px solid var(--system-blue);
             box-shadow: var(--hud-glow);
+            margin: 2rem auto;
+            width: 90%;
+            max-width: 800px;
+            position: relative;
+            padding: 2rem;
+        }
+
+        .system-container::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(45deg, 
+                var(--system-blue), 
+                var(--system-purple),
+                var(--system-blue));
+            z-index: -1;
+            animation: border-glow 3s linear infinite;
+        }
+
+        /* Status Window */
+        .status-window {
+            border: 2px solid var(--system-blue);
+            padding: 2rem;
+            margin: 2rem 0;
+            position: relative;
+            background: rgba(0,0,0,0.8);
+        }
+
+        .status-header {
+            font-family: 'Orbitron', sans-serif;
+            text-shadow: 0 0 20px var(--system-blue);
+            border-bottom: 2px solid var(--system-blue);
+            padding-bottom: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        /* Level Display */
+        .level-display {
+            position: absolute;
+            top: -30px;
+            right: -30px;
+            background: #000;
+            border: 2px solid var(--system-blue);
+            padding: 1rem 2rem;
+            transform: rotate(5deg);
+            box-shadow: var(--hud-glow);
+        }
+
+        /* Attributes Grid */
+        .attributes-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+        }
+
+        .attribute-box {
+            border: 1px solid var(--system-blue);
             padding: 1rem;
+            text-align: center;
             position: relative;
         }
 
-        .system-header h1 {
-            font-family: 'Orbitron', sans-serif;
-            text-shadow: 0 0 20px var(--neon-blue);
-            letter-spacing: 3px;
-        }
-
-        /* Level Badge */
-        .level-badge {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            width: 80px;
-            height: 80px;
-            border: 3px solid var(--neon-blue);
-            border-radius: 50%;
-            background: rgba(0,0,0,0.8);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            animation: badge-pulse 2s infinite;
-        }
-
-        .level-badge::before {
+        .attribute-box::after {
             content: '';
             position: absolute;
+            bottom: 0;
+            left: 0;
             width: 100%;
-            height: 100%;
-            border-radius: 50%;
-            box-shadow: 0 0 30px var(--neon-blue);
+            height: 3px;
+            background: var(--system-blue);
+            box-shadow: var(--hud-glow);
         }
 
-        .level-number {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 2rem;
-            background: linear-gradient(45deg, var(--neon-blue), var(--shadow-purple));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        /* Experience Bar */
-        .exp-bar {
-            width: 300px;
+        /* Progress Bars */
+        .hud-bar {
             height: 20px;
             background: #000;
-            border: 2px solid var(--neon-blue);
-            border-radius: 10px;
-            margin: 2rem auto;
+            border: 1px solid var(--system-blue);
+            margin: 1rem 0;
+            position: relative;
+        }
+
+        .hud-fill {
+            height: 100%;
+            background: linear-gradient(90deg, 
+                var(--system-purple), 
+                var(--system-blue));
+            width: 75%;
             position: relative;
             overflow: hidden;
         }
 
-        .exp-fill {
-            height: 100%;
-            background: linear-gradient(90deg, var(--shadow-purple), var(--neon-blue));
-            width: 65%;
-            position: relative;
-        }
-
-        .exp-fill::after {
+        .hud-fill::after {
             content: '';
             position: absolute;
             top: 0;
-            left: -50%;
-            width: 50%;
+            left: -100%;
+            width: 100%;
             height: 100%;
             background: linear-gradient(
                 90deg,
@@ -104,144 +137,104 @@
             animation: shine 2s infinite;
         }
 
+        /* Animations */
+        @keyframes border-glow {
+            0% { opacity: 0.5; }
+            50% { opacity: 1; }
+            100% { opacity: 0.5; }
+        }
+
+        @keyframes shine {
+            0% { left: -100%; }
+            100% { left: 200%; }
+        }
+
         /* Skill Tree */
         .skill-tree {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             gap: 2rem;
             padding: 2rem;
-            background: rgba(0,0,0,0.5);
-            border: 2px solid var(--neon-blue);
-            margin: 2rem;
+            border: 2px solid var(--system-blue);
+            margin-top: 2rem;
         }
 
         .skill-node {
-            padding: 1.5rem;
-            border: 2px solid var(--neon-blue);
+            padding: 1rem;
+            border: 1px solid var(--system-blue);
             position: relative;
-            transition: all 0.3s ease;
             cursor: pointer;
-            background: rgba(0,0,0,0.8);
+            transition: all 0.3s ease;
         }
 
         .skill-node:hover {
-            transform: scale(1.05);
             box-shadow: var(--hud-glow);
+            transform: scale(1.05);
         }
 
-        /* Shadow Monarch Influence */
-        .monarch-influence {
-            position: fixed;
-            bottom: 20px;
-            left: 20px;
-            background: rgba(0,0,0,0.7);
-            border: 2px solid var(--shadow-purple);
-            padding: 1rem;
-        }
-
-        /* Animations */
-        @keyframes badge-pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.1); }
-            100% { transform: scale(1); }
-        }
-
-        @keyframes shine {
-            0% { left: -50%; }
-            100% { left: 150%; }
-        }
-
-        /* Stats HUD */
-        .stats-hud {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 1rem;
-            padding: 2rem;
-            background: rgba(0,0,0,0.3);
-        }
-
-        .stat-card {
-            border: 1px solid var(--neon-blue);
-            padding: 1rem;
-            position: relative;
-        }
-
-        .stat-card::before {
-            content: '';
+        .skill-node::before {
+            content: '▶';
             position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(45deg, transparent, rgba(0,243,255,0.1));
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--system-blue);
         }
     </style>
 </head>
 <body>
-    <header class="system-header text-center">
-        <h1>SHADOW MONARCH SYSTEM</h1>
-        <div class="exp-bar">
-            <div class="exp-fill"></div>
+    <div class="system-container">
+        <div class="level-display">
+            <span style="color: var(--system-blue)">LEVEL</span>
+            <span style="font-size: 2em; color: var(--system-purple)">99</span>
         </div>
-    </header>
 
-    <div class="level-badge">
-        <span class="level-number">Lv.99</span>
-    </div>
+        <div class="status-window">
+            <h2 class="status-header">PLAYER STATUS</h2>
+            
+            <div class="attributes-grid">
+                <div class="attribute-box">
+                    <h3>INTELLIGENCE</h3>
+                    <div class="hud-bar">
+                        <div class="hud-fill" style="width: 95%"></div>
+                    </div>
+                    <p>System Analysis: S+</p>
+                </div>
 
-    <div class="monarch-influence">
-        <h3>🜏 Shadow Influence: 85%</h3>
-        <div class="progress">
-            <div class="progress-bar bg-dark" style="width: 85%"></div>
+                <div class="attribute-box">
+                    <h3>DEXTERITY</h3>
+                    <div class="hud-bar">
+                        <div class="hud-fill" style="width: 88%"></div>
+                    </div>
+                    <p>Network Speed: 10Gbps</p>
+                </div>
+
+                <div class="attribute-box">
+                    <h3>ENDURANCE</h3>
+                    <div class="hud-bar">
+                        <div class="hud-fill" style="width: 92%"></div>
+                    </div>
+                    <p>System Uptime: 99.99%</p>
+                </div>
+            </div>
         </div>
-    </div>
 
-    <main class="container">
-        <section class="stats-hud">
-            <div class="stat-card">
-                <h3>⚡ Core Attributes</h3>
-                <ul>
-                    <li>Intelligence: ★★★★★</li>
-                    <li>Dexterity: ★★★★☆</li>
-                    <li>Stamina: ★★★★☆</li>
-                </ul>
-            </div>
-
-            <div class="stat-card">
-                <h3>🛡️ Defense Matrix</h3>
-                <ul>
-                    <li>Firewall: Level 98</li>
-                    <li>Encryption: AES-256</li>
-                    <li>Threat Detection: Active</li>
-                </ul>
-            </div>
-        </section>
-
-        <section class="skill-tree">
+        <div class="skill-tree">
             <div class="skill-node">
                 <h4>Shadow Network</h4>
-                <p>Advanced Network Manipulation</p>
-                <div class="progress mt-2" style="height: 3px;">
-                    <div class="progress-bar bg-info" style="width: 90%"></div>
-                </div>
+                <p>Advanced Network Architecture</p>
             </div>
 
             <div class="skill-node">
                 <h4>Code: Eclipse</h4>
                 <p>Dark Mode Programming</p>
-                <div class="progress mt-2" style="height: 3px;">
-                    <div class="progress-bar bg-success" style="width: 95%"></div>
-                </div>
             </div>
 
             <div class="skill-node">
                 <h4>Server Necromancy</h4>
                 <p>System Resurrection Protocol</p>
-                <div class="progress mt-2" style="height: 3px;">
-                    <div class="progress-bar bg-warning" style="width: 88%"></div>
-                </div>
             </div>
-        </section>
-    </main>
+        </div>
+    </div>
 </body>
 </html>

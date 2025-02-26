@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portofolio RevolverDX</title>
+    <link rel="icon" href="img/iconweb.ico">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-blue: #00a8ff;
+            --bg-dark: #0a1929;
+            --card-bg: rgba(255, 255, 255, 0.03);
+            --border-color: rgba(0, 168, 255, 0.2);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: var(--bg-dark);
+            color: white;
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+            padding-bottom: 70px;
+        }
+
+        /* Navbar Calculator Style */
+        .navbar {
+            background: rgba(0, 8, 29, 0.98) !important;
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border-color);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .navbar-brand {
+            font-weight: 700;
+            letter-spacing: 1px;
+            padding: 10px 20px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .nav-link {
+            color: white !important;
+            padding: 10px 25px !important;
+            border-radius: 8px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .nav-link:hover {
+            background: rgba(0, 168, 255, 0.1);
+            transform: translateY(-2px);
+        }
+
+        /* Card Style */
+        .project-card, .edu-card, .skill-card, .exp-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.5rem;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        }
+
+        .project-card:hover, .edu-card:hover, .skill-card:hover, .exp-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0, 168, 255, 0.15);
+            border-color: var(--primary-blue);
+        }
+
+        /* Button Style */
+        .btn-primary {
+            background: rgba(0, 168, 255, 0.9);
+            border: none;
+            border-radius: 8px;
+            padding: 12px 24px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary:hover {
+            background: rgba(0, 168, 255, 1);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 168, 255, 0.2);
+        }
+
+        /* Profile Section */
+        .profile-pic {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            border: 3px solid var(--primary-blue);
+            box-shadow: 0 0 30px rgba(0, 168, 255, 0.3);
+        }
+
+        .status-indicator {
+            position: absolute;
+            bottom: 30px;
+            right: 30px;
+            width: 15px;
+            height: 15px;
+            background: #2ecc71;
+            border-radius: 50%;
+            border: 2px solid var(--bg-dark);
+            animation: status-pulse 1.5s infinite;
+        }
+
+        @keyframes status-pulse {
+            0% { box-shadow: 0 0 0 0 rgba(46, 204, 113, 0.4); }
+            70% { box-shadow: 0 0 0 10px rgba(46, 204, 113, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(46, 204, 113, 0); }
+        }
+
+        /* Section Layout */
+        section {
+            padding: 4rem 0;
+            margin: 2rem 0;
+        }
+
+        h1, h2, h3 {
+            color: var(--primary-blue);
+            text-shadow: 0 0 15px rgba(0, 168, 255, 0.2);
+            margin-bottom: 1.5rem;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .navbar-collapse {
+                background: rgba(0, 8, 29, 0.95);
+                padding: 1rem;
+                border-radius: 0 0 12px 12px;
+            }
+            
+            .nav-link {
+                margin: 5px 0;
+            }
+        }
+
+        /* Animations */
+        @keyframes cardEntrance {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .project-card, .edu-card, .skill-card, .exp-card {
+            animation: cardEntrance 0.6s ease forwards;
+            opacity: 0;
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar fixed-top navbar-expand-lg navbar-dark">
+        <div class="container">
+            <a class="navbar-brand" href="#">RDX</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link active" href="#home">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#pendidikan">Pendidikan</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#skill">Skill</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#pengalaman">Pengalaman</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#about">About</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Home Section -->
+    <section id="home" class="container mt-5">
+        <div class="row align-items-center">
+            <div class="col-lg-8 mx-auto text-center">
+                <h1 class="display-5 mb-4">Portofolio RevolverDX</h1>
+                <p class="lead mb-4">
+                    Network Administrator & IT Enthusiast<br>
+                    <span class="text-primary">► Network Systems</span> | 
+                    <span class="text-primary">► IT Infrastructure</span> | 
+                    <span class="text-primary">► Hardware Specialist</span>
+                </p>
+            </div>
+        </div>
+
+        <div class="projects mt-5">
+            <h2>Proyek Terbaru</h2>
+            <div class="row row-cols-1 row-cols-md-2 g-4 mt-3">
+                <div class="col">
+                    <div class="project-card h-100 p-4">
+                        <h3 class="mb-3">Direct Link Website</h3>
+                        <p class="text-muted">Website direktori link sosial media</p>
+                        <div class="d-flex gap-2 mt-4">
+                            <a href="#" class="btn btn-primary">Lihat Kode</a>
+                            <a href="#" class="btn btn-primary">Demo</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="project-card h-100 p-4">
+                        <h3 class="mb-3">Network Monitor</h3>
+                        <p class="text-muted">Monitoring jaringan berbasis Python</p>
+                        <div class="d-flex gap-2 mt-4">
+                            <a href="#" class="btn btn-primary">Lihat Kode</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pendidikan Section -->
+    <section id="pendidikan" class="container">
+        <h2>Pendidikan</h2>
+        <div class="row g-4 mt-3">
+            <div class="col-md-6">
+                <div class="edu-card p-4">
+                    <h3>🎓 SMA</h3>
+                    <p class="mb-0">SMK TI Kartika Cendekia Purworejo - TKJ</p>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="edu-card p-4">
+                    <h3>🏫 Universitas</h3>
+                    <p class="mb-0">Bina Sarana Informatika - Teknologi Informasi</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Skill Section -->
+    <section id="skill" class="container">
+        <h2>Skill</h2>
+        <div class="row g-4 mt-3">
+            <div class="col-md-6 col-lg-3">
+                <div class="skill-card p-4">
+                    <h3>💻 Programming</h3>
+                    <ul class="list-unstyled mt-3">
+                        <li>HTML/CSS</li>
+                        <li>JavaScript</li>
+                        <li>Python</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-3">
+                <div class="skill-card p-4">
+                    <h3>🌐 Networking</h3>
+                    <ul class="list-unstyled mt-3">
+                        <li>Mikrotik</li>
+                        <li>TCP/IP</li>
+                        <li>VLAN</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-3">
+                <div class="skill-card p-4">
+                    <h3>🖥️ Sistem</h3>
+                    <ul class="list-unstyled mt-3">
+                        <li>Windows Server</li>
+                        <li>Linux</li>
+                        <li>Troubleshooting</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-3">
+                <div class="skill-card p-4">
+                    <h3>📚 Lainnya</h3>
+                    <ul class="list-unstyled mt-3">
+                        <li>English Intermediate</li>
+                        <li>Git Version Control</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="d-flex align-items-center justify-content-center">
+        <div class="text-muted">
+            &copy; 2024 RDX Portfolio | Status: <span class="text-success">Online</span>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Script untuk navigasi dan animasi
+        document.addEventListener('DOMContentLoaded', function() {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = 1;
+                    }
+                });
+            });
+
+            document.querySelectorAll('.project-card, .edu-card, .skill-card').forEach((el) => {
+                observer.observe(el);
+            });
+        });
+    </script>
+</body>
+</html>

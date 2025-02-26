@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RevolverDX - Shadow Monarch System</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500&family=Rajdhani:wght@500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --neon-blue: #00f3ff;
+            --shadow-purple: #6a00ff;
+            --dark-bg: #0a0a12;
+            --hud-glow: 0 0 15px var(--neon-blue);
+        }
+
+        body {
+            background: var(--dark-bg);
+            color: white;
+            font-family: 'Rajdhani', sans-serif;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* System Header */
+        .system-header {
+            background: linear-gradient(45deg, #000428, #004e92);
+            border-bottom: 3px solid var(--neon-blue);
+            box-shadow: var(--hud-glow);
+            padding: 1rem;
+            position: relative;
+        }
+
+        .system-header h1 {
+            font-family: 'Orbitron', sans-serif;
+            text-shadow: 0 0 20px var(--neon-blue);
+            letter-spacing: 3px;
+        }
+
+        /* Level Badge */
+        .level-badge {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            width: 80px;
+            height: 80px;
+            border: 3px solid var(--neon-blue);
+            border-radius: 50%;
+            background: rgba(0,0,0,0.8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: badge-pulse 2s infinite;
+        }
+
+        .level-badge::before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            box-shadow: 0 0 30px var(--neon-blue);
+        }
+
+        .level-number {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2rem;
+            background: linear-gradient(45deg, var(--neon-blue), var(--shadow-purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* Experience Bar */
+        .exp-bar {
+            width: 300px;
+            height: 20px;
+            background: #000;
+            border: 2px solid var(--neon-blue);
+            border-radius: 10px;
+            margin: 2rem auto;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .exp-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--shadow-purple), var(--neon-blue));
+            width: 65%;
+            position: relative;
+        }
+
+        .exp-fill::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -50%;
+            width: 50%;
+            height: 100%;
+            background: linear-gradient(
+                90deg,
+                transparent,
+                rgba(255,255,255,0.2),
+                transparent
+            );
+            animation: shine 2s infinite;
+        }
+
+        /* Skill Tree */
+        .skill-tree {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            padding: 2rem;
+            background: rgba(0,0,0,0.5);
+            border: 2px solid var(--neon-blue);
+            margin: 2rem;
+        }
+
+        .skill-node {
+            padding: 1.5rem;
+            border: 2px solid var(--neon-blue);
+            position: relative;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            background: rgba(0,0,0,0.8);
+        }
+
+        .skill-node:hover {
+            transform: scale(1.05);
+            box-shadow: var(--hud-glow);
+        }
+
+        /* Shadow Monarch Influence */
+        .monarch-influence {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            background: rgba(0,0,0,0.7);
+            border: 2px solid var(--shadow-purple);
+            padding: 1rem;
+        }
+
+        /* Animations */
+        @keyframes badge-pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
+        @keyframes shine {
+            0% { left: -50%; }
+            100% { left: 150%; }
+        }
+
+        /* Stats HUD */
+        .stats-hud {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+            padding: 2rem;
+            background: rgba(0,0,0,0.3);
+        }
+
+        .stat-card {
+            border: 1px solid var(--neon-blue);
+            padding: 1rem;
+            position: relative;
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, transparent, rgba(0,243,255,0.1));
+        }
+    </style>
+</head>
+<body>
+    <header class="system-header text-center">
+        <h1>SHADOW MONARCH SYSTEM</h1>
+        <div class="exp-bar">
+            <div class="exp-fill"></div>
+        </div>
+    </header>
+
+    <div class="level-badge">
+        <span class="level-number">Lv.99</span>
+    </div>
+
+    <div class="monarch-influence">
+        <h3>🜏 Shadow Influence: 85%</h3>
+        <div class="progress">
+            <div class="progress-bar bg-dark" style="width: 85%"></div>
+        </div>
+    </div>
+
+    <main class="container">
+        <section class="stats-hud">
+            <div class="stat-card">
+                <h3>⚡ Core Attributes</h3>
+                <ul>
+                    <li>Intelligence: ★★★★★</li>
+                    <li>Dexterity: ★★★★☆</li>
+                    <li>Stamina: ★★★★☆</li>
+                </ul>
+            </div>
+
+            <div class="stat-card">
+                <h3>🛡️ Defense Matrix</h3>
+                <ul>
+                    <li>Firewall: Level 98</li>
+                    <li>Encryption: AES-256</li>
+                    <li>Threat Detection: Active</li>
+                </ul>
+            </div>
+        </section>
+
+        <section class="skill-tree">
+            <div class="skill-node">
+                <h4>Shadow Network</h4>
+                <p>Advanced Network Manipulation</p>
+                <div class="progress mt-2" style="height: 3px;">
+                    <div class="progress-bar bg-info" style="width: 90%"></div>
+                </div>
+            </div>
+
+            <div class="skill-node">
+                <h4>Code: Eclipse</h4>
+                <p>Dark Mode Programming</p>
+                <div class="progress mt-2" style="height: 3px;">
+                    <div class="progress-bar bg-success" style="width: 95%"></div>
+                </div>
+            </div>
+
+            <div class="skill-node">
+                <h4>Server Necromancy</h4>
+                <p>System Resurrection Protocol</p>
+                <div class="progress mt-2" style="height: 3px;">
+                    <div class="progress-bar bg-warning" style="width: 88%"></div>
+                </div>
+            </div>
+        </section>
+    </main>
+</body>
+</html>

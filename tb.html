@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tebak Kata Jepang</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            margin: 0;
+            padding: 20px;
+            background-color: #f0f7f4;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 800px;
+            width: 100%;
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 0 15px rgba(0,0,0,0.1);
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .score-box, .lives-box {
+            padding: 10px 20px;
+            border-radius: 5px;
+            background: #3d5467;
+            color: white;
+        }
+
+        .question {
+            font-size: 2em;
+            text-align: center;
+            margin: 20px 0;
+            color: #3d5467;
+        }
+
+        .options-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 10px;
+            margin: 20px 0;
+        }
+
+        .option {
+            padding: 15px;
+            border: none;
+            border-radius: 8px;
+            background: #8aa29e;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .option:hover:not(:disabled) {
+            transform: scale(1.05);
+            background: #3d5467;
+        }
+
+        .correct {
+            background: #2ecc71 !important;
+        }
+
+        .wrong {
+            background: #e74c3c !important;
+        }
+
+        .game-over {
+            text-align: center;
+            display: none;
+        }
+
+        .restart-btn {
+            padding: 10px 30px;
+            background: #3d5467;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 10px;
+            background: #ddd;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+
+        .progress {
+            height: 100%;
+            background: #2ecc71;
+            transition: width 0.3s;
+        }
+
+        @media (max-width: 480px) {
+            .question {
+                font-size: 1.5em;
+            }
+            
+            .option {
+                padding: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="score-box">Skor: <span id="score">0</span></div>
+            <div class="lives-box">Nyawa: <span id="lives">3</span></div>
+        </div>
+        <div class="progress-bar">
+            <div class="progress" id="progress"></div>
+        </div>
+        <div id="game">
+            <div class="question" id="word"></div>
+            <div class="options-container" id="options"></div>
+        </div>
+        <div class="game-over" id="gameOver">
+            <h2>Game Over!</h2>
+            <p>Skor Akhir: <span id="finalScore">0</span></p>
+            <button class="restart-btn" onclick="restartGame()">Main Lagi</button>
+        </div>
+    </div>
+
+    <script>
+        const words = [
+            { word: "sakura", meaning: "bunga ceri", wrongs: ["angin", "gunung", "matahari"] },
+            { word: "tempura", meaning: "makanan goreng", wrongs: ["sup", "panggang", "kukus"] },
+            { word: "sensei", meaning: "guru", wrongs: ["murid", "dokter", "insinyur"] },
+            { word: "ramen", meaning: "mi Jepang", wrongs: ["nasi", "roti", "kue"] },
+            { word: "kawaii", meaning: "imut", wrongs: ["besar", "jelek", "tua"] },
+            { word: "samurai", meaning: "ksatria", wrongs: ["petani", "pedagang", "nelayan"] }
+        ];
+
+        let currentQuestion = null;
+        let score = 0;
+        let lives = 3;
+        let totalQuestions = 0;
+
+        function initGame() {
+            showQuestion();
+            updateDisplay();
+        }
+
+        function showQuestion() {
+            currentQuestion = words[Math.floor(Math.random() * words.length)];
+            totalQuestions++;
+            
+            const options = [currentQuestion.meaning, ...currentQuestion.wrongs];
+            const shuffledOptions = options.sort(() => Math.random() - 0.5);
+            
+            document.getElementById('word').textContent = currentQuestion.word;
+            document.getElementById('options').innerHTML = shuffledOptions
+                .map(opt => `<button class="option" onclick="checkAnswer('${opt}')">${opt}</button>`)
+                .join('');
+        }
+
+        function checkAnswer(answer) {
+            const options = document.querySelectorAll('.option');
+            const correct = answer === currentQuestion.meaning;
+            
+            options.forEach(opt => {
+                opt.disabled = true;
+                if(opt.textContent === currentQuestion.meaning) {
+                    opt.classList.add('correct');
+                }
+                if(opt.textContent === answer && !correct) {
+                    opt.classList.add('wrong');
+                }
+            });
+
+            if(correct) {
+                score += 10;
+            } else {
+                lives--;
+            }
+
+            updateDisplay();
+            
+            setTimeout(() => {
+                if(lives <= 0) {
+                    gameOver();
+                } else if(correct) {
+                    showQuestion();
+                } else {
+                    options.forEach(opt => opt.disabled = false);
+                }
+            }, 1500);
+        }
+
+        function updateDisplay() {
+            document.getElementById('score').textContent = score;
+            document.getElementById('lives').textContent = lives;
+            document.getElementById('progress').style.width = 
+                `${(totalQuestions / (totalQuestions + 3 - lives)) * 100}%`;
+        }
+
+        function gameOver() {
+            document.getElementById('game').style.display = 'none';
+            document.getElementById('gameOver').style.display = 'block';
+            document.getElementById('finalScore').textContent = score;
+        }
+
+        function restartGame() {
+            score = 0;
+            lives = 3;
+            totalQuestions = 0;
+            document.getElementById('game').style.display = 'block';
+            document.getElementById('gameOver').style.display = 'none';
+            initGame();
+        }
+
+        initGame();
+    </script>
+</body>
+</html>

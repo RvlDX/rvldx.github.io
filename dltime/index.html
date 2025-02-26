@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Download Time Calculator</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: #f0f2f5;
+            padding: 20px;
+        }
+
+        .calculator {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 500px;
+        }
+
+        h1 {
+            color: #1a73e8;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .input-group {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 1.5rem;
+        }
+
+        input[type="number"] {
+            flex: 1;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+        }
+
+        select {
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background: white;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        .result {
+            background: #f8f9fa;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin-top: 1.5rem;
+            text-align: center;
+            font-size: 1.1rem;
+            color: #333;
+        }
+
+        @media (max-width: 480px) {
+            .input-group {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="calculator">
+        <h1>Download Time Calculator</h1>
+        
+        <div class="input-group">
+            <input type="number" id="fileSize" placeholder="Ukuran file" step="0.01" min="0">
+            <select id="sizeUnit">
+                <option value="KB">KB</option>
+                <option value="MB">MB</option>
+                <option value="GB">GB</option>
+            </select>
+        </div>
+
+        <div class="input-group">
+            <input type="number" id="downloadSpeed" placeholder="Kecepatan download" step="0.01" min="0">
+            <select id="speedUnit">
+                <option value="Kb">Kb/s</option>
+                <option value="Mb">Mb/s</option>
+                <option value="Gb">Gb/s</option>
+                <option value="KB">KB/s</option>
+                <option value="MB">MB/s</option>
+                <option value="GB">GB/s</option>
+            </select>
+        </div>
+
+        <div class="result" id="result">
+            Waktu download akan muncul di sini
+        </div>
+    </div>
+
+    <script>
+        const sizeUnits = {
+            'KB': 1000,
+            'MB': 1000000,
+            'GB': 1000000000
+        };
+
+        const speedMultipliers = {
+            'Kb': 125,      // 1000 bits / 8 = 125 bytes
+            'Mb': 125000,   // 1,000,000 bits / 8 = 125,000 bytes
+            'Gb': 125000000, // 1,000,000,000 bits / 8 = 125,000,000 bytes
+            'KB': 1000,
+            'MB': 1000000,
+            'GB': 1000000000
+        };
+
+        function calculateTime() {
+            const fileSize = parseFloat(document.getElementById('fileSize').value);
+            const sizeUnit = document.getElementById('sizeUnit').value;
+            const downloadSpeed = parseFloat(document.getElementById('downloadSpeed').value);
+            const speedUnit = document.getElementById('speedUnit').value;
+
+            if (!fileSize || !downloadSpeed) return;
+
+            // Convert file size to bytes
+            const totalBytes = fileSize * sizeUnits[sizeUnit];
+            
+            // Convert speed to bytes per second
+            const bytesPerSecond = downloadSpeed * speedMultipliers[speedUnit];
+            
+            if (bytesPerSecond === 0) {
+                document.getElementById('result').innerText = "Kecepatan tidak boleh nol";
+                return;
+            }
+
+            const seconds = totalBytes / bytesPerSecond;
+            const time = formatTime(seconds);
+            
+            document.getElementById('result').innerText = `Perkiraan waktu download: ${time}`;
+        }
+
+        function formatTime(seconds) {
+            const timeUnits = [
+                { unit: 'Hari', divisor: 86400 },
+                { unit: 'Jam', divisor: 3600 },
+                { unit: 'Menit', divisor: 60 },
+                { unit: 'Detik', divisor: 1 }
+            ];
+
+            let result = [];
+            let remaining = seconds;
+
+            for (const { unit, divisor } of timeUnits) {
+                const value = Math.floor(remaining / divisor);
+                if (value > 0) {
+                    result.push(`${value} ${unit}`);
+                    remaining %= divisor;
+                }
+            }
+
+            return result.join(' ') || '0 Detik';
+        }
+
+        // Event listeners
+        document.getElementById('fileSize').addEventListener('input', calculateTime);
+        document.getElementById('sizeUnit').addEventListener('change', calculateTime);
+        document.getElementById('downloadSpeed').addEventListener('input', calculateTime);
+        document.getElementById('speedUnit').addEventListener('change', calculateTime);
+    </script>
+</body>
+</html>

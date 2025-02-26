@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cyber Download Calculator</title>
+    <style>
+        :root {
+            --neon-blue: #00f3ff;
+            --neon-purple: #6a00ff;
+            --dark-bg: #0a0a0a;
+            --input-bg: rgba(0,0,0,0.7);
+            --text-glow: 0 0 10px var(--neon-blue);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Courier New', monospace;
+        }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: var(--dark-bg);
+            padding: 20px;
+        }
+
+        .calculator {
+            background: rgba(0,0,0,0.9);
+            border: 3px solid var(--neon-blue);
+            box-shadow: 0 0 30px rgba(0,243,255,0.2);
+            padding: 2rem;
+            width: 100%;
+            max-width: 500px;
+            position: relative;
+        }
+
+        .calculator::before {
+            content: '';
+            position: absolute;
+            top: -3px;
+            left: -3px;
+            right: -3px;
+            bottom: -3px;
+            background: linear-gradient(45deg, 
+                var(--neon-blue), 
+                var(--neon-purple),
+                var(--neon-blue));
+            z-index: -1;
+            animation: border-glow 3s linear infinite;
+        }
+
+        h1 {
+            color: var(--neon-blue);
+            text-shadow: var(--text-glow);
+            margin-bottom: 2rem;
+            text-align: center;
+            letter-spacing: 2px;
+        }
+
+        .input-group {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 1.5rem;
+            position: relative;
+        }
+
+        input[type="number"] {
+            flex: 1;
+            padding: 15px;
+            background: var(--input-bg);
+            border: 2px solid var(--neon-blue);
+            color: var(--neon-blue);
+            border-radius: 5px;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+        }
+
+        input[type="number"]:focus {
+            outline: none;
+            box-shadow: var(--text-glow);
+        }
+
+        select {
+            padding: 15px;
+            background: var(--input-bg);
+            border: 2px solid var(--neon-blue);
+            color: var(--neon-blue);
+            border-radius: 5px;
+            cursor: pointer;
+            appearance: none;
+            -webkit-appearance: none;
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%2300f3ff'%3e%3cpath d='M7 10l5 5 5-5z'/%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 15px center;
+            background-size: 12px;
+        }
+
+        .result {
+            background: var(--input-bg);
+            padding: 1.5rem;
+            border: 2px solid var(--neon-blue);
+            border-radius: 5px;
+            margin-top: 1.5rem;
+            text-align: center;
+            font-size: 1.1rem;
+            color: var(--neon-blue);
+            text-shadow: var(--text-glow);
+        }
+
+        @keyframes border-glow {
+            0% { opacity: 0.5; }
+            50% { opacity: 1; }
+            100% { opacity: 0.5; }
+        }
+
+        @media (max-width: 480px) {
+            .input-group {
+                flex-direction: column;
+            }
+            
+            input[type="number"], 
+            select {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="calculator">
+        <h1>⏳ CYBER DOWNLOAD CALCULATOR ⏳</h1>
+
+        <div class="input-group">
+            <input type="number" id="fileSize" placeholder="File size" step="0.01" min="0">
+            <select id="sizeUnit">
+                <option value="KB">KB</option>
+                <option value="MB">MB</option>
+                <option value="GB">GB</option>
+            </select>
+        </div>
+
+        <div class="input-group">
+            <input type="number" id="downloadSpeed" placeholder="Download speed" step="0.01" min="0">
+            <select id="speedUnit">
+                <option value="Kb">Kb/s</option>
+                <option value="Mb">Mb/s</option>
+                <option value="Gb">Gb/s</option>
+                <option value="KB">KB/s</option>
+                <option value="MB">MB/s</option>
+                <option value="GB">GB/s</option>
+            </select>
+        </div>
+
+        <div class="result" id="result">
+            [[ Download time will be calculated here ]]
+        </div>
+    </div>
+
+    <script>
+        // Script tetap sama seperti sebelumnya
+        const sizeUnits = {
+            'KB': 1000,
+            'MB': 1000000,
+            'GB': 1000000000
+        };
+
+        const speedMultipliers = {
+            'Kb': 125,
+            'Mb': 125000,
+            'Gb': 125000000,
+            'KB': 1000,
+            'MB': 1000000,
+            'GB': 1000000000
+        };
+
+        function calculateTime() {
+            const fileSize = parseFloat(document.getElementById('fileSize').value);
+            const sizeUnit = document.getElementById('sizeUnit').value;
+            const downloadSpeed = parseFloat(document.getElementById('downloadSpeed').value);
+            const speedUnit = document.getElementById('speedUnit').value;
+
+            if (!fileSize || !downloadSpeed) return;
+
+            const totalBytes = fileSize * sizeUnits[sizeUnit];
+            const bytesPerSecond = downloadSpeed * speedMultipliers[speedUnit];
+
+            if (bytesPerSecond === 0) {
+                document.getElementById('result').innerText = "ERROR: Zero speed detected";
+                return;
+            }
+
+            const seconds = totalBytes / bytesPerSecond;
+            const time = formatTime(seconds);
+
+            document.getElementById('result').innerHTML = 
+                `⏱ <span style="color: #6a00ff">ESTIMATED TIME:</span><br>${time}`;
+        }
+
+        function formatTime(seconds) {
+            const timeUnits = [
+                { unit: 'Days', divisor: 86400 },
+                { unit: 'Hours', divisor: 3600 },
+                { unit: 'Minutes', divisor: 60 },
+                { unit: 'Seconds', divisor: 1 }
+            ];
+
+            let result = [];
+            let remaining = seconds;
+
+            for (const { unit, divisor } of timeUnits) {
+                const value = Math.floor(remaining / divisor);
+                if (value > 0) {
+                    result.push(`${value} ${unit}`);
+                    remaining %= divisor;
+                }
+            }
+
+            return result.join(' ') || '0 Seconds';
+        }
+
+        // Event listeners
+        document.getElementById('fileSize').addEventListener('input', calculateTime);
+        document.getElementById('sizeUnit').addEventListener('change', calculateTime);
+        document.getElementById('downloadSpeed').addEventListener('input', calculateTime);
+        document.getElementById('speedUnit').addEventListener('change', calculateTime);
+    </script>
+</body>
+</html>

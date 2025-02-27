@@ -77,13 +77,42 @@
 
         @media (max-width: 480px) {
             .input-group {
-                flex-direction: column;
+                display: flex;
+                gap: 10px;
+                margin-bottom: 1.2rem;
+                align-items: stretch;
             }
             
-            input[type="number"],
+            input[type="number"] {
+            width: 75%;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            margin-left: 20px;
+            }
+
             select {
-                width: 100% !important;
-                margin: auto !important;
+                width: 20%;
+                margin-right: 20px;
+                padding: 15px;
+                border: 1px solid #ddd;
+                border-radius: 8px;
+                background: white;
+                font-size: 16px;
+                cursor: pointer;
+                appearance: none;
+                -webkit-appearance: none;
+            }
+
+            .result{
+                background:#f8f9fa;
+                padding: 1.5rem;
+                border-radius: 8px;
+                margin: 0 20px;
+                text-align: center;
+                font-size: 1.1rem;
+                color: #333;
             }
         }
     </style>

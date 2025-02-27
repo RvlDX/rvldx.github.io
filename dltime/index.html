@@ -190,6 +190,8 @@
 
         function formatTime(seconds) {
             const timeUnits = [
+                { unit: 'Dekade', divisor: 315360000 },
+                { unit: 'Tahun', divisor: 31536000 },
                 { unit: 'Hari', divisor: 86400 },
                 { unit: 'Jam', divisor: 3600 },
                 { unit: 'Menit', divisor: 60 },

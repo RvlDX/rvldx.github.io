@@ -185,7 +185,8 @@
             const seconds = totalBytes / bytesPerSecond;
             const time = formatTime(seconds);
             
-            document.getElementById('result').innerText = `Perkiraan waktu download: ${time}`;
+            document.getElementById('result').innerText = `Perkiraan waktu download: 
+            <br>${time}`;
         }
 
         function formatTime(seconds) {

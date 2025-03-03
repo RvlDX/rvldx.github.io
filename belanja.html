@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Shopping List</title>
+    <title>Multi-Function App</title>
     <style>
         * {
             margin: 0;
@@ -22,21 +22,57 @@
             margin: 0 auto;
         }
 
+        .nav-buttons {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .nav-btn {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+
+        .active-tab {
+            background-color: #2c5c7a;
+            color: white;
+        }
+
+        .inactive-tab {
+            background-color: #e6f3ff;
+            color: #2c5c7a;
+        }
+
+        /* Styles untuk Activity Scheduler */
+        .scheduler-section {
+            display: block;
+        }
+
+        .shopping-section {
+            display: none;
+        }
+
         .header {
             text-align: center;
-            color: #ff4444;
+            color: #2c5c7a;
             margin-bottom: 30px;
             padding: 15px;
-            background-color: #ffcccc;
+            background-color: #e6f3ff;
             border-radius: 10px;
         }
 
-        .shopping-form {
+        .form-container {
             background: white;
             padding: 20px;
             border-radius: 15px;
             box-shadow: 0 2px 5px rgba(0,0,0,0.1);
             margin-bottom: 20px;
+            border: 1px solid #cce7ff;
         }
 
         .form-group {
@@ -45,16 +81,15 @@
             margin-bottom: 15px;
         }
 
-        input[type="text"] {
+        input[type="time"], input[type="text"] {
             padding: 10px;
-            border: 2px solid #ff4444;
+            border: 1px solid #cce7ff;
             border-radius: 8px;
             flex: 1;
-            font-size: 16px;
         }
 
         .add-btn {
-            background-color: #ff4444;
+            background-color: #2c5c7a;
             color: white;
             border: none;
             padding: 12px 25px;
@@ -62,48 +97,28 @@
             cursor: pointer;
             width: 100%;
             font-size: 16px;
-            transition: background-color 0.3s;
         }
 
-        .add-btn:hover {
-            background-color: #cc0000;
-        }
-
-        .items-list {
+        .entries-list {
             background: white;
             padding: 20px;
             border-radius: 15px;
             box-shadow: 0 2px 5px rgba(0,0,0,0.1);
         }
 
+        /* Styles untuk Shopping List */
         .shopping-item {
             display: flex;
             align-items: center;
             padding: 15px;
             margin: 10px 0;
             border-radius: 8px;
-            transition: all 0.3s;
-        }
-
-        .unchecked {
             background-color: #ffcccc;
+            transition: all 0.3s;
         }
 
         .checked {
             background-color: #ccffcc !important;
-        }
-
-        .item-content {
-            flex: 1;
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-
-        .checkbox {
-            width: 20px;
-            height: 20px;
-            cursor: pointer;
         }
 
         .delete-btn {
@@ -114,83 +129,172 @@
             font-size: 20px;
             padding: 5px;
         }
+
+        .checkbox {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+            margin-right: 15px;
+        }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1 class="header">Daftar Belanja</h1>
-        
-        <div class="shopping-form">
-            <div class="form-group">
-                <input type="text" id="item-input" placeholder="Masukkan item belanja">
-            </div>
-            <button class="add-btn" id="add-btn">Tambah Item</button>
+        <div class="nav-buttons">
+            <button class="nav-btn active-tab" id="btn-scheduler">Aktivitas</button>
+            <button class="nav-btn inactive-tab" id="btn-shopping">Belanja</button>
         </div>
 
-        <div class="items-list" id="items-list">
-            <!-- Daftar item akan muncul di sini -->
+        <!-- Activity Scheduler Section -->
+        <div class="scheduler-section" id="scheduler-section">
+            <h1 class="header">Jadwal Aktivitas</h1>
+            
+            <div class="form-container">
+                <div class="form-group">
+                    <input type="time" id="input-time">
+                    <input type="text" id="input-activity" placeholder="Aktivitas">
+                </div>
+                <button class="add-btn" id="add-activity">Tambah</button>
+            </div>
+
+            <div class="entries-list" id="activity-list"></div>
+        </div>
+
+        <!-- Shopping List Section -->
+        <div class="shopping-section" id="shopping-section">
+            <h1 class="header">Daftar Belanja</h1>
+            
+            <div class="form-container">
+                <div class="form-group">
+                    <input type="text" id="item-input" placeholder="Item belanja">
+                </div>
+                <button class="add-btn" id="add-item">Tambah</button>
+            </div>
+
+            <div class="entries-list" id="shopping-list"></div>
         </div>
     </div>
 
     <script>
-        let shoppingItems = JSON.parse(localStorage.getItem('shoppingItems')) || [];
-        const itemsList = document.getElementById('items-list');
-        const itemInput = document.getElementById('item-input');
+        // Toggle Section
+        const schedulerSection = document.getElementById('scheduler-section');
+        const shoppingSection = document.getElementById('shopping-section');
+        const btnScheduler = document.getElementById('btn-scheduler');
+        const btnShopping = document.getElementById('btn-shopping');
 
-        function renderItems() {
-            itemsList.innerHTML = '';
+        function showSection(section) {
+            schedulerSection.style.display = 'none';
+            shoppingSection.style.display = 'none';
+            btnScheduler.classList.remove('active-tab');
+            btnShopping.classList.remove('active-tab');
+            
+            if(section === 'scheduler') {
+                schedulerSection.style.display = 'block';
+                btnScheduler.classList.add('active-tab');
+            } else {
+                shoppingSection.style.display = 'block';
+                btnShopping.classList.add('active-tab');
+            }
+        }
+
+        // Activity Scheduler Logic
+        let activities = JSON.parse(localStorage.getItem('activities')) || [];
+        const activityList = document.getElementById('activity-list');
+
+        function renderActivities() {
+            activityList.innerHTML = '';
+            activities.forEach((activity, index) => {
+                const activityHTML = `
+                    <div class="shopping-item">
+                        <div style="flex:1; display:flex; justify-content:space-between; align-items:center">
+                            <div>
+                                <span style="color:#2c5c7a; font-weight:bold">${activity.time}</span>
+                                <span>${activity.name}</span>
+                            </div>
+                            <button class="delete-btn" onclick="deleteActivity(${index})">×</button>
+                        </div>
+                    </div>
+                `;
+                activityList.insertAdjacentHTML('beforeend', activityHTML);
+            });
+        }
+
+        function addActivity() {
+            const time = document.getElementById('input-time').value;
+            const name = document.getElementById('input-activity').value.trim();
+            
+            if(!time || !name) {
+                alert('Harap isi waktu dan aktivitas!');
+                return;
+            }
+
+            activities.push({ time, name });
+            localStorage.setItem('activities', JSON.stringify(activities));
+            renderActivities();
+            document.getElementById('input-time').value = '';
+            document.getElementById('input-activity').value = '';
+        }
+
+        function deleteActivity(index) {
+            activities.splice(index, 1);
+            localStorage.setItem('activities', JSON.stringify(activities));
+            renderActivities();
+        }
+
+        // Shopping List Logic
+        let shoppingItems = JSON.parse(localStorage.getItem('shoppingItems')) || [];
+        const shoppingList = document.getElementById('shopping-list');
+
+        function renderShoppingList() {
+            shoppingList.innerHTML = '';
             shoppingItems.forEach((item, index) => {
-                const itemElement = document.createElement('div');
-                itemElement.className = `shopping-item ${item.checked ? 'checked' : 'unchecked'}`;
-                itemElement.innerHTML = `
-                    <div class="item-content">
+                const itemHTML = `
+                    <div class="shopping-item ${item.checked ? 'checked' : ''}">
                         <input type="checkbox" class="checkbox" ${item.checked ? 'checked' : ''} 
                             onchange="toggleCheck(${index})">
-                        <span>${item.name}</span>
+                        <span style="flex:1">${item.name}</span>
+                        <button class="delete-btn" onclick="deleteItem(${index})">×</button>
                     </div>
-                    <button class="delete-btn" onclick="deleteItem(${index})">×</button>
                 `;
-                itemsList.appendChild(itemElement);
+                shoppingList.insertAdjacentHTML('beforeend', itemHTML);
             });
         }
 
         function addItem() {
-            const itemName = itemInput.value.trim();
-            if (!itemName) {
+            const name = document.getElementById('item-input').value.trim();
+            if(!name) {
                 alert('Masukkan nama item!');
                 return;
             }
 
-            shoppingItems.push({
-                name: itemName,
-                checked: false
-            });
-
+            shoppingItems.push({ name, checked: false });
             localStorage.setItem('shoppingItems', JSON.stringify(shoppingItems));
-            itemInput.value = '';
-            renderItems();
+            renderShoppingList();
+            document.getElementById('item-input').value = '';
         }
 
         function toggleCheck(index) {
             shoppingItems[index].checked = !shoppingItems[index].checked;
             localStorage.setItem('shoppingItems', JSON.stringify(shoppingItems));
-            renderItems();
+            renderShoppingList();
         }
 
         function deleteItem(index) {
             shoppingItems.splice(index, 1);
             localStorage.setItem('shoppingItems', JSON.stringify(shoppingItems));
-            renderItems();
+            renderShoppingList();
         }
 
-        // Event listeners
-        document.getElementById('add-btn').addEventListener('click', addItem);
-        itemInput.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') addItem();
-        });
+        // Event Listeners
+        btnScheduler.addEventListener('click', () => showSection('scheduler'));
+        btnShopping.addEventListener('click', () => showSection('shopping'));
+        document.getElementById('add-activity').addEventListener('click', addActivity);
+        document.getElementById('add-item').addEventListener('click', addItem);
 
-        // Initial render
-        renderItems();
+        // Initial Load
+        showSection('scheduler');
+        renderActivities();
+        renderShoppingList();
     </script>
 </body>
 </html>

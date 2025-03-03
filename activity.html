@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daily Schedule</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background-color: #f0f8ff;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            color: #2c5c7a;
+            margin-bottom: 30px;
+            padding: 15px;
+            background-color: #e6f3ff;
+            border-radius: 10px;
+        }
+
+        .schedule-form {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+            border: 1px solid #cce7ff;
+        }
+
+        .form-group {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        input[type="time"], input[type="text"] {
+            padding: 10px;
+            border: 1px solid #cce7ff;
+            border-radius: 8px;
+            flex: 1;
+            transition: border-color 0.3s;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #2c5c7a;
+        }
+
+        .add-btn {
+            background-color: #2c5c7a;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 8px;
+            cursor: pointer;
+            width: 100%;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+
+        .add-btn:hover {
+            background-color: #1a4059;
+        }
+
+        .entries-list {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            border: 1px solid #cce7ff;
+        }
+
+        .schedule-entry {
+            display: flex;
+            align-items: center;
+            padding: 15px 0;
+            border-bottom: 1px solid #e6f3ff;
+        }
+
+        .schedule-entry:last-child {
+            border-bottom: none;
+        }
+
+        .time {
+            width: 80px;
+            color: #2c5c7a;
+            font-weight: bold;
+        }
+
+        .activity {
+            flex: 1;
+            color: #333;
+        }
+
+        .remove-btn {
+            color: #ff4444;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 5px;
+            font-size: 18px;
+            transition: color 0.3s;
+        }
+
+        .remove-btn:hover {
+            color: #cc0000;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="header">Daily Schedule</h1>
+        
+        <!-- Form Input -->
+        <div class="schedule-form">
+            <div class="form-group">
+                <input type="time" id="input-time" required>
+                <input type="text" id="input-activity" placeholder="Aktivitas" required>
+            </div>
+            <button class="add-btn" id="add-btn">Tambah</button>
+        </div>
+
+        <!-- Daftar Jadwal -->
+        <div class="entries-list" id="entries-list">
+            <!-- Entri akan dimasukkan di sini -->
+        </div>
+    </div>
+
+    <script>
+        // Local Storage Handling
+        let entries = JSON.parse(localStorage.getItem('scheduleEntries')) || [];
+
+        // Elemen DOM
+        const inputTime = document.getElementById('input-time');
+        const inputActivity = document.getElementById('input-activity');
+        const addBtn = document.getElementById('add-btn');
+        const entriesList = document.getElementById('entries-list');
+
+        // Render entries
+        function renderEntries() {
+            entriesList.innerHTML = '';
+            entries.forEach((entry, index) => {
+                const entryHTML = `
+                    <div class="schedule-entry" data-id="${entry.id}">
+                        <div class="time">${entry.time}</div>
+                        <div class="activity">${entry.activity}</div>
+                        <button class="remove-btn" onclick="deleteEntry(${entry.id})">×</button>
+                    </div>
+                `;
+                entriesList.insertAdjacentHTML('beforeend', entryHTML);
+            });
+        }
+
+        // Tambah entry
+        function addEntry() {
+            if (!inputTime.value || !inputActivity.value) {
+                alert('Harap isi waktu dan aktivitas!');
+                return;
+            }
+
+            const newEntry = {
+                id: Date.now(),
+                time: inputTime.value,
+                activity: inputActivity.value
+            };
+
+            entries.push(newEntry);
+            localStorage.setItem('scheduleEntries', JSON.stringify(entries));
+            renderEntries();
+            
+            // Reset form
+            inputTime.value = '';
+            inputActivity.value = '';
+        }
+
+        // Hapus entry
+        function deleteEntry(id) {
+            entries = entries.filter(entry => entry.id !== id);
+            localStorage.setItem('scheduleEntries', JSON.stringify(entries));
+            renderEntries();
+        }
+
+        // Event Listeners
+        addBtn.addEventListener('click', addEntry);
+        inputActivity.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') addEntry();
+        });
+
+        // Initial render
+        renderEntries();
+    </script>
+</body>
+</html>

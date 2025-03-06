@@ -125,9 +125,13 @@
         }
 
         .link-item i {
-            font-size: 2rem;
-            width: 40px;
-            transition: transform 0.3s ease;
+    font-size: 2rem;
+    width: 40px;
+    height: 40px;          /* Menetapkan tinggi agar container ikon berbentuk kotak */
+    display: flex;         /* Mengubah container ikon menjadi flex */
+    align-items: center;   /* Vertikal center */
+    justify-content: center; /* Horizontal center */
+    transition: transform 0.3s ease;
         }
 
         .link-item:hover i {

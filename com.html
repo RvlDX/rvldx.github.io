@@ -3,527 +3,270 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Portofolio RevolverDX</title>
-    <link rel="icon" href="img/iconweb.ico">
+    <title>Portfolio - John Doe</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Poppins', sans-serif;
-            cursor: none;
-        }
-
-        body {
-            background: linear-gradient(45deg, #0a0a0a, #1a1a1a);
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 6rem 2rem 2rem;
-            color: white;
-            overflow-x: hidden;
-        }
-
-        #particles-js {
+        /* Tambahkan style sebelumnya di sini */
+        
+        /* Navbar Styles */
+        .navbar {
             position: fixed;
             top: 0;
-            left: 0;
             width: 100%;
-            height: 100%;
-            z-index: 0;
-        }
-
-        .cursor {
-            width: 20px;
-            height: 20px;
-            border: 2px solid rgba(255,255,255,0.8);
-            border-radius: 50%;
-            position: fixed;
-            pointer-events: none;
-            transition: all 0.3s ease, transform 0.2s ease;
-            mix-blend-mode: difference;
-        }
-
-        .cursor.active {
-            transform: scale(1.5);
-            background: rgba(255,255,255,0.2);
-        }
-
-        .profile-container {
-            text-align: center;
-            margin-bottom: 3rem;
-            position: relative;
-            z-index: 1;
-        }
-
-        .profile-pic {
-            width: 200px;
-            height: 200px;
-            border-radius: 50%;
-            border: 3px solid rgba(255, 255, 255, 0.1);
-            margin-bottom: 1.5rem;
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-            animation: float 4s ease-in-out infinite;
-        }
-
-        @keyframes float {
-            0% { transform: translateY(0px) rotate(0deg); }
-            50% { transform: translateY(-20px) rotate(5deg); }
-            100% { transform: translate-Y(0px) rotate(0deg); }
-        }
-
-        h1 {
-            font-size: 2.5rem;
-            margin-bottom: 0.5rem;
-            background: linear-gradient(45deg, #00a8ff, #2ecc71);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            text-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
-        }
-
-        .section {
-            width: 100%;
-            max-width: 800px;
-            margin: 2rem 0;
-            position: relative;
-            z-index: 1;
-            animation: linkEntrance 0.6s ease-out forwards;
-            opacity: 0;
-        }
-
-        .card {
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(12px);
-            margin: 1.5rem 0;
-            padding: 2rem;
-            border-radius: 20px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
-            transition: 0.6s;
-        }
-
-        .card:hover {
-            transform: translateY(-5px) scale(1.02);
-            box-shadow: 0 12px 32px rgba(0, 0, 0, 0.4);
-            background: linear-gradient(45deg, #00a8ff, rgba(255,255,255,0.1));
-        }
-
-        .card:hover::before {
-            left: 100%;
-        }
-
-        .skill-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1.5rem;
-            margin-top: 1.5rem;
-        }
-
-        .social-links {
-            display: flex;
-            gap: 1.5rem;
-            justify-content: center;
-            margin-top: 2rem;
-        }
-
-        .social-link {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: rgba(255,255,255,0.05);
-            transition: all 0.3s ease;
-            text-decoration: none;
-        }
-
-        .social-link:hover {
-            transform: scale(1.2) rotate(-10deg);
-            background: #00a8ff;
-        }
-
-        @keyframes linkEntrance {
-            from { opacity: 0; transform: translateX(-50px); }
-            to { opacity: 1; transform: translateX(0); }
+            background: rgba(10, 10, 10, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            padding: 1rem 2rem;
         }
 
         .nav-container {
-            position: fixed;
-            top: 1rem;
-            z-index: 1000;
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
 
-        .nav-button {
-            background: rgba(0,0,0,0.4);
-            backdrop-filter: blur(10px);
-            border: none;
-            color: white;
-            padding: 0.8rem 1.5rem;
-            border-radius: 15px;
-            margin: 0 0.5rem;
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: linear-gradient(45deg, #fff, #aaa);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
             transition: all 0.3s ease;
         }
 
-        .nav-button:hover {
-            background: #00a8ff;
-            transform: translateY(-3px);
+        .nav-links a:hover {
+            color: white;
+            transform: translateY(-2px);
         }
 
+        .hamburger {
+            display: none;
+            cursor: pointer;
+        }
+
+        /* Section Styles */
+        section {
+            padding: 5rem 2rem;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+        }
+
+        .content-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(12px);
+            padding: 2rem;
+            border-radius: 20px;
+            width: 100%;
+            max-width: 800px;
+            margin: 1rem 0;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* Education Timeline */
+        .timeline-item {
+            position: relative;
+            padding-left: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 5px;
+            width: 12px;
+            height: 12px;
+            background: var(--brand-color, #fff);
+            border-radius: 50%;
+        }
+
+        /* Skills Grid */
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+            width: 100%;
+        }
+
+        .skill-item {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 1rem;
+            border-radius: 10px;
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+
+        .skill-item:hover {
+            transform: translateY(-5px);
+        }
+
+        /* Responsive Styles */
         @media (max-width: 768px) {
-            body {
-                padding: 5rem 1rem 1rem;
+            .hamburger {
+                display: block;
             }
-            
-            .card {
-                padding: 1.5rem;
-                margin: 1rem 0;
+
+            .nav-links {
+                position: fixed;
+                top: 60px;
+                right: -100%;
+                flex-direction: column;
+                background: rgba(10, 10, 10, 0.95);
+                width: 100%;
+                text-align: center;
+                padding: 2rem 0;
+                transition: 0.3s;
             }
-            
-            .profile-pic {
-                width: 150px;
-                height: 150px;
+
+            .nav-links.active {
+                right: 0;
+            }
+
+            section {
+                padding: 7rem 1rem 2rem;
             }
         }
-
-    /* Tambahan Styling */
-    .skill-list li {
-        padding: 8px 15px;
-        margin: 5px 0;
-        background: rgba(255,255,255,0.05);
-        border-radius: 8px;
-        transition: transform 0.3s ease;
-    }
-
-    .skill-list li:hover {
-        transform: translateX(10px);
-        background: linear-gradient(90deg, #00a8ff33, transparent);
-    }
-
-    .experience-item {
-        padding: 1.5rem;
-        margin: 1rem 0;
-        background: rgba(0,0,0,0.3);
-        border-radius: 15px;
-    }
-
-    .expertise-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-        gap: 1.5rem;
-        margin: 2rem 0;
-    }
-
-    .about-text {
-        line-height: 1.8;
-        margin: 2rem 0;
-        text-align: justify;
-    }
-
-    .status-indicator {
-        position: absolute;
-        bottom: 20px;
-        right: 20px;
-        width: 15px;
-        height: 15px;
-        background: #2ecc71;
-        border-radius: 50%;
-        box-shadow: 0 0 15px #2ecc71;
-        animation: pulse 1.5s infinite;
-    }
-
-    @keyframes pulse {
-        0% { transform: scale(0.95); }
-        50% { transform: scale(1.2); }
-        100% { transform: scale(0.95); }
-    }
-
-    @media (max-width: 768px) {
-        .skill-grid, .expertise-grid {
-            grid-template-columns: 1fr;
-        }
-        
-        .profile-pic {
-            width: 180px;
-            height: 180px;
-        }
-    }
     </style>
 </head>
 <body>
     <div id="particles-js"></div>
     <div class="cursor"></div>
 
-    <div class="nav-container">
-        <button class="nav-button" onclick="showSection('home')">Home</button>
-        <button class="nav-button" onclick="showSection('pendidikan')">Pendidikan</button>
-        <button class="nav-button" onclick="showSection('skill')">Skill</button>
-        <button class="nav-button" onclick="showSection('pengalaman')">Pengalaman</button>
-        <button class="nav-button" onclick="showSection('about')">About</button>
-    </div>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">JD</div>
+            <ul class="nav-links">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#pendidikan">Pendidikan</a></li>
+                <li><a href="#skill">Skill</a></li>
+                <li><a href="#pengalaman">Pengalaman</a></li>
+                <li><a href="#about">About</a></li>
+            </ul>
+            <div class="hamburger">
+                <i class="fas fa-bars"></i>
+            </div>
+        </div>
+    </nav>
 
     <!-- Home Section -->
-    <section class="section" id="home">
+    <section id="home">
         <div class="profile-container">
-            <img src="1676983876035.jpg" alt="Profile" class="profile-pic">
-            <h1>RevolverDX</h1>
-            <p>Network Administrator & IT Specialist</p>
-        </div>
-
-        <div class="card">
-            <h2>Proyek Terbaru</h2>
-            <div class="skill-grid">
-                <div class="card">
-                    <h3>Direct Link Website</h3>
-                    <p>Website direct link sosmed</p>
-                    <div class="badges">
-                        <span>HTML</span>
-                        <span>CSS</span>
-                    </div>
-                    <div class="links">
-                        <a href="https://github.com/RvlDX/Ardi" class="social-link" target="_blank">
-                            <i class="fab fa-github"></i>
-                        </a>
-                        <a href="https://truffleard.vercel.app/" class="social-link" target="_blank">
-                            <i class="fas fa-globe"></i>
-                        </a>
-                    </div>
-                </div>
-                
-                <div class="card">
-                    <h3>Network Monitor</h3>
-                    <p>Tools monitoring jaringan Python</p>
-                    <div class="badges">
-                        <span>Python</span>
-                        <span>SNMP</span>
-                        <span>Linux</span>
-                    </div>
-                    <a href="https://github.com/rvldx/network-monitor" class="social-link" target="_blank">
-                        <i class="fab fa-github"></i>
-                    </a>
-                </div>
-            </div>
+            <img src="https://api.dicebear.com/7.x/initials/svg?seed=User" alt="Profile" class="profile-img">
+            <h1>John Doe</h1>
+            <p>Full Stack Developer & Digital Creator</p>
         </div>
     </section>
 
     <!-- Pendidikan Section -->
-    <section class="section" id="pendidikan" style="display: none;">
-        <div class="card">
-            <h2>Riwayat Pendidikan</h2>
-            <div class="timeline">
-                <div class="card">
-                    <h3>📚 SD</h3>
-                    <p>SDIT Salsabila 5 Purworejo</p>
-                </div>
-                <div class="card">
-                    <h3>🎓 SMP</h3>
-                    <p>MTs Negeri 1 Purworejo</p>
-                </div>
-                <div class="card">
-                    <h3>🏫 SMA</h3>
-                    <p>SMK TI Kartika Cendekia Purworejo - TKJ</p>
-                </div>
-                <div class="card">
-                    <h3>🎓 Universitas</h3>
-                    <p>Universitas Bina Sarana Informatika</p>
-                </div>
+    <section id="pendidikan">
+        <div class="content-card">
+            <h2>Pendidikan</h2>
+            <div class="timeline-item">
+                <h3>Sarjana Teknik Informatika</h3>
+                <p>Universitas Contoh (2020-2024)</p>
+            </div>
+            <div class="timeline-item">
+                <h3>SMA Negeri Contoh</h3>
+                <p>Jurusan IPA (2017-2020)</p>
             </div>
         </div>
     </section>
 
-<!-- Skill Section -->
-<section class="section" id="skill" style="display: none;">
-    <div class="card">
-        <h2>Kemampuan Teknis</h2>
-        <div class="skill-grid">
-            <div class="card">
-                <h3><i class="fas fa-code"></i> Programming</h3>
-                <ul class="skill-list">
-                    <li>HTML5/CSS3</li>
-                    <li>JavaScript (ES6+)</li>
-                    <li>Python 3</li>
-                    <li>Java</li>
-                    <li>Bash Scripting</li>
-                </ul>
-            </div>
-
-            <div class="card">
-                <h3><i class="fas fa-network-wired"></i> Jaringan</h3>
-                <ul class="skill-list">
-                    <li>Mikrotik RouterOS</li>
-                    <li>Cisco IOS</li>
-                    <li>TCP/IP Stack</li>
-                    <li>VLAN Management</li>
-                    <li>Network Security</li>
-                </ul>
-            </div>
-
-            <div class="card">
-                <h3><i class="fas fa-server"></i> Sistem</h3>
-                <ul class="skill-list">
-                    <li>Windows Server</li>
-                    <li>Linux Administration</li>
-                    <li>Docker Container</li>
-                    <li>Virtualization</li>
-                    <li>Hardware Maintenance</li>
-                </ul>
-            </div>
-
-            <div class="card">
-                <h3><i class="fas fa-tools"></i> Lainnya</h3>
-                <ul class="skill-list">
-                    <li>Git Version Control</li>
-                    <li>CI/CD Pipeline</li>
-                    <li>Postman API</li>
-                    <li>Wireshark</li>
-                    <li>UI/UX Dasar</li>
-                </ul>
+    <!-- Skill Section -->
+    <section id="skill">
+        <div class="content-card">
+            <h2>Skills</h2>
+            <div class="skills-grid">
+                <div class="skill-item">HTML/CSS</div>
+                <div class="skill-item">JavaScript</div>
+                <div class="skill-item">React</div>
+                <div class="skill-item">Node.js</div>
+                <div class="skill-item">UI/UX Design</div>
+                <div class="skill-item">Python</div>
             </div>
         </div>
-    </div>
-</section>
+    </section>
 
-<!-- Pengalaman Section -->
-<section class="section" id="pengalaman" style="display: none;">
-    <div class="card">
-        <h2>Pengalaman</h2>
-        <div class="experience-grid">
-            <div class="card">
-                <h3><i class="fas fa-trophy"></i> Prestasi</h3>
-                <div class="experience-item">
-                    <h4>Juara 3 LKS IT Network Administration</h4>
-                    <p>Kabupaten Purworejo | 2021</p>
-                    <ul>
-                        <li>Membangun jaringan enterprise lengkap</li>
-                        <li>Konfigurasi keamanan jaringan tingkat lanjut</li>
-                        <li>Troubleshooting infrastruktur kompleks</li>
-                    </ul>
-                </div>
+    <!-- Pengalaman Section -->
+    <section id="pengalaman">
+        <div class="content-card">
+            <h2>Pengalaman Kerja</h2>
+            <div class="timeline-item">
+                <h3>Full Stack Developer</h3>
+                <p>PT Contoh Teknologi (2022-Sekarang)</p>
             </div>
-
-            <div class="card">
-                <h3><i class="fas fa-users"></i> Organisasi</h3>
-                <div class="experience-item">
-                    <h4>Ketua OSIS</h4>
-                    <p>MTs Negeri 1 Purworejo | 2018-2019</p>
-                    <ul>
-                        <li>Memimpin 30 anggota OSIS</li>
-                        <li>Mengorganisir 10+ event sekolah</li>
-                        <li>Koordinasi antar divisi</li>
-                    </ul>
-                </div>
-
-                <div class="experience-item">
-                    <h4>Dewan Ambalan</h4>
-                    <p>SMK TI Kartika Cendekia | 2020-2021</p>
-                    <ul>
-                        <li>Pengelolaan kegiatan pramuka</li>
-                        <li>Pelatihan kepemimpinan</li>
-                        <li>Event management</li>
-                    </ul>
-                </div>
+            <div class="timeline-item">
+                <h3>Frontend Developer</h3>
+                <p>Startup Contoh (2020-2022)</p>
             </div>
         </div>
-    </div>
-</section>
+    </section>
 
-<!-- About Section -->
-<section class="section" id="about" style="display: none;">
-    <div class="card">
-        <div class="profile-container">
-            <img src="1676983876035.jpg" alt="Profil" class="profile-pic">
-            <div class="status-indicator"></div>
+    <!-- About Section -->
+    <section id="about">
+        <div class="links-container">
+            <h2>Connect With Me</h2>
+            <!-- Tambahkan link sosmed dari contoh sebelumnya di sini -->
+            <a href="#" class="link-item discord">...</a>
+            <!-- ... -->
         </div>
-        
-        <h2>Tentang Saya</h2>
-        
-        <div class="about-content">
-            <p class="about-text">
-                Sebagai seorang teknisi jaringan dan pengembang perangkat lunak, saya memiliki hasrat dalam 
-                menciptakan solusi teknologi yang efisien dan aman. Dengan pengalaman 3+ tahun di bidang IT, 
-                saya mengkhususkan diri dalam:
-            </p>
+    </section>
 
-            <div class="expertise-grid">
-                <div class="card">
-                    <h4><i class="fas fa-shield-alt"></i> Keamanan Jaringan</h4>
-                    <p>Implementasi firewall, IDS/IPS, dan sistem deteksi anomaly</p>
-                </div>
+    <script>
+        // Tambahkan script particles dan cursor dari sebelumnya
 
-                <div class="card">
-                    <h4><i class="fas fa-cloud"></i> Cloud Infrastructure</h4>
-                    <p>Docker containerization dan deployment aplikasi cloud</p>
-                </div>
+        // Navbar Toggle
+        const hamburger = document.querySelector('.hamburger');
+        const navLinks = document.querySelector('.nav-links');
 
-                <div class="card">
-                    <h4><i class="fas fa-terminal"></i> Otomasi Sistem</h4>
-                    <p>Scripting untuk automasi tugas administratif</p>
-                </div>
-            </div>
-
-            <div class="social-links">
-                <a href="https://github.com/rvldx" class="social-link" target="_blank">
-                    <i class="fab fa-github"></i>
-                </a>
-                <a href="https://linkedin.com/in/rvldx" class="social-link" target="_blank">
-                    <i class="fab fa-linkedin"></i>
-                </a>
-                <a href="https://facebook.com/muhawaluddin.azhariihsan" class="social-link" target="_blank">
-                    <i class="fab fa-facebook"></i>
-                </a>
-                <a href="https://instagram.com/muhawlddn_024" class="social-link" target="_blank">
-                    <i class="fab fa-instagram"></i>
-                </a>
-            </div>
-        </div>
-    </div>
-</section>
-
-<script>
-    // Script untuk navigasi section
-    function showSection(sectionId) {
-        // Sembunyikan semua section
-        document.querySelectorAll('.section').forEach(section => {
-            section.style.display = 'none';
+        hamburger.addEventListener('click', () => {
+            navLinks.classList.toggle('active');
         });
-        
-        // Tampilkan section yang dipilih
-        const activeSection = document.getElementById(sectionId);
-        if(activeSection) {
-            activeSection.style.display = 'block';
-            activeSection.style.animation = 'linkEntrance 0.6s ease-out forwards';
-        }
-        
-        // Update URL hash
-        window.location.hash = sectionId;
-    }
 
-    // Handle hash change
-    window.addEventListener('hashchange', () => {
-        const sectionId = window.location.hash.substring(1);
-        showSection(sectionId);
-    });
+        // Smooth Scroll
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+                navLinks.classList.remove('active');
+            });
+        });
 
-    // Init pertama kali
-    document.addEventListener('DOMContentLoaded', () => {
-        const initialSection = window.location.hash.substring(1) || 'home';
-        showSection(initialSection);
-    });
-</script>
+        // Section Animation
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = 1;
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        });
+
+        document.querySelectorAll('.content-card').forEach((card) => {
+            card.style.opacity = 0;
+            card.style.transform = 'translateY(20px)';
+            card.style.transition = 'all 0.6s ease-out';
+            observer.observe(card);
+        });
+    </script>
+</body>
 </html>

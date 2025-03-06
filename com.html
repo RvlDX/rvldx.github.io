@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Modern Social Links</title>
+    <title>John Doe - Portfolio</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
     <style>
@@ -21,7 +21,7 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            padding: 2rem;
+            padding: 4rem 2rem 2rem;
             color: white;
             overflow-x: hidden;
         }
@@ -37,63 +37,42 @@
 
         .profile-container {
             text-align: center;
-            margin-bottom: 2rem;
+            margin-bottom: 1.5rem;
             position: relative;
             z-index: 1;
+            padding-top: 1rem;
         }
 
         .profile-img {
-            width: 160px;
-            height: 160px;
+            width: 140px;
+            height: 140px;
             border-radius: 50%;
-            border: 3px solid rgba(255, 255, 255, 0.1);
-            margin-bottom: 1.5rem;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            margin-bottom: 1rem;
             transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             position: relative;
-            background: url('https://api.dicebear.com/7.x/initials/svg?seed=User') center/cover;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-        }
-
-        .profile-img:hover {
-            transform: scale(1.05) rotate(5deg);
-            border-color: rgba(255, 255, 255, 0.3);
-        }
-
-        .profile-img::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            border-radius: 50%;
-            background: linear-gradient(45deg, transparent 50%, rgba(255,255,255,0.1));
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-
-        .profile-img:hover::after {
-            opacity: 1;
+            background: url('https://api.dicebear.com/7.x/initials/svg?seed=John+Doe') center/cover;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
         }
 
         h1 {
-            font-size: 2.5rem;
-            margin-bottom: 0.5rem;
+            font-size: 2.2rem;
+            margin-bottom: 0.3rem;
             background: linear-gradient(45deg, #fff, #aaa);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            text-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
         }
 
         p {
             color: rgba(255, 255, 255, 0.8);
-            margin-bottom: 2rem;
+            font-size: 0.95rem;
+            margin-bottom: 1.5rem;
             font-weight: 300;
         }
 
         .links-container {
             width: 100%;
-            max-width: 800px;
+            max-width: 600px;
             position: relative;
             z-index: 1;
         }
@@ -101,13 +80,13 @@
         .link-item {
             background: rgba(255, 255, 255, 0.05);
             backdrop-filter: blur(12px);
-            margin: 1.5rem 0;
-            padding: 1.5rem;
-            border-radius: 20px;
+            margin: 0.8rem 0;
+            padding: 1.2rem;
+            border-radius: 15px;
             display: flex;
             align-items: center;
-            gap: 1.5rem;
-            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            gap: 1.2rem;
+            transition: all 0.3s ease;
             position: relative;
             overflow: hidden;
             border: 1px solid rgba(255, 255, 255, 0.1);
@@ -130,8 +109,8 @@
         }
 
         .link-item:hover {
-            transform: translateY(-5px) scale(1.02);
-            box-shadow: 0 12px 32px rgba(0, 0, 0, 0.4);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
             background: linear-gradient(45deg, var(--brand-color), rgba(255,255,255,0.1));
         }
 
@@ -140,13 +119,9 @@
         }
 
         .link-item i {
-            font-size: 2rem;
-            width: 40px;
+            font-size: 1.5rem;
+            width: 35px;
             transition: transform 0.3s ease;
-        }
-
-        .link-item:hover i {
-            transform: scale(1.2) rotate(-10deg);
         }
 
         .discord { --brand-color: #7289da; }
@@ -155,43 +130,36 @@
         .github { --brand-color: #333; }
 
         .link-item span {
-            font-size: 1.2rem;
+            font-size: 1rem;
             font-weight: 500;
-            letter-spacing: 0.5px;
+            letter-spacing: 0.3px;
         }
 
-        /* Custom Cursor */
         .cursor {
-            width: 20px;
-            height: 20px;
+            width: 18px;
+            height: 18px;
             border: 2px solid rgba(255,255,255,0.8);
             border-radius: 50%;
             position: fixed;
             pointer-events: none;
-            transition: all 0.3s ease, transform 0.2s ease;
+            transition: all 0.2s ease;
             mix-blend-mode: difference;
         }
 
-        .cursor.active {
-            transform: scale(1.5);
-            background: rgba(255,255,255,0.2);
-        }
-
-        /* Animations */
         @keyframes float {
-            0% { transform: translateY(0px) rotate(0deg); }
-            50% { transform: translateY(-20px) rotate(5deg); }
-            100% { transform: translateY(0px) rotate(0deg); }
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
         }
 
         .profile-img {
-            animation: float 4s ease-in-out infinite;
+            animation: float 3s ease-in-out infinite;
         }
 
         @keyframes linkEntrance {
             from {
                 opacity: 0;
-                transform: translateX(-50px);
+                transform: translateX(-30px);
             }
             to {
                 opacity: 1;
@@ -200,27 +168,31 @@
         }
 
         .link-item {
-            animation: linkEntrance 0.6s ease-out forwards;
+            animation: linkEntrance 0.5s ease-out forwards;
             opacity: 0;
         }
 
-        .link-item:nth-child(1) { animation-delay: 0.2s; }
-        .link-item:nth-child(2) { animation-delay: 0.4s; }
-        .link-item:nth-child(3) { animation-delay: 0.6s; }
-        .link-item:nth-child(4) { animation-delay: 0.8s; }
+        .link-item:nth-child(1) { animation-delay: 0.1s; }
+        .link-item:nth-child(2) { animation-delay: 0.2s; }
+        .link-item:nth-child(3) { animation-delay: 0.3s; }
+        .link-item:nth-child(4) { animation-delay: 0.4s; }
 
         @media (max-width: 768px) {
             body {
-                padding: 1rem;
+                padding: 3rem 1rem 1rem;
             }
             
-            .link-item {
-                padding: 1.2rem;
-                margin: 1rem 0;
+            .profile-img {
+                width: 120px;
+                height: 120px;
             }
             
             h1 {
-                font-size: 2rem;
+                font-size: 1.8rem;
+            }
+            
+            .link-item {
+                padding: 1rem;
             }
         }
     </style>
@@ -230,108 +202,67 @@
     <div class="cursor"></div>
 
     <div class="profile-container">
-        <img src="https://api.dicebear.com/7.x/initials/svg?seed=User" alt="Profile" class="profile-img">
+        <img src="1000648125.jpg" alt="John Doe" class="profile-img">
         <h1>John Doe</h1>
         <p>Digital Creator & Full Stack Developer</p>
     </div>
 
     <div class="links-container">
-        <a href="https://discord.gg/yourlink" target="_blank" class="link-item discord">
+        <a href="[DISCORD_LINK]" target="_blank" class="link-item discord">
             <i class="fab fa-discord"></i>
             <span>Join My Discord Community</span>
         </a>
 
-        <a href="https://instagram.com/yourprofile" target="_blank" class="link-item instagram">
+        <a href="[INSTAGRAM_LINK]" target="_blank" class="link-item instagram">
             <i class="fab fa-instagram"></i>
             <span>Follow on Instagram</span>
         </a>
 
-        <a href="https://facebook.com/yourprofile" target="_blank" class="link-item facebook">
+        <a href="[FACEBOOK_LINK]" target="_blank" class="link-item facebook">
             <i class="fab fa-facebook-f"></i>
             <span>Connect on Facebook</span>
         </a>
 
-        <a href="https://github.com/yourprofile" target="_blank" class="link-item github">
+        <a href="[GITHUB_LINK]" target="_blank" class="link-item github">
             <i class="fab fa-github"></i>
             <span>Explore My GitHub</span>
         </a>
     </div>
 
     <script>
-        // Particle.js Config
-        particlesJS('particles-js',
-            {
-                "particles": {
-                    "number": {
-                        "value": 80,
-                        "density": {
-                            "enable": true,
-                            "value_area": 800
-                        }
-                    },
-                    "color": {
-                        "value": "#ffffff"
-                    },
-                    "shape": {
-                        "type": "circle"
-                    },
-                    "opacity": {
-                        "value": 0.5,
-                        "random": false
-                    },
-                    "size": {
-                        "value": 3,
-                        "random": true
-                    },
-                    "line_linked": {
-                        "enable": true,
-                        "distance": 150,
-                        "color": "#ffffff",
-                        "opacity": 0.4,
-                        "width": 1
-                    },
-                    "move": {
-                        "enable": true,
-                        "speed": 6,
-                        "direction": "none",
-                        "random": false,
-                        "straight": false,
-                        "out_mode": "out",
-                        "bounce": false
-                    }
+        particlesJS('particles-js', {
+            particles: {
+                number: { value: 60 },
+                color: { value: "#ffffff" },
+                shape: { type: "circle" },
+                opacity: { value: 0.5 },
+                size: { value: 3 },
+                line_linked: {
+                    enable: true,
+                    distance: 140,
+                    color: "#ffffff",
+                    opacity: 0.3,
+                    width: 1
                 },
-                "interactivity": {
-                    "detect_on": "canvas",
-                    "events": {
-                        "onhover": {
-                            "enable": true,
-                            "mode": "repulse"
-                        },
-                        "onclick": {
-                            "enable": true,
-                            "mode": "push"
-                        },
-                        "resize": true
-                    }
-                },
-                "retina_detect": true
+                move: {
+                    enable: true,
+                    speed: 5,
+                    direction: "none",
+                }
+            },
+            interactivity: {
+                detect_on: "canvas",
+                events: {
+                    onhover: { enable: true, mode: "repulse" },
+                    onclick: { enable: true, mode: "push" }
+                }
             }
-        );
+        });
 
-        // Custom Cursor
         const cursor = document.querySelector('.cursor');
         document.addEventListener('mousemove', (e) => {
             cursor.style.left = e.clientX + 'px';
             cursor.style.top = e.clientY + 'px';
-        });
-
-        document.querySelectorAll('a, button').forEach(element => {
-            element.addEventListener('mouseenter', () => {
-                cursor.classList.add('active');
-            });
-            element.addEventListener('mouseleave', () => {
-                cursor.classList.remove('active');
-            });
         });
     </script>
 </body>

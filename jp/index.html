@@ -72,6 +72,7 @@ body {
     width: 100%;
     max-width: 800px;
     position: relative;
+    order: -1; 
 }
 
 .category-card {
@@ -372,7 +373,6 @@ body {
 }
 
 .category-section {
-    display: none;
     background: white;
     border-radius: var(--radius-lg);
     padding: 2rem;
@@ -380,6 +380,9 @@ body {
     width: 100%;
     max-width: 800px;
     margin: 1rem 0;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
 }
 
 .category-title {
@@ -434,6 +437,8 @@ body {
 
     <!-- Halaman Kategori -->
     <div class="category-section" id="categorySection">
+        <h2 class="category-title"></h2>
+        <p class="category-instruction"></p>
         <div class="category-container" id="categoryContainer"></div>
         <button class="back-btn" onclick="showScriptSelection()">&larr; Kembali</button>
     </div>
@@ -554,13 +559,10 @@ function showCategorySelection() {
     document.getElementById('categorySection').style.display = 'block';
 
     const container = document.getElementById('categoryContainer');
-    container.innerHTML = '';
-
-    // Tambah judul
-    container.insertAdjacentHTML('afterbegin', `
+    container.innerHTML = `
         <h2 class="category-title">Pilih Kategori ${currentScript.toUpperCase()}</h2>
         <p class="category-instruction">Pilih minimal satu untuk mulai belajar</p>
-    `);
+    `;
 
     // Render kategori
     const categories = currentScript === 'hiragana' 

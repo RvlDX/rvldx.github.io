@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tebak Huruf Jepang</title>
+    <style>
+        :root {
+            --primary: #4a90e2;
+            --secondary: #f5f6fa;
+            --success: #6dd400;
+            --danger: #ff3b30;
+        }
+
+        * {
+            box-sizing: border-box;
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .mode-container {
+            display: grid;
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .mode-btn {
+            padding: 15px 30px;
+            font-size: 1.1em;
+            border: none;
+            border-radius: 12px;
+            background: var(--primary);
+            color: white;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .category-container {
+            display: none;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin: 20px 0;
+            max-width: 600px;
+            width: 100%;
+        }
+
+        .category-card {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .category-card h3 {
+            margin: 0 0 10px 0;
+            color: #333;
+        }
+
+        .category-label {
+            display: block;
+            margin: 8px 0;
+            color: #666;
+        }
+
+        .game-container {
+            display: none;
+            max-width: 600px;
+            width: 100%;
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .character-display {
+            font-size: 8em;
+            text-align: center;
+            margin: 30px 0;
+            color: var(--primary);
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .options-container {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+        }
+
+        .option-btn {
+            padding: 15px;
+            font-size: 1em;
+            border: 2px solid var(--secondary);
+            border-radius: 8px;
+            background: white;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .option-btn:hover:not(:disabled) {
+            background: var(--secondary);
+            transform: scale(1.02);
+        }
+
+        .option-btn.correct {
+            background: var(--success);
+            color: white;
+        }
+
+        .option-btn.wrong {
+            background: var(--danger);
+            color: white;
+        }
+
+        .score-board {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            font-size: 1.1em;
+            color: #666;
+        }
+
+        .result-screen {
+            text-align: center;
+            display: none;
+            max-width: 600px;
+            width: 100%;
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .stats-container {
+            margin: 20px 0;
+            padding: 20px;
+            background: var(--secondary);
+            border-radius: 12px;
+        }
+
+        .retry-btn {
+            padding: 12px 24px;
+            font-size: 1em;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            margin: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="mode-container">
+        <button class="mode-btn" onclick="selectScript('hiragana')">Hiragana</button>
+        <button class="mode-btn" onclick="selectScript('katakana')">Katakana</button>
+    </div>
+
+    <div class="category-container" id="categoryContainer"></div>
+
+    <div class="game-container">
+        <div class="score-board">
+            <span>Benar: <span id="correctCount">0</span></span>
+            <span>Salah: <span id="wrongCount">0</span></span>
+        </div>
+        <div class="character-display" id="character"></div>
+        <div class="options-container" id="options"></div>
+    </div>
+
+    <div class="result-screen" id="resultScreen">
+        <h2>Hasil Akhir!</h2>
+        <div class="stats-container">
+            <p>Total Benar: <span id="finalCorrect">0</span></p>
+            <p>Total Salah: <span id="finalWrong">0</span></p>
+            <p>Akurasi: <span id="accuracy">0</span>%</p>
+        </div>
+        <button class="retry-btn" onclick="location.reload()">Main Lagi</button>
+        <button class="retry-btn" onclick="showCategorySelection()">Pilih Kategori Lain</button>
+    </div>
+
+    <script>
+        const hiragana = {
+            basic: {
+                'あ':'a', 'い':'i', 'う':'u', 'え':'e', 'お':'o',
+                'か':'ka', 'き':'ki', 'く':'ku', 'け':'ke', 'こ':'ko',
+                'さ':'sa', 'し':'shi', 'す':'su', 'せ':'se', 'そ':'so',
+                'た':'ta', 'ち':'chi', 'つ':'tsu', 'て':'te', 'と':'to',
+                'な':'na', 'に':'ni', 'ぬ':'nu', 'ね':'ne', 'の':'no',
+                'は':'ha', 'ひ':'hi', 'ふ':'fu', 'へ':'he', 'ほ':'ho',
+                'ま':'ma', 'み':'mi', 'む':'mu', 'め':'me', 'も':'mo',
+                'や':'ya', 'ゆ':'yu', 'よ':'yo',
+                'ら':'ra', 'り':'ri', 'る':'ru', 'れ':'re', 'ろ':'ro',
+                'わ':'wa', 'を':'wo', 'ん':'n'
+            },
+            dakuten: {
+                'が':'ga', 'ぎ':'gi', 'ぐ':'gu', 'げ':'ge', 'ご':'go',
+                'ざ':'za', 'じ':'ji', 'ず':'zu', 'ぜ':'ze', 'ぞ':'zo',
+                'だ':'da', 'ぢ':'ji', 'づ':'zu', 'で':'de', 'ど':'do',
+                'ば':'ba', 'び':'bi', 'ぶ':'bu', 'べ':'be', 'ぼ':'bo',
+                'ぱ':'pa', 'ぴ':'pi', 'ぷ':'pu', 'ぺ':'pe', 'ぽ':'po'
+            }
+        };
+
+        const katakana = {
+            basic: {
+                'ア':'a', 'イ':'i', 'ウ':'u', 'エ':'e', 'オ':'o',
+                'カ':'ka', 'キ':'ki', 'ク':'ku', 'ケ':'ke', 'コ':'ko',
+                'サ':'sa', 'シ':'shi', 'ス':'su', 'セ':'se', 'ソ':'so',
+                'タ':'ta', 'チ':'chi', 'ツ':'tsu', 'テ':'te', 'ト':'to',
+                'ナ':'na', 'ニ':'ni', 'ヌ':'nu', 'ネ':'ne', 'ノ':'no',
+                'ハ':'ha', 'ヒ':'hi', 'フ':'fu', 'ヘ':'he', 'ホ':'ho',
+                'マ':'ma', 'ミ':'mi', 'ム':'mu', 'メ':'me', 'モ':'mo',
+                'ヤ':'ya', 'ユ':'yu', 'ヨ':'yo',
+                'ラ':'ra', 'リ':'ri', 'ル':'ru', 'レ':'re', 'ロ':'ro',
+                'ワ':'wa', 'ヲ':'wo', 'ン':'n'
+            },
+            dakuten: {
+                'ガ':'ga', 'ギ':'gi', 'グ':'gu', 'ゲ':'ge', 'ゴ':'go',
+                'ザ':'za', 'ジ':'ji', 'ズ':'zu', 'ゼ':'ze', 'ゾ':'zo',
+                'ダ':'da', 'ヂ':'ji', 'ヅ':'zu', 'デ':'de', 'ド':'do',
+                'バ':'ba', 'ビ':'bi', 'ブ':'bu', 'ベ':'be', 'ボ':'bo',
+                'パ':'pa', 'ピ':'pi', 'プ':'pu', 'ペ':'pe', 'ポ':'po'
+            },
+            extended: {
+                'ヴ':'vu',
+                'ウィ':'wi', 'ウェ':'we', 'ウォ':'wo',
+                'シェ':'she', 'ジェ':'je',
+                'チェ':'che', 'ティ':'ti', 'ディ':'di',
+                'トゥ':'tu', 'ドゥ':'du',
+                'ファ':'fa', 'フィ':'fi', 'フェ':'fe', 'フォ':'fo'
+            }
+        };
+
+        let currentSet = {};
+        let questionQueue = [];
+        let correctCount = 0;
+        let wrongCount = 0;
+        let currentScript = '';
+
+        function selectScript(script) {
+            currentScript = script;
+            document.querySelector('.mode-container').style.display = 'none';
+            showCategorySelection();
+        }
+
+        function showCategorySelection() {
+            const container = document.getElementById('categoryContainer');
+            container.innerHTML = '';
+            
+            const categories = Object.keys(currentScript === 'hiragana' ? hiragana : katakana);
+            categories.forEach(category => {
+                const card = document.createElement('div');
+                card.className = 'category-card';
+                card.innerHTML = `
+                    <h3>${category.toUpperCase()}</h3>
+                    ${Object.keys(getCategoryCharacters(category)).map(char => `
+                        <label class="category-label">
+                            <input type="checkbox" name="${category}" value="${char}">
+                            ${char} (${getCategoryCharacters(category)[char]})
+                        </label>
+                    `).join('')}
+                `;
+                container.appendChild(card);
+            });
+            
+            container.style.display = 'grid';
+            container.insertAdjacentHTML('afterbegin', 
+                '<button class="mode-btn" onclick="startGame()" style="grid-column: 1/-1">Mulai!</button>');
+        }
+
+        function getCategoryCharacters(category) {
+            return currentScript === 'hiragana' 
+                ? hiragana[category] 
+                : katakana[category];
+        }
+
+        function startGame() {
+            currentSet = {};
+            const checkboxes = document.querySelectorAll('input[type="checkbox"]:checked');
+            
+            checkboxes.forEach(checkbox => {
+                const category = checkbox.name;
+                const char = checkbox.value;
+                currentSet[char] = getCategoryCharacters(category)[char];
+            });
+            
+            if (Object.keys(currentSet).length === 0) {
+                alert('Pilih minimal satu kategori!');
+                return;
+            }
+
+            totalCharacters = Object.keys(currentSet).length;
+            questionQueue = shuffleArray(Object.keys(currentSet));
+            document.getElementById('categoryContainer').style.display = 'none';
+            document.querySelector('.game-container').style.display = 'block';
+            resetCounters();
+            generateQuestion();
+        }
+
+        function generateQuestion() {
+            if (questionQueue.length === 0) {
+                endGame();
+                return;
+            }
+
+            const currentChar = questionQueue.pop();
+            const correctAnswer = currentSet[currentChar];
+
+            document.getElementById('character').textContent = currentChar;
+
+            const options = [correctAnswer];
+            const allAnswers = Object.values(currentSet);
+            
+            // Generate jawaban acak
+            while (options.length < 4) {
+                const randomAnswer = allAnswers[Math.floor(Math.random() * allAnswers.length)];
+                if (!options.includes(randomAnswer)) {
+                    options.push(randomAnswer);
+                }
+            }
+
+            options.sort(() => Math.random() - 0.5);
+
+            const optionsContainer = document.getElementById('options');
+            optionsContainer.innerHTML = '';
+
+            options.forEach(option => {
+                const button = document.createElement('button');
+                button.className = 'option-btn';
+                button.textContent = option;
+                button.onclick = () => checkAnswer(option === correctAnswer);
+                optionsContainer.appendChild(button);
+            });
+        }
+
+        function checkAnswer(isCorrect) {
+            const options = document.querySelectorAll('.option-btn');
+            options.forEach(btn => btn.disabled = true);
+
+            if (isCorrect) {
+                correctCount++;
+                document.getElementById('correctCount').textContent = correctCount;
+                event.target.classList.add('correct');
+            } else {
+                wrongCount++;
+                document.getElementById('wrongCount').textContent = wrongCount;
+                event.target.classList.add('wrong');
+                options.forEach(btn => {
+                    if (btn.textContent === currentSet[document.getElementById('character').textContent]) {
+                        btn.classList.add('correct');
+                    }
+                });
+            }
+
+            setTimeout(() => {
+                if (questionQueue.length > 0) {
+                    generateQuestion();
+                } else {
+                    endGame();
+                }
+            }, 1500);
+        }
+
+        function endGame() {
+            document.querySelector('.game-container').style.display = 'none';
+            const resultScreen = document.getElementById('resultScreen');
+            resultScreen.style.display = 'block';
+            
+            const total = correctCount + wrongCount;
+            const accuracy = total > 0 
+                ? ((correctCount / total) * 100).toFixed(2)
+                : 0;
+
+            document.getElementById('finalCorrect').textContent = correctCount;
+            document.getElementById('finalWrong').textContent = wrongCount;
+            document.getElementById('accuracy').textContent = accuracy;
+        }
+
+    </script>
+</body>
+</html>

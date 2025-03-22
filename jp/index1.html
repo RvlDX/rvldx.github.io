@@ -240,151 +240,174 @@
             }
         };
 
-        let currentSet = {};
-        let questionQueue = [];
-        let correctCount = 0;
-        let wrongCount = 0;
-        let currentScript = '';
+    let currentSet = {};
+    let questionQueue = [];
+    let correctCount = 0;
+    let wrongCount = 0;
+    let currentScript = '';
+    let selectedCategories = {};
 
-        function selectScript(script) {
-            currentScript = script;
-            document.querySelector('.mode-container').style.display = 'none';
-            showCategorySelection();
+    // Fungsi utama
+    function selectScript(script) {
+        currentScript = script;
+        document.querySelector('.mode-container').style.display = 'none';
+        showCategorySelection();
+    }
+
+    function showCategorySelection() {
+        document.querySelector('.game-container').style.display = 'none';
+        document.getElementById('resultScreen').style.display = 'none';
+        
+        const container = document.getElementById('categoryContainer');
+        container.innerHTML = '';
+        
+        const categories = Object.keys(currentScript === 'hiragana' ? hiragana : katakana);
+        
+        categories.forEach(category => {
+            const card = document.createElement('div');
+            card.className = 'category-card';
+            card.innerHTML = `
+                <h3>${category.toUpperCase()}</h3>
+                ${Object.keys(getCategoryCharacters(category)).map(char => `
+                    <label class="category-label">
+                        <input type="checkbox" name="${category}" value="${char}" 
+                            ${selectedCategories[char] ? 'checked' : ''}>
+                        ${char} (${getCategoryCharacters(category)[char]})
+                    </label>
+                `).join('')}
+            `;
+            container.appendChild(card);
+        });
+        
+        container.style.display = 'grid';
+        container.insertAdjacentHTML('afterbegin', 
+            `<button class="mode-btn" onclick="startGame()" style="grid-column: 1/-1; margin-bottom: 20px;">
+                Mulai Permainan
+            </button>`);
+    }
+
+    function getCategoryCharacters(category) {
+        return currentScript === 'hiragana' 
+            ? hiragana[category] 
+            : katakana[category];
+    }
+
+    function startGame() {
+        currentSet = {};
+        selectedCategories = {};
+        const checkboxes = document.querySelectorAll('input[type="checkbox"]:checked');
+        
+        checkboxes.forEach(checkbox => {
+            const category = checkbox.name;
+            const char = checkbox.value;
+            currentSet[char] = getCategoryCharacters(category)[char];
+            selectedCategories[char] = true;
+        });
+        
+        if (Object.keys(currentSet).length === 0) {
+            alert('Pilih minimal satu kategori!');
+            return;
         }
 
-        function showCategorySelection() {
-            const container = document.getElementById('categoryContainer');
-            container.innerHTML = '';
-            
-            const categories = Object.keys(currentScript === 'hiragana' ? hiragana : katakana);
-            categories.forEach(category => {
-                const card = document.createElement('div');
-                card.className = 'category-card';
-                card.innerHTML = `
-                    <h3>${category.toUpperCase()}</h3>
-                    ${Object.keys(getCategoryCharacters(category)).map(char => `
-                        <label class="category-label">
-                            <input type="checkbox" name="${category}" value="${char}">
-                            ${char} (${getCategoryCharacters(category)[char]})
-                        </label>
-                    `).join('')}
-                `;
-                container.appendChild(card);
-            });
-            
-            container.style.display = 'grid';
-            container.insertAdjacentHTML('afterbegin', 
-                '<button class="mode-btn" onclick="startGame()" style="grid-column: 1/-1">Mulai!</button>');
+        questionQueue = shuffleArray([...Object.keys(currentSet)]);
+        document.getElementById('categoryContainer').style.display = 'none';
+        document.querySelector('.game-container').style.display = 'block';
+        resetCounters();
+        generateQuestion();
+    }
+
+    // Fungsi bantu
+    function shuffleArray(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]];
         }
+        return array;
+    }
 
-        function getCategoryCharacters(category) {
-            return currentScript === 'hiragana' 
-                ? hiragana[category] 
-                : katakana[category];
-        }
+    function resetCounters() {
+        correctCount = 0;
+        wrongCount = 0;
+        document.getElementById('correctCount').textContent = '0';
+        document.getElementById('wrongCount').textContent = '0';
+    }
 
-        function startGame() {
-            currentSet = {};
-            const checkboxes = document.querySelectorAll('input[type="checkbox"]:checked');
-            
-            checkboxes.forEach(checkbox => {
-                const category = checkbox.name;
-                const char = checkbox.value;
-                currentSet[char] = getCategoryCharacters(category)[char];
-            });
-            
-            if (Object.keys(currentSet).length === 0) {
-                alert('Pilih minimal satu kategori!');
-                return;
-            }
-
-            totalCharacters = Object.keys(currentSet).length;
+    function generateQuestion() {
+        if (questionQueue.length === 0) {
             questionQueue = shuffleArray(Object.keys(currentSet));
-            document.getElementById('categoryContainer').style.display = 'none';
-            document.querySelector('.game-container').style.display = 'block';
-            resetCounters();
-            generateQuestion();
         }
 
-        function generateQuestion() {
-            if (questionQueue.length === 0) {
-                endGame();
-                return;
+        const currentChar = questionQueue.pop();
+        const correctAnswer = currentSet[currentChar];
+
+        document.getElementById('character').textContent = currentChar;
+
+        const options = [correctAnswer];
+        const allAnswers = Object.values(currentSet);
+        
+        while (options.length < 4) {
+            const randomAnswer = allAnswers[Math.floor(Math.random() * allAnswers.length)];
+            if (!options.includes(randomAnswer)) {
+                options.push(randomAnswer);
             }
+        }
 
-            const currentChar = questionQueue.pop();
-            const correctAnswer = currentSet[currentChar];
+        options.sort(() => Math.random() - 0.5);
 
-            document.getElementById('character').textContent = currentChar;
+        const optionsContainer = document.getElementById('options');
+        optionsContainer.innerHTML = '';
 
-            const options = [correctAnswer];
-            const allAnswers = Object.values(currentSet);
-            
-            // Generate jawaban acak
-            while (options.length < 4) {
-                const randomAnswer = allAnswers[Math.floor(Math.random() * allAnswers.length)];
-                if (!options.includes(randomAnswer)) {
-                    options.push(randomAnswer);
+        options.forEach(option => {
+            const button = document.createElement('button');
+            button.className = 'option-btn';
+            button.textContent = option;
+            button.onclick = (e) => checkAnswer(option === correctAnswer, e);
+            optionsContainer.appendChild(button);
+        });
+    }
+
+    function checkAnswer(isCorrect, e) {
+        const options = document.querySelectorAll('.option-btn');
+        options.forEach(btn => btn.disabled = true);
+
+        if (isCorrect) {
+            correctCount++;
+            document.getElementById('correctCount').textContent = correctCount;
+            e.target.classList.add('correct');
+        } else {
+            wrongCount++;
+            document.getElementById('wrongCount').textContent = wrongCount;
+            e.target.classList.add('wrong');
+            options.forEach(btn => {
+                if (btn.textContent === currentSet[document.getElementById('character').textContent]) {
+                    btn.classList.add('correct');
                 }
-            }
-
-            options.sort(() => Math.random() - 0.5);
-
-            const optionsContainer = document.getElementById('options');
-            optionsContainer.innerHTML = '';
-
-            options.forEach(option => {
-                const button = document.createElement('button');
-                button.className = 'option-btn';
-                button.textContent = option;
-                button.onclick = () => checkAnswer(option === correctAnswer);
-                optionsContainer.appendChild(button);
             });
         }
 
-        function checkAnswer(isCorrect) {
-            const options = document.querySelectorAll('.option-btn');
-            options.forEach(btn => btn.disabled = true);
-
-            if (isCorrect) {
-                correctCount++;
-                document.getElementById('correctCount').textContent = correctCount;
-                event.target.classList.add('correct');
+        setTimeout(() => {
+            if (questionQueue.length > 0 || document.getElementById('character').textContent) {
+                generateQuestion();
             } else {
-                wrongCount++;
-                document.getElementById('wrongCount').textContent = wrongCount;
-                event.target.classList.add('wrong');
-                options.forEach(btn => {
-                    if (btn.textContent === currentSet[document.getElementById('character').textContent]) {
-                        btn.classList.add('correct');
-                    }
-                });
+                endGame();
             }
+        }, 1500);
+    }
 
-            setTimeout(() => {
-                if (questionQueue.length > 0) {
-                    generateQuestion();
-                } else {
-                    endGame();
-                }
-            }, 1500);
-        }
+    function endGame() {
+        document.querySelector('.game-container').style.display = 'none';
+        const resultScreen = document.getElementById('resultScreen');
+        resultScreen.style.display = 'block';
+        
+        const total = correctCount + wrongCount;
+        const accuracy = total > 0 
+            ? ((correctCount / total) * 100).toFixed(2)
+            : 0;
 
-        function endGame() {
-            document.querySelector('.game-container').style.display = 'none';
-            const resultScreen = document.getElementById('resultScreen');
-            resultScreen.style.display = 'block';
-            
-            const total = correctCount + wrongCount;
-            const accuracy = total > 0 
-                ? ((correctCount / total) * 100).toFixed(2)
-                : 0;
-
-            document.getElementById('finalCorrect').textContent = correctCount;
-            document.getElementById('finalWrong').textContent = wrongCount;
-            document.getElementById('accuracy').textContent = accuracy;
-        }
-
-    </script>
+        document.getElementById('finalCorrect').textContent = correctCount;
+        document.getElementById('finalWrong').textContent = wrongCount;
+        document.getElementById('accuracy').textContent = accuracy;
+    }
+</script>
 </body>
 </html>

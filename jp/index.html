@@ -841,6 +841,26 @@
 
         // Inisialisasi
         showHome();
+
+        // Blokir klik kanan
+        document.oncontextmenu = () => false;
+
+        // Blokir F12, Ctrl+Shift+I, Ctrl+Shift+J
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'F12' || (e.ctrlKey && e.shiftKey && ['I', 'J'].includes(e.key))) {
+                e.preventDefault();
+                window.location.href = 'about:blank';
+            }
+        });
+
+        // Deteksi resize window (banyak devtools membuka panel samping)
+        let width = window.innerWidth;
+        setInterval(() => {
+            if (window.innerWidth !== width) {
+                document.body.innerHTML = '<h1>Stop Inspecting!</h1>';
+                width = window.innerWidth;
+            }
+        }, 100);
     </script>
 </body>
 

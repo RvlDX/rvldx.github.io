@@ -399,24 +399,26 @@ body {
 }
 
 .error-notification {
-        position: fixed;
-        top: -100px;
-        left: 50%;
-        transform: translateX(-50%);
-        background: var(--danger);
-        color: white;
-        padding: 1rem 2rem;
-        border-radius: var(--radius-md);
-        box-shadow: var(--shadow-lg);
-        transition: top 0.5s ease;
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-        z-index: 1000;
-    }
+    position: fixed;
+    top: -100px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--danger);
+    color: white;
+    padding: 1rem 2rem;
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-lg);
+    transition: all 0.3s ease-in-out;
+    z-index: 9999; /* Pastikan z-index tertinggi */
+    opacity: 0;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
 
 .error-notification.show {
     top: 20px;
+    opacity: 1;
 }
 </style>
 </head>
@@ -660,19 +662,21 @@ function getCategoryGroups(category) {
 
 // Fungsi Game
 function startGame() {
-        const selectedGroups = {};
-        Object.keys(currentSet).forEach(category => {
-            currentSet[category].forEach(group => {
-                const groups = getCategoryGroups(category)[group];
-                Object.assign(selectedGroups, groups);
-            });
+    const selectedGroups = {};
+    let totalSelected = 0; // Tambahkan counter
+    
+    Object.keys(currentSet).forEach(category => {
+        currentSet[category].forEach(group => {
+            const groups = getCategoryGroups(category)[group];
+            Object.assign(selectedGroups, groups);
+            totalSelected++; // Hitung total yang dipilih
         });
+    });
 
-        const selectedKeys = Object.keys(selectedGroups);
-        if (selectedKeys.length === 0) {
-            showErrorNotification();
-            return;
-        }
+    if (totalSelected === 0) { // Ganti pengecekan ke totalSelected
+        showErrorNotification();
+        return;
+    }
 
         totalQuestions = selectedKeys.length;
         questionQueue = shuffleArray([...selectedKeys]);
@@ -687,6 +691,7 @@ function startGame() {
     function showErrorNotification() {
         const errorNotif = document.getElementById('errorNotification');
         errorNotif.classList.add('show');
+        
         setTimeout(() => {
             errorNotif.classList.remove('show');
         }, 3000);

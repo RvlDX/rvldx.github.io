@@ -503,8 +503,8 @@
     <!-- Halaman Permainan -->
     <div class="game-container">
         <div class="score-board">
-            <span>Benar: <span id="correctCount">0</span></span>
-            <span>Salah: <span id="wrongCount">0</span></span>
+            <span>Benar : <span id="correctCount"> 0</span></span>
+            <span>Salah : <span id="wrongCount"> 0</span></span>
         </div>
         <div class="character-display" id="character"></div>
         <div class="options-container" id="options"></div>
@@ -514,9 +514,9 @@
     <div class="result-screen" id="resultScreen">
         <h2>Hasil Akhir!</h2>
         <div class="stats-container">
-            <p>Total Benar: <span id="finalCorrect">0</span></p>
-            <p>Total Salah: <span id="finalWrong">0</span></p>
-            <p>Akurasi: <span id="accuracy">0</span>%</p>
+            <p>Total Benar : <span id="finalCorrect"> 0</span></p>
+            <p>Total Salah : <span id="finalWrong"> 0</span></p>
+            <p>Akurasi : <span id="accuracy"> 0</span>%</p>
         </div>
         <button class="retry-btn" onclick="location.reload()">Main Lagi</button>
         <button class="retry-btn" onclick="showHome()">Kembali ke Halaman Utama</button>
@@ -809,8 +809,13 @@
                 wrongCount++;
                 document.getElementById('wrongCount').textContent = wrongCount;
                 element.classList.add('wrong');
+
+                // Tunjukkan jawaban benar dengan warna hijau
                 options.forEach(btn => {
-                    if (btn.textContent === currentCorrectAnswer) btn.classList.add('correct');
+                    // Gunakan trim() untuk menghapus spasi/enter tidak perlu
+                    if (btn.textContent.trim() === currentCorrectAnswer) {
+                        btn.classList.add('correct');
+                    }
                 });
             }
 
@@ -820,7 +825,6 @@
                     : endGame();
             }, 1500);
         }
-
         function endGame() {
             document.querySelector('.game-container').style.display = 'none';
             const resultScreen = document.getElementById('resultScreen');

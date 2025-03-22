@@ -397,6 +397,27 @@ body {
     text-align: center;
     margin-bottom: 1.5rem;
 }
+
+.error-notification {
+        position: fixed;
+        top: -100px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: var(--danger);
+        color: white;
+        padding: 1rem 2rem;
+        border-radius: var(--radius-md);
+        box-shadow: var(--shadow-lg);
+        transition: top 0.5s ease;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        z-index: 1000;
+    }
+
+.error-notification.show {
+    top: 20px;
+}
 </style>
 </head>
 <body>
@@ -464,6 +485,12 @@ body {
         <button class="retry-btn" onclick="location.reload()">Main Lagi</button>
         <button class="retry-btn" onclick="showHome()">Kembali ke Halaman Utama</button>
     </div>
+
+    <!-- Notifikasi Error -->
+    <div class="error-notification" id="errorNotification">
+        <span>⚠️ Pilih minimal satu kelompok karakter!</span>
+    </div>
+
 
 <script>
     const hiraganaGroups = {
@@ -633,28 +660,37 @@ function getCategoryGroups(category) {
 
 // Fungsi Game
 function startGame() {
-    const selectedGroups = {};
-    Object.keys(currentSet).forEach(category => {
-        currentSet[category].forEach(group => {
-            const groups = getCategoryGroups(category)[group];
-            Object.assign(selectedGroups, groups);
+        const selectedGroups = {};
+        Object.keys(currentSet).forEach(category => {
+            currentSet[category].forEach(group => {
+                const groups = getCategoryGroups(category)[group];
+                Object.assign(selectedGroups, groups);
+            });
         });
-    });
 
-    const selectedKeys = Object.keys(selectedGroups);
-    if (selectedKeys.length === 0) {
-        alert('Pilih minimal satu karakter!');
-        return;
+        const selectedKeys = Object.keys(selectedGroups);
+        if (selectedKeys.length === 0) {
+            showErrorNotification();
+            return;
+        }
+
+        totalQuestions = selectedKeys.length;
+        questionQueue = shuffleArray([...selectedKeys]);
+
+        document.getElementById('categorySection').style.display = 'none';
+        document.querySelector('.game-container').style.display = 'block';
+        resetCounters();
+        generateQuestion();
     }
 
-    totalQuestions = selectedKeys.length;
-    questionQueue = shuffleArray([...selectedKeys]);
-
-    document.getElementById('categorySection').style.display = 'none';
-    document.querySelector('.game-container').style.display = 'block';
-    resetCounters();
-    generateQuestion();
-}
+    // Tambahkan fungsi notifikasi error
+    function showErrorNotification() {
+        const errorNotif = document.getElementById('errorNotification');
+        errorNotif.classList.add('show');
+        setTimeout(() => {
+            errorNotif.classList.remove('show');
+        }, 3000);
+    }
 
 function shuffleArray(array) {
     for (let i = array.length - 1; i > 0; i--) {

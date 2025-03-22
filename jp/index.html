@@ -697,17 +697,19 @@
         // Fungsi Game
         function startGame() {
             const selectedGroups = {};
-            let totalSelected = 0; // Tambahkan counter
+            let totalSelected = 0;
 
             Object.keys(currentSet).forEach(category => {
                 currentSet[category].forEach(group => {
                     const groups = getCategoryGroups(category)[group];
                     Object.assign(selectedGroups, groups);
-                    totalSelected++; // Hitung total yang dipilih
+                    totalSelected++;
                 });
             });
 
-            if (totalSelected === 0) { // Ganti pengecekan ke totalSelected
+            // Periksa apakah ada grup yang dipilih
+            const selectedKeys = Object.keys(selectedGroups);
+            if (selectedKeys.length === 0) {
                 showErrorNotification();
                 return;
             }

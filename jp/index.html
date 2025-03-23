@@ -517,6 +517,7 @@
             margin-bottom: 1.5rem;
         }
 
+        /* Notifikasi */
         .error-notification {
             position: fixed;
             top: -100px;
@@ -541,29 +542,55 @@
             opacity: 1;
         }
 
+        .coming-soon-notification {
+            position: fixed;
+            top: -100px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--danger);
+            /* Atau warna lain sesuai kebutuhan */
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: var(--radius-md);
+            box-shadow: var(--shadow-lg);
+            transition: all 0.3s ease-in-out;
+            z-index: 9999;
+            opacity: 0;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .coming-soon-notification.show {
+            top: 20px;
+            opacity: 1;
+        }
+
+
+        .mode-container {
+            /* Gunakan flex atau grid yang men-center isi */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            /* Center horizontal */
+            width: 100%;
+        }
+
         .script-selection {
+            width: 100%;
+            margin: 1rem auto;
             display: flex;
             flex-wrap: wrap;
-            grid-template-columns: repeat(2, minmax(180px, 1fr));
-            /* 2 kolom dengan lebar seimbang */
-            gap: 0.5rem;
-            /* Jarak horizontal/vertikal antar kartu */
-            justify-items: center;
-            /* Setiap item di-tengah-kan secara horizontal */
-            margin-top: 2rem;
-            /* Jarak ke atas (judul atau elemen lain) */
+            justify-content: center;
+            gap: 1rem;
         }
 
         .script-card {
             width: 200px;
-            /* Lebar tetap agar semua sama */
             height: 200px;
-            /* Tinggi tetap agar semua sama */
             border: 2px solid #2563eb;
-            /* Warna border (biru) */
             border-radius: 12px;
             display: flex;
-            /* Flex layout untuk memudahkan penataan konten */
             flex-direction: column;
             align-items: center;
             justify-content: center;
@@ -572,11 +599,11 @@
             transition: transform 0.2s ease, box-shadow 0.2s ease;
         }
 
-        /* Efek hover (mengambang sedikit + bayangan) */
         .script-card:hover {
             transform: translateY(-3px);
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
+
 
         /* Icon dan label di dalam kartu */
         .script-icon {
@@ -590,14 +617,6 @@
             font-weight: 600;
             color: #2563eb;
             text-align: center;
-        }
-
-        /* Kartu ketiga (Kanji) berada di baris kedua dan tetap center */
-        .script-card:nth-child(3) {
-            grid-column: 1 / 3;
-            /* Memaksa berada di kolom 1 hingga 2 (spanning 2 kolom) */
-            justify-self: center;
-            /* Agar posisi di tengah secara horizontal */
         }
     </style>
 </head>
@@ -629,7 +648,7 @@
             <button class="mode-btn start-btn" onclick="showScriptSelection()">
                 Mulai Quiz
             </button>
-            <button class="mode-btn start-btn" onclick="">
+            <button class="mode-btn start-btn" onclick="showComingSoonNotification()">
                 Mulai Belajar
             </button>
         </div>
@@ -691,11 +710,14 @@
         <button class="retry-btn" onclick="showHome()">Kembali ke Halaman Utama</button>
     </div>
 
-    <!-- Notifikasi Error -->
+    <!-- Notifikasi -->
     <div class="error-notification" id="errorNotification">
         <span>⚠️ Pilih minimal satu kelompok karakter!</span>
     </div>
 
+    <div class="coming-soon-notification" id="comingSoonNotification">
+        <span>🚧 Coming Soon!</span>
+    </div>
 
     <script>
         const hiraganaGroups = {
@@ -1098,16 +1120,6 @@
             }
         }
 
-        // Tambahkan fungsi notifikasi error
-        function showErrorNotification() {
-            const errorNotif = document.getElementById('errorNotification');
-            errorNotif.classList.add('show');
-
-            setTimeout(() => {
-                errorNotif.classList.remove('show');
-            }, 3000);
-        }
-
         function shuffleArray(array) {
             for (let i = array.length - 1; i > 0; i--) {
                 const j = Math.floor(Math.random() * (i + 1));
@@ -1266,6 +1278,26 @@
                 }
             }
             return '';
+        }
+
+        // Tambahkan fungsi notifikasi
+        function showErrorNotification() {
+            const errorNotif = document.getElementById('errorNotification');
+            errorNotif.classList.add('show');
+
+            setTimeout(() => {
+                errorNotif.classList.remove('show');
+            }, 3000);
+        }
+
+        function showComingSoonNotification() {
+            const notif = document.getElementById('comingSoonNotification');
+            notif.classList.add('show');
+
+            // Hilangkan notifikasi otomatis setelah 3 detik (opsional)
+            setTimeout(() => {
+                notif.classList.remove('show');
+            }, 3000);
         }
     </script>
 </body>

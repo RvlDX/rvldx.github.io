@@ -597,6 +597,12 @@
             color: #2563eb;
             text-align: center;
         }
+
+        .start-btn,
+        .retry-btn {
+            width: 100%;
+            max-width: 200px;
+        }
     </style>
 </head>
 
@@ -1173,6 +1179,8 @@
             // Render opsi ke HTML
             const optionsContainer = document.getElementById('options');
             optionsContainer.innerHTML = options.map(option => {
+                // Jika Kanji: option = "hiru (siang)"
+                // Jika Hira/Kata: option = "ka" dsb.
                 let [r, mRaw] = option.split('(');
                 const reading = (r || '').trim();
                 const meaning = (mRaw || '').replace(')', '').trim();
@@ -1231,6 +1239,9 @@
                         if (group) {
                             // Setiap entry di group berbentuk { Kanji: "reading (arti)" }
                             Object.entries(group).forEach(([kanji, answer]) => {
+                                // Contoh answer: "hiru (siang)"
+                                // Kita simpan utuh agar saat generate opsi
+                                // bisa ditampilkan reading + arti
                                 allAnswers[kanji] = answer;
                             });
                         }
@@ -1263,6 +1274,7 @@
 
                 // Tunjukkan jawaban benar dengan warna hijau
                 options.forEach(btn => {
+                    // Gunakan trim() untuk menghapus spasi/enter tidak perlu
                     if (btn.textContent.trim() === currentCorrectAnswer) {
                         btn.classList.add('correct');
                     }

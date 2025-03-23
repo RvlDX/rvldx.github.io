@@ -583,6 +583,194 @@
             }
         };
 
+const kanjiGroups = {
+    "Waktu & Kalender": {
+        "日": "nichi (hari)",
+        "月": "getsu (bulan)",
+        "年": "nen (tahun)",
+        "時": "ji (waktu)",
+        "分": "fun (menit)",
+        "秒": "byou (detik)",
+        "週": "shuu (minggu)",
+        "曜": "you (hari dalam minggu)",
+        "朝": "asa (pagi)",
+        "昼": "hiru (siang)",
+        "夜": "yoru (malam)",
+        "季": "ki (musim)"
+    },
+
+    "Angka Dasar 1-10": {
+        "一": "ichi (1)",
+        "二": "ni (2)",
+        "三": "san (3)",
+        "四": "yon (4)",
+        "五": "go (5)",
+        "六": "roku (6)",
+        "七": "nana (7)",
+        "八": "hachi (8)",
+        "九": "kyuu (9)",
+        "十": "juu (10)"
+    },
+
+    "Angka & Jumlah": {
+        "百": "hyaku (100)",
+        "千": "sen (1.000)",
+        "万": "man (10.000)",
+        "円": "en (Yen)",
+        "零": "rei (nol)",
+        "半": "han (setengah)"
+    },
+
+    "Orang & Keluarga": {
+        "人": "hito (orang)",
+        "男": "otoko (laki-laki)",
+        "女": "onna (perempuan)",
+        "父": "chichi (ayah)",
+        "母": "haha (ibu)",
+        "子": "ko (anak)",
+        "兄": "ani (kakak laki-laki)",
+        "弟": "otouto (adik laki-laki)",
+        "姉": "ane (kakak perempuan)",
+        "妹": "imouto (adik perempuan)",
+        "夫": "otto (suami)",
+        "妻": "tsuma (istri)"
+    },
+
+    "Tempat": {
+        "山": "yama (gunung)",
+        "川": "kawa (sungai)",
+        "田": "ta (sawah)",
+        "町": "machi (kota kecil)",
+        "店": "mise (toko)",
+        "駅": "eki (stasiun)",
+        "国": "kuni (negara)",
+        "家": "ie (rumah)",
+        "村": "mura (desa)",
+        "市": "shi (kota)"
+    },
+
+    "Kata Kerja Umum": {
+        "行": "iku (pergi)",
+        "来": "kuru (datang)",
+        "食": "taberu (makan)",
+        "飲": "nomu (minum)",
+        "見": "miru (melihat)",
+        "聞": "kiku (mendengar)",
+        "話": "hanasu (berbicara)",
+        "読": "yomu (membaca)",
+        "書": "kaku (menulis)",
+        "立": "tatsu (berdiri)",
+        "帰": "kaeru (pulang)",
+        "買": "kau (membeli)"
+    },
+
+    "Sifat & Kondisi": {
+        "大": "dai (besar)",
+        "小": "shou (kecil)",
+        "新": "shin (baru)",
+        "古": "ko (lama)",
+        "高": "kou (tinggi/murah)",
+        "安": "an (murah)",
+        "早": "sou (cepat/awal)",
+        "多": "ta (banyak)",
+        "長": "nagai (panjang)",
+        "短": "mijikai (pendek)"
+    },
+
+    "Alam & Cuaca": {
+        "木": "moku (pohon)",
+        "林": "rin (hutan kecil)",
+        "森": "mori (hutan)",
+        "火": "ka (api)",
+        "水": "sui (air)",
+        "雨": "ame (hujan)",
+        "風": "kaze (angin)",
+        "雪": "yuki (salju)",
+        "天": "ten (langit)",
+        "気": "ki (energi)",
+        "土": "tsuchi (tanah)",
+        "霧": "kiri (kabut)",
+        "雷": "kaminari (petir)"
+    },
+
+    "Warna & Keadaan": {
+        "赤": "aka (merah)",
+        "青": "ao (biru)",
+        "白": "shiro (putih)",
+        "黒": "kuro (hitam)",
+        "色": "iro (warna)",
+        "灰": "hai (abu-abu)"
+    },
+
+    "Transportasi & Arah": {
+        "車": "kuruma (mobil)",
+        "電": "den (listrik)",
+        "道": "michi (jalan)",
+        "空": "sora (langit)",
+        "港": "minato (pelabuhan)",
+        "北": "kita (utara)",
+        "南": "minami (selatan)",
+        "東": "higashi (timur)",
+        "西": "nishi (barat)",
+        "線": "sen (jalur)"
+    },
+
+    "Aktivitas Sehari-hari": {
+        "寝": "nemui (tidur/ngantuk)",
+        "起": "okiru (bangun)",
+        "働": "hataraku (bekerja)",
+        "休": "yasumu (istirahat)",
+        "洗": "arau (mencuci)",
+        "浴": "abiru (mandi)",
+        "遊": "asobu (bermain)",
+        "走": "hashiru (berlari)"
+    },
+
+    "Makanan & Minuman": {
+        "米": "kome (beras)",
+        "肉": "niku (daging)",
+        "魚": "sakana (ikan)",
+        "飲": "nomu (minum)",
+        "茶": "cha (teh)",
+        "飯": "meshi (nasi/makanan)",
+        "酒": "sake (alkohol)"
+    },
+
+    "Pekerjaan & Pendidikan": {
+        "仕": "shi (bekerja)",
+        "学": "gaku (belajar)",
+        "校": "kou (sekolah)",
+        "教": "kyou (mengajar)",
+        "医": "i (dokter)",
+        "院": "in (institusi/rumah sakit)",
+        "業": "gyou (bisnis/pekerjaan)",
+        "試": "tamesu (ujian/mencoba)",
+        "社": "sha (perusahaan)",
+        "術": "jutsu (teknik/seni)"
+    },
+
+    "Keadaan & Emosi": {
+        "楽": "tanoshii (senang)",
+        "悲": "kanashii (sedih)",
+        "喜": "yorokobu (gembira)",
+        "怒": "okoru (marah)",
+        "哀": "ai (duka)",
+        "驚": "odoroku (terkejut)"
+    },
+
+    "Kata Kerja Penting Lainnya": {
+        "会": "au (bertemu)",
+        "思": "omou (berpikir)",
+        "使": "tsukau (menggunakan)",
+        "待": "matsu (menunggu)",
+        "送": "okuru (mengirim)",
+        "出": "deru (keluar)",
+        "入": "hairu (masuk)",
+        "開": "aku (membuka)",
+        "選": "eru (memilih)"
+    }
+};
+
         // Variabel State
         let currentSet = {};
         let questionQueue = [];

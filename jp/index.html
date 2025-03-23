@@ -1036,41 +1036,41 @@
         <p class="category-instruction">Pilih minimal satu untuk mulai belajar</p>
     `;
 
-        // Render kategori
-        const categories = currentScript === 'kanji'
-            ? Object.keys(kanjiGroups) // Ambil semua kategori kanji
-            : Object.keys(currentScript === 'hiragana' ? hiraganaGroups : katakanaGroups);
+            // Render kategori
+            const categories = currentScript === 'kanji'
+                ? Object.keys(kanjiGroups) // Ambil semua kategori kanji
+                : Object.keys(currentScript === 'hiragana' ? hiraganaGroups : katakanaGroups);
 
-        categories.forEach(category => {
-            const card = document.createElement('div');
-            card.className = 'category-card';
+            categories.forEach(category => {
+                const card = document.createElement('div');
+                card.className = 'category-card';
 
-            const categoryBtn = document.createElement('button');
-            categoryBtn.className = 'category-header';
-            categoryBtn.innerHTML = `
+                const categoryBtn = document.createElement('button');
+                categoryBtn.className = 'category-header';
+                categoryBtn.innerHTML = `
             ${category.toUpperCase()}
         `;
-            categoryBtn.onclick = () => toggleCategoryGroups(card);
+                categoryBtn.onclick = () => toggleCategoryGroups(card);
 
-            const groupsContainer = document.createElement('div');
-            groupsContainer.className = 'groups-container';
+                const groupsContainer = document.createElement('div');
+                groupsContainer.className = 'groups-container';
 
-            // Render kelompok
-            Object.keys(getCategoryGroups(category)).forEach(group => {
-                const groupBtn = document.createElement('button');
-                groupBtn.className = 'group-btn';
-                groupBtn.textContent = group;
-                groupBtn.onclick = () => toggleGroupSelection(group, category, groupBtn);
-                groupsContainer.appendChild(groupBtn);
+                // Render kelompok
+                Object.keys(getCategoryGroups(category)).forEach(group => {
+                    const groupBtn = document.createElement('button');
+                    groupBtn.className = 'group-btn';
+                    groupBtn.textContent = group;
+                    groupBtn.onclick = () => toggleGroupSelection(group, category, groupBtn);
+                    groupsContainer.appendChild(groupBtn);
+                });
+
+                card.appendChild(categoryBtn);
+                card.appendChild(groupsContainer);
+                container.appendChild(card);
             });
 
-            card.appendChild(categoryBtn);
-            card.appendChild(groupsContainer);
-            container.appendChild(card);
-        });
-
-        // Tambah tombol mulai
-        container.insertAdjacentHTML('beforeend', `
+            // Tambah tombol mulai
+            container.insertAdjacentHTML('beforeend', `
         <button class="mode-btn" onclick="startGame()">
             Mulai Permainan
         </button>
@@ -1253,8 +1253,11 @@
                 }
 
                 // Tampilkan reading besar, arti kecil di bawah
+                // Simpan reading di data-reading agar mudah dicek di checkAnswer()
                 return `
-            <button class="option-btn" onclick="checkAnswer(${isThisCorrect}, this)">
+            <button class="option-btn"
+                    data-reading="${reading}"
+                    onclick="checkAnswer(${isThisCorrect}, this)">
                 <span style="font-size: 1.2rem;">${reading}</span><br>
                 <small style="font-size: 0.8rem;">${meaning}</small>
             </button>
@@ -1331,8 +1334,8 @@
 
                 // Tunjukkan jawaban benar dengan warna hijau
                 options.forEach(btn => {
-                    // Gunakan trim() untuk menghapus spasi/enter tidak perlu
-                    if (btn.textContent.trim() === currentCorrectAnswer) {
+                    // Bandingkan data-reading vs currentCorrectAnswer
+                    if (btn.dataset.reading === currentCorrectAnswer) {
                         btn.classList.add('correct');
                     }
                 });

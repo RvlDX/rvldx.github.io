@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tebak Huruf Jepang</title>
+    <title>Quiz HiraKataKan</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -21,6 +21,7 @@
             --radius-lg: 16px;
         }
 
+        /* Base Styles */
         * {
             box-sizing: border-box;
             margin: 0;
@@ -38,6 +39,70 @@
             color: var(--text-primary);
         }
 
+        /* Home Container */
+        .home-container {
+            max-width: 800px;
+            width: 100%;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: var(--primary);
+        }
+
+        .header p {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+        }
+
+        /* Features Grid */
+        .features-container {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+            margin-bottom: 2rem;
+            position: relative;
+        }
+
+        .feature-card {
+            width: 200px;
+            height: 200px;
+            background: white;
+            padding: 1.5rem;
+            border-radius: var(--radius-md);
+            box-shadow: var(--shadow-sm);
+            transition: all 0.2s ease;
+            text-align: center;
+        }
+
+        .feature-card:nth-child(3) {
+            grid-column: 1 / -1;
+            width: 200px;
+            height: 200px;
+            margin: 0 auto;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .feature-card h3 {
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+            font-size: 1.2rem;
+        }
+
+        .feature-card p {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            line-height: 1.4;
+        }
+
+        /* Mode Container */
         .mode-container {
             display: grid;
             gap: 1.5rem;
@@ -58,6 +123,10 @@
             transition: all 0.2s ease;
             box-shadow: var(--shadow-sm);
             border: 2px solid var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
         }
 
         .mode-btn:hover {
@@ -342,9 +411,10 @@
 
         .features-container {
             display: grid;
-            grid-template-columns: repeat(2, 1fr);
+            grid-template-columns: repeat(2, 200px);
+            grid-auto-rows: 200px;
+            justify-content: center;
             gap: 1.5rem;
-            margin-bottom: 2rem;
         }
 
         .feature-card {
@@ -353,6 +423,13 @@
             border-radius: var(--radius-md);
             box-shadow: var(--shadow-sm);
             transition: all 0.2s ease;
+            text-align: center;
+        }
+
+        /* Card ketiga (Kanji) menempati dua kolom dan ditengahkan */
+        .feature-card:nth-child(3) {
+            grid-column: 1 / span 2;
+            justify-self: center;
         }
 
         .feature-card:hover {
@@ -369,6 +446,16 @@
             color: var(--text-secondary);
             font-size: 0.9rem;
         }
+
+        .button-container {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            /* Sesuaikan jarak antar tombol sesuai kebutuhan */
+            margin-top: 2rem;
+            /* Jarak antara container tombol dengan elemen di atasnya */
+        }
+
 
         .back-btn {
             padding: 1rem 1.5rem;
@@ -453,6 +540,65 @@
             top: 20px;
             opacity: 1;
         }
+
+        .script-selection {
+            display: flex;
+            flex-wrap: wrap;
+            grid-template-columns: repeat(2, minmax(180px, 1fr));
+            /* 2 kolom dengan lebar seimbang */
+            gap: 0.5rem;
+            /* Jarak horizontal/vertikal antar kartu */
+            justify-items: center;
+            /* Setiap item di-tengah-kan secara horizontal */
+            margin-top: 2rem;
+            /* Jarak ke atas (judul atau elemen lain) */
+        }
+
+        .script-card {
+            width: 200px;
+            /* Lebar tetap agar semua sama */
+            height: 200px;
+            /* Tinggi tetap agar semua sama */
+            border: 2px solid #2563eb;
+            /* Warna border (biru) */
+            border-radius: 12px;
+            display: flex;
+            /* Flex layout untuk memudahkan penataan konten */
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background-color: #fff;
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        /* Efek hover (mengambang sedikit + bayangan) */
+        .script-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Icon dan label di dalam kartu */
+        .script-icon {
+            font-size: 48px;
+            color: #2563eb;
+            margin-bottom: 0.5rem;
+        }
+
+        .script-label {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #2563eb;
+            text-align: center;
+        }
+
+        /* Kartu ketiga (Kanji) berada di baris kedua dan tetap center */
+        .script-card:nth-child(3) {
+            grid-column: 1 / 3;
+            /* Memaksa berada di kolom 1 hingga 2 (spanning 2 kolom) */
+            justify-self: center;
+            /* Agar posisi di tengah secara horizontal */
+        }
     </style>
 </head>
 
@@ -460,7 +606,7 @@
     <!-- Halaman Utama -->
     <div class="home-container" id="homeContainer">
         <div class="header">
-            <h1>Quiz Huruf Jepang</h1>
+            <h1>Quiz HiraKataKan</h1>
             <p>Belajar Hiragana, Katakana, dan Kanji dengan Metode Interaktif</p>
         </div>
 
@@ -479,28 +625,41 @@
             </div>
         </div>
 
-        <button class="mode-btn start-btn" onclick="showScriptSelection()">
-            Mulai Quiz
-        </button>
-        <button class="mode-btn start-btn" onclick="">
-            Mulai Belajar
-        </button>
+        <div class="button-container">
+            <button class="mode-btn start-btn" onclick="showScriptSelection()">
+                Mulai Quiz
+            </button>
+            <button class="mode-btn start-btn" onclick="">
+                Mulai Belajar
+            </button>
+        </div>
     </div>
 
     <!-- Halaman Pemilihan Script -->
     <div class="mode-container" id="modeContainer">
         <h2 class="section-title">Pilih Jenis Huruf</h2>
-        <button class="mode-btn" onclick="selectScript('hiragana')">
-            <span class="script-icon">あ</span> Hiragana
-        </button>
-        <button class="mode-btn" onclick="selectScript('katakana')">
-            <span class="script-icon">ア</span> Katakana
-        </button>
-        <button class="mode-btn" onclick="selectScript('kanji')">
-            <span class="script-icon">漢</span> Kanji
-        </button>
+
+        <!-- Mulai: Container khusus pemilihan script -->
+        <div class="script-selection">
+            <div class="script-card" onclick="selectScript('hiragana')">
+                <div class="script-icon">あ</div>
+                <div class="script-label">Hiragana</div>
+            </div>
+            <div class="script-card" onclick="selectScript('katakana')">
+                <div class="script-icon">ア</div>
+                <div class="script-label">Katakana</div>
+            </div>
+            <div class="script-card" onclick="selectScript('kanji')">
+                <div class="script-icon">漢</div>
+                <div class="script-label">Kanji</div>
+            </div>
+        </div>
+        <!-- Selesai: Container khusus pemilihan script -->
+
         <button class="back-btn" onclick="showHome()">&larr; Kembali</button>
     </div>
+
+
 
     <!-- Halaman Kategori -->
     <div class="category-section" id="categorySection">

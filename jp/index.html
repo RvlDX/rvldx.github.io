@@ -457,6 +457,24 @@
             gap: 0.5rem;
             margin: 1rem 0;
             box-shadow: var(--shadow-sm);
+            width: 60%;
+            justify-content: center;
+            font-weight: 600;
+        }
+
+        .back-btn-b {
+            padding: 1rem 1.5rem;
+            border: 2px solid var(--primary);
+            border-radius: var(--radius-md);
+            background: var(--secondary);
+            color: var(--text-primary);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin: 1rem 0;
+            box-shadow: var(--shadow-sm);
             width: 100%;
             justify-content: center;
             font-weight: 600;
@@ -472,6 +490,23 @@
             margin-bottom: 0rem;
             grid-column: 1/-1;
             color: var(--text-primary);
+        }
+
+        .mode-section {
+            display: none;
+            /* Tambahkan baris ini agar tersembunyi by default */
+            background: white;
+            border-radius: var(--radius-lg);
+            padding: 2rem;
+            box-shadow: var(--shadow-lg);
+            width: 100%;
+            max-width: 800px;
+            margin: 1rem 0;
+            display: flex;
+            /* Jangan lupa, baris ini menimpa "display: none" di atas! */
+            flex-direction: column;
+            gap: 1.5rem;
+            align-items: center;
         }
 
         .category-section {
@@ -547,7 +582,6 @@
             opacity: 1;
         }
 
-
         .mode-container {
             display: flex;
             flex-direction: column;
@@ -598,8 +632,7 @@
             text-align: center;
         }
 
-        .start-btn,
-        .retry-btn {
+        .start-btn {
             width: 100%;
             max-width: 200px;
         }
@@ -640,27 +673,29 @@
     </div>
 
     <!-- Halaman Pemilihan Script -->
-    <div class="mode-container" id="modeContainer">
-        <h2 class="section-title">Pilih Jenis Huruf</h2>
+    <div class="mode-section">
+        <div class="mode-container" id="modeContainer">
+            <h2 class="section-title">Pilih Jenis Huruf</h2>
 
-        <!-- Mulai: Container khusus pemilihan script -->
-        <div class="script-selection">
-            <div class="script-card" onclick="selectScript('hiragana')">
-                <div class="script-icon">あ</div>
-                <div class="script-label">Hiragana</div>
+            <!-- Mulai: Container khusus pemilihan script -->
+            <div class="script-selection">
+                <div class="script-card" onclick="selectScript('hiragana')">
+                    <div class="script-icon">あ</div>
+                    <div class="script-label">Hiragana</div>
+                </div>
+                <div class="script-card" onclick="selectScript('katakana')">
+                    <div class="script-icon">ア</div>
+                    <div class="script-label">Katakana</div>
+                </div>
+                <div class="script-card" onclick="selectScript('kanji')">
+                    <div class="script-icon">漢</div>
+                    <div class="script-label">Kanji</div>
+                </div>
             </div>
-            <div class="script-card" onclick="selectScript('katakana')">
-                <div class="script-icon">ア</div>
-                <div class="script-label">Katakana</div>
-            </div>
-            <div class="script-card" onclick="selectScript('kanji')">
-                <div class="script-icon">漢</div>
-                <div class="script-label">Kanji</div>
-            </div>
+            <!-- Selesai: Container khusus pemilihan script -->
+
+            <button class="back-btn" onclick="showHome()">&larr; Kembali</button>
         </div>
-        <!-- Selesai: Container khusus pemilihan script -->
-
-        <button class="back-btn" onclick="showHome()">&larr; Kembali</button>
     </div>
 
     <!-- Halaman Kategori -->
@@ -668,7 +703,7 @@
         <h2 class="category-title"></h2>
         <p class="category-instruction"></p>
         <div class="category-container" id="categoryContainer"></div>
-        <button class="back-btn" onclick="showScriptSelection()">&larr; Kembali</button>
+        <button class="back-btn-b" onclick="showScriptSelection()">&larr; Kembali</button>
     </div>
 
     <!-- Halaman Permainan -->
@@ -945,75 +980,97 @@
 
         // Fungsi Navigasi
         function showHome() {
+            // Reset state
             currentSet = {};
             questionQueue = [];
+
+            // Tampilkan home
             document.getElementById('homeContainer').style.display = 'block';
-            document.querySelector('.mode-container').style.display = 'none';
+
+            // Sembunyikan .mode-section (bungkus "Pilih Jenis Huruf")
+            document.querySelector('.mode-section').style.display = 'none';
+
+            // Sembunyikan elemen lain
             document.getElementById('categorySection').style.display = 'none';
             document.querySelector('.game-container').style.display = 'none';
             document.getElementById('resultScreen').style.display = 'none';
         }
 
         function showScriptSelection() {
+            // Sembunyikan home
             document.getElementById('homeContainer').style.display = 'none';
-            document.querySelector('.mode-container').style.display = 'grid';
+
+            // Tampilkan .mode-section (bungkus "Pilih Jenis Huruf")
+            // Gunakan display: 'flex' atau 'block' sesuai CSS Anda
+            document.querySelector('.mode-section').style.display = 'flex';
+
+            // Sembunyikan elemen lain
             document.getElementById('categorySection').style.display = 'none';
         }
 
         function selectScript(script) {
+            // Simpan script yang dipilih
             currentScript = script;
-            document.querySelector('.mode-container').style.display = 'none';
 
+            // Sembunyikan .mode-section begitu user pilih script
+            document.querySelector('.mode-section').style.display = 'none';
+
+            // Lanjut ke kategori
             showCategorySelection();
         }
 
-        // Fungsi Kategori
         function showCategorySelection() {
+            // Sembunyikan game & hasil
             document.querySelector('.game-container').style.display = 'none';
             document.getElementById('resultScreen').style.display = 'none';
+
+            // Tampilkan kategori
             document.getElementById('categorySection').style.display = 'block';
 
+            // Ubah judul & instruksi kategori
             const container = document.getElementById('categoryContainer');
             container.innerHTML = `
-        <h2 class="category-title">Pilih Kategori ${currentScript.charAt(0).toUpperCase() + currentScript.slice(1).toLowerCase()}</h2>
+        <h2 class="category-title">
+            Pilih Kategori ${currentScript.charAt(0).toUpperCase() + currentScript.slice(1).toLowerCase()}
+        </h2>
         <p class="category-instruction">Pilih minimal satu untuk mulai belajar</p>
     `;
 
-            // Render kategori
-            const categories = currentScript === 'kanji'
-                ? Object.keys(kanjiGroups) // Ambil semua kategori kanji
-                : Object.keys(currentScript === 'hiragana' ? hiraganaGroups : katakanaGroups);
+        // Render kategori
+        const categories = currentScript === 'kanji'
+            ? Object.keys(kanjiGroups) // Ambil semua kategori kanji
+            : Object.keys(currentScript === 'hiragana' ? hiraganaGroups : katakanaGroups);
 
-            categories.forEach(category => {
-                const card = document.createElement('div');
-                card.className = 'category-card';
+        categories.forEach(category => {
+            const card = document.createElement('div');
+            card.className = 'category-card';
 
-                const categoryBtn = document.createElement('button');
-                categoryBtn.className = 'category-header';
-                categoryBtn.innerHTML = `
+            const categoryBtn = document.createElement('button');
+            categoryBtn.className = 'category-header';
+            categoryBtn.innerHTML = `
             ${category.toUpperCase()}
         `;
-                categoryBtn.onclick = () => toggleCategoryGroups(card);
+            categoryBtn.onclick = () => toggleCategoryGroups(card);
 
-                const groupsContainer = document.createElement('div');
-                groupsContainer.className = 'groups-container';
+            const groupsContainer = document.createElement('div');
+            groupsContainer.className = 'groups-container';
 
-                // Render kelompok
-                Object.keys(getCategoryGroups(category)).forEach(group => {
-                    const groupBtn = document.createElement('button');
-                    groupBtn.className = 'group-btn';
-                    groupBtn.textContent = group;
-                    groupBtn.onclick = () => toggleGroupSelection(group, category, groupBtn);
-                    groupsContainer.appendChild(groupBtn);
-                });
-
-                card.appendChild(categoryBtn);
-                card.appendChild(groupsContainer);
-                container.appendChild(card);
+            // Render kelompok
+            Object.keys(getCategoryGroups(category)).forEach(group => {
+                const groupBtn = document.createElement('button');
+                groupBtn.className = 'group-btn';
+                groupBtn.textContent = group;
+                groupBtn.onclick = () => toggleGroupSelection(group, category, groupBtn);
+                groupsContainer.appendChild(groupBtn);
             });
 
-            // Tambah tombol mulai
-            container.insertAdjacentHTML('beforeend', `
+            card.appendChild(categoryBtn);
+            card.appendChild(groupsContainer);
+            container.appendChild(card);
+        });
+
+        // Tambah tombol mulai
+        container.insertAdjacentHTML('beforeend', `
         <button class="mode-btn" onclick="startGame()">
             Mulai Permainan
         </button>

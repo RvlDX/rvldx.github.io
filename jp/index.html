@@ -489,6 +489,9 @@
         <button class="mode-btn" onclick="selectScript('katakana')">
             <span class="script-icon">ア</span> Katakana
         </button>
+<button class="mode-btn" onclick="selectScript('kanji')">
+    <span class="script-icon">漢</span> Kanji
+</button>
         <button class="back-btn" onclick="showHome()">&larr; Kembali</button>
     </div>
 
@@ -800,6 +803,11 @@ const kanjiGroups = {
         function selectScript(script) {
             currentScript = script;
             document.querySelector('.mode-container').style.display = 'none';
+
+if(script === 'kanji') {
+        document.querySelector('.category-title').textContent = "Pilih Kategori Kanji";
+        document.querySelector('.category-instruction').textContent = "Pilih minimal satu kategori untuk mulai belajar";
+    }
             showCategorySelection();
         }
 
@@ -819,6 +827,10 @@ const kanjiGroups = {
             const categories = currentScript === 'hiragana'
                 ? Object.keys(hiraganaGroups)
                 : Object.keys(katakanaGroups);
+
+const categories = currentScript === 'kanji' 
+        ? Object.keys(kanjiGroups) // Ambil semua kategori kanji
+        : Object.keys(currentScript === 'hiragana' ? hiraganaGroups : katakanaGroups);
 
             categories.forEach(category => {
                 const card = document.createElement('div');
@@ -877,16 +889,32 @@ const kanjiGroups = {
         }
 
         function getCategoryGroups(category) {
-            return currentScript === 'hiragana'
-                ? hiraganaGroups[category]
-                : katakanaGroups[category];
-        }
+    switch(currentScript) {
+        case 'hiragana': return hiraganaGroups[category];
+        case 'katakana': return katakanaGroups[category];
+        case 'kanji': return kanjiGroups; // Ambil langsung dari kanjiGroups
+        default: return {};
+    }
+}
 
         // Fungsi Game
         function startGame() {
-            const selectedGroups = {};
-            let totalSelected = 0;
+    const selectedGroups = {};
+    let totalSelected = 0;
 
+    // Handle struktur berbeda untuk kanji
+    if(currentScript === 'kanji') {
+        currentSet['kanji'].forEach(category => {
+            Object.assign(selectedGroups, kanjiGroups[category]);
+        });
+    } else {
+        // Kode original untuk hiragana/katakana
+        Object.keys(currentSet).forEach(category => {
+            currentSet[category].forEach(group => {
+                const groups = getCategoryGroups(category)[group];
+                Object.assign(selectedGroups, groups);
+            });
+        });
             Object.keys(currentSet).forEach(category => {
                 currentSet[category].forEach(group => {
                     const groups = getCategoryGroups(category)[group];
@@ -944,7 +972,22 @@ const kanjiGroups = {
                 ? findRomaji(currentChar, hiraganaGroups)
                 : findRomaji(currentChar, katakanaGroups);
 
-            document.getElementById('character').textContent = currentChar;
+           currentCorrectAnswer = currentScript === 'kanji' 
+        ? selectedGroups[currentChar].split('(')[0].trim() // Ambil "nichi" dari "nichi (hari)"
+        : findRomaji(currentChar, currentScript === 'hiragana' ? hiraganaGroups : katakanaGroups);
+
+    // Tampilkan arti untuk kanji
+    if(currentScript === 'kanji') {
+        const meaning = selectedGroups[currentChar].split('(')[1].replace(')', '');
+        document.getElementById('character').innerHTML = `
+            ${currentChar}<br>
+            <small style="font-size: 1.5rem; color: var(--text-secondary)">${meaning}</small>
+        `;
+    } else {
+        document.getElementById('character').textContent = currentChar;
+    }
+
+ document.getElementById('character').textContent = currentChar;
 
             // Generate opsi jawaban
             const options = [currentCorrectAnswer];
@@ -1049,6 +1092,22 @@ const kanjiGroups = {
                 width = window.innerWidth;
             }
         }, 100);
+
+function findRomaji(char, scriptData) {
+    if(currentScript === 'kanji') {
+        return Object.entries(kanjiGroups).flatMap(([category, groups]) => 
+            Object.entries(groups).find(([k]) => k === char)?.[1].split(' ')[0]
+        ).filter(Boolean)[0] || '';
+    }
+    
+    // Kode original untuk hiragana/katakana
+    for(const category of Object.values(scriptData)) {
+        for(const group of Object.values(category)) {
+            if(group[char]) return group[char];
+        }
+    }
+    return '';
+}
     </script>
 </body>
 

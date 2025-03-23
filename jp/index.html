@@ -30,6 +30,7 @@
         }
 
         body {
+            margin-top: 4rem;
             min-height: 100vh;
             background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
             display: flex;
@@ -403,8 +404,8 @@
             grid-auto-rows: 200px;
             justify-content: center;
             gap: 1.5rem;
-            margin: 0 auto;   
-            padding: 0 1rem;  
+            margin: 0 auto;
+            padding: 0 1rem;
         }
 
         .feature-card {
@@ -646,7 +647,7 @@
                 <div class="script-icon">ア</div>
                 <div class="script-label">Katakana</div>
             </div>
-            <div class="script-card" onclick="showComingSoonNotification()">
+            <div class="script-card" onclick="selectScript('kanji')">
                 <div class="script-icon">漢</div>
                 <div class="script-label">Kanji</div>
             </div>
@@ -752,190 +753,176 @@
 
         const kanjiGroups = {
             n4: {
-                "Waktu & Kalender": {
-                    "日": "nichi (hari)",
-                    "月": "getsu (bulan)",
-                    "年": "nen (tahun)",
-                    "時": "ji (waktu)",
-                    "分": "fun (menit)",
-                    "秒": "byou (detik)",
-                    "週": "shuu (minggu)",
-                    "曜": "you (hari dalam minggu)",
-                    "朝": "asa (pagi)",
-                    "昼": "hiru (siang)",
-                    "夜": "yoru (malam)",
-                    "季": "ki (musim)"
+                'Waktu & Kalender': {
+                    '日': 'nichi (hari)',
+                    '月': 'getsu (bulan)',
+                    '年': 'nen (tahun)',
+                    '時': 'ji (waktu)',
+                    '分': 'fun (menit)',
+                    '秒': 'byou (detik)',
+                    '週': 'shuu (minggu)',
+                    '曜': 'you (hari dalam minggu)',
+                    '朝': 'asa (pagi)',
+                    '昼': 'hiru (siang)',
+                    '夜': 'yoru (malam)',
+                    '季': 'ki (musim)'
                 },
-    
-                "Angka Dasar 1-10": {
-                    "一": "ichi (1)",
-                    "二": "ni (2)",
-                    "三": "san (3)",
-                    "四": "yon (4)",
-                    "五": "go (5)",
-                    "六": "roku (6)",
-                    "七": "nana (7)",
-                    "八": "hachi (8)",
-                    "九": "kyuu (9)",
-                    "十": "juu (10)"
+                'Angka Dasar 1-10': {
+                    '一': 'ichi (1)',
+                    '二': 'ni (2)',
+                    '三': 'san (3)',
+                    '四': 'yon (4)',
+                    '五': 'go (5)',
+                    '六': 'roku (6)',
+                    '七': 'nana (7)',
+                    '八': 'hachi (8)',
+                    '九': 'kyuu (9)',
+                    '十': 'juu (10)'
                 },
-    
-                "Angka & Jumlah": {
-                    "百": "hyaku (100)",
-                    "千": "sen (1.000)",
-                    "万": "man (10.000)",
-                    "円": "en (Yen)",
-                    "零": "rei (nol)",
-                    "半": "han (setengah)"
+                'Angka & Jumlah': {
+                    '百': 'hyaku (100)',
+                    '千': 'sen (1.000)',
+                    '万': 'man (10.000)',
+                    '円': 'en (Yen)',
+                    '零': 'rei (nol)',
+                    '半': 'han (setengah)'
                 },
-    
-                "Orang & Keluarga": {
-                    "人": "hito (orang)",
-                    "男": "otoko (laki-laki)",
-                    "女": "onna (perempuan)",
-                    "父": "chichi (ayah)",
-                    "母": "haha (ibu)",
-                    "子": "ko (anak)",
-                    "兄": "ani (kakak laki-laki)",
-                    "弟": "otouto (adik laki-laki)",
-                    "姉": "ane (kakak perempuan)",
-                    "妹": "imouto (adik perempuan)",
-                    "夫": "otto (suami)",
-                    "妻": "tsuma (istri)"
+                'Orang & Keluarga': {
+                    '人': 'hito (orang)',
+                    '男': 'otoko (laki-laki)',
+                    '女': 'onna (perempuan)',
+                    '父': 'chichi (ayah)',
+                    '母': 'haha (ibu)',
+                    '子': 'ko (anak)',
+                    '兄': 'ani (kakak laki-laki)',
+                    '弟': 'otouto (adik laki-laki)',
+                    '姉': 'ane (kakak perempuan)',
+                    '妹': 'imouto (adik perempuan)',
+                    '夫': 'otto (suami)',
+                    '妻': 'tsuma (istri)'
                 },
-    
-                "Tempat": {
-                    "山": "yama (gunung)",
-                    "川": "kawa (sungai)",
-                    "田": "ta (sawah)",
-                    "町": "machi (kota kecil)",
-                    "店": "mise (toko)",
-                    "駅": "eki (stasiun)",
-                    "国": "kuni (negara)",
-                    "家": "ie (rumah)",
-                    "村": "mura (desa)",
-                    "市": "shi (kota)"
+                'Tempat': {
+                    '山': 'yama (gunung)',
+                    '川': 'kawa (sungai)',
+                    '田': 'ta (sawah)',
+                    '町': 'machi (kota kecil)',
+                    '店': 'mise (toko)',
+                    '駅': 'eki (stasiun)',
+                    '国': 'kuni (negara)',
+                    '家': 'ie (rumah)',
+                    '村': 'mura (desa)',
+                    '市': 'shi (kota)'
                 },
-    
-                "Kata Kerja Umum": {
-                    "行": "iku (pergi)",
-                    "来": "kuru (datang)",
-                    "食": "taberu (makan)",
-                    "飲": "nomu (minum)",
-                    "見": "miru (melihat)",
-                    "聞": "kiku (mendengar)",
-                    "話": "hanasu (berbicara)",
-                    "読": "yomu (membaca)",
-                    "書": "kaku (menulis)",
-                    "立": "tatsu (berdiri)",
-                    "帰": "kaeru (pulang)",
-                    "買": "kau (membeli)"
+                'Kata Kerja Umum': {
+                    '行': 'iku (pergi)',
+                    '来': 'kuru (datang)',
+                    '食': 'taberu (makan)',
+                    '飲': 'nomu (minum)',
+                    '見': 'miru (melihat)',
+                    '聞': 'kiku (mendengar)',
+                    '話': 'hanasu (berbicara)',
+                    '読': 'yomu (membaca)',
+                    '書': 'kaku (menulis)',
+                    '立': 'tatsu (berdiri)',
+                    '帰': 'kaeru (pulang)',
+                    '買': 'kau (membeli)'
                 },
-    
-                "Sifat & Kondisi": {
-                    "大": "dai (besar)",
-                    "小": "shou (kecil)",
-                    "新": "shin (baru)",
-                    "古": "ko (lama)",
-                    "高": "kou (tinggi/murah)",
-                    "安": "an (murah)",
-                    "早": "sou (cepat/awal)",
-                    "多": "ta (banyak)",
-                    "長": "nagai (panjang)",
-                    "短": "mijikai (pendek)"
+                'Sifat & Kondisi': {
+                    '大': 'dai (besar)',
+                    '小': 'shou (kecil)',
+                    '新': 'shin (baru)',
+                    '古': 'ko (lama)',
+                    '高': 'kou (tinggi/murah)',
+                    '安': 'an (murah)',
+                    '早': 'sou (cepat/awal)',
+                    '多': 'ta (banyak)',
+                    '長': 'nagai (panjang)',
+                    '短': 'mijikai (pendek)'
                 },
-    
-                "Alam & Cuaca": {
-                    "木": "moku (pohon)",
-                    "林": "rin (hutan kecil)",
-                    "森": "mori (hutan)",
-                    "火": "ka (api)",
-                    "水": "sui (air)",
-                    "雨": "ame (hujan)",
-                    "風": "kaze (angin)",
-                    "雪": "yuki (salju)",
-                    "天": "ten (langit)",
-                    "気": "ki (energi)",
-                    "土": "tsuchi (tanah)",
-                    "霧": "kiri (kabut)",
-                    "雷": "kaminari (petir)"
+                'Alam & Cuaca': {
+                    '木': 'moku (pohon)',
+                    '林': 'rin (hutan kecil)',
+                    '森': 'mori (hutan)',
+                    '火': 'ka (api)',
+                    '水': 'sui (air)',
+                    '雨': 'ame (hujan)',
+                    '風': 'kaze (angin)',
+                    '雪': 'yuki (salju)',
+                    '天': 'ten (langit)',
+                    '気': 'ki (energi)',
+                    '土': 'tsuchi (tanah)',
+                    '霧': 'kiri (kabut)',
+                    '雷': 'kaminari (petir)'
                 },
-    
-                "Warna & Keadaan": {
-                    "赤": "aka (merah)",
-                    "青": "ao (biru)",
-                    "白": "shiro (putih)",
-                    "黒": "kuro (hitam)",
-                    "色": "iro (warna)",
-                    "灰": "hai (abu-abu)"
+                'Warna & Keadaan': {
+                    '赤': 'aka (merah)',
+                    '青': 'ao (biru)',
+                    '白': 'shiro (putih)',
+                    '黒': 'kuro (hitam)',
+                    '色': 'iro (warna)',
+                    '灰': 'hai (abu-abu)'
                 },
-    
-                "Transportasi & Arah": {
-                    "車": "kuruma (mobil)",
-                    "電": "den (listrik)",
-                    "道": "michi (jalan)",
-                    "空": "sora (langit)",
-                    "港": "minato (pelabuhan)",
-                    "北": "kita (utara)",
-                    "南": "minami (selatan)",
-                    "東": "higashi (timur)",
-                    "西": "nishi (barat)",
-                    "線": "sen (jalur)"
+                'Transportasi & Arah': {
+                    '車': 'kuruma (mobil)',
+                    '電': 'den (listrik)',
+                    '道': 'michi (jalan)',
+                    '空': 'sora (langit)',
+                    '港': 'minato (pelabuhan)',
+                    '北': 'kita (utara)',
+                    '南': 'minami (selatan)',
+                    '東': 'higashi (timur)',
+                    '西': 'nishi (barat)',
+                    '線': 'sen (jalur)'
                 },
-    
-                "Aktivitas Sehari-hari": {
-                    "寝": "nemui (tidur/ngantuk)",
-                    "起": "okiru (bangun)",
-                    "働": "hataraku (bekerja)",
-                    "休": "yasumu (istirahat)",
-                    "洗": "arau (mencuci)",
-                    "浴": "abiru (mandi)",
-                    "遊": "asobu (bermain)",
-                    "走": "hashiru (berlari)"
+                'Aktivitas Sehari-hari': {
+                    '寝': 'nemui (tidur/ngantuk)',
+                    '起': 'okiru (bangun)',
+                    '働': 'hataraku (bekerja)',
+                    '休': 'yasumu (istirahat)',
+                    '洗': 'arau (mencuci)',
+                    '浴': 'abiru (mandi)',
+                    '遊': 'asobu (bermain)',
+                    '走': 'hashiru (berlari)'
                 },
-    
-                "Makanan & Minuman": {
-                    "米": "kome (beras)",
-                    "肉": "niku (daging)",
-                    "魚": "sakana (ikan)",
-                    "飲": "nomu (minum)",
-                    "茶": "cha (teh)",
-                    "飯": "meshi (nasi/makanan)",
-                    "酒": "sake (alkohol)"
+                'Makanan & Minuman': {
+                    '米': 'kome (beras)',
+                    '肉': 'niku (daging)',
+                    '魚': 'sakana (ikan)',
+                    '飲': 'nomu (minum)',
+                    '茶': 'cha (teh)',
+                    '飯': 'meshi (nasi/makanan)',
+                    '酒': 'sake (alkohol)'
                 },
-    
-                "Pekerjaan & Pendidikan": {
-                    "仕": "shi (bekerja)",
-                    "学": "gaku (belajar)",
-                    "校": "kou (sekolah)",
-                    "教": "kyou (mengajar)",
-                    "医": "i (dokter)",
-                    "院": "in (institusi/rumah sakit)",
-                    "業": "gyou (bisnis/pekerjaan)",
-                    "試": "tamesu (ujian/mencoba)",
-                    "社": "sha (perusahaan)",
-                    "術": "jutsu (teknik/seni)"
+                'Pekerjaan & Pendidikan': {
+                    '仕': 'shi (bekerja)',
+                    '学': 'gaku (belajar)',
+                    '校': 'kou (sekolah)',
+                    '教': 'kyou (mengajar)',
+                    '医': 'i (dokter)',
+                    '院': 'in (institusi/rumah sakit)',
+                    '業': 'gyou (bisnis/pekerjaan)',
+                    '試': 'tamesu (ujian/mencoba)',
+                    '社': 'sha (perusahaan)',
+                    '術': 'jutsu (teknik/seni)'
                 },
-    
-                "Keadaan & Emosi": {
-                    "楽": "tanoshii (senang)",
-                    "悲": "kanashii (sedih)",
-                    "喜": "yorokobu (gembira)",
-                    "怒": "okoru (marah)",
-                    "哀": "ai (duka)",
-                    "驚": "odoroku (terkejut)"
+                'Keadaan & Emosi': {
+                    '楽': 'tanoshii (senang)',
+                    '悲': 'kanashii (sedih)',
+                    '喜': 'yorokobu (gembira)',
+                    '怒': 'okoru (marah)',
+                    '哀': 'ai (duka)',
+                    '驚': 'odoroku (terkejut)'
                 },
-    
-                "Kata Kerja Penting Lainnya": {
-                    "会": "au (bertemu)",
-                    "思": "omou (berpikir)",
-                    "使": "tsukau (menggunakan)",
-                    "待": "matsu (menunggu)",
-                    "送": "okuru (mengirim)",
-                    "出": "deru (keluar)",
-                    "入": "hairu (masuk)",
-                    "開": "aku (membuka)",
-                    "選": "eru (memilih)"
+                'Kata Kerja Penting Lainnya': {
+                    '会': 'au (bertemu)',
+                    '思': 'omou (berpikir)',
+                    '使': 'tsukau (menggunakan)',
+                    '待': 'matsu (menunggu)',
+                    '送': 'okuru (mengirim)',
+                    '出': 'deru (keluar)',
+                    '入': 'hairu (masuk)',
+                    '開': 'aku (membuka)',
+                    '選': 'eru (memilih)'
                 }
             }
         };
@@ -948,6 +935,7 @@
         let currentScript = '';
         let totalQuestions = 0;
         let currentCorrectAnswer = '';
+        let selectedGroups = {};
 
         // Fungsi Navigasi
         function showHome() {
@@ -1050,52 +1038,52 @@
             switch (currentScript) {
                 case 'hiragana': return hiraganaGroups[category];
                 case 'katakana': return katakanaGroups[category];
-                case 'kanji': return kanjiGroups; // Ambil langsung dari kanjiGroups
+                case 'kanji': return kanjiGroups[category]; // Langsung return kategori Kanji
                 default: return {};
             }
         }
 
         // Fungsi Game
         function startGame() {
-            const selectedGroups = {};
-            let totalSelected = 0;
+            selectedGroups = {};
 
-            // Handle struktur berbeda untuk kanji
+            // Handle Kanji
             if (currentScript === 'kanji') {
-                currentSet['kanji'].forEach(category => {
-                    Object.assign(selectedGroups, kanjiGroups[category]);
-                });
-            } else {
-                // Kode original untuk hiragana/katakana
+                // Iterasi setiap kategori (contoh: 'n4') yang dipilih user
                 Object.keys(currentSet).forEach(category => {
+                    // Iterasi setiap kelompok dalam kategori
                     currentSet[category].forEach(group => {
-                        const groups = getCategoryGroups(category)[group];
-                        Object.assign(selectedGroups, groups);
+                        // Ambil data kelompok dari kanjiGroups
+                        const groupData = kanjiGroups[category][group];
+                        Object.assign(selectedGroups, groupData);
                     });
                 });
-                Object.keys(currentSet).forEach(category => {
-                    currentSet[category].forEach(group => {
-                        const groups = getCategoryGroups(category)[group];
-                        Object.assign(selectedGroups, groups);
-                        totalSelected++;
-                    });
-                });
-
-                // Periksa apakah ada grup yang dipilih
-                const selectedKeys = Object.keys(selectedGroups);
-                if (selectedKeys.length === 0) {
-                    showErrorNotification();
-                    return;
-                }
-
-                totalQuestions = selectedKeys.length;
-                questionQueue = shuffleArray([...selectedKeys]);
-
-                document.getElementById('categorySection').style.display = 'none';
-                document.querySelector('.game-container').style.display = 'block';
-                resetCounters();
-                generateQuestion();
             }
+            // Handle Hiragana/Katakana
+            else {
+                Object.keys(currentSet).forEach(category => {
+                    currentSet[category].forEach(group => {
+                        const groups = getCategoryGroups(category)[group];
+                        Object.assign(selectedGroups, groups);
+                    });
+                });
+            }
+
+            // Validasi pilihan user
+            const selectedKeys = Object.keys(selectedGroups);
+            if (selectedKeys.length === 0) {
+                showErrorNotification();
+                return;
+            }
+
+            totalQuestions = selectedKeys.length;
+            questionQueue = shuffleArray([...selectedKeys]);
+
+            // Sembunyikan UI kategori dan tampilkan permainan
+            document.getElementById('categorySection').style.display = 'none';
+            document.querySelector('.game-container').style.display = 'block';
+            resetCounters();
+            generateQuestion();
         }
 
         function shuffleArray(array) {
@@ -1114,51 +1102,115 @@
         }
 
         function generateQuestion() {
+            // Jika soal habis, akhiri game
             if (questionQueue.length === 0) return endGame();
 
             const currentChar = questionQueue.pop();
-            currentCorrectAnswer = currentScript === 'hiragana'
-                ? findRomaji(currentChar, hiraganaGroups)
-                : findRomaji(currentChar, katakanaGroups);
 
-            currentCorrectAnswer = currentScript === 'kanji'
-                ? selectedGroups[currentChar].split('(')[0].trim() // Ambil "nichi" dari "nichi (hari)"
-                : findRomaji(currentChar, currentScript === 'hiragana' ? hiraganaGroups : katakanaGroups);
-
-            // Tampilkan arti untuk kanji
+            // --- BAGIAN KANJI ---
             if (currentScript === 'kanji') {
-                const meaning = selectedGroups[currentChar].split('(')[1].replace(')', '');
-                document.getElementById('character').innerHTML = `
-            ${currentChar}<br>
-            <small style="font-size: 1.5rem; color: var(--text-secondary)">${meaning}</small>
-        `;
-            } else {
+                const kanjiData = selectedGroups[currentChar];
+                if (!kanjiData) {
+                    console.error("Data Kanji tidak ditemukan untuk:", currentChar);
+                    return generateQuestion(); // Skip jika tidak valid
+                }
+
+                // Contoh kanjiData = "hiru (siang)"
+                let [rawReading, rawMeaning] = kanjiData.split('(');
+                const reading = rawReading.trim();
+                const meaning = (rawMeaning || '').replace(')', '').trim();
+
+                // Tampilkan hanya Kanji di area soal
+                document.getElementById('character').textContent = currentChar;
+
+                // Jawaban benar = reading
+                currentCorrectAnswer = reading;
+            }
+            // --- BAGIAN HIRAGANA / KATAKANA ---
+            else {
+                currentCorrectAnswer = findRomaji(
+                    currentChar,
+                    currentScript === 'hiragana' ? hiraganaGroups : katakanaGroups
+                );
+                // Tampilkan karakter Hira/Kata
                 document.getElementById('character').textContent = currentChar;
             }
 
-            document.getElementById('character').textContent = currentChar;
+            // Siapkan array opsi jawaban
+            const options = [];
 
-            // Generate opsi jawaban
-            const options = [currentCorrectAnswer];
-            const allAnswers = Object.values(getAllSelectedAnswers());
-
-            while (options.length < 4) {
-                const randomAnswer = allAnswers[Math.floor(Math.random() * allAnswers.length)];
-                if (!options.includes(randomAnswer)) options.push(randomAnswer);
+            // Masukkan jawaban benar terlebih dahulu
+            if (currentScript === 'kanji') {
+                // selectedGroups[currentChar] = "hiru (siang)"
+                options.push(selectedGroups[currentChar]);
+            } else {
+                // Hiragana / Katakana
+                options.push(currentCorrectAnswer);
             }
 
+            // Ambil semua jawaban (reading (arti) atau romaji)
+            const allAnswers = Object.values(getAllSelectedAnswers());
+
+            // Tambah jawaban acak sampai 4 opsi
+            while (options.length < 4 && allAnswers.length > 0) {
+                const randomIndex = Math.floor(Math.random() * allAnswers.length);
+                const randomAnswer = allAnswers.splice(randomIndex, 1)[0];
+
+                // Pastikan tidak duplikat
+                if (!options.includes(randomAnswer)) {
+                    options.push(randomAnswer);
+                }
+            }
+
+            // Jika masih kurang, isi dummy
+            while (options.length < 4) {
+                options.push("dummy" + options.length);
+            }
+
+            // Acak urutan opsi
             options.sort(() => Math.random() - 0.5);
 
-            // Render opsi
+            // Render opsi ke HTML
             const optionsContainer = document.getElementById('options');
-            optionsContainer.innerHTML = options.map(option => `
-        <button class="option-btn" onclick="checkAnswer(${option === currentCorrectAnswer}, this)">
-            ${option}
-        </button>
-    `).join('');
+            optionsContainer.innerHTML = options.map(option => {
+                let [r, mRaw] = option.split('(');
+                const reading = (r || '').trim();
+                const meaning = (mRaw || '').replace(')', '').trim();
+
+                // Tentukan apakah ini benar
+                let isThisCorrect = false;
+                if (currentScript === 'kanji') {
+                    // Untuk Kanji, cek apakah reading sama dengan currentCorrectAnswer
+                    isThisCorrect = (reading === currentCorrectAnswer);
+                } else {
+                    // Untuk Hira/Kata, cek string mentah
+                    isThisCorrect = (option === currentCorrectAnswer);
+                }
+
+                // Tampilkan reading besar, arti kecil di bawah
+                return `
+            <button class="option-btn" onclick="checkAnswer(${isThisCorrect}, this)">
+                <span style="font-size: 1.2rem;">${reading}</span><br>
+                <small style="font-size: 0.8rem;">${meaning}</small>
+            </button>
+        `;
+            }).join('');
         }
 
         function findRomaji(char, scriptData) {
+            if (currentScript === 'kanji') {
+                // Cari di semua kategori kanji
+                for (const category of Object.values(kanjiGroups)) {
+                    for (const group of Object.values(category)) {
+                        if (group[char]) {
+                            return group[char].split('(')[0].trim();
+                        }
+                    }
+                }
+                return '';
+            }
+
+            // Kode untuk hiragana/katakana
             for (const category of Object.values(scriptData)) {
                 for (const group of Object.values(category)) {
                     if (group[char]) return group[char];
@@ -1169,11 +1221,30 @@
 
         function getAllSelectedAnswers() {
             const allAnswers = {};
-            Object.keys(currentSet).forEach(category => {
-                currentSet[category].forEach(group => {
-                    Object.assign(allAnswers, getCategoryGroups(category)[group]);
+
+            if (currentScript === 'kanji') {
+                // Loop melalui semua kategori Kanji yang dipilih
+                Object.keys(currentSet).forEach(category => {
+                    // Loop melalui semua group yang dipilih
+                    currentSet[category].forEach(groupName => {
+                        const group = kanjiGroups[category][groupName];
+                        if (group) {
+                            // Setiap entry di group berbentuk { Kanji: "reading (arti)" }
+                            Object.entries(group).forEach(([kanji, answer]) => {
+                                allAnswers[kanji] = answer;
+                            });
+                        }
+                    });
                 });
-            });
+            } else {
+                // Hiragana / Katakana
+                Object.keys(currentSet).forEach(category => {
+                    currentSet[category].forEach(group => {
+                        Object.assign(allAnswers, getCategoryGroups(category)[group]);
+                    });
+                });
+            }
+
             return allAnswers;
         }
 
@@ -1192,7 +1263,6 @@
 
                 // Tunjukkan jawaban benar dengan warna hijau
                 options.forEach(btn => {
-                    // Gunakan trim() untuk menghapus spasi/enter tidak perlu
                     if (btn.textContent.trim() === currentCorrectAnswer) {
                         btn.classList.add('correct');
                     }
@@ -1222,34 +1292,20 @@
         // Inisialisasi
         showHome();
 
-        // Blokir klik kanan
-        /* document.oncontextmenu = () => false;
-
-        // Blokir F12, Ctrl+Shift+I, Ctrl+Shift+J
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'F12' || (e.ctrlKey && e.shiftKey && ['I', 'J'].includes(e.key))) {
-                e.preventDefault();
-                window.location.href = 'about:blank';
-            }
-        });
-
-        // Deteksi resize window (banyak devtools membuka panel samping)
-        let width = window.innerWidth;
-        setInterval(() => {
-            if (window.innerWidth !== width) {
-                document.body.innerHTML = '<h1>Stop Inspecting!</h1>';
-                width = window.innerWidth;
-            }
-        }, 100); */
-
         function findRomaji(char, scriptData) {
             if (currentScript === 'kanji') {
-                return Object.entries(kanjiGroups).flatMap(([category, groups]) =>
-                    Object.entries(groups).find(([k]) => k === char)?.[1].split(' ')[0]
-                ).filter(Boolean)[0] || '';
+                // Cari di semua kategori kanji
+                for (const category of Object.values(kanjiGroups)) {
+                    for (const group of Object.values(category)) {
+                        if (group[char]) {
+                            return group[char].split('(')[0].trim();
+                        }
+                    }
+                }
+                return '';
             }
 
-            // Kode original untuk hiragana/katakana
+            // Kode untuk hiragana/katakana
             for (const category of Object.values(scriptData)) {
                 for (const group of Object.values(category)) {
                     if (group[char]) return group[char];
@@ -1257,7 +1313,6 @@
             }
             return '';
         }
-
         // Tambahkan fungsi notifikasi
         function showErrorNotification() {
             const errorNotif = document.getElementById('errorNotification');

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -144,12 +145,64 @@
             justify-content: center;
             gap: 0.5rem;
         }
+
+        /* Tambahan Responsivitas */
+        @media (max-width: 768px) {
+            .container {
+                width: 95%;
+                padding: 1rem;
+            }
+
+            .upload-section {
+                padding: 1rem;
+            }
+
+            h1 {
+                font-size: 1.5rem;
+            }
+
+            .anime-title {
+                font-size: 1.25rem;
+            }
+
+            #imagePreview {
+                max-width: 200px;
+            }
+        }
+
+        /* Switch Toggle Style */
+        .api-switch {
+            display: flex;
+            gap: 0.5rem;
+            margin: 1rem 0;
+            justify-content: center;
+        }
+
+        .api-option {
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            background: #334155;
+            border: 1px solid #475569;
+            transition: all 0.3s ease;
+        }
+
+        .api-option.active {
+            background: var(--primary);
+            border-color: var(--primary);
+        }
     </style>
 </head>
 
 <body>
     <div class="container">
         <h1>🔍 Anime Search by Image</h1>
+
+        <!-- Tambah Switch API -->
+        <div class="api-switch">
+            <div class="api-option active" id="geminiSwitch">Gemini</div>
+            <div class="api-option" id="traceMoeSwitch">Trace.moe</div>
+        </div>
 
         <div class="upload-section" id="dropZone">
             <input type="file" id="imageInput" accept="image/*" hidden>
@@ -325,6 +378,104 @@
             });
         }
 
+        let activeAPI = 'gemini'; // 'gemini' atau 'tracemoe'
+
+        // Event listeners untuk switch API
+        document.getElementById('geminiSwitch').addEventListener('click', () => {
+            setActiveAPI('gemini');
+        });
+
+        document.getElementById('traceMoeSwitch').addEventListener('click', () => {
+            setActiveAPI('tracemoe');
+        });
+
+        function setActiveAPI(api) {
+            activeAPI = api;
+            document.querySelectorAll('.api-option').forEach(opt => {
+                opt.classList.remove('active');
+            });
+            if (api === 'gemini') {
+                document.getElementById('geminiSwitch').classList.add('active');
+            } else {
+                document.getElementById('traceMoeSwitch').classList.add('active');
+            }
+        }
+
+        async function analyzeImage() {
+            const file = imageInput.files[0];
+            if (!file) {
+                alert('Pilih gambar terlebih dahulu');
+                return;
+            }
+
+            toggleLoading(true);
+
+            try {
+                if (activeAPI === 'gemini') {
+                    // Kode Gemini sebelumnya...
+                } else {
+                    // Gunakan Trace.moe API
+                    const formData = new FormData();
+                    formData.append("image", file);
+
+                    const response = await fetch("https://api.trace.moe/search", {
+                        method: "POST",
+                        body: formData
+                    });
+
+                    const data = await response.json();
+                    displayTraceMoeResult(data);
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Terjadi kesalahan saat memproses gambar');
+            } finally {
+                toggleLoading(false);
+            }
+        }
+
+        function displayTraceMoeResult(data) {
+            resultDiv.style.display = 'block';
+            const resultContainer = document.getElementById('resultText');
+            resultContainer.innerHTML = '';
+
+            if (data.error) {
+                resultContainer.textContent = data.error;
+                return;
+            }
+
+            const bestMatch = data.result[0];
+
+            const titleEl = document.createElement('h2');
+            titleEl.className = 'anime-title';
+            titleEl.innerHTML = `
+                    ${bestMatch.filename} 
+                    <span style="color: #94a3b8; font-size: 1.1rem">(Similarity: ${(bestMatch.similarity * 100).toFixed(1)}%)</span>
+                `;
+            resultContainer.appendChild(titleEl);
+
+            const infoEl = document.createElement('div');
+            infoEl.className = 'tv-info';
+            infoEl.innerHTML = `
+                    Episode: ${bestMatch.episode}<br>
+                    From: ${formatTime(bestMatch.from)} - To: ${formatTime(bestMatch.to)}
+                `;
+            resultContainer.appendChild(infoEl);
+
+            const videoLink = document.createElement('a');
+            videoLink.href = bestMatch.video;
+            videoLink.target = '_blank';
+            videoLink.textContent = 'Lihat Video Clip';
+            videoLink.style.color = (--primary);
+            resultContainer.appendChild(videoLink);
+        }
+
+        function formatTime(seconds) {
+            const date = new Date(0);
+            date.setSeconds(seconds);
+            return date.toISOString().substr(11, 8);
+        }
+
         // === Anti Inspect Script ===
         // Blokir klik kanan
         document.addEventListener('contextmenu', function (e) {
@@ -342,4 +493,5 @@
         });
     </script>
 </body>
+
 </html>

@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portofolio RevolverDX</title>
+    <link rel="icon" href="img/iconweb.ico">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --network-blue: #00a8ff;
+            --node-color: #2ecc71;
+            --packet-color: #e74c3c;
+            --bg-color: #0a1929;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+
+        body {
+            background: var(--bg-color);
+            color: white;
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+            padding-bottom: 70px;
+        }
+
+        .navbar {
+            background: rgba(0, 0, 0, 0.4) !important;
+            backdrop-filter: blur(10px);
+            border-bottom: 2px solid var(--network-blue);
+            z-index: 1000;
+        }
+
+        .navbar-toggler {
+            border-color: rgba(255,255,255,0.5);
+            transition: transform 0.3s ease;
+            border: none !important;
+        }
+
+        .navbar-toggler[aria-expanded="true"] {
+            transform: rotate(90deg);
+        }
+
+        .navbar-toggler-icon {
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba(255, 255, 255, 0.8)' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+            transition: transform 0.3s ease;
+        }
+
+        .navbar-toggler[aria-expanded="true"] .navbar-toggler-icon {
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba(255, 255, 255, 0.8)' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M6 6L24 24M24 6L6 24'/%3e%3c/svg%3e");
+            transform: rotate(180deg);
+        }
+
+        .navbar-toggler:focus,.navbar-toggler:focus-visible {
+            box-shadow: none !important;
+            outline: none !important;
+            border: none !important;
+        }
+
+        .navbar-brand, .nav-link{
+            color: white !important;
+            padding-left: 15px;
+            text-shadow: 0 0 15px rgba(0, 168, 255, 0.4);
+            font-weight: 700 !important;
+        }
+
+        .nav-link:hover {
+            color: var(--network-blue) !important;
+            padding-left: 20px;
+            text-shadow: 0 0 25px rgba(0, 168, 255, 0.3);
+        }
+
+        section {
+            padding: 4rem 0;
+            position: relative;
+            z-index: 2;
+        }
+
+        .project-card, .edu-card, .skill-card, .exp-card {
+            background: rgba(0, 0, 0, 0.3) !important;
+            border: 2px solid var(--network-blue);
+            border-radius: 5px;
+            backdrop-filter: blur(5px);
+            transition: all 0.3s ease;
+        }
+        
+        .text-muted {
+            color: #fff !important;
+            opacity: 0.8;
+        }
+
+        .project-card:hover, .edu-card:hover, .skill-card:hover, .exp-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 0 25px rgba(0, 168, 255, 0.3);
+        }
+
+        .btn-primary {
+            background: var(--network-blue) !important;
+            border: none;
+            transition: transform 0.2s ease-in-out;
+        }
+
+       .btn-primary:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 0 25px rgba(0, 168, 255, 0.3);
+        }
+
+       .profile-pic {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            border: 3px solid var(--network-blue);
+            box-shadow: 0 0 30px rgba(0, 168, 255, 0.3);
+        }
+
+        @keyframes node-pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(1); }
+        }
+
+        @keyframes move-packets {
+            0% { transform: translateY(0); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { transform: translateY(-100vh); opacity: 0; }
+       }
+
+        /* Animasi status */
+        .profile-pic-wrapper {
+            position: relative;
+            display: inline-block;
+        }
+
+        .status-indicator {
+            position: absolute;
+            bottom: 34px;
+            right: 34px;
+            width: 15px;
+            height: 15px;
+            background: #2ecc71;
+            border-radius: 50%;
+            border: 2px solid var(--bg-color);
+            box-shadow: 0 0 8px rgba(46, 204, 113, 0.5);
+            animation: status-pulse 1.5s infinite;
+        }
+
+        @keyframes breath {
+            0% { transform: scale(0.9); opacity: 0.7; }
+            50% { transform: scale(1.2); opacity: 1; }
+           100% { transform: scale(0.9); opacity: 0.7; }
+        }
+
+       
+       .traffic-stats {
+            padding: 0 1rem;
+            text-align: center;
+            margin: 0;
+            color: #7f8c8d;
+            font-size: 0.9rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        @keyframes breath {
+            0% { transform: scale(0.9); opacity: 0.7; }
+            50% { transform: scale(1.2); opacity: 1; }
+            100% { transform: scale(0.9); opacity: 0.7; }
+        }
+/*
+        .btn-circle i {
+            transition: transform 0.2s ease-in-out;
+        }
+
+       .btn-circle:hover i {
+            transform: translateY(-5px);
+       }
+*/
+        footer {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(0,0,0,0.5);
+            border-top: 2px solid var(--network-blue);
+            height: 50px;
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+        }
+
+        .about-content {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 10px;
+            border: 2px solid var(--network-blue);
+            backdrop-filter: blur(5px);
+        }
+
+        .interest-list li {
+            padding: 6px 10px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 5px;
+            transition: all 0.3s ease;
+        }
+
+        .interest-list li:hover {
+            transform: translateX(10px);
+            background: rgba(0, 168, 255, 0.1);
+        }
+
+        .lead {
+            line-height: 1.8;
+            margin-bottom: 1.5rem;
+        }
+
+        .text-justify {
+            text-align: justify;
+            hyphens: auto;
+           -webkit-hyphens: auto;
+           -ms-hyphens: auto;
+        }
+    }
+    </style>
+</head>
+
+<body>
+    <!-- Network Elements -->
+    <div class="network-node" style="top: 15%; left: 20%"></div>
+    <div class="network-node" style="top: 40%; right: 25%"></div>
+    <div class="data-packet" style="left: 21%; animation-delay: 0.5s"></div>
+    <div class="data-packet" style="left: 36%; animation-delay: 1.2s"></div>
+
+    <nav class="navbar fixed-top navbar-expand-lg navbar-dark">
+        <div class="container">
+            <a class="navbar-brand fs-4 font-bold" href="https://rvldx.github.io/">RDX</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto gap-2">
+                    <li class="nav-item"><a class="nav-link active" href="#home">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#pendidikan">Pendidikan</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#skill">Skill</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#pengalaman">Pengalaman</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#about">About</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <section id="home" class="container mt-5">
+    <div class="row align-items-center">
+        <div class="col-lg-8 mx-auto text-center">
+            <h1 class="display-4 mb-3">Selamat Datang di Portofolio Saya</h1>
+           <p class="lead mb-3">
+    Seorang Network Administrator dan IT Enthusiast dengan spesialisasi:<br>
+           <span class="text-primary">► Administrasi Jaringan</span> |
+           <span class="text-primary">► Infrastruktur Sistem</span> |
+           <span class="text-primary">► Hardware & Software</span>
+           </p>
+        </div>
+    </div>
+        
+        <div class="projects mt-5">
+            <h2 class="mb-4">Proyek Terbaru</h2>
+            <div class="row row-cols-1 row-cols-md-2 g-4">
+                <div class="col">
+                    <div class="project-card h-100 p-4">
+                        <h3 class="mb-3">Direct Link Website</h3>
+                        <p class="text-muted">Website direct link sosmed</p>
+                        <div class="tech-stack mb-3">
+                            <span class="badge bg-primary">HTML</span>
+                            <span class="badge bg-primary">CSS</span>
+                        </div>
+                        <a href="https://github.com/RvlDX/Ardi" class="btn btn-primary btn-sm" target="_blank">
+                            <i class="fab fa-github me-2"></i>Lihat Kode                       
+                        </a>
+                        <a href="https://truffleard.vercel.app/" class="btn btn-primary btn-sm" target="_blank">
+                            <i class="fa-solid fa-globe me-2"></i>Demo
+                       </a>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="project-card h-100 p-4">
+                        <h3 class="mb-3">Network Monitor</h3>
+                        <p class="text-muted">Web Quiz Huruf Jepang</p>
+                        <div class="tech-stack mb-3">
+                            <span class="badge bg-primary">HTML</span>
+                            <span class="badge bg-primary">CSS</span>
+                            <span class="badge bg-primary">JS</span>
+                        </div>
+                        <a href="https://rvldx.github.io/jp/" class="btn btn-primary btn-sm" target="_blank">
+                            <i class="fab fa-github me-2"></i>Lihat Kode
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="pendidikan" class="container mt-5">
+        <h2 class="mb-4">Pendidikan</h2>
+        <div class="row g-4">
+            <div class="col-12">
+                <div class="edu-card p-4">
+                    <h3>📚 SD</h3>
+                    <p class="mb-0">SDIT Salsabila 5 Purworejo</p>
+                </div>
+            </div>
+            <div class="col-12">
+                <div class="edu-card p-4">
+                    <h3>🎓 SMP</h3>
+                    <p class="mb-0">MTs Negeri 1 Purworejo</p>
+                </div>
+            </div>
+            <div class="col-12">
+                <div class="edu-card p-4">
+                    <h3>🏫 SMA</h3>
+                    <p class="mb-0">SMK TI Kartika Cendekia Purworejo - TKJ</p>
+                </div>
+            </div>
+            <div class="col-12">
+                <div class="edu-card p-4">
+                    <h3>🎓 Universitas</h3>
+                    <p class="mb-0">Universitas Bina Sarana Informatika - Teknologi Informasi</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="skill" class="container mt-5">
+        <h2 class="mb-4">Skill</h2>
+        <div class="row g-4">
+            <div class="col-md-6 col-lg-3">
+                <div class="skill-card p-4">
+                    <h3 class="h5">💻 Programming</h3>
+                    <ul class="list-unstyled">
+                        <li>HTML/CSS</li>
+                        <li>JavaScript</li>
+                        <li>Python</li>
+                        <li>Java</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-3">
+                <div class="skill-card p-4">
+                    <h3 class="h5">🌐 Networking</h3>
+                    <ul class="list-unstyled">
+                        <li>Mikrotik</li>
+                        <li>TCP/IP</li>
+                        <li>VLAN</li>
+                        <li>Subnetting</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-3">
+                <div class="skill-card p-4">
+                    <h3 class="h5">🖥️ Sistem</h3>
+                    <ul class="list-unstyled">
+                        <li>Windows</li>
+                        <li>Linux</li>
+                        <li>Hardware</li>
+                        <li>Troubleshooting</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-3">
+                <div class="skill-card p-4">
+                    <h3 class="h5">🌍 Lainnya</h3>
+                    <ul class="list-unstyled">
+                        <li>English Intermediate</li>
+                        <li>Git Version Control</li>
+                        <li>UI/UX Dasar</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="pengalaman" class="container mt-5">
+        <h2 class="mb-4">Pengalaman</h2>
+        <div class="row g-4">
+            <div class="col-md-6">
+                <div class="exp-card p-4">
+                    <h3 class="h5">🏆 Lomba</h3>
+                    <ul class="list-unstyled">
+                        <li>Juara 3 LKS IT Network System Administration Kabupaten Purworejo</li>
+                   </ul>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="exp-card p-4">
+                    <h3 class="h5">👥 Organisasi</h3>
+                    <ul class="list-unstyled">
+                        <li>OSIS MTs Negeri 1 Purworejo</li>
+                        <li>Dewan Ambalan SMK TI Kartika Cendekia Purworejo</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="about" class="container mt-5 mb-5">
+    <div class="text-center">
+        <div class="profile-pic-wrapper position-relative d-inline-block">
+            <img src="1676983876035.jpg" alt="Profil" class="profile-pic mb-4">
+            <div class="status-indicator"></div>
+        </div>
+    </div>
+    
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <h2 class="mb-4 text-center">Tentang Saya</h2>
+            <div class="about-content p-4 project-card">
+                <p class="text-justify mb-3">
+                    Sebagai mahasiswa Teknologi Informasi di <strong>Universitas Bina Sarana Informatika</strong>, 
+                    saya memiliki ketertarikan yang besar dalam dunia teknologi digital. Fokus utama saya meliputi:
+                </p>
+                
+                <div class="interest-list row justify-content-center">
+                    <div class="col-md-6">
+                        <ul class="list-unstyled">
+                            <li class="mb-3">
+                                <i class="fas fa-network-wired me-2 text-primary"></i>
+                                Jaringan Komputer & Sistem Administrasi
+                            </li>
+                            <li class="mb-3">
+                                <i class="fas fa-microchip me-2 text-primary"></i>
+                                Hardware & Troubleshooting
+                            </li>
+                            <li class="mb-3">
+                                <i class="fas fa-code me-2 text-primary"></i>
+                                Perangkat Lunak
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="col-md-6">
+                        <ul class="list-unstyled">
+                            <li class="mb-3">
+                                <i class="fas fa-chart-line me-2 text-primary"></i>
+                                Perkembangan Teknologi Terkini
+                            </li>
+                            <li class="mb-3">
+                                <i class="fas fa-server me-2 text-primary"></i>
+                                Sistem Operasi & Infrastruktur IT
+                            </li>
+                            <li class="mb-3">
+                                <i class="fas fa-shield-alt me-2 text-primary"></i>
+                                Keamanan Jaringan
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <p class="text-justify mb-0">
+                    Senang berkolaborasi dalam proyek kreatif dan terus mengembangkan kemampuan di bidang sistem jaringan, 
+                    cloud computing, dan pengembangan solusi teknologi inovatif.
+                </p>
+            </div>
+        </div>
+    </div>
+
+            <div class="social-links d-flex justify-content-center gap-3 mt-4">
+                <a href="https://github.com/rvldx" class="btn btn-primary btn-circle">
+                    <i class="fab fa-github"></i>
+                </a>
+                <a href="https://linkedin.com/in/rvldx" class="btn btn-primary btn-circle">
+                    <i class="fab fa-linkedin"></i>
+                </a>
+                <a href="https://facebook.com/muhawaluddin.azhariihsan" class="btn btn-primary btn-circle">
+                    <i class="fab fa-facebook"></i>
+                </a>
+                <a href="https://instagram.com/muhawlddn_024" class="btn btn-primary btn-circle">
+                    <i class="fab fa-instagram"></i>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const sections = document.querySelectorAll('section');
+            const navLinks = document.querySelectorAll('.nav-link');
+            const navbarCollapse = document.querySelector('.navbar-collapse');
+            
+            sections.forEach(section => {
+                if(section.id !== 'home') section.style.display = 'none';
+            });
+
+            navLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const targetId = this.getAttribute('href');
+                    
+                    sections.forEach(section => {
+                        section.style.display = 'none';
+                    });
+                    
+                    document.querySelector(targetId).style.display = 'block';
+                    
+                    navLinks.forEach(link => link.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    if(window.innerWidth < 768) {
+                        const bsCollapse = bootstrap.Collapse.getInstance(navbarCollapse);
+                        
+                        const scrollToSection = () => {
+                            window.scrollTo({
+                                top: document.querySelector(targetId).offsetTop,
+                                behavior: 'smooth'
+                            });
+                        };
+
+                        if(bsCollapse && navbarCollapse.classList.contains('show')) {
+                            navbarCollapse.addEventListener('hidden.bs.collapse', scrollToSection, {once: true});
+                            bsCollapse.hide();
+                        } else {
+                            scrollToSection();
+                        }
+                    }
+                });
+            });
+
+            navLinks.forEach(link => {
+                link.addEventListener('click', () => {
+                    const bsCollapse = bootstrap.Collapse.getInstance(navbarCollapse);
+                    if(bsCollapse && navbarCollapse.classList.contains('show')) {
+                        bsCollapse.hide();
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+
+<footer class="d-flex align-items-center justify-content-center text-center">
+    <div class="traffic-stats">
+        &copy; 2025 <a href="https://rvldx.my.id/sosmed"> RDX </a> | Status: Online
+    </div>
+</footer>
+</html>

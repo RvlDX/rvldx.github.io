@@ -1126,7 +1126,6 @@ p {
 
 /* Copyright Styles */
 .copyright {
-    border-radius: 10px;
     position: relative;
     margin-top: auto;
     text-align: center;
@@ -1137,5 +1136,4 @@ p {
     width: 100%;
     z-index: 1;
     box-shadow: var(--shadow-sm);
-    border: 2px solid var(--border-light);
 }

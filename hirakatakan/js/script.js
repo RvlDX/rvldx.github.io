@@ -239,11 +239,16 @@ let totalQuestions = 10;
 
 // Navigation Functions
 function showHome() {
+    // Sembunyikan semua container
     document.getElementById('homeContainer').classList.remove('hidden');
     document.getElementById('scriptSelectionContainer').classList.add('hidden');
     document.getElementById('categoryContainer').classList.add('hidden');
     document.getElementById('gameContainer').classList.add('hidden');
     document.getElementById('resultContainer').classList.add('hidden');
+    document.getElementById('learningContainer').classList.add('hidden'); // Tambahkan ini
+
+    // Tampilkan menu utama
+    document.getElementById('homeContainer').classList.remove('hidden');
 }
 
 function showScriptSelection() {
@@ -475,11 +480,72 @@ function showNotification(type) {
     setTimeout(() => notification.classList.remove('show'), 3000);
 }
 
-function showComingSoonNotification() {
-    showNotification('comingSoon');
-}
-
 // Initial Setup
 document.addEventListener('DOMContentLoaded', () => {
     showHome();
+});
+
+// Learning Section
+function showLearningDictionary() {
+    document.getElementById('homeContainer').classList.add('hidden');
+    document.getElementById('scriptSelectionContainer').classList.add('hidden');
+    document.getElementById('categoryContainer').classList.add('hidden');
+    document.getElementById('gameContainer').classList.add('hidden');
+    document.getElementById('resultContainer').classList.add('hidden');
+
+    // Show learning container
+    document.getElementById('learningContainer').classList.remove('hidden');
+
+    // Load default content (Hiragana)
+    showLearningTab('hiragana');
+}
+// Show learning tab content
+function showLearningTab(scriptType) {
+    // Update active tab
+    document.querySelectorAll('.script-tab').forEach(tab => {
+        tab.classList.remove('active');
+    });
+    event.currentTarget.classList.add('active');
+
+    // Clear previous content
+    const content = document.getElementById('learningContent');
+    content.innerHTML = '';
+
+    // Get data for selected script
+    const data = {
+        hiragana: hiraganaGroups,
+        katakana: katakanaGroups,
+        kanji: kanjiGroups
+    }[scriptType];
+
+    // Build content for each group
+    for (const [category, groups] of Object.entries(data)) {
+        const categoryHTML = `
+        <div class="learning-script-container">
+            <h3 class="learning-group-title">${category.toUpperCase()}</h3>
+            ${Object.entries(groups).map(([groupName, characters]) => `
+                <div class="learning-group">
+                    <h4 class="group-subtitle">${groupName}</h4>
+                    <div class="learning-characters">
+                        ${Object.entries(characters).map(([character, reading]) => `
+                            <div class="learning-char-item">
+                                <div class="learning-char">${character}</div>
+                                <div class="learning-reading">${reading.split(' (')[0]}</div>
+                                ${scriptType === 'kanji' ?
+                `<div class="learning-meaning">${reading.split('(')[1]?.replace(')', '') || ''}</div>` :
+                ''}
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            `).join('')}
+        </div>
+    `;
+        content.insertAdjacentHTML('beforeend', categoryHTML);
+    }
+}
+
+// Initialize with Hiragana by default
+document.addEventListener('DOMContentLoaded', () => {
+    showLearningTab('hiragana');
 });

@@ -1126,13 +1126,16 @@ p {
 
 /* Copyright Styles */
 .copyright {
+    border-radius: 10px;
     position: relative;
     margin-top: auto;
     text-align: center;
     padding: 1.1rem;
-    color: var(--text-tertiary);
+    color: var(--text-primary);
     font-size: 0.9rem;
     background: var(--bg-primary);
     width: 100%;
     z-index: 1;
+    box-shadow: var(--shadow-sm);
+    border: 2px solid var(--border-light);
 }

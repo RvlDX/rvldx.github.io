@@ -61,10 +61,7 @@
         }
 
         /* Typography */
-        h1,
-        h2,
-        h3,
-        h4 {
+        h1,h2,h3,h4 {
             font-weight: 700;
             line-height: 1.2;
             margin-bottom: 1rem;
@@ -483,20 +480,69 @@
             margin: 2rem auto;
         }
 
+        .progress-container {
+            width: 100%;
+            height: 6px;
+            background: var(--bg-secondary);
+            border-radius: 3px;
+            margin-bottom: 1rem;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: var(--primary);
+            border-radius: 3px;
+            transition: width 0.3s ease;
+        }
+
         .score-board {
             display: flex;
-            justify-content: space-between;
+            gap: 1.5rem;
             margin-bottom: 2rem;
-            font-weight: 600;
-            color: var(--text-secondary);
+            background: var(--bg-primary);
+            padding: 1rem 2rem;
+            border-radius: var(--radius-xl);
+            box-shadow: var(--shadow-sm);
+            border: 2px solid var(--border-light);
         }
 
         .score-correct {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-weight: 600;
+            padding: 0.75rem 1.5rem;
+            border-radius: var(--radius-md);
+            transition: var(--transition);
             color: var(--success);
+            background: rgba(16, 185, 129, 0.1);
         }
 
         .score-wrong {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-weight: 600;
+            padding: 0.75rem 1.5rem;
+            border-radius: var(--radius-md);
+            transition: var(--transition);
             color: var(--danger);
+            background: rgba(239, 68, 68, 0.1);
+        }
+
+        .score-correct::before {
+            content: "✓";
+            font-size: 1.2em;
+            display: inline-block;
+            animation: pop 0.3s ease;
+        }
+
+        .score-wrong::before {
+            content: "✗";
+            font-size: 1.2em;
+            display: inline-block;
+            animation: pop 0.3s ease;
         }
 
         .character-display {
@@ -508,21 +554,15 @@
             animation: float 3s ease-in-out infinite;
         }
 
-        @keyframes float {
-
-            0%,
-            100% {
-                transform: translateY(0px);
-            }
-
-            50% {
-                transform: translateY(-10px);
-            }
+        .correct-answer-message {
+            text-align: center;
+            margin: 1rem 0;
+            color: var(--success);
+            font-weight: 500;
         }
 
         .options-grid {
             display: grid;
-            grid-template-columns: repeat(2, 1fr);
             gap: 1rem;
         }
 
@@ -550,14 +590,14 @@
             background: var(--success);
             color: white;
             border-color: var(--success);
-            animation: bounce 0.5s ease;
+            animation: correctBounce 0.6s ease;
         }
 
         .option-btn.wrong {
             background: var(--danger);
             color: white;
             border-color: var(--danger);
-            animation: shake 0.4s ease;
+            animation: shake 0.5s ease;
         }
 
         .option-reading {
@@ -570,37 +610,8 @@
             color: var(--text-tertiary);
         }
 
-        .option-btn.correct .option-meaning,
-        .option-btn.wrong .option-meaning {
+        .option-btn.correct .option-meaning .option-btn.wrong .option-meaning {
             color: rgba(255, 255, 255, 0.8);
-        }
-
-        @keyframes bounce {
-
-            0%,
-            100% {
-                transform: translateY(0);
-            }
-
-            50% {
-                transform: translateY(-10px);
-            }
-        }
-
-        @keyframes shake {
-
-            0%,
-            100% {
-                transform: translateX(0);
-            }
-
-            25% {
-                transform: translateX(8px);
-            }
-
-            75% {
-                transform: translateX(-8px);
-            }
         }
 
         /* Results Screen */
@@ -620,31 +631,31 @@
             font-size: 4rem;
             color: var(--primary);
             margin-bottom: 1.5rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 2rem;
         }
 
         .result-title {
             font-size: 2rem;
-            margin-bottom: 1.5rem;
+            margin-bottom: 0.5rem;
+            width: 100%;
+            text-align: center;
         }
 
-        .stats-container {
-            background: var(--bg-secondary);
-            border-radius: var(--radius-lg);
-            padding: 2rem;
-            margin: 2rem 0;
+        .result-stats {
             display: grid;
-            gap: 1rem;
-            max-width: 400px;
-            margin-left: auto;
-            margin-right: auto;
+            grid-template-columns: repeat(2, 1fr);
+            margin-top: 0.5rem !important;
+            gap: 0.75rem;
         }
 
-        .stat-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 0.5rem 0;
-            border-bottom: 1px dashed var(--border-light);
+        .stat-box {
+            background: var(--bg-secondary);
+            border-radius: var(--radius-md);
+            padding: 1rem;
+            text-align: center;
         }
 
         .stat-label {
@@ -653,6 +664,8 @@
 
         .stat-value {
             font-weight: 600;
+            font-size: 2rem;
+            margin: 0.25rem 0;
         }
 
         .stat-correct {
@@ -715,21 +728,70 @@
             font-size: 1.25rem;
         }
 
-        /* Progress Bar */
-        .progress-container {
-            width: 100%;
-            height: 6px;
-            background: var(--bg-secondary);
-            border-radius: 3px;
-            margin-bottom: 1rem;
-            overflow: hidden;
+        /* Animations */
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0px);
+            }
+
+            50% {
+                transform: translateY(-10px);
+            }
         }
 
-        .progress-bar {
-            height: 100%;
-            background: var(--primary);
-            border-radius: 3px;
-            transition: width 0.3s ease;
+        @keyframes correctBounce {
+            0%, 100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+
+        @keyframes shake {
+            0%, 100% {
+                transform: translateX(0);
+            }
+
+            25% {
+                transform: translateX(8px);
+            }
+
+            75% {
+                transform: translateX(-8px);
+            }
+        }
+
+        @keyframes pop {
+            0% {
+                transform: scale(0.8);
+            }
+
+            50% {
+                transform: scale(1.2);
+            }
+
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* Loading Animation */
+        .loading-spinner {
+            display: inline-block;
+            width: 40px;
+            height: 40px;
+            border: 4px solid rgba(79, 70, 229, 0.1);
+            border-radius: 50%;
+            border-top-color: var(--primary);
+            animation: spin 1s ease-in-out infinite;
         }
 
         /* Responsive Adjustments */
@@ -781,9 +843,18 @@
                 padding: 2rem 0;
             }
 
-            .game-container,
-            .result-container {
+            .game-container .result-container {
                 padding: 1.5rem;
+            }
+
+            .score-board {
+                flex-direction: column;
+                gap: 0.5rem;
+                padding: 1rem;
+            }
+
+            .score-correct .score-wrong {
+                justify-content: center;
             }
         }
 
@@ -811,204 +882,10 @@
         .mt-8 {
             margin-top: 2rem;
         }
-
-        /* Loading Animation */
-        .loading-spinner {
-            display: inline-block;
-            width: 40px;
-            height: 40px;
-            border: 4px solid rgba(79, 70, 229, 0.1);
-            border-radius: 50%;
-            border-top-color: var(--primary);
-            animation: spin 1s ease-in-out infinite;
-        }
-
-        @keyframes spin {
-            to {
-                transform: rotate(360deg);
-            }
-        }
-
-        /* Centering the Start Button */
-        #categoryContainer .btn {
-            display: block;
-            margin: 2rem auto 0;
-        }
-
-        /* Enhanced Answer Feedback */
-        .option-btn.correct {
-            animation: correctBounce 0.6s ease;
-        }
-
-        .option-btn.wrong {
-            animation: shake 0.5s ease;
-        }
-
-        @keyframes correctBounce {
-
-            0%,
-            100% {
-                transform: translateY(0);
-            }
-
-            50% {
-                transform: translateY(-10px);
-            }
-        }
-
-        /* Result Screen Improvements */
-        .result-stats {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            margin-top: 0.5rem !important;
-            gap: 0.75rem;
-        }
-
-        .stat-box {
-            background: var(--bg-secondary);
-            border-radius: var(--radius-md);
-            padding: 1rem;
-            text-align: center;
-        }
-
-        .stat-value {
-            font-size: 2rem;
-            font-weight: 700;
-            margin: 0.25rem 0
-        }
-
-        /* Responsive Answer Buttons */
-        @media (min-width: 768px) {
-            .options-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-
-            .option-btn {
-                padding: 1.5rem 2rem;
-            }
-        }
-
-        /* Correct Answer Highlight */
-        .correct-answer-message {
-            text-align: center;
-            margin: 1rem 0;
-            color: var(--success);
-            font-weight: 500;
-        }
-
-        .result-container {
-            text-align: center;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-
-        .result-icon {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin-top: 2rem
-        }
-
-        .result-title {
-            margin-bottom: 0.5rem !important;
-            width: 100%;
-            text-align: center;
-        }
-
-        #resultContainer {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-        }
-
-        /* Score Board Styles */ 
-        .score-board {
-            display: flex;
-            gap: 1.5rem;
-            margin-bottom: 2rem;
-            background: var(--bg-primary);
-            padding: 1rem 2rem;
-            border-radius: var(--radius-xl);
-            box-shadow: var(--shadow-sm);
-            border: 2px solid var(--border-light);
-        }
-
-        .score-correct,
-        .score-wrong {
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-            font-weight: 600;
-            padding: 0.75rem 1.5rem;
-            border-radius: var(--radius-md);
-            transition: var(--transition);
-        }
-
-        .score-correct {
-            color: var(--success);
-            background: rgba(16, 185, 129, 0.1);
-        }
-
-        .score-wrong {
-            color: var(--danger);
-            background: rgba(239, 68, 68, 0.1);
-        }
-
-        .score-correct::before {
-            content: "✓";
-            font-size: 1.2em;
-            display: inline-block;
-            animation: pop 0.3s ease;
-        }
-
-        .score-wrong::before {
-            content: "✗";
-            font-size: 1.2em;
-            display: inline-block;
-            animation: pop 0.3s ease;
-        }
-
-        @keyframes pop {
-            0% {
-                transform: scale(0.8);
-            }
-
-            50% {
-                transform: scale(1.2);
-            }
-
-            100% {
-                transform: scale(1);
-            }
-        }
-
-        /* Hover Effects */
-        .score-correct:hover,
-        .score-wrong:hover {
-            transform: translateY(-2px);
-            box-shadow: var(--shadow-sm);
-        }
-
-        /* Mobile Responsive */
-        @media (max-width: 480px) {
-            .score-board {
-                flex-direction: column;
-                gap: 0.5rem;
-                padding: 1rem;
-            }
-
-            .score-correct,
-            .score-wrong {
-                justify-content: center;
-            }
-        }
     </style>
 </head>
 
 <body>
-
     <!-- Home -->
     <div class="container" id="homeContainer">
         <section class="hero">
@@ -1082,10 +959,11 @@
             <p class="category-instruction" id="categoryInstruction">Choose at least one group to begin</p>
             <div class="category-container" id="categoryList"></div>
         </div>
-
-        <button class="btn btn-primary w-full max-w-md" onclick="startGame()">
-            <i class="fas fa-play btn-icon"></i> Start Quiz
-        </button>
+        <div class="flex justify-center">
+            <button class="btn btn-primary w-full max-w-md" onclick="startGame()">
+                <i class="fas fa-play btn-icon"></i> Start Quiz
+            </button>
+        </div>
     </div>
 
     <!-- Game Container -->
@@ -1628,12 +1506,6 @@
         function showComingSoonNotification() {
             showNotification('comingSoon');
         }
-
-        // Initial Setup
-        document.addEventListener('DOMContentLoaded', () => {
-            showHome();
-        });
     </script>
 </body>
-
 </html>

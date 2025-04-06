@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>Ucapkan Huruf & Kata Jepang</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      padding: 20px;
+    }
+
+    h2 {
+      margin-top: 30px;
+    }
+
+    button {
+      margin: 5px;
+      padding: 10px 20px;
+      font-size: 1.1em;
+      cursor: pointer;
+    }
+
+    #status {
+      margin-top: 15px;
+      color: green;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <h1>🎌 Ucapkan Huruf & Kata Jepang</h1>
+
+  <div id="status">Memuat suara Jepang...</div>
+
+  <h2>🈁 Hiragana</h2>
+  <button onclick="speak('あ')">あ (a)</button>
+  <button onclick="speak('し')">し (shi)</button>
+  <button onclick="speak('つ')">つ (tsu)</button>
+
+  <h2>🈯 Katakana</h2>
+  <button onclick="speak('ア')">ア (a)</button>
+  <button onclick="speak('シ')">シ (shi)</button>
+  <button onclick="speak('ツ')">ツ (tsu)</button>
+
+  <h2>🈸 Kanji</h2>
+  <button onclick="speak('水')">水 (mizu - air)</button>
+  <button onclick="speak('火')">火 (hi - api)</button>
+  <button onclick="speak('学')">学 (gaku - belajar)</button>
+
+  <h2>🈶 Kotoba (Kosakata)</h2>
+  <button onclick="speak('こんにちは')">こんにちは (Halo)</button>
+  <button onclick="speak('ありがとう')">ありがとう (Terima kasih)</button>
+  <button onclick="speak('学生')">学生 (Gakusei - Siswa)</button>
+  <button onclick="speak('日本語')">日本語 (Nihongo - Bahasa Jepang)</button>
+  <button onclick="speak('私は日本語を勉強しています')">私は日本語を勉強しています (Saya belajar bahasa Jepang)</button>
+
+  <script>
+    let japaneseVoice = null;
+    const statusEl = document.getElementById('status');
+
+    function loadVoices() {
+      const voices = speechSynthesis.getVoices();
+      japaneseVoice = voices.find(voice => voice.lang === 'ja-JP');
+
+      if (japaneseVoice) {
+        statusEl.textContent = "✅ Suara Jepang tersedia!";
+        statusEl.style.color = "green";
+      } else {
+        statusEl.textContent = "❌ Suara Jepang tidak tersedia. Aktifkan bahasa Jepang di sistem atau browser.";
+        statusEl.style.color = "red";
+      }
+    }
+
+    if (typeof speechSynthesis !== 'undefined' && speechSynthesis.onvoiceschanged !== undefined) {
+      speechSynthesis.onvoiceschanged = loadVoices;
+    } else {
+      loadVoices();
+    }
+
+    function speak(text) {
+      if (!japaneseVoice) {
+        alert("Suara Jepang belum tersedia.");
+        return;
+      }
+
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.voice = japaneseVoice;
+      utterance.lang = 'ja-JP';
+      speechSynthesis.cancel(); // hentikan suara sebelumnya jika ada
+      speechSynthesis.speak(utterance);
+    }
+  </script>
+</body>
+</html>

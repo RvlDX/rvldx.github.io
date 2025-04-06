@@ -5,20 +5,34 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Quiz HiraKataKan</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
-            --primary: #2563eb;
-            --secondary: #f3f4f6;
+            --primary: #4f46e5;
+            --primary-light: #6366f1;
+            --primary-dark: #4338ca;
+            --secondary: #f9fafb;
             --success: #10b981;
+            --success-light: #34d399;
             --danger: #ef4444;
-            --text-primary: #1f2937;
+            --danger-light: #f87171;
+            --warning: #f59e0b;
+            --text-primary: #111827;
             --text-secondary: #6b7280;
-            --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.12);
+            --text-tertiary: #9ca3af;
+            --bg-primary: #ffffff;
+            --bg-secondary: #f3f4f6;
+            --border-light: #e5e7eb;
+            --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
             --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
             --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
+            --shadow-xl: 0 20px 25px rgba(0, 0, 0, 0.1);
+            --radius-sm: 6px;
             --radius-md: 12px;
             --radius-lg: 16px;
+            --radius-xl: 24px;
+            --transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         /* Base Styles */
@@ -26,180 +40,421 @@
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            font-family: 'Poppins', sans-serif;
+            font-family: 'Inter', sans-serif;
         }
 
         body {
             min-height: 100vh;
-            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            background: var(--bg-secondary);
             display: flex;
             flex-direction: column;
             align-items: center;
-            padding: 2rem;
             color: var(--text-primary);
+            line-height: 1.5;
         }
 
-        /* Home Container */
-        .home-container {
-            margin-top: 2rem;
-            max-width: 800px;
+        .container {
             width: 100%;
-            text-align: center;
-            margin-right: 1rem;
-            margin-left: 1rem;
+            max-width: 1200px;
+            padding: 2rem;
+            margin: 0 auto;
         }
 
-        .header h1 {
+        /* Typography */
+        h1,
+        h2,
+        h3,
+        h4 {
+            font-weight: 700;
+            line-height: 1.2;
+            margin-bottom: 1rem;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+        }
+
+        h2 {
+            font-size: 2rem;
+        }
+
+        h3 {
+            font-size: 1.5rem;
+        }
+
+        p {
+            color: var(--text-secondary);
+            margin-bottom: 1.5rem;
+        }
+
+        /* Buttons */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.75rem 1.5rem;
+            border-radius: var(--radius-md);
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            border: none;
+            text-align: center;
+            white-space: nowrap;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .btn-secondary {
+            background: white;
+            color: var(--primary);
+            border: 2px solid var(--primary);
+        }
+
+        .btn-secondary:hover {
+            background: var(--primary);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: var(--primary);
+            border: 2px solid var(--border-light);
+        }
+
+        .btn-outline:hover {
+            border-color: var(--primary);
+            transform: translateY(-2px);
+        }
+
+        .btn-icon {
+            margin-right: 0.5rem;
+        }
+
+        /* Cards */
+        .card {
+            background: var(--bg-primary);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-sm);
+            overflow: hidden;
+            transition: var(--transition);
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .card-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid var(--border-light);
+        }
+
+        .card-body {
+            padding: 1.5rem;
+        }
+
+        /* Navigation */
+        .nav-back {
+            display: inline-flex;
+            align-items: center;
+            color: var(--text-secondary);
+            font-weight: 500;
+            margin-bottom: 1.5rem;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .nav-back:hover {
+            color: var(--primary);
+        }
+
+        .nav-back i {
+            margin-right: 0.5rem;
+        }
+
+        /* Layout Components */
+        .section {
+            width: 100%;
+            margin-bottom: 2rem;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 2rem;
+            position: relative;
+        }
+
+        .section-title:after {
+            content: '';
+            display: block;
+            width: 80px;
+            height: 4px;
+            background: var(--primary);
+            margin: 1rem auto 0;
+            border-radius: 2px;
+        }
+
+        .grid {
+            display: grid;
+            gap: 1.5rem;
+        }
+
+        .grid-cols-2 {
+            grid-template-columns: repeat(2, 1fr);
+        }
+
+        .grid-cols-3 {
+            grid-template-columns: repeat(3, 1fr);
+        }
+
+        .flex {
+            display: flex;
+        }
+
+        .flex-col {
+            flex-direction: column;
+        }
+
+        .items-center {
+            align-items: center;
+        }
+
+        .justify-center {
+            justify-content: center;
+        }
+
+        .gap-4 {
+            gap: 1rem;
+        }
+
+        .gap-8 {
+            gap: 2rem;
+        }
+
+        .text-center {
+            text-align: center;
+        }
+
+        .w-full {
+            width: 100%;
+        }
+
+        .max-w-md {
+            max-width: 28rem;
+        }
+
+        .mx-auto {
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* Home Page */
+        .hero {
+            text-align: center;
+            padding: 3rem 0;
+        }
+
+        .hero-title {
+            font-size: 3rem;
+            background: linear-gradient(to right, var(--primary), var(--primary-light));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin-bottom: 1rem;
+        }
+
+        .hero-subtitle {
+            font-size: 1.25rem;
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin: 0 auto 2rem;
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin: 3rem 0;
+        }
+
+        .feature-card {
+            background: white;
+            border-radius: var(--radius-lg);
+            padding: 2rem;
+            text-align: center;
+            transition: var(--transition);
+            border: 1px solid var(--border-light);
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-lg);
+            border-color: var(--primary);
+        }
+
+        .feature-icon {
             font-size: 2.5rem;
             margin-bottom: 1rem;
             color: var(--primary);
         }
 
-        .header p {
-            font-size: 1.1rem;
+        .feature-title {
+            font-size: 1.25rem;
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
+        }
+
+        .feature-desc {
             color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-top: 2rem;
+        }
+
+        /* Script Selection */
+        .script-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+
+        .script-card {
+            background: white;
+            border-radius: var(--radius-lg);
+            padding: 2rem;
+            text-align: center;
+            transition: var(--transition);
+            border: 2px solid var(--border-light);
+            cursor: pointer;
+        }
+
+        .script-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-lg);
+            border-color: var(--primary);
+        }
+
+        .script-card.selected {
+            border-color: var(--primary);
+            background: rgba(79, 70, 229, 0.05);
+        }
+
+        .script-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            color: var(--primary);
+        }
+
+        .script-name {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
+        }
+
+        .script-desc {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+
+        /* Category Selection */
+        .category-container {
+            width: 100%;
             margin-bottom: 2rem;
         }
 
-        /* Features Grid */
-        .features-container {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 1rem;
-            margin: 2rem;
-            position: relative;
-        }
-
-        .feature-card {
-            width: 197px;
-            height: 197px;
-            background: white;
-            padding: 1.5rem;
-            border-radius: var(--radius-md);
-            box-shadow: var(--shadow-sm);
-            transition: all 0.2s ease;
+        .category-title {
             text-align: center;
+            margin-bottom: 1rem;
         }
 
-        .feature-card:nth-child(3) {
-            grid-column: 1 / -1;
-            width: 197px;
-            height: 197px;
-            margin: 0 auto;
-        }
-
-        .feature-card:hover {
-            transform: translateY(-5px);
-            box-shadow: var(--shadow-md);
-        }
-
-        .feature-card h3 {
-            color: var(--primary);
-            margin-bottom: 0.5rem;
-            font-size: 1.2rem;
-        }
-
-        .feature-card p {
+        .category-instruction {
+            text-align: center;
             color: var(--text-secondary);
-            font-size: 0.9rem;
-            line-height: 1.4;
-        }
-
-        .mode-btn {
-            padding: 1.5rem;
-            font-size: 1.1rem;
-            font-weight: 600;
-            border: none;
-            border-radius: var(--radius-md);
-            background: white;
-            color: var(--primary);
-            cursor: pointer;
-            transition: all 0.2s ease;
-            box-shadow: var(--shadow-sm);
-            border: 2px solid var(--primary);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.5rem;
-        }
-
-        .mode-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: var(--shadow-md);
-            background: var(--primary);
-            color: white;
-        }
-
-        .category-container {
-            display: grid;
-            gap: 1.5rem;
-            width: 100%;
-            max-width: 800px;
-            position: relative;
-            order: -1;
+            margin-bottom: 2rem;
         }
 
         .category-card {
             background: white;
             border-radius: var(--radius-md);
-            box-shadow: var(--shadow-sm);
             overflow: hidden;
-            transition: all 0.2s ease;
-            order: 1;
-        }
-
-        .category-container>.mode-btn {
-            margin-top: 2rem;
-            order: 2;
+            box-shadow: var(--shadow-sm);
+            margin-bottom: 1rem;
         }
 
         .category-header {
             width: 100%;
-            padding: 1.5rem;
-            border: none;
-            background: transparent;
-            font-size: 1.1rem;
-            font-weight: 600;
-            color: var(--text-primary);
-            cursor: pointer;
+            padding: 1.25rem 1.5rem;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            cursor: pointer;
+            font-weight: 600;
+            background: var(--bg-primary);
+            border: none;
+            text-align: left;
+            transition: var(--transition);
         }
 
-        .category-header::after {
-            content: '▼';
-            display: inline-block;
-            transition: transform 0.5s ease;
-            font-family: 'Arial', sans-serif;
+        .category-header:hover {
+            background: var(--bg-secondary);
         }
 
-        .category-header.expanded::after {
+        .category-header i {
+            transition: var(--transition);
+        }
+
+        .category-header.expanded i {
             transform: rotate(180deg);
         }
 
         .groups-container {
+            padding: 0 1.5rem;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
             gap: 0.75rem;
-            padding: 0 1.5rem 1.5rem;
-            display: none;
         }
 
         .groups-container.show {
-            display: grid;
+            padding: 1rem 1.5rem 1.5rem;
+            max-height: 1000px;
         }
 
         .group-btn {
             padding: 0.75rem;
-            border: 2px solid var(--secondary);
-            border-radius: 8px;
+            border: 2px solid var(--border-light);
+            border-radius: var(--radius-sm);
             background: white;
             cursor: pointer;
             font-weight: 500;
             color: var(--text-primary);
-            transition: all 0.2s ease;
+            transition: var(--transition);
             position: relative;
+            text-align: center;
+        }
+
+        .group-btn:hover {
+            border-color: var(--primary-light);
         }
 
         .group-btn.selected {
@@ -216,14 +471,32 @@
             font-weight: 700;
         }
 
+        /* Game Screen */
         .game-container {
             display: none;
             width: 100%;
             max-width: 800px;
             background: white;
             padding: 2rem;
-            border-radius: var(--radius-lg);
-            box-shadow: var(--shadow-lg);
+            border-radius: var(--radius-xl);
+            box-shadow: var(--shadow-xl);
+            margin: 2rem auto;
+        }
+
+        .score-board {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 2rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+        }
+
+        .score-correct {
+            color: var(--success);
+        }
+
+        .score-wrong {
+            color: var(--danger);
         }
 
         .character-display {
@@ -247,7 +520,7 @@
             }
         }
 
-        .options-container {
+        .options-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
             gap: 1rem;
@@ -256,17 +529,21 @@
         .option-btn {
             padding: 1.25rem;
             font-size: 1rem;
-            border: 2px solid var(--secondary);
+            border: 2px solid var(--border-light);
             border-radius: var(--radius-md);
             background: white;
             cursor: pointer;
-            transition: all 0.2s ease;
+            transition: var(--transition);
             font-weight: 500;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
 
         .option-btn:hover:not(:disabled) {
             transform: translateY(-2px);
             box-shadow: var(--shadow-sm);
+            border-color: var(--primary-light);
         }
 
         .option-btn.correct {
@@ -281,6 +558,21 @@
             color: white;
             border-color: var(--danger);
             animation: shake 0.4s ease;
+        }
+
+        .option-reading {
+            font-size: 1.2rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .option-meaning {
+            font-size: 0.8rem;
+            color: var(--text-tertiary);
+        }
+
+        .option-btn.correct .option-meaning,
+        .option-btn.wrong .option-meaning {
+            color: rgba(255, 255, 255, 0.8);
         }
 
         @keyframes bounce {
@@ -311,443 +603,555 @@
             }
         }
 
-        .result-screen {
+        /* Results Screen */
+        .result-container {
             display: none;
             text-align: center;
             background: white;
             padding: 3rem;
-            border-radius: var(--radius-lg);
-            box-shadow: var(--shadow-lg);
+            border-radius: var(--radius-xl);
+            box-shadow: var(--shadow-xl);
             max-width: 800px;
             width: 100%;
+            margin: 2rem auto;
+        }
+
+        .result-icon {
+            font-size: 4rem;
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+        }
+
+        .result-title {
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
         }
 
         .stats-container {
-            background: var(--secondary);
-            border-radius: var(--radius-md);
+            background: var(--bg-secondary);
+            border-radius: var(--radius-lg);
             padding: 2rem;
             margin: 2rem 0;
             display: grid;
             gap: 1rem;
+            max-width: 400px;
+            margin-left: auto;
+            margin-right: auto;
         }
 
-        .stats-container p {
-            font-size: 1.1rem;
-            color: var(--text-primary);
+        .stat-item {
             display: flex;
             justify-content: space-between;
-            max-width: 400px;
-            margin: 0 auto;
+            align-items: center;
+            padding: 0.5rem 0;
+            border-bottom: 1px dashed var(--border-light);
         }
 
-        .retry-btn {
-            padding: 1rem 2rem;
-            font-size: 1rem;
+        .stat-label {
+            color: var(--text-secondary);
+        }
+
+        .stat-value {
             font-weight: 600;
-            background: var(--primary);
-            color: white;
-            border: none;
+        }
+
+        .stat-correct {
+            color: var(--success);
+        }
+
+        .stat-wrong {
+            color: var(--danger);
+        }
+
+        .stat-accuracy {
+            color: var(--primary);
+        }
+
+        .result-actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-top: 2rem;
+        }
+
+        /* Notifications */
+        .notification {
+            position: fixed;
+            top: -100px;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 1rem 2rem;
             border-radius: var(--radius-md);
-            cursor: pointer;
-            transition: all 0.2s ease;
-            margin: 0.5rem;
+            box-shadow: var(--shadow-lg);
+            transition: all 0.3s ease-in-out;
+            z-index: 9999;
+            opacity: 0;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-weight: 500;
+            max-width: 90vw;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
 
-        .retry-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: var(--shadow-sm);
+        .notification.show {
+            top: 20px;
+            opacity: 1;
         }
 
-        @media (max-width: 640px) {
+        .notification-error {
+            background: var(--danger);
+            color: white;
+        }
+
+        .notification-warning {
+            background: var(--warning);
+            color: white;
+        }
+
+        .notification-icon {
+            font-size: 1.25rem;
+        }
+
+        /* Progress Bar */
+        .progress-container {
+            width: 100%;
+            height: 6px;
+            background: var(--bg-secondary);
+            border-radius: 3px;
+            margin-bottom: 1rem;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: var(--primary);
+            border-radius: 3px;
+            transition: width 0.3s ease;
+        }
+
+        /* Responsive Adjustments */
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 2.25rem;
+            }
+
+            .hero-subtitle {
+                font-size: 1.1rem;
+            }
+
+            .feature-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+            }
+
+            .options-grid {
+                grid-template-columns: 1fr;
+            }
+
             .character-display {
                 font-size: 6rem;
                 margin: 2rem 0;
             }
 
-            .options-container {
+            .result-actions {
+                flex-direction: column;
+            }
+
+            .script-grid {
                 grid-template-columns: 1fr;
             }
 
-            .mode-btn,
-            .retry-btn {
-                width: 100%;
-            }
-
-            .features-container {
-                grid-template-columns: 1fr;
-            }
-
-            .feature-card {
-                padding: 1rem;
+            .groups-container {
+                grid-template-columns: 1fr 1fr;
             }
         }
 
-        .home-container {
-            max-width: 800px;
-            width: 100%;
-            text-align: center;
+        @media (max-width: 480px) {
+            .container {
+                padding: 1.5rem;
+            }
+
+            .hero {
+                padding: 2rem 0;
+            }
+
+            .game-container,
+            .result-container {
+                padding: 1.5rem;
+            }
         }
 
-        .header h1 {
-            font-size: 2.5rem;
-            margin-bottom: 1rem;
+        /* Utility Classes */
+        .hidden {
+            display: none !important;
+        }
+
+        .text-primary {
             color: var(--primary);
         }
 
-        .header p {
-            font-size: 1.1rem;
-            color: var(--text-secondary);
+        .mb-4 {
+            margin-bottom: 1rem;
+        }
+
+        .mb-8 {
             margin-bottom: 2rem;
         }
 
-        .features-container {
-            display: grid;
-            grid-template-columns: repeat(2, 200px);
-            grid-auto-rows: 200px;
-            justify-content: center;
-            gap: 1.5rem;
-            margin: 0 auto;
-            padding: 0 1rem;
+        .mt-4 {
+            margin-top: 1rem;
         }
 
-        .feature-card {
-            background: white;
-            padding: 1.5rem;
-            border-radius: var(--radius-md);
-            box-shadow: var(--shadow-sm);
-            transition: all 0.2s ease;
-            text-align: center;
-        }
-
-        .feature-card:nth-child(3) {
-            grid-column: 1 / span 2;
-            justify-self: center;
-        }
-
-        .feature-card:hover {
-            transform: translateY(-5px);
-            box-shadow: var(--shadow-md);
-        }
-
-        .feature-card h3 {
-            color: var(--primary);
-            margin-bottom: 0.5rem;
-        }
-
-        .feature-card p {
-            color: var(--text-secondary);
-            font-size: 0.9rem;
-        }
-
-        .button-container {
-            display: flex;
-            justify-content: center;
-            gap: 1rem;
+        .mt-8 {
             margin-top: 2rem;
         }
 
-        .back-btn {
-            padding: 1rem 1.5rem;
-            border: 2px solid var(--primary);
+        /* Loading Animation */
+        .loading-spinner {
+            display: inline-block;
+            width: 40px;
+            height: 40px;
+            border: 4px solid rgba(79, 70, 229, 0.1);
+            border-radius: 50%;
+            border-top-color: var(--primary);
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* Centering the Start Button */
+        #categoryContainer .btn {
+            display: block;
+            margin: 2rem auto 0;
+        }
+
+        /* Enhanced Answer Feedback */
+        .option-btn.correct {
+            animation: correctBounce 0.6s ease;
+        }
+
+        .option-btn.wrong {
+            animation: shake 0.5s ease;
+        }
+
+        @keyframes correctBounce {
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+
+        /* Result Screen Improvements */
+        .result-stats {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            margin-top: 0.5rem !important;
+            gap: 0.75rem;
+        }
+
+        .stat-box {
+            background: var(--bg-secondary);
             border-radius: var(--radius-md);
-            background: var(--secondary);
-            color: var(--text-primary);
-            cursor: pointer;
-            transition: all 0.2s ease;
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            margin: 1rem 0;
-            box-shadow: var(--shadow-sm);
-            width: 65%;
-            justify-content: center;
-            font-weight: 600;
-        }
-
-        .back-btn-b {
-            padding: 1rem 1.5rem;
-            border: 2px solid var(--primary);
-            border-radius: var(--radius-md);
-            background: var(--secondary);
-            color: var(--text-primary);
-            cursor: pointer;
-            transition: all 0.2s ease;
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            margin: 1rem 0;
-            box-shadow: var(--shadow-sm);
-            width: 100%;
-            justify-content: center;
-            font-weight: 600;
-        }
-
-        .back-btn:hover {
-            background: #e2e8f0;
-            transform: translateY(-2px);
-        }
-
-        .section-title {
-            text-align: center;
-            margin-bottom: 0rem;
-            grid-column: 1/-1;
-            color: var(--text-primary);
-        }
-
-        .mode-section {
-            display: none;
-            /* Tambahkan baris ini agar tersembunyi by default */
-            background: white;
-            border-radius: var(--radius-lg);
-            padding: 2rem;
-            box-shadow: var(--shadow-lg);
-            width: 100%;
-            max-width: 800px;
-            margin: 1rem 0;
-            display: flex;
-            /* Jangan lupa, baris ini menimpa "display: none" di atas! */
-            flex-direction: column;
-            gap: 1.5rem;
-            align-items: center;
-        }
-
-        .category-section {
-            background: white;
-            border-radius: var(--radius-lg);
-            padding: 2rem;
-            box-shadow: var(--shadow-lg);
-            width: 100%;
-            max-width: 800px;
-            margin: 1rem 0;
-            display: flex;
-            flex-direction: column;
-            gap: 1.5rem;
-        }
-
-        .category-title {
-            font-size: 1.5rem;
-            color: var(--text-primary);
-            text-align: center;
-        }
-
-        .category-instruction {
-            color: var(--text-secondary);
-            font-size: 0.9rem;
-            text-align: center;
-            margin-bottom: 1.5rem;
-        }
-
-        /* Notifikasi */
-        .error-notification {
-            position: fixed;
-            top: -100px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: var(--danger);
-            color: white;
             padding: 1rem;
-            border-radius: var(--radius-md);
-            box-shadow: var(--shadow-lg);
-            transition: all 0.3s ease-in-out;
-            z-index: 9999;
-            opacity: 0;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            max-width: 85vw;
-        }
-
-
-        .error-notification.show {
-            top: 20px;
-            opacity: 1;
-        }
-
-        .coming-soon-notification {
-            position: fixed;
-            top: -100px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: var(--danger);
-            color: white;
-            padding: 1rem 2rem;
-            border-radius: var(--radius-md);
-            box-shadow: var(--shadow-lg);
-            transition: all 0.3s ease-in-out;
-            z-index: 9999;
-            opacity: 0;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .coming-soon-notification.show {
-            top: 20px;
-            opacity: 1;
-        }
-
-        .mode-container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            width: 100%;
-        }
-
-        .script-selection {
-            width: 100%;
-            margin: 1rem auto;
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 1rem;
-        }
-
-        .script-card {
-            width: 200px;
-            height: 200px;
-            border: 2px solid #2563eb;
-            border-radius: 12px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            background-color: #fff;
-            cursor: pointer;
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
-        }
-
-        .script-card:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        }
-
-
-        /* Icon dan label di dalam kartu */
-        .script-icon {
-            font-size: 48px;
-            color: #2563eb;
-            margin-bottom: 0.5rem;
-        }
-
-        .script-label {
-            font-size: 1.1rem;
-            font-weight: 600;
-            color: #2563eb;
             text-align: center;
         }
 
-        .start-btn {
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            margin: 0.25rem 0
+        }
+
+        /* Responsive Answer Buttons */
+        @media (min-width: 768px) {
+            .options-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .option-btn {
+                padding: 1.5rem 2rem;
+            }
+        }
+
+        /* Correct Answer Highlight */
+        .correct-answer-message {
+            text-align: center;
+            margin: 1rem 0;
+            color: var(--success);
+            font-weight: 500;
+        }
+
+        .result-container {
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .result-icon {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 2rem
+        }
+
+        .result-title {
+            margin-bottom: 0.5rem !important;
             width: 100%;
-            max-width: 200px;
+            text-align: center;
+        }
+
+        #resultContainer {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* Score Board Styles */ 
+        .score-board {
+            display: flex;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+            background: var(--bg-primary);
+            padding: 1rem 2rem;
+            border-radius: var(--radius-xl);
+            box-shadow: var(--shadow-sm);
+            border: 2px solid var(--border-light);
+        }
+
+        .score-correct,
+        .score-wrong {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-weight: 600;
+            padding: 0.75rem 1.5rem;
+            border-radius: var(--radius-md);
+            transition: var(--transition);
+        }
+
+        .score-correct {
+            color: var(--success);
+            background: rgba(16, 185, 129, 0.1);
+        }
+
+        .score-wrong {
+            color: var(--danger);
+            background: rgba(239, 68, 68, 0.1);
+        }
+
+        .score-correct::before {
+            content: "✓";
+            font-size: 1.2em;
+            display: inline-block;
+            animation: pop 0.3s ease;
+        }
+
+        .score-wrong::before {
+            content: "✗";
+            font-size: 1.2em;
+            display: inline-block;
+            animation: pop 0.3s ease;
+        }
+
+        @keyframes pop {
+            0% {
+                transform: scale(0.8);
+            }
+
+            50% {
+                transform: scale(1.2);
+            }
+
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        /* Hover Effects */
+        .score-correct:hover,
+        .score-wrong:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-sm);
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 480px) {
+            .score-board {
+                flex-direction: column;
+                gap: 0.5rem;
+                padding: 1rem;
+            }
+
+            .score-correct,
+            .score-wrong {
+                justify-content: center;
+            }
         }
     </style>
 </head>
 
 <body>
-    <!-- Halaman Utama -->
-    <div class="home-container" id="homeContainer">
-        <div class="header">
-            <h1>Quiz HiraKataKan</h1>
-            <p>Belajar Hiragana, Katakana, dan Kanji dengan Metode Interaktif</p>
+
+    <!-- Home -->
+    <div class="container" id="homeContainer">
+        <section class="hero">
+            <h1 class="hero-title">Quiz HiraKataKan</h1>
+            <p class="hero-subtitle">Master Japanese characters through interactive quizzes and learning tools</p>
+
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">あ</div>
+                    <h3 class="feature-title">Hiragana</h3>
+                    <p class="feature-desc">46 basic characters for native Japanese words and grammar</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">ア</div>
+                    <h3 class="feature-title">Katakana</h3>
+                    <p class="feature-desc">46 characters for foreign loanwords and special names</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">漢</div>
+                    <h3 class="feature-title">Kanji</h3>
+                    <p class="feature-desc">Complex characters representing meaning with multiple readings</p>
+                </div>
+            </div>
+
+            <div class="action-buttons">
+                <button class="btn btn-primary" onclick="showScriptSelection()">
+                    <i class="fas fa-play btn-icon"></i> Start
+                </button>
+                <button class="btn btn-secondary" onclick="showComingSoonNotification()">
+                    <i class="fas fa-book btn-icon"></i> Start Learning
+                </button>
+            </div>
+        </section>
+    </div>
+
+    <!-- Script Selection Screen -->
+    <div class="container hidden" id="scriptSelectionContainer">
+        <div class="nav-back" onclick="showHome()">
+            <i class="fas fa-arrow-left"></i> Back to Home
         </div>
 
-        <div class="features-container">
-            <div class="feature-card">
-                <h3>🎌 Hiragana</h3>
-                <p>46 karakter dasar untuk penulisan kata asli Jepang</p>
-            </div>
-            <div class="feature-card">
-                <h3>🎎 Katakana</h3>
-                <p>46 karakter untuk kata serapan asing dan nama khusus</p>
-            </div>
-            <div class="feature-card">
-                <h3>📖 Kanji</h3>
-                <p>Simbol karakter yang merepresentasikan makna dan memiliki banyak cara baca</p>
-            </div>
-        </div>
+        <h2 class="section-title">Choose Script Type</h2>
 
-        <div class="button-container">
-            <button class="mode-btn start-btn" onclick="showScriptSelection()">
-                Mulai Quiz
-            </button>
-            <button class="mode-btn start-btn" onclick="showComingSoonNotification()">
-                Mulai Belajar
-            </button>
+        <div class="script-grid">
+            <div class="script-card" onclick="showCategorySelection('hiragana')" id="hiraganaCard">
+                <div class="script-icon">あ</div>
+                <h3 class="script-name">Hiragana</h3>
+                <p class="script-desc">Basic phonetic script for Japanese words</p>
+            </div>
+            <div class="script-card" onclick="showCategorySelection('katakana')" id="katakanaCard">
+                <div class="script-icon">ア</div>
+                <h3 class="script-name">Katakana</h3>
+                <p class="script-desc">Used for foreign words and emphasis</p>
+            </div>
+            <div class="script-card" onclick="showCategorySelection('kanji')" id="kanjiCard">
+                <div class="script-icon">漢</div>
+                <h3 class="script-name">Kanji</h3>
+                <p class="script-desc">Chinese characters with multiple readings</p>
+            </div>
         </div>
     </div>
 
-    <!-- Halaman Pemilihan Script -->
-    <div class="mode-section">
-        <div class="mode-container" id="modeContainer">
-            <h2 class="section-title">Pilih Jenis Huruf</h2>
-
-            <!-- Mulai: Container khusus pemilihan script -->
-            <div class="script-selection">
-                <div class="script-card" onclick="selectScript('hiragana')">
-                    <div class="script-icon">あ</div>
-                    <div class="script-label">Hiragana</div>
-                </div>
-                <div class="script-card" onclick="selectScript('katakana')">
-                    <div class="script-icon">ア</div>
-                    <div class="script-label">Katakana</div>
-                </div>
-                <div class="script-card" onclick="selectScript('kanji')">
-                    <div class="script-icon">漢</div>
-                    <div class="script-label">Kanji</div>
-                </div>
-            </div>
-            <!-- Selesai: Container khusus pemilihan script -->
-
-            <button class="back-btn" onclick="showHome()">&larr; Kembali</button>
+    <!-- Category Selection -->
+    <div class="container hidden" id="categoryContainer">
+        <div class="nav-back" onclick="showScriptSelection()">
+            <i class="fas fa-arrow-left"></i> Back to Script Selection
         </div>
+
+        <div id="categorySection">
+            <h2 class="category-title" id="categoryTitle">Select Hiragana Categories</h2>
+            <p class="category-instruction" id="categoryInstruction">Choose at least one group to begin</p>
+            <div class="category-container" id="categoryList"></div>
+        </div>
+
+        <button class="btn btn-primary w-full max-w-md" onclick="startGame()">
+            <i class="fas fa-play btn-icon"></i> Start Quiz
+        </button>
     </div>
 
-    <!-- Halaman Kategori -->
-    <div class="category-section" id="categorySection">
-        <h2 class="category-title"></h2>
-        <p class="category-instruction"></p>
-        <div class="category-container" id="categoryContainer"></div>
-        <button class="back-btn-b" onclick="showScriptSelection()">&larr; Kembali</button>
-    </div>
-
-    <!-- Halaman Permainan -->
-    <div class="game-container">
+    <!-- Game Container -->
+    <div id="gameContainer" class="hidden">
+        <div class="progress-container">
+            <div class="progress-bar" id="progressBar"></div>
+        </div>
         <div class="score-board">
-            <span>Benar : <span id="correctCount"> 0</span></span>
-            <span>Salah : <span id="wrongCount"> 0</span></span>
+            <span class="score-correct">Correct : <span id="correctCount">0</span></span>
+            <span class="score-wrong">Wrong : <span id="wrongCount">0</span></span>
         </div>
         <div class="character-display" id="character"></div>
-        <div class="options-container" id="options"></div>
+
+        <div class="correct-answer-message" id="correctAnswerMessage"></div>
+
+        <div class="options-grid" id="options"></div>
     </div>
 
-    <!-- Halaman Hasil -->
-    <div class="result-screen" id="resultScreen">
-        <h2>Hasil Akhir!</h2>
-        <div class="stats-container">
-            <p>Total Benar : <span id="finalCorrect"> 0</span></p>
-            <p>Total Salah : <span id="finalWrong"> 0</span></p>
-            <p>Akurasi : <span id="accuracy"> 0</span>%</p>
+    <!-- Result Container -->
+    <div id="resultContainer" class="hidden">
+        <div class="result-icon">
+            <i class="fas fa-trophy"></i>
         </div>
-        <button class="retry-btn" onclick="showCategorySelection()">Main Lagi</button>
-        <button class="retry-btn" onclick="showHome()">Kembali ke Halaman Utama</button>
+        <h2 class="result-title">Quiz Completed!</h2>
+
+        <div class="result-stats">
+            <div class="stat-box">
+                <div class="stat-label">Correct Answers</div>
+                <div class="stat-value stat-correct" id="finalCorrect">0</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-label">Wrong Answers</div>
+                <div class="stat-value stat-wrong" id="finalWrong">0</div>
+            </div>
+            <div class="stat-box" style="grid-column: span 2;">
+                <div class="stat-label">Accuracy</div>
+                <div class="stat-value stat-accuracy" id="accuracy">0%</div>
+            </div>
+        </div>
+
+        <div class="result-actions">
+            <button class="btn btn-primary" onclick="showScriptSelection()">
+                <i class="fas fa-redo btn-icon"></i> Try Again
+            </button>
+            <button class="btn btn-secondary" onclick="showHome()">
+                <i class="fas fa-home btn-icon"></i> Return Home
+            </button>
+        </div>
     </div>
 
-    <!-- Notifikasi -->
-    <div class="error-notification" id="errorNotification">
-        <span>⚠️ Pilih minimal satu kelompok karakter!</span>
+    <!-- Notifications -->
+    <div class="notification notification-error" id="errorNotification">
+        <i class="fas fa-exclamation-circle notification-icon"></i>
+        <span>Please select at least one character group!</span>
     </div>
 
-    <div class="coming-soon-notification" id="comingSoonNotification">
-        <span>🚧 Coming Soon!</span>
+    <div class="notification notification-warning" id="comingSoonNotification">
+        <i class="fas fa-hard-hat notification-icon"></i>
+        <span>This feature is coming soon!</span>
     </div>
 
     <script>
+        // Data sets
         const hiraganaGroups = {
             basic: {
-                'Vokal': { 'あ': 'a', 'い': 'i', 'う': 'u', 'え': 'e', 'お': 'o' },
+                'Vowels': { 'あ': 'a', 'い': 'i', 'う': 'u', 'え': 'e', 'お': 'o' },
                 'K-': { 'か': 'ka', 'き': 'ki', 'く': 'ku', 'け': 'ke', 'こ': 'ko' },
                 'S-': { 'さ': 'sa', 'し': 'shi', 'す': 'su', 'せ': 'se', 'そ': 'so' },
                 'T-': { 'た': 'ta', 'ち': 'chi', 'つ': 'tsu', 'て': 'te', 'と': 'to' },
@@ -758,7 +1162,6 @@
                 'R-': { 'ら': 'ra', 'り': 'ri', 'る': 'ru', 'れ': 're', 'ろ': 'ro' },
                 'W-': { 'わ': 'wa', 'を': 'o' }
             },
-
             dakuten: {
                 'G-': { 'が': 'ga', 'ぎ': 'gi', 'ぐ': 'gu', 'げ': 'ge', 'ご': 'go' },
                 'Z-': { 'ざ': 'za', 'じ': 'ji', 'ず': 'zu', 'ぜ': 'ze', 'ぞ': 'zo' },
@@ -770,7 +1173,7 @@
 
         const katakanaGroups = {
             basic: {
-                'Vokal': { 'ア': 'a', 'イ': 'i', 'ウ': 'u', 'エ': 'e', 'オ': 'o' },
+                'Vowels': { 'ア': 'a', 'イ': 'i', 'ウ': 'u', 'エ': 'e', 'オ': 'o' },
                 'K-': { 'カ': 'ka', 'キ': 'ki', 'ク': 'ku', 'ケ': 'ke', 'コ': 'ko' },
                 'S-': { 'サ': 'sa', 'シ': 'shi', 'ス': 'su', 'セ': 'se', 'ソ': 'so' },
                 'T-': { 'タ': 'ta', 'チ': 'chi', 'ツ': 'tsu', 'テ': 'te', 'ト': 'to' },
@@ -801,21 +1204,21 @@
 
         const kanjiGroups = {
             n4: {
-                'Waktu & Kalender': {
-                    '日': 'nichi (hari)',
-                    '月': 'getsu (bulan)',
-                    '年': 'nen (tahun)',
-                    '時': 'ji (waktu)',
-                    '分': 'fun (menit)',
-                    '秒': 'byou (detik)',
-                    '週': 'shuu (minggu)',
-                    '曜': 'you (hari dalam minggu)',
-                    '朝': 'asa (pagi)',
-                    '昼': 'hiru (siang)',
-                    '夜': 'yoru (malam)',
-                    '季': 'ki (musim)'
+                'Time & Calendar': {
+                    '日': 'nichi (day)',
+                    '月': 'getsu (month)',
+                    '年': 'nen (year)',
+                    '時': 'ji (time)',
+                    '分': 'fun (minute)',
+                    '秒': 'byou (second)',
+                    '週': 'shuu (week)',
+                    '曜': 'you (day of week)',
+                    '朝': 'asa (morning)',
+                    '昼': 'hiru (noon)',
+                    '夜': 'yoru (night)',
+                    '季': 'ki (season)'
                 },
-                'Angka Dasar 1-10': {
+                'Numbers 1-10': {
                     '一': 'ichi (1)',
                     '二': 'ni (2)',
                     '三': 'san (3)',
@@ -827,590 +1230,409 @@
                     '九': 'kyuu (9)',
                     '十': 'juu (10)'
                 },
-                'Angka & Jumlah': {
+                'Numbers & Amounts': {
                     '百': 'hyaku (100)',
-                    '千': 'sen (1.000)',
-                    '万': 'man (10.000)',
+                    '千': 'sen (1,000)',
+                    '万': 'man (10,000)',
                     '円': 'en (Yen)',
-                    '零': 'rei (nol)',
-                    '半': 'han (setengah)'
+                    '零': 'rei (zero)',
+                    '半': 'han (half)'
                 },
-                'Orang & Keluarga': {
-                    '人': 'hito (orang)',
-                    '男': 'otoko (laki-laki)',
-                    '女': 'onna (perempuan)',
-                    '父': 'chichi (ayah)',
-                    '母': 'haha (ibu)',
-                    '子': 'ko (anak)',
-                    '兄': 'ani (kakak laki-laki)',
-                    '弟': 'otouto (adik laki-laki)',
-                    '姉': 'ane (kakak perempuan)',
-                    '妹': 'imouto (adik perempuan)',
-                    '夫': 'otto (suami)',
-                    '妻': 'tsuma (istri)'
+                'People & Family': {
+                    '人': 'hito (person)',
+                    '男': 'otoko (man)',
+                    '女': 'onna (woman)',
+                    '父': 'chichi (father)',
+                    '母': 'haha (mother)',
+                    '子': 'ko (child)',
+                    '兄': 'ani (older brother)',
+                    '弟': 'otouto (younger brother)',
+                    '姉': 'ane (older sister)',
+                    '妹': 'imouto (younger sister)',
+                    '夫': 'otto (husband)',
+                    '妻': 'tsuma (wife)'
                 },
-                'Tempat': {
-                    '山': 'yama (gunung)',
-                    '川': 'kawa (sungai)',
-                    '田': 'ta (sawah)',
-                    '町': 'machi (kota kecil)',
-                    '店': 'mise (toko)',
-                    '駅': 'eki (stasiun)',
-                    '国': 'kuni (negara)',
-                    '家': 'ie (rumah)',
-                    '村': 'mura (desa)',
-                    '市': 'shi (kota)'
+                'Places': {
+                    '山': 'yama (mountain)',
+                    '川': 'kawa (river)',
+                    '田': 'ta (rice field)',
+                    '町': 'machi (town)',
+                    '店': 'mise (shop)',
+                    '駅': 'eki (station)',
+                    '国': 'kuni (country)',
+                    '家': 'ie (house)',
+                    '村': 'mura (village)',
+                    '市': 'shi (city)'
                 },
-                'Kata Kerja Umum': {
-                    '行': 'iku (pergi)',
-                    '来': 'kuru (datang)',
-                    '食': 'taberu (makan)',
-                    '飲': 'nomu (minum)',
-                    '見': 'miru (melihat)',
-                    '聞': 'kiku (mendengar)',
-                    '話': 'hanasu (berbicara)',
-                    '読': 'yomu (membaca)',
-                    '書': 'kaku (menulis)',
-                    '立': 'tatsu (berdiri)',
-                    '帰': 'kaeru (pulang)',
-                    '買': 'kau (membeli)'
+                'Common Verbs': {
+                    '行': 'iku (go)',
+                    '来': 'kuru (come)',
+                    '食': 'taberu (eat)',
+                    '飲': 'nomu (drink)',
+                    '見': 'miru (see)',
+                    '聞': 'kiku (hear)',
+                    '話': 'hanasu (speak)',
+                    '読': 'yomu (read)',
+                    '書': 'kaku (write)',
+                    '立': 'tatsu (stand)',
+                    '帰': 'kaeru (return)',
+                    '買': 'kau (buy)'
                 },
-                'Sifat & Kondisi': {
-                    '大': 'dai (besar)',
-                    '小': 'shou (kecil)',
-                    '新': 'shin (baru)',
-                    '古': 'ko (lama)',
-                    '高': 'kou (tinggi/murah)',
-                    '安': 'an (murah)',
-                    '早': 'sou (cepat/awal)',
-                    '多': 'ta (banyak)',
-                    '長': 'nagai (panjang)',
-                    '短': 'mijikai (pendek)'
+                'Adjectives': {
+                    '大': 'dai (big)',
+                    '小': 'shou (small)',
+                    '新': 'shin (new)',
+                    '古': 'ko (old)',
+                    '高': 'kou (high/expensive)',
+                    '安': 'an (cheap)',
+                    '早': 'sou (fast/early)',
+                    '多': 'ta (many)',
+                    '長': 'nagai (long)',
+                    '短': 'mijikai (short)'
                 },
-                'Alam & Cuaca': {
-                    '木': 'moku (pohon)',
-                    '林': 'rin (hutan kecil)',
-                    '森': 'mori (hutan)',
-                    '火': 'ka (api)',
-                    '水': 'sui (air)',
-                    '雨': 'ame (hujan)',
-                    '風': 'kaze (angin)',
-                    '雪': 'yuki (salju)',
-                    '天': 'ten (langit)',
-                    '気': 'ki (energi)',
-                    '土': 'tsuchi (tanah)',
-                    '霧': 'kiri (kabut)',
-                    '雷': 'kaminari (petir)'
+                'Nature & Weather': {
+                    '木': 'moku (tree)',
+                    '林': 'rin (grove)',
+                    '森': 'mori (forest)',
+                    '火': 'ka (fire)',
+                    '水': 'sui (water)',
+                    '雨': 'ame (rain)',
+                    '風': 'kaze (wind)',
+                    '雪': 'yuki (snow)',
+                    '天': 'ten (sky)',
+                    '気': 'ki (energy)',
+                    '土': 'tsuchi (earth)',
+                    '霧': 'kiri (fog)',
+                    '雷': 'kaminari (thunder)'
                 },
-                'Warna & Keadaan': {
-                    '赤': 'aka (merah)',
-                    '青': 'ao (biru)',
-                    '白': 'shiro (putih)',
-                    '黒': 'kuro (hitam)',
-                    '色': 'iro (warna)',
-                    '灰': 'hai (abu-abu)'
+                'Colors': {
+                    '赤': 'aka (red)',
+                    '青': 'ao (blue)',
+                    '白': 'shiro (white)',
+                    '黒': 'kuro (black)',
+                    '色': 'iro (color)',
+                    '灰': 'hai (gray)'
                 },
-                'Transportasi & Arah': {
-                    '車': 'kuruma (mobil)',
-                    '電': 'den (listrik)',
-                    '道': 'michi (jalan)',
-                    '空': 'sora (langit)',
-                    '港': 'minato (pelabuhan)',
-                    '北': 'kita (utara)',
-                    '南': 'minami (selatan)',
-                    '東': 'higashi (timur)',
-                    '西': 'nishi (barat)',
-                    '線': 'sen (jalur)'
+                'Transportation': {
+                    '車': 'kuruma (car)',
+                    '電': 'den (electricity)',
+                    '道': 'michi (road)',
+                    '空': 'sora (sky)',
+                    '港': 'minato (harbor)',
+                    '北': 'kita (north)',
+                    '南': 'minami (south)',
+                    '東': 'higashi (east)',
+                    '西': 'nishi (west)',
+                    '線': 'sen (line)'
                 },
-                'Aktivitas Sehari-hari': {
-                    '寝': 'nemui (tidur/ngantuk)',
-                    '起': 'okiru (bangun)',
-                    '働': 'hataraku (bekerja)',
-                    '休': 'yasumu (istirahat)',
-                    '洗': 'arau (mencuci)',
-                    '浴': 'abiru (mandi)',
-                    '遊': 'asobu (bermain)',
-                    '走': 'hashiru (berlari)'
+                'Daily Activities': {
+                    '寝': 'nemui (sleep)',
+                    '起': 'okiru (wake up)',
+                    '働': 'hataraku (work)',
+                    '休': 'yasumu (rest)',
+                    '洗': 'arau (wash)',
+                    '浴': 'abiru (bathe)',
+                    '遊': 'asobu (play)',
+                    '走': 'hashiru (run)'
                 },
-                'Makanan & Minuman': {
-                    '米': 'kome (beras)',
-                    '肉': 'niku (daging)',
-                    '魚': 'sakana (ikan)',
-                    '飲': 'nomu (minum)',
-                    '茶': 'cha (teh)',
-                    '飯': 'meshi (nasi/makanan)',
-                    '酒': 'sake (alkohol)'
+                'Food & Drink': {
+                    '米': 'kome (rice)',
+                    '肉': 'niku (meat)',
+                    '魚': 'sakana (fish)',
+                    '飲': 'nomu (drink)',
+                    '茶': 'cha (tea)',
+                    '飯': 'meshi (meal)',
+                    '酒': 'sake (alcohol)'
                 },
-                'Pekerjaan & Pendidikan': {
-                    '仕': 'shi (bekerja)',
-                    '学': 'gaku (belajar)',
-                    '校': 'kou (sekolah)',
-                    '教': 'kyou (mengajar)',
-                    '医': 'i (dokter)',
-                    '院': 'in (institusi/rumah sakit)',
-                    '業': 'gyou (bisnis/pekerjaan)',
-                    '試': 'tamesu (ujian/mencoba)',
-                    '社': 'sha (perusahaan)',
-                    '術': 'jutsu (teknik/seni)'
+                'Work & Education': {
+                    '仕': 'shi (work)',
+                    '学': 'gaku (study)',
+                    '校': 'kou (school)',
+                    '教': 'kyou (teach)',
+                    '医': 'i (doctor)',
+                    '院': 'in (institution)',
+                    '業': 'gyou (business)',
+                    '試': 'tamesu (test)',
+                    '社': 'sha (company)',
+                    '術': 'jutsu (technique)'
                 },
-                'Keadaan & Emosi': {
-                    '楽': 'tanoshii (senang)',
-                    '悲': 'kanashii (sedih)',
-                    '喜': 'yorokobu (gembira)',
-                    '怒': 'okoru (marah)',
-                    '哀': 'ai (duka)',
-                    '驚': 'odoroku (terkejut)'
+                'Emotions': {
+                    '楽': 'tanoshii (happy)',
+                    '悲': 'kanashii (sad)',
+                    '喜': 'yorokobu (joy)',
+                    '怒': 'okoru (anger)',
+                    '哀': 'ai (sorrow)',
+                    '驚': 'odoroku (surprise)'
                 },
-                'Kata Kerja Penting Lainnya': {
-                    '会': 'au (bertemu)',
-                    '思': 'omou (berpikir)',
-                    '使': 'tsukau (menggunakan)',
-                    '待': 'matsu (menunggu)',
-                    '送': 'okuru (mengirim)',
-                    '出': 'deru (keluar)',
-                    '入': 'hairu (masuk)',
-                    '開': 'aku (membuka)',
-                    '選': 'eru (memilih)'
+                'Other Important Verbs': {
+                    '会': 'au (meet)',
+                    '思': 'omou (think)',
+                    '使': 'tsukau (use)',
+                    '待': 'matsu (wait)',
+                    '送': 'okuru (send)',
+                    '出': 'deru (exit)',
+                    '入': 'hairu (enter)',
+                    '開': 'aku (open)',
+                    '選': 'eru (choose)'
                 }
             }
         };
 
-        // Variabel State
-        let currentSet = {};
-        let questionQueue = [];
+        // Game State
+        let currentScriptType = '';
+        let selectedGroups = [];
+        let questions = [];
+        let currentQuestionIndex = 0;
         let correctCount = 0;
         let wrongCount = 0;
-        let currentScript = '';
-        let totalQuestions = 0;
-        let currentCorrectAnswer = '';
-        let selectedGroups = {};
+        let totalQuestions = 10;
 
-        // Fungsi Navigasi
+        // Navigation Functions
         function showHome() {
-            // Reset state
-            currentSet = {};
-            questionQueue = [];
-
-            // Tampilkan home
-            document.getElementById('homeContainer').style.display = 'block';
-
-            // Sembunyikan .mode-section (bungkus "Pilih Jenis Huruf")
-            document.querySelector('.mode-section').style.display = 'none';
-
-            // Sembunyikan elemen lain
-            document.getElementById('categorySection').style.display = 'none';
-            document.querySelector('.game-container').style.display = 'none';
-            document.getElementById('resultScreen').style.display = 'none';
+            document.getElementById('homeContainer').classList.remove('hidden');
+            document.getElementById('scriptSelectionContainer').classList.add('hidden');
+            document.getElementById('categoryContainer').classList.add('hidden');
+            document.getElementById('gameContainer').classList.add('hidden');
+            document.getElementById('resultContainer').classList.add('hidden');
         }
 
         function showScriptSelection() {
-            // Sembunyikan home
-            document.getElementById('homeContainer').style.display = 'none';
-
-            // Tampilkan .mode-section (bungkus "Pilih Jenis Huruf")
-            // Gunakan display: 'flex' atau 'block' sesuai CSS Anda
-            document.querySelector('.mode-section').style.display = 'flex';
-
-            // Sembunyikan elemen lain
-            document.getElementById('categorySection').style.display = 'none';
+            document.getElementById('homeContainer').classList.add('hidden');
+            document.getElementById('scriptSelectionContainer').classList.remove('hidden');
+            document.getElementById('categoryContainer').classList.add('hidden');
+            document.getElementById('resultContainer').classList.add('hidden');
         }
 
-        function selectScript(script) {
-            // Simpan script yang dipilih
-            currentScript = script;
+        function showCategorySelection(scriptType) {
+            currentScriptType = scriptType;
+            document.getElementById('scriptSelectionContainer').classList.add('hidden');
+            document.getElementById('categoryContainer').classList.remove('hidden');
 
-            // Sembunyikan .mode-section begitu user pilih script
-            document.querySelector('.mode-section').style.display = 'none';
-
-            // Lanjut ke kategori
-            showCategorySelection();
+            // Update UI based on script type
+            const titleMap = {
+                hiragana: 'Hiragana',
+                katakana: 'Katakana',
+                kanji: 'Kanji'
+            };
+            document.getElementById('categoryTitle').textContent = `Select ${titleMap[scriptType]} Categories`;
+            populateCategories(scriptType);
         }
 
-        function showCategorySelection() {
-            // Sembunyikan game & hasil
-            document.querySelector('.game-container').style.display = 'none';
-            document.getElementById('resultScreen').style.display = 'none';
+        // Category Population
+        function populateCategories(scriptType) {
+            const container = document.getElementById('categoryList');
+            container.innerHTML = '';
 
-            // Tampilkan kategori
-            document.getElementById('categorySection').style.display = 'block';
+            const groups = scriptType === 'hiragana' ? hiraganaGroups :
+                scriptType === 'katakana' ? katakanaGroups : kanjiGroups;
 
-            // Ubah judul & instruksi kategori
-            const container = document.getElementById('categoryContainer');
-            container.innerHTML = `
-        <h2 class="category-title">
-            Pilih Kategori ${currentScript.charAt(0).toUpperCase() + currentScript.slice(1).toLowerCase()}
-        </h2>
-        <p class="category-instruction">Pilih minimal satu untuk mulai belajar</p>
-    `;
+            for (const [categoryName, groupsObj] of Object.entries(groups)) {
+                const categoryHTML = `
+                    <div class="category-card">
+                        <button class="category-header" onclick="toggleCategory(this)">
+                            ${categoryName.toUpperCase()}
+                            <i class="fas fa-chevron-down"></i>
+                        </button>
+                        <div class="groups-container"></div>
+                    </div>
+                `;
+                container.insertAdjacentHTML('beforeend', categoryHTML);
 
-            // Render kategori
-            const categories = currentScript === 'kanji'
-                ? Object.keys(kanjiGroups) // Ambil semua kategori kanji
-                : Object.keys(currentScript === 'hiragana' ? hiraganaGroups : katakanaGroups);
-
-            categories.forEach(category => {
-                const card = document.createElement('div');
-                card.className = 'category-card';
-
-                const categoryBtn = document.createElement('button');
-                categoryBtn.className = 'category-header';
-                categoryBtn.innerHTML = `
-            ${category.toUpperCase()}
-        `;
-                categoryBtn.onclick = () => toggleCategoryGroups(card);
-
-                const groupsContainer = document.createElement('div');
-                groupsContainer.className = 'groups-container';
-
-                // Render kelompok
-                Object.keys(getCategoryGroups(category)).forEach(group => {
-                    const groupBtn = document.createElement('button');
-                    groupBtn.className = 'group-btn';
-                    groupBtn.textContent = group;
-                    groupBtn.onclick = () => toggleGroupSelection(group, category, groupBtn);
-                    groupsContainer.appendChild(groupBtn);
-                });
-
-                card.appendChild(categoryBtn);
-                card.appendChild(groupsContainer);
-                container.appendChild(card);
-            });
-
-            // Tambah tombol mulai
-            container.insertAdjacentHTML('beforeend', `
-        <button class="mode-btn" onclick="startGame()">
-            Mulai Permainan
-        </button>
-    `);
+                const groupsContainer = container.lastElementChild.querySelector('.groups-container');
+                for (const [groupName, characters] of Object.entries(groupsObj)) {
+                    const groupHTML = `
+                        <button class="group-btn" 
+                            onclick="toggleGroupSelection('${scriptType}', '${categoryName}', '${groupName}', this)">
+                            ${groupName}
+                        </button>
+                    `;
+                    groupsContainer.insertAdjacentHTML('beforeend', groupHTML);
+                }
+            }
         }
 
-        function toggleCategoryGroups(card) {
-            const header = card.querySelector('.category-header');
-            const groupsContainer = card.querySelector('.groups-container');
+        // Group Selection
+        function toggleCategory(header) {
+            const categoryCard = header.closest('.category-card');
+            const groupsContainer = categoryCard.querySelector('.groups-container');
             header.classList.toggle('expanded');
             groupsContainer.classList.toggle('show');
         }
 
-        function toggleGroupSelection(group, category, element) {
-            element.classList.toggle('selected');
+        function toggleGroupSelection(scriptType, category, groupName, button) {
+            // Properly handle category names with spaces
+            const groupKey = `${scriptType}|${category}|${groupName}`;
 
-            if (!currentSet[category]) currentSet[category] = [];
-            const index = currentSet[category].indexOf(group);
-
-            if (index > -1) {
-                currentSet[category].splice(index, 1);
+            if (selectedGroups.includes(groupKey)) {
+                selectedGroups = selectedGroups.filter(g => g !== groupKey);
             } else {
-                currentSet[category].push(group);
+                selectedGroups.push(groupKey);
             }
+            button.classList.toggle('selected');
         }
 
-        function getCategoryGroups(category) {
-            switch (currentScript) {
-                case 'hiragana': return hiraganaGroups[category];
-                case 'katakana': return katakanaGroups[category];
-                case 'kanji': return kanjiGroups[category]; // Langsung return kategori Kanji
-                default: return {};
-            }
-        }
-
-        // Fungsi Game
+        // Game Initialization
         function startGame() {
-            selectedGroups = {};
-
-            // Handle Kanji
-            if (currentScript === 'kanji') {
-                // Iterasi setiap kategori (contoh: 'n4') yang dipilih user
-                Object.keys(currentSet).forEach(category => {
-                    // Iterasi setiap kelompok dalam kategori
-                    currentSet[category].forEach(group => {
-                        // Ambil data kelompok dari kanjiGroups
-                        const groupData = kanjiGroups[category][group];
-                        Object.assign(selectedGroups, groupData);
-                    });
-                });
-            }
-            // Handle Hiragana/Katakana
-            else {
-                Object.keys(currentSet).forEach(category => {
-                    currentSet[category].forEach(group => {
-                        const groups = getCategoryGroups(category)[group];
-                        Object.assign(selectedGroups, groups);
-                    });
-                });
-            }
-
-            // Validasi pilihan user
-            const selectedKeys = Object.keys(selectedGroups);
-            if (selectedKeys.length === 0) {
-                showErrorNotification();
+            if (selectedGroups.length === 0) {
+                showNotification('error');
                 return;
             }
 
-            totalQuestions = selectedKeys.length;
-            questionQueue = shuffleArray([...selectedKeys]);
-
-            // Sembunyikan UI kategori dan tampilkan permainan
-            document.getElementById('categorySection').style.display = 'none';
-            document.querySelector('.game-container').style.display = 'block';
-            resetCounters();
-            generateQuestion();
-        }
-
-        function shuffleArray(array) {
-            for (let i = array.length - 1; i > 0; i--) {
-                const j = Math.floor(Math.random() * (i + 1));
-                [array[i], array[j]] = [array[j], array[i]];
-            }
-            return array;
-        }
-
-        function resetCounters() {
+            questions = generateQuestions();
+            currentQuestionIndex = 0;
             correctCount = 0;
             wrongCount = 0;
-            document.getElementById('correctCount').textContent = '0';
-            document.getElementById('wrongCount').textContent = '0';
+
+            document.getElementById('categoryContainer').classList.add('hidden');
+            document.getElementById('gameContainer').classList.remove('hidden');
+            showNextQuestion();
         }
 
-        function generateQuestion() {
-            // Jika soal habis, akhiri game
-            if (questionQueue.length === 0) return endGame();
+        function generateQuestions() {
+            const allCharacters = [];
+            selectedGroups.forEach(groupKey => {
+                const [script, category, group] = groupKey.split('|');
+                const characters = script === 'hiragana' ? hiraganaGroups[category][group] :
+                    script === 'katakana' ? katakanaGroups[category][group] :
+                        kanjiGroups[category][group];
+                allCharacters.push(...Object.entries(characters));
+            });
 
-            const currentChar = questionQueue.pop();
+            return shuffleArray(allCharacters).slice(0, totalQuestions);
+        }
 
-            // --- BAGIAN KANJI ---
-            if (currentScript === 'kanji') {
-                const kanjiData = selectedGroups[currentChar];
-                if (!kanjiData) {
-                    console.error("Data Kanji tidak ditemukan untuk:", currentChar);
-                    return generateQuestion(); // Skip jika tidak valid
-                }
-
-                // Contoh kanjiData = "hiru (siang)"
-                let [rawReading, rawMeaning] = kanjiData.split('(');
-                const reading = rawReading.trim();
-                const meaning = (rawMeaning || '').replace(')', '').trim();
-
-                // Tampilkan hanya Kanji di area soal
-                document.getElementById('character').textContent = currentChar;
-
-                // Jawaban benar = reading
-                currentCorrectAnswer = reading;
-            }
-            // --- BAGIAN HIRAGANA / KATAKANA ---
-            else {
-                currentCorrectAnswer = findRomaji(
-                    currentChar,
-                    currentScript === 'hiragana' ? hiraganaGroups : katakanaGroups
-                );
-                // Tampilkan karakter Hira/Kata
-                document.getElementById('character').textContent = currentChar;
+        // Game Logic
+        function showNextQuestion() {
+            if (currentQuestionIndex >= questions.length) {
+                showResults();
+                return;
             }
 
-            // Siapkan array opsi jawaban
-            const options = [];
+            updateProgress();
+            const [character, correctAnswer] = questions[currentQuestionIndex];
+            document.getElementById('character').textContent = character;
 
-            // Masukkan jawaban benar terlebih dahulu
-            if (currentScript === 'kanji') {
-                // selectedGroups[currentChar] = "hiru (siang)"
-                options.push(selectedGroups[currentChar]);
-            } else {
-                // Hiragana / Katakana
-                options.push(currentCorrectAnswer);
-            }
+            const options = generateOptions(correctAnswer);
+            renderOptions(options);
+        }
 
-            // Ambil semua jawaban (reading (arti) atau romaji)
-            const allAnswers = Object.values(getAllSelectedAnswers());
-
-            // Tambah jawaban acak sampai 4 opsi
-            while (options.length < 4 && allAnswers.length > 0) {
-                const randomIndex = Math.floor(Math.random() * allAnswers.length);
-                const randomAnswer = allAnswers.splice(randomIndex, 1)[0];
-
-                // Pastikan tidak duplikat
-                if (!options.includes(randomAnswer)) {
-                    options.push(randomAnswer);
-                }
-            }
-
-            // Jika masih kurang, isi dummy
+        function generateOptions(correctAnswer) {
+            const options = [correctAnswer];
             while (options.length < 4) {
-                options.push("dummy" + options.length);
+                const randomChar = getRandomDistractor();
+                if (!options.includes(randomChar)) {
+                    options.push(randomChar);
+                }
             }
+            return shuffleArray(options);
+        }
 
-            // Acak urutan opsi
-            options.sort(() => Math.random() - 0.5);
+        function getRandomDistractor() {
+            const randomQuestion = questions[Math.floor(Math.random() * questions.length)];
+            return randomQuestion[1];
+        }
 
-            // Render opsi ke HTML
+        function renderOptions(options) {
             const optionsContainer = document.getElementById('options');
-            optionsContainer.innerHTML = options.map(option => {
-                // Jika Kanji: option = "hiru (siang)"
-                // Jika Hira/Kata: option = "ka" dsb.
-                let [r, mRaw] = option.split('(');
-                const reading = (r || '').trim();
-                const meaning = (mRaw || '').replace(')', '').trim();
+            optionsContainer.innerHTML = '';
 
-                // Tentukan apakah ini benar
-                let isThisCorrect = false;
-                if (currentScript === 'kanji') {
-                    // Untuk Kanji, cek apakah reading sama dengan currentCorrectAnswer
-                    isThisCorrect = (reading === currentCorrectAnswer);
-                } else {
-                    // Untuk Hira/Kata, cek string mentah
-                    isThisCorrect = (option === currentCorrectAnswer);
-                }
-
-                // Tampilkan reading besar, arti kecil di bawah
-                // Simpan reading di data-reading agar mudah dicek di checkAnswer()
-                return `
-            <button class="option-btn"
-                    data-reading="${reading}"
-                    onclick="checkAnswer(${isThisCorrect}, this)">
-                <span style="font-size: 1.2rem;">${reading}</span><br>
-                <small style="font-size: 0.8rem;">${meaning}</small>
-            </button>
-        `;
-            }).join('');
+            options.forEach(option => {
+                const isReading = currentScriptType !== 'kanji';
+                const optionHTML = `
+                    <button class="option-btn" onclick="checkAnswer('${option}')">
+                        <span class="option-reading">${option}</span>
+                        ${!isReading ? `<span class="option-meaning">${getKanjiMeaning(option)}</span>` : ''}
+                    </button>
+                `;
+                optionsContainer.insertAdjacentHTML('beforeend', optionHTML);
+            });
         }
 
-        function findRomaji(char, scriptData) {
-            if (currentScript === 'kanji') {
-                // Cari di semua kategori kanji
-                for (const category of Object.values(kanjiGroups)) {
-                    for (const group of Object.values(category)) {
-                        if (group[char]) {
-                            return group[char].split('(')[0].trim();
-                        }
-                    }
-                }
-                return '';
-            }
-
-            // Kode untuk hiragana/katakana
-            for (const category of Object.values(scriptData)) {
-                for (const group of Object.values(category)) {
-                    if (group[char]) return group[char];
-                }
-            }
-            return '';
+        function getKanjiMeaning(reading) {
+            const kanjiEntry = Object.entries(kanjiGroups.n4)
+                .flatMap(([_, groups]) => Object.entries(groups))
+                .find(([_, meaning]) => meaning.includes(reading));
+            return kanjiEntry ? kanjiEntry[1].split('(')[1].replace(')', '') : '';
         }
 
-        function getAllSelectedAnswers() {
-            const allAnswers = {};
-
-            if (currentScript === 'kanji') {
-                // Loop melalui semua kategori Kanji yang dipilih
-                Object.keys(currentSet).forEach(category => {
-                    // Loop melalui semua group yang dipilih
-                    currentSet[category].forEach(groupName => {
-                        const group = kanjiGroups[category][groupName];
-                        if (group) {
-                            // Setiap entry di group berbentuk { Kanji: "reading (arti)" }
-                            Object.entries(group).forEach(([kanji, answer]) => {
-                                // Contoh answer: "hiru (siang)"
-                                // Kita simpan utuh agar saat generate opsi
-                                // bisa ditampilkan reading + arti
-                                allAnswers[kanji] = answer;
-                            });
-                        }
-                    });
-                });
-            } else {
-                // Hiragana / Katakana
-                Object.keys(currentSet).forEach(category => {
-                    currentSet[category].forEach(group => {
-                        Object.assign(allAnswers, getCategoryGroups(category)[group]);
-                    });
-                });
-            }
-
-            return allAnswers;
-        }
-
-        function checkAnswer(isCorrect, element) {
+        function checkAnswer(selectedAnswer) {
+            const [character, correctAnswer] = questions[currentQuestionIndex];
             const options = document.querySelectorAll('.option-btn');
-            options.forEach(btn => btn.disabled = true);
+            let correctElement;
 
-            if (isCorrect) {
-                correctCount++;
-                document.getElementById('correctCount').textContent = correctCount;
-                element.classList.add('correct');
-            } else {
-                wrongCount++;
-                document.getElementById('wrongCount').textContent = wrongCount;
-                element.classList.add('wrong');
+            options.forEach(option => {
+                option.disabled = true;
+                const optionText = option.querySelector('.option-reading').textContent;
 
-                // Tunjukkan jawaban benar dengan warna hijau
-                options.forEach(btn => {
-                    // Bandingkan data-reading vs currentCorrectAnswer
-                    if (btn.dataset.reading === currentCorrectAnswer) {
-                        btn.classList.add('correct');
-                    }
-                });
-            }
+                if (optionText === correctAnswer) {
+                    option.classList.add('correct');
+                    correctElement = option;
+                }
+
+                if (optionText === selectedAnswer && selectedAnswer !== correctAnswer) {
+                    option.classList.add('wrong');
+                }
+            });
+
+            // Show correct answer message
+            const meaning = currentScriptType === 'kanji' ? getKanjiMeaning(correctAnswer) : '';
+            document.getElementById('correctAnswerMessage').textContent =
+                `Correct answer : ${correctAnswer} ${meaning}`;
 
             setTimeout(() => {
-                correctCount + wrongCount < totalQuestions
-                    ? generateQuestion()
-                    : endGame();
-            }, 1500);
-        }
-        function endGame() {
-            document.querySelector('.game-container').style.display = 'none';
-            const resultScreen = document.getElementById('resultScreen');
-            resultScreen.style.display = 'block';
+                if (selectedAnswer === correctAnswer) {
+                    correctCount++;
+                } else {
+                    wrongCount++;
+                }
 
-            const accuracy = totalQuestions > 0
-                ? ((correctCount / totalQuestions) * 100).toFixed(2)
-                : 0;
+                updateScore();
+                currentQuestionIndex++;
+                showNextQuestion();
+                document.getElementById('correctAnswerMessage').textContent = '';
+            }, 2000);
+        }
+
+        // Results Screen
+        function showResults() {
+            document.getElementById('gameContainer').classList.add('hidden');
+            document.getElementById('resultContainer').classList.remove('hidden');
 
             document.getElementById('finalCorrect').textContent = correctCount;
             document.getElementById('finalWrong').textContent = wrongCount;
-            document.getElementById('accuracy').textContent = accuracy;
+            document.getElementById('accuracy').textContent =
+                `${Math.round((correctCount / (correctCount + wrongCount)) * 100)}%`;
         }
 
-        // Inisialisasi
-        showHome();
-
-        function findRomaji(char, scriptData) {
-            if (currentScript === 'kanji') {
-                // Cari di semua kategori kanji
-                for (const category of Object.values(kanjiGroups)) {
-                    for (const group of Object.values(category)) {
-                        if (group[char]) {
-                            return group[char].split('(')[0].trim();
-                        }
-                    }
-                }
-                return '';
-            }
-
-            // Kode untuk hiragana/katakana
-            for (const category of Object.values(scriptData)) {
-                for (const group of Object.values(category)) {
-                    if (group[char]) return group[char];
-                }
-            }
-            return '';
+        // Utilities
+        function shuffleArray(array) {
+            return array.sort(() => Math.random() - 0.5);
         }
-        // Tambahkan fungsi notifikasi
-        function showErrorNotification() {
-            const errorNotif = document.getElementById('errorNotification');
-            errorNotif.classList.add('show');
 
-            setTimeout(() => {
-                errorNotif.classList.remove('show');
-            }, 3000);
+        function updateProgress() {
+            const progress = (currentQuestionIndex / questions.length) * 100;
+            document.getElementById('progressBar').style.width = `${progress}%`;
+        }
+
+        function updateScore() {
+            document.getElementById('correctCount').textContent = correctCount;
+            document.getElementById('wrongCount').textContent = wrongCount;
+        }
+
+        function showNotification(type) {
+            const notification = document.getElementById(`${type}Notification`);
+            notification.classList.add('show');
+            setTimeout(() => notification.classList.remove('show'), 3000);
         }
 
         function showComingSoonNotification() {
-            const notif = document.getElementById('comingSoonNotification');
-            notif.classList.add('show');
-
-            // Hilangkan notifikasi otomatis setelah 3 detik (opsional)
-            setTimeout(() => {
-                notif.classList.remove('show');
-            }, 3000);
+            showNotification('comingSoon');
         }
+
+        // Initial Setup
+        document.addEventListener('DOMContentLoaded', () => {
+            showHome();
+        });
     </script>
 </body>
 

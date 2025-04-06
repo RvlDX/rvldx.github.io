@@ -375,20 +375,32 @@
         }
 
         /* Category Selection */
-        .category-accordion {
+        .category-container {
             width: 100%;
             margin-bottom: 2rem;
         }
 
-        .accordion-item {
+        .category-title {
+            text-align: center;
             margin-bottom: 1rem;
+        }
+
+        .category-instruction {
+            text-align: center;
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+        }
+
+        .category-card {
+            background: white;
             border-radius: var(--radius-md);
             overflow: hidden;
             box-shadow: var(--shadow-sm);
-            background: white;
+            margin-bottom: 1rem;
         }
 
-        .accordion-header {
+        .category-header {
+            width: 100%;
             padding: 1.25rem 1.5rem;
             display: flex;
             justify-content: space-between;
@@ -396,38 +408,36 @@
             cursor: pointer;
             font-weight: 600;
             background: var(--bg-primary);
+            border: none;
+            text-align: left;
             transition: var(--transition);
         }
 
-        .accordion-header:hover {
+        .category-header:hover {
             background: var(--bg-secondary);
         }
 
-        .accordion-header i {
+        .category-header i {
             transition: var(--transition);
         }
 
-        .accordion-header.expanded i {
+        .category-header.expanded i {
             transform: rotate(180deg);
         }
 
-        .accordion-content {
+        .groups-container {
             padding: 0 1.5rem;
             max-height: 0;
             overflow: hidden;
             transition: max-height 0.3s ease-out;
-        }
-
-        .accordion-content.show {
-            padding: 0 1.5rem 1.5rem;
-            max-height: 1000px;
-        }
-
-        .group-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
             gap: 0.75rem;
-            margin-top: 1rem;
+        }
+
+        .groups-container.show {
+            padding: 1rem 1.5rem 1.5rem;
+            max-height: 1000px;
         }
 
         .group-btn {
@@ -756,6 +766,10 @@
             .script-grid {
                 grid-template-columns: 1fr;
             }
+
+            .groups-container {
+                grid-template-columns: 1fr 1fr;
+            }
         }
 
         @media (max-width: 480px) {
@@ -765,10 +779,6 @@
 
             .hero {
                 padding: 2rem 0;
-            }
-
-            .group-grid {
-                grid-template-columns: 1fr 1fr;
             }
 
             .game-container,
@@ -816,6 +826,182 @@
         @keyframes spin {
             to {
                 transform: rotate(360deg);
+            }
+        }
+
+        /* Centering the Start Button */
+        #categoryContainer .btn {
+            display: block;
+            margin: 2rem auto 0;
+        }
+
+        /* Enhanced Answer Feedback */
+        .option-btn.correct {
+            animation: correctBounce 0.6s ease;
+        }
+
+        .option-btn.wrong {
+            animation: shake 0.5s ease;
+        }
+
+        @keyframes correctBounce {
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+
+        /* Result Screen Improvements */
+        .result-stats {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            margin-top: 0.5rem !important;
+            gap: 0.75rem;
+        }
+
+        .stat-box {
+            background: var(--bg-secondary);
+            border-radius: var(--radius-md);
+            padding: 1rem;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            margin: 0.25rem 0
+        }
+
+        /* Responsive Answer Buttons */
+        @media (min-width: 768px) {
+            .options-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .option-btn {
+                padding: 1.5rem 2rem;
+            }
+        }
+
+        /* Correct Answer Highlight */
+        .correct-answer-message {
+            text-align: center;
+            margin: 1rem 0;
+            color: var(--success);
+            font-weight: 500;
+        }
+
+        .result-container {
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .result-icon {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 2rem
+        }
+
+        .result-title {
+            margin-bottom: 0.5rem !important;
+            width: 100%;
+            text-align: center;
+        }
+
+        #resultContainer {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* Score Board Styles */ 
+        .score-board {
+            display: flex;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+            background: var(--bg-primary);
+            padding: 1rem 2rem;
+            border-radius: var(--radius-xl);
+            box-shadow: var(--shadow-sm);
+            border: 2px solid var(--border-light);
+        }
+
+        .score-correct,
+        .score-wrong {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-weight: 600;
+            padding: 0.75rem 1.5rem;
+            border-radius: var(--radius-md);
+            transition: var(--transition);
+        }
+
+        .score-correct {
+            color: var(--success);
+            background: rgba(16, 185, 129, 0.1);
+        }
+
+        .score-wrong {
+            color: var(--danger);
+            background: rgba(239, 68, 68, 0.1);
+        }
+
+        .score-correct::before {
+            content: "✓";
+            font-size: 1.2em;
+            display: inline-block;
+            animation: pop 0.3s ease;
+        }
+
+        .score-wrong::before {
+            content: "✗";
+            font-size: 1.2em;
+            display: inline-block;
+            animation: pop 0.3s ease;
+        }
+
+        @keyframes pop {
+            0% {
+                transform: scale(0.8);
+            }
+
+            50% {
+                transform: scale(1.2);
+            }
+
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        /* Hover Effects */
+        .score-correct:hover,
+        .score-wrong:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-sm);
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 480px) {
+            .score-board {
+                flex-direction: column;
+                gap: 0.5rem;
+                padding: 1rem;
+            }
+
+            .score-correct,
+            .score-wrong {
+                justify-content: center;
             }
         }
     </style>
@@ -890,11 +1076,12 @@
         <div class="nav-back" onclick="showScriptSelection()">
             <i class="fas fa-arrow-left"></i> Back to Script Selection
         </div>
-        <h2 class="section-title" id="categoryTitle">Select Categories</h2>
-        <p class="text-center text-secondary mb-8" id="categoryInstruction">Choose at least one group to begin</p>
-        <div id="categoryList"></div>
 
-        <div class="category-accordion" id="categoryAccordion"></div>
+        <div id="categorySection">
+            <h2 class="category-title" id="categoryTitle">Select Hiragana Categories</h2>
+            <p class="category-instruction" id="categoryInstruction">Choose at least one group to begin</p>
+            <div class="category-container" id="categoryList"></div>
+        </div>
 
         <button class="btn btn-primary w-full max-w-md" onclick="startGame()">
             <i class="fas fa-play btn-icon"></i> Start Quiz
@@ -907,10 +1094,12 @@
             <div class="progress-bar" id="progressBar"></div>
         </div>
         <div class="score-board">
-            <span class="score-correct">Correct: <span id="correctCount">0</span></span>
-            <span class="score-wrong">Wrong: <span id="wrongCount">0</span></span>
+            <span class="score-correct">Correct : <span id="correctCount">0</span></span>
+            <span class="score-wrong">Wrong : <span id="wrongCount">0</span></span>
         </div>
         <div class="character-display" id="character"></div>
+
+        <div class="correct-answer-message" id="correctAnswerMessage"></div>
 
         <div class="options-grid" id="options"></div>
     </div>
@@ -921,9 +1110,22 @@
             <i class="fas fa-trophy"></i>
         </div>
         <h2 class="result-title">Quiz Completed!</h2>
-        <p>Correct Answers: <span id="finalCorrect">0</span></p>
-        <p>Wrong Answers: <span id="finalWrong">0</span></p>
-        <p>Accuracy: <span id="accuracy">0%</span></p>
+
+        <div class="result-stats">
+            <div class="stat-box">
+                <div class="stat-label">Correct Answers</div>
+                <div class="stat-value stat-correct" id="finalCorrect">0</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-label">Wrong Answers</div>
+                <div class="stat-value stat-wrong" id="finalWrong">0</div>
+            </div>
+            <div class="stat-box" style="grid-column: span 2;">
+                <div class="stat-label">Accuracy</div>
+                <div class="stat-value stat-accuracy" id="accuracy">0%</div>
+            </div>
+        </div>
+
         <div class="result-actions">
             <button class="btn btn-primary" onclick="showScriptSelection()">
                 <i class="fas fa-redo btn-icon"></i> Try Again
@@ -1177,192 +1379,260 @@
         };
 
         // Game State
-        let currentScript = '';
-        let selectedGroups = {};
-        let questionQueue = [];
-        let currentQuestion = '';
-        let currentAnswer = '';
+        let currentScriptType = '';
+        let selectedGroups = [];
+        let questions = [];
+        let currentQuestionIndex = 0;
         let correctCount = 0;
         let wrongCount = 0;
-        let totalQuestions = 0;
-        let currentIndex = 0;
+        let totalQuestions = 10;
 
-        // UI Navigation
+        // Navigation Functions
         function showHome() {
-            hideAll();
             document.getElementById('homeContainer').classList.remove('hidden');
-        }
-
-        function showScriptSelection() {
-            hideAll();
-            document.getElementById('scriptSelectionContainer').classList.remove('hidden');
-        }
-
-        function showCategorySelection(script) {
-            hideAll();
-            currentScript = script;
-            document.getElementById('categoryContainer').classList.remove('hidden');
-            renderCategories();
-        }
-
-        function hideAll() {
-            document.getElementById('homeContainer').classList.add('hidden');
             document.getElementById('scriptSelectionContainer').classList.add('hidden');
             document.getElementById('categoryContainer').classList.add('hidden');
             document.getElementById('gameContainer').classList.add('hidden');
             document.getElementById('resultContainer').classList.add('hidden');
         }
 
-        function renderCategories() {
+        function showScriptSelection() {
+            document.getElementById('homeContainer').classList.add('hidden');
+            document.getElementById('scriptSelectionContainer').classList.remove('hidden');
+            document.getElementById('categoryContainer').classList.add('hidden');
+            document.getElementById('resultContainer').classList.add('hidden');
+        }
+
+        function showCategorySelection(scriptType) {
+            currentScriptType = scriptType;
+            document.getElementById('scriptSelectionContainer').classList.add('hidden');
+            document.getElementById('categoryContainer').classList.remove('hidden');
+
+            // Update UI based on script type
+            const titleMap = {
+                hiragana: 'Hiragana',
+                katakana: 'Katakana',
+                kanji: 'Kanji'
+            };
+            document.getElementById('categoryTitle').textContent = `Select ${titleMap[scriptType]} Categories`;
+            populateCategories(scriptType);
+        }
+
+        // Category Population
+        function populateCategories(scriptType) {
             const container = document.getElementById('categoryList');
             container.innerHTML = '';
 
-            const groupSet = currentScript === 'hiragana' ? hiraganaGroups
-                : currentScript === 'katakana' ? katakanaGroups
-                    : kanjiGroups;
+            const groups = scriptType === 'hiragana' ? hiraganaGroups :
+                scriptType === 'katakana' ? katakanaGroups : kanjiGroups;
 
-            for (const category in groupSet) {
-                const section = groupSet[category];
-                for (const group in section) {
-                    const btn = document.createElement('button');
-                    btn.textContent = `${category} - ${group}`;
-                    btn.className = 'group-btn';
-                    btn.onclick = () => toggleGroup(category, group, btn);
-                    container.appendChild(btn);
+            for (const [categoryName, groupsObj] of Object.entries(groups)) {
+                const categoryHTML = `
+                    <div class="category-card">
+                        <button class="category-header" onclick="toggleCategory(this)">
+                            ${categoryName.toUpperCase()}
+                            <i class="fas fa-chevron-down"></i>
+                        </button>
+                        <div class="groups-container"></div>
+                    </div>
+                `;
+                container.insertAdjacentHTML('beforeend', categoryHTML);
+
+                const groupsContainer = container.lastElementChild.querySelector('.groups-container');
+                for (const [groupName, characters] of Object.entries(groupsObj)) {
+                    const groupHTML = `
+                        <button class="group-btn" 
+                            onclick="toggleGroupSelection('${scriptType}', '${categoryName}', '${groupName}', this)">
+                            ${groupName}
+                        </button>
+                    `;
+                    groupsContainer.insertAdjacentHTML('beforeend', groupHTML);
                 }
             }
         }
 
-        function toggleGroup(category, group, btn) {
-            const groupSet = currentScript === 'hiragana' ? hiraganaGroups
-                : currentScript === 'katakana' ? katakanaGroups
-                    : kanjiGroups;
-
-            const key = `${category}-${group}`;
-            if (selectedGroups[key]) {
-                delete selectedGroups[key];
-                btn.classList.remove('selected');
-            } else {
-                selectedGroups[key] = groupSet[category][group];
-                btn.classList.add('selected');
-            }
+        // Group Selection
+        function toggleCategory(header) {
+            const categoryCard = header.closest('.category-card');
+            const groupsContainer = categoryCard.querySelector('.groups-container');
+            header.classList.toggle('expanded');
+            groupsContainer.classList.toggle('show');
         }
 
-        // Start Game
+        function toggleGroupSelection(scriptType, category, groupName, button) {
+            // Properly handle category names with spaces
+            const groupKey = `${scriptType}|${category}|${groupName}`;
+
+            if (selectedGroups.includes(groupKey)) {
+                selectedGroups = selectedGroups.filter(g => g !== groupKey);
+            } else {
+                selectedGroups.push(groupKey);
+            }
+            button.classList.toggle('selected');
+        }
+
+        // Game Initialization
         function startGame() {
-            if (Object.keys(selectedGroups).length === 0) {
-                showErrorNotification();
+            if (selectedGroups.length === 0) {
+                showNotification('error');
                 return;
             }
 
-            // Gabungkan semua karakter jadi satu
-            const allChars = {};
-            for (const key in selectedGroups) {
-                Object.assign(allChars, selectedGroups[key]);
-            }
-
-            questionQueue = shuffleArray(Object.keys(allChars));
-            totalQuestions = questionQueue.length;
-            currentIndex = 0;
+            questions = generateQuestions();
+            currentQuestionIndex = 0;
             correctCount = 0;
             wrongCount = 0;
 
-            hideAll();
+            document.getElementById('categoryContainer').classList.add('hidden');
             document.getElementById('gameContainer').classList.remove('hidden');
-            document.getElementById('correctCount').textContent = '0';
-            document.getElementById('wrongCount').textContent = '0';
-
-            selectedGroups = allChars;
-            generateQuestion();
+            showNextQuestion();
         }
 
-        function shuffleArray(array) {
-            for (let i = array.length - 1; i > 0; i--) {
-                const j = Math.floor(Math.random() * (i + 1));
-                [array[i], array[j]] = [array[j], array[i]];
-            }
-            return array;
+        function generateQuestions() {
+            const allCharacters = [];
+            selectedGroups.forEach(groupKey => {
+                const [script, category, group] = groupKey.split('|');
+                const characters = script === 'hiragana' ? hiraganaGroups[category][group] :
+                    script === 'katakana' ? katakanaGroups[category][group] :
+                        kanjiGroups[category][group];
+                allCharacters.push(...Object.entries(characters));
+            });
+
+            return shuffleArray(allCharacters).slice(0, totalQuestions);
         }
 
-        // Generate Question
-        function generateQuestion() {
-            if (currentIndex >= totalQuestions) {
-                return endGame();
+        // Game Logic
+        function showNextQuestion() {
+            if (currentQuestionIndex >= questions.length) {
+                showResults();
+                return;
             }
 
-            currentQuestion = questionQueue[currentIndex];
-            currentAnswer = selectedGroups[currentQuestion];
-            currentIndex++;
+            updateProgress();
+            const [character, correctAnswer] = questions[currentQuestionIndex];
+            document.getElementById('character').textContent = character;
 
-            const options = [currentAnswer];
-            const allAnswers = Object.values(selectedGroups);
+            const options = generateOptions(correctAnswer);
+            renderOptions(options);
+        }
 
+        function generateOptions(correctAnswer) {
+            const options = [correctAnswer];
             while (options.length < 4) {
-                const rand = allAnswers[Math.floor(Math.random() * allAnswers.length)];
-                if (!options.includes(rand)) options.push(rand);
+                const randomChar = getRandomDistractor();
+                if (!options.includes(randomChar)) {
+                    options.push(randomChar);
+                }
             }
+            return shuffleArray(options);
+        }
 
-            options.sort(() => Math.random() - 0.5);
+        function getRandomDistractor() {
+            const randomQuestion = questions[Math.floor(Math.random() * questions.length)];
+            return randomQuestion[1];
+        }
 
-            document.getElementById('character').textContent = currentQuestion;
-            const container = document.getElementById('options');
-            container.innerHTML = '';
-            options.forEach(opt => {
-                const btn = document.createElement('button');
-                btn.className = 'option-btn';
-                btn.innerHTML = `<span>${opt}</span>`;
-                btn.onclick = () => checkAnswer(opt, btn);
-                container.appendChild(btn);
+        function renderOptions(options) {
+            const optionsContainer = document.getElementById('options');
+            optionsContainer.innerHTML = '';
+
+            options.forEach(option => {
+                const isReading = currentScriptType !== 'kanji';
+                const optionHTML = `
+                    <button class="option-btn" onclick="checkAnswer('${option}')">
+                        <span class="option-reading">${option}</span>
+                        ${!isReading ? `<span class="option-meaning">${getKanjiMeaning(option)}</span>` : ''}
+                    </button>
+                `;
+                optionsContainer.insertAdjacentHTML('beforeend', optionHTML);
             });
         }
 
-        // Check Answer
-        function checkAnswer(answer, btn) {
-            const isCorrect = answer === currentAnswer;
-            if (isCorrect) {
-                btn.classList.add('correct');
-                correctCount++;
-                document.getElementById('correctCount').textContent = correctCount;
-            } else {
-                btn.classList.add('wrong');
-                wrongCount++;
-                document.getElementById('wrongCount').textContent = wrongCount;
+        function getKanjiMeaning(reading) {
+            const kanjiEntry = Object.entries(kanjiGroups.n4)
+                .flatMap(([_, groups]) => Object.entries(groups))
+                .find(([_, meaning]) => meaning.includes(reading));
+            return kanjiEntry ? kanjiEntry[1].split('(')[1].replace(')', '') : '';
+        }
 
-                const buttons = document.querySelectorAll('.option-btn');
-                buttons.forEach(b => {
-                    if (b.textContent === currentAnswer) b.classList.add('correct');
-                });
-            }
+        function checkAnswer(selectedAnswer) {
+            const [character, correctAnswer] = questions[currentQuestionIndex];
+            const options = document.querySelectorAll('.option-btn');
+            let correctElement;
 
-            const allBtns = document.querySelectorAll('.option-btn');
-            allBtns.forEach(b => (b.disabled = true));
+            options.forEach(option => {
+                option.disabled = true;
+                const optionText = option.querySelector('.option-reading').textContent;
+
+                if (optionText === correctAnswer) {
+                    option.classList.add('correct');
+                    correctElement = option;
+                }
+
+                if (optionText === selectedAnswer && selectedAnswer !== correctAnswer) {
+                    option.classList.add('wrong');
+                }
+            });
+
+            // Show correct answer message
+            const meaning = currentScriptType === 'kanji' ? getKanjiMeaning(correctAnswer) : '';
+            document.getElementById('correctAnswerMessage').textContent =
+                `Correct answer : ${correctAnswer} ${meaning}`;
 
             setTimeout(() => {
-                generateQuestion();
-            }, 1200);
+                if (selectedAnswer === correctAnswer) {
+                    correctCount++;
+                } else {
+                    wrongCount++;
+                }
+
+                updateScore();
+                currentQuestionIndex++;
+                showNextQuestion();
+                document.getElementById('correctAnswerMessage').textContent = '';
+            }, 2000);
         }
 
-        function endGame() {
-            hideAll();
+        // Results Screen
+        function showResults() {
+            document.getElementById('gameContainer').classList.add('hidden');
             document.getElementById('resultContainer').classList.remove('hidden');
+
             document.getElementById('finalCorrect').textContent = correctCount;
             document.getElementById('finalWrong').textContent = wrongCount;
-            const accuracy = totalQuestions > 0 ? ((correctCount / totalQuestions) * 100).toFixed(2) : 0;
-            document.getElementById('accuracy').textContent = `${accuracy}%`;
+            document.getElementById('accuracy').textContent =
+                `${Math.round((correctCount / (correctCount + wrongCount)) * 100)}%`;
         }
 
-        // Notification functions
-        function showErrorNotification() {
-            const errorNotif = document.getElementById('errorNotification');
-            errorNotif.classList.add('show');
-            setTimeout(() => errorNotif.classList.remove('show'), 3000);
+        // Utilities
+        function shuffleArray(array) {
+            return array.sort(() => Math.random() - 0.5);
+        }
+
+        function updateProgress() {
+            const progress = (currentQuestionIndex / questions.length) * 100;
+            document.getElementById('progressBar').style.width = `${progress}%`;
+        }
+
+        function updateScore() {
+            document.getElementById('correctCount').textContent = correctCount;
+            document.getElementById('wrongCount').textContent = wrongCount;
+        }
+
+        function showNotification(type) {
+            const notification = document.getElementById(`${type}Notification`);
+            notification.classList.add('show');
+            setTimeout(() => notification.classList.remove('show'), 3000);
         }
 
         function showComingSoonNotification() {
-            const notif = document.getElementById('comingSoonNotification');
-            notif.classList.add('show');
-            setTimeout(() => notif.classList.remove('show'), 3000);
+            showNotification('comingSoon');
         }
+
+        // Initial Setup
+        document.addEventListener('DOMContentLoaded', () => {
+            showHome();
+        });
     </script>
 </body>
 

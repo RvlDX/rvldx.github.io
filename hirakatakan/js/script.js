@@ -499,13 +499,16 @@ function showLearningDictionary() {
     // Load default content (Hiragana)
     showLearningTab('hiragana');
 }
+
 // Show learning tab content
 function showLearningTab(scriptType) {
     // Update active tab
-    document.querySelectorAll('.script-tab').forEach(tab => {
-        tab.classList.remove('active');
-    });
-    event.currentTarget.classList.add('active');
+    const scriptTabs = document.querySelectorAll('.script-tab');
+        if(scriptTabs) {
+            scriptTabs.forEach(tab => {
+                tab.classList.remove('active');
+            });
+        }
 
     // Clear previous content
     const content = document.getElementById('learningContent');

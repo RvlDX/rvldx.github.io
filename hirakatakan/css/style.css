@@ -1027,19 +1027,6 @@ p {
     box-shadow: var(--shadow-sm);
 }
 
-/* Mobile Responsive */
-@media (max-width: 480px) {
-    .score-board {
-        flex-direction: column;
-        gap: 0.5rem;
-        padding: 1rem;
-    }
-
-    .score-correct .score-wrong {
-        justify-content: center;
-    }
-}
-
 /* Learning Section Styles */
 .learning-script-container {
     background: var(--bg-primary);

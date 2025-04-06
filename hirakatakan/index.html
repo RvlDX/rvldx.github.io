@@ -36,11 +36,12 @@
                 </div>
             </div>
 
+            <!-- In the homeContainer section -->
             <div class="action-buttons">
                 <button class="btn btn-primary" onclick="showScriptSelection()">
-                    <i class="fas fa-play btn-icon"></i> Start
+                    <i class="fas fa-play btn-icon"></i> Start Quiz
                 </button>
-                <button class="btn btn-secondary" onclick="showComingSoonNotification()">
+                <button class="btn btn-secondary" onclick="showLearningDictionary()">
                     <i class="fas fa-book btn-icon"></i> Start Learning
                 </button>
             </div>
@@ -85,11 +86,10 @@
             <p class="category-instruction" id="categoryInstruction">Choose at least one group to begin</p>
             <div class="category-container" id="categoryList"></div>
         </div>
-        <div class="flex justify-center">
-            <button class="btn btn-primary w-full max-w-md" onclick="startGame()">
-                <i class="fas fa-play btn-icon"></i> Start Quiz
-            </button>
-        </div>
+
+        <button class="btn btn-primary w-full max-w-md" onclick="startGame()">
+            <i class="fas fa-play btn-icon"></i> Start Quiz
+        </button>
     </div>
 
     <!-- Game Container -->
@@ -140,6 +140,27 @@
         </div>
     </div>
 
+    <!-- Container kamus belajar -->
+    <div class="container hidden" id="learningContainer">
+        <div class="nav-back" onclick="showHome()">
+            <i class="fas fa-arrow-left"></i> Back to Home
+        </div>
+
+        <h2 class="section-title">Learning Materials</h2>
+
+        <!-- Script Navigation Tabs -->
+        <div class="script-tabs">
+            <div class="script-tab active" onclick="showLearningTab('hiragana')">Hiragana</div>
+            <div class="script-tab" onclick="showLearningTab('katakana')">Katakana</div>
+            <div class="script-tab" onclick="showLearningTab('kanji')">Kanji</div>
+        </div>
+
+        <!-- Learning Content -->
+        <div id="learningContent">
+            <!-- Hiragana content will be loaded here by default -->
+        </div>
+    </div>
+
     <!-- Notifications -->
     <div class="notification notification-error" id="errorNotification">
         <i class="fas fa-exclamation-circle notification-icon"></i>
@@ -150,7 +171,7 @@
         <i class="fas fa-hard-hat notification-icon"></i>
         <span>This feature is coming soon!</span>
     </div>
-
+    
     <script src="js/script.js"></script>
     <script src="/hirakatakan/js/script.js"></script>
 </body>

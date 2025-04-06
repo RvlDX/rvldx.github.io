@@ -903,19 +903,35 @@
 
     <!-- Game Container -->
     <div id="gameContainer" class="hidden">
-        <h2>Quiz Time!</h2>
-        <div id="character" style="font-size: 48px; margin-bottom: 20px;"></div>
-        <div id="options"></div>
-        <div>Correct: <span id="correctCount">0</span> | Wrong: <span id="wrongCount">0</span></div>
+        <div class="progress-container">
+            <div class="progress-bar" id="progressBar"></div>
+        </div>
+        <div class="score-board">
+            <span class="score-correct">Correct: <span id="correctCount">0</span></span>
+            <span class="score-wrong">Wrong: <span id="wrongCount">0</span></span>
+        </div>
+        <div class="character-display" id="character"></div>
+
+        <div class="options-grid" id="options"></div>
     </div>
 
     <!-- Result Container -->
     <div id="resultContainer" class="hidden">
-        <h2>Results</h2>
+        <div class="result-icon">
+            <i class="fas fa-trophy"></i>
+        </div>
+        <h2 class="result-title">Quiz Completed!</h2>
         <p>Correct Answers: <span id="finalCorrect">0</span></p>
         <p>Wrong Answers: <span id="finalWrong">0</span></p>
         <p>Accuracy: <span id="accuracy">0%</span></p>
-        <button onclick="showHome()">Back to Home</button>
+        <div class="result-actions">
+            <button class="btn btn-primary" onclick="showScriptSelection()">
+                <i class="fas fa-redo btn-icon"></i> Try Again
+            </button>
+            <button class="btn btn-secondary" onclick="showHome()">
+                <i class="fas fa-home btn-icon"></i> Return Home
+            </button>
+        </div>
     </div>
 
     <!-- Notifications -->

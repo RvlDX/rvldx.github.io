@@ -822,7 +822,8 @@
 </head>
 
 <body>
-    <!-- Home Screen -->
+
+    <!-- Home -->
     <div class="container" id="homeContainer">
         <section class="hero">
             <h1 class="hero-title">Quiz HiraKataKan</h1>
@@ -856,8 +857,8 @@
             </div>
         </section>
     </div>
-
-    <!-- Script Selection Screen -->
+  
+     <!-- Script Selection Screen -->
     <div class="container hidden" id="scriptSelectionContainer">
         <div class="nav-back" onclick="showHome()">
             <i class="fas fa-arrow-left"></i> Back to Home
@@ -866,89 +867,50 @@
         <h2 class="section-title">Choose Script Type</h2>
 
         <div class="script-grid">
-            <div class="script-card" onclick="selectScript('hiragana')" id="hiraganaCard">
+            <div class="script-card" onclick="showCategorySelection('hiragana')" id="hiraganaCard">
                 <div class="script-icon">あ</div>
                 <h3 class="script-name">Hiragana</h3>
                 <p class="script-desc">Basic phonetic script for Japanese words</p>
             </div>
-            <div class="script-card" onclick="selectScript('katakana')" id="katakanaCard">
+            <div class="script-card" onclick="showCategorySelection('katakana')" id="katakanaCard">
                 <div class="script-icon">ア</div>
                 <h3 class="script-name">Katakana</h3>
                 <p class="script-desc">Used for foreign words and emphasis</p>
             </div>
-            <div class="script-card" onclick="selectScript('kanji')" id="kanjiCard">
+            <div class="script-card" onclick="showCategorySelection('kanji')" id="kanjiCard">
                 <div class="script-icon">漢</div>
                 <h3 class="script-name">Kanji</h3>
                 <p class="script-desc">Chinese characters with multiple readings</p>
             </div>
         </div>
     </div>
-
-    <!-- Category Selection Screen -->
-    <div class="container hidden" id="categoryContainer">
-        <div class="nav-back" onclick="showScriptSelection()">
-            <i class="fas fa-arrow-left"></i> Back to Script Selection
-        </div>
-
-        <h2 class="section-title" id="categoryTitle">Select Categories</h2>
-        <p class="text-center text-secondary mb-8" id="categoryInstruction">Choose at least one group to begin</p>
-
-        <div class="category-accordion" id="categoryAccordion"></div>
-
-        <button class="btn btn-primary w-full max-w-md" onclick="startGame()">
-            <i class="fas fa-play btn-icon"></i> Start Quiz
-        </button>
+  
+    <!-- Category Selection -->
+    <div id="categoryContainer" class="hidden">
+      <h2>Select Groups</h2>
+      <div id="categoryList"></div>
+      <button onclick="startGame()">Start Quiz</button>
+      <button onclick="showScriptSelection()">Back</button>
+      <div id="errorNotification" class="notification">Please select at least one group!</div>
     </div>
-
-    <!-- Game Screen -->
-    <div class="game-container" id="gameContainer">
-        <div class="progress-container">
-            <div class="progress-bar" id="progressBar"></div>
-        </div>
-
-        <div class="score-board">
-            <span class="score-correct">Correct: <span id="correctCount">0</span></span>
-            <span class="score-wrong">Wrong: <span id="wrongCount">0</span></span>
-        </div>
-
-        <div class="character-display" id="character"></div>
-
-        <div class="options-grid" id="options"></div>
+  
+    <!-- Game Container -->
+    <div id="gameContainer" class="hidden">
+      <h2>Quiz Time!</h2>
+      <div id="character" style="font-size: 48px; margin-bottom: 20px;"></div>
+      <div id="options"></div>
+      <div>Correct: <span id="correctCount">0</span> | Wrong: <span id="wrongCount">0</span></div>
     </div>
-
-    <!-- Results Screen -->
-    <div class="result-container" id="resultContainer">
-        <div class="result-icon">
-            <i class="fas fa-trophy"></i>
-        </div>
-
-        <h2 class="result-title">Quiz Completed!</h2>
-
-        <div class="stats-container">
-            <div class="stat-item">
-                <span class="stat-label">Correct Answers:</span>
-                <span class="stat-value stat-correct" id="finalCorrect">0</span>
-            </div>
-            <div class="stat-item">
-                <span class="stat-label">Wrong Answers:</span>
-                <span class="stat-value stat-wrong" id="finalWrong">0</span>
-            </div>
-            <div class="stat-item">
-                <span class="stat-label">Accuracy:</span>
-                <span class="stat-value stat-accuracy" id="accuracy">0%</span>
-            </div>
-        </div>
-
-        <div class="result-actions">
-            <button class="btn btn-primary" onclick="showCategorySelection()">
-                <i class="fas fa-redo btn-icon"></i> Try Again
-            </button>
-            <button class="btn btn-secondary" onclick="showHome()">
-                <i class="fas fa-home btn-icon"></i> Return Home
-            </button>
-        </div>
+  
+    <!-- Result Container -->
+    <div id="resultContainer" class="hidden">
+      <h2>Results</h2>
+      <p>Correct Answers: <span id="finalCorrect">0</span></p>
+      <p>Wrong Answers: <span id="finalWrong">0</span></p>
+      <p>Accuracy: <span id="accuracy">0%</span></p>
+      <button onclick="showHome()">Back to Home</button>
     </div>
-
+  
     <!-- Notifications -->
     <div class="notification notification-error" id="errorNotification">
         <i class="fas fa-exclamation-circle notification-icon"></i>
@@ -959,7 +921,7 @@
         <i class="fas fa-hard-hat notification-icon"></i>
         <span>This feature is coming soon!</span>
     </div>
-
+    
     <script>
         // Data sets
         const hiraganaGroups = {
@@ -1191,160 +1153,103 @@
             }
         };
 
-        // Game state
-        let currentSet = {};
+        // Game State
+        let currentScript = '';
+        let selectedGroups = {};
         let questionQueue = [];
+        let currentQuestion = '';
+        let currentAnswer = '';
         let correctCount = 0;
         let wrongCount = 0;
-        let currentScript = '';
         let totalQuestions = 0;
-        let currentCorrectAnswer = '';
-        let selectedGroups = {};
-        let currentQuestionIndex = 0;
+        let currentIndex = 0;
 
-        // Navigation functions
+        // UI Navigation
         function showHome() {
-            try {
-                currentSet = {};
-                questionQueue = [];
-                document.getElementById('homeContainer').classList.remove('hidden');
-                document.getElementById('scriptSelectionContainer').classList.add('hidden');
-                document.getElementById('categoryContainer').classList.add('hidden');
-                document.getElementById('gameContainer').classList.add('hidden');
-                document.getElementById('resultContainer').classList.add('hidden');
-            } catch (error) {
-                console.error('Error in showHome:', error);
-                alert('Terjadi kesalahan saat menampilkan beranda');
-            }
+            hideAll();
+            document.getElementById('homeContainer').classList.remove('hidden');
         }
 
         function showScriptSelection() {
-            document.getElementById('homeContainer').classList.add('hidden');
+            hideAll();
             document.getElementById('scriptSelectionContainer').classList.remove('hidden');
+        }
+
+        function showCategorySelection(script) {
+            hideAll();
+            currentScript = script;
+            document.getElementById('categoryContainer').classList.remove('hidden');
+            renderCategories();
+        }
+
+        function hideAll() {
+            document.getElementById('homeContainer').classList.add('hidden');
+            document.getElementById('scriptSelectionContainer').classList.add('hidden');
             document.getElementById('categoryContainer').classList.add('hidden');
             document.getElementById('gameContainer').classList.add('hidden');
             document.getElementById('resultContainer').classList.add('hidden');
-
-            // Reset selection highlights
-            document.getElementById('hiraganaCard').classList.remove('selected');
-            document.getElementById('katakanaCard').classList.remove('selected');
-            document.getElementById('kanjiCard').classList.remove('selected');
         }
 
-        function selectScript(script) {
-            currentScript = script;
-            document.getElementById(script + 'Card').classList.add('selected');
-            showCategorySelection();
-        }
-
-        function showCategorySelection() {
-            document.getElementById('homeContainer').classList.add('hidden');
-            document.getElementById('scriptSelectionContainer').classList.add('hidden');
-            document.getElementById('categoryContainer').classList.remove('hidden');
-
-            const scriptName = currentScript.charAt(0).toUpperCase() + currentScript.slice(1);
-            document.getElementById('categoryTitle').textContent = `Select ${scriptName} Groups`;
-
-            const container = document.getElementById('categoryAccordion');
+        function renderCategories() {
+            const container = document.getElementById('categoryList');
             container.innerHTML = '';
 
-            const categories = currentScript === 'kanji'
-                ? Object.keys(kanjiGroups)
-                : Object.keys(currentScript === 'hiragana' ? hiraganaGroups : katakanaGroups);
+            const groupSet = currentScript === 'hiragana' ? hiraganaGroups
+                : currentScript === 'katakana' ? katakanaGroups
+                    : kanjiGroups;
 
-            categories.forEach(category => {
-                const item = document.createElement('div');
-                item.className = 'accordion-item';
-
-                const header = document.createElement('div');
-                header.className = 'accordion-header';
-                header.innerHTML = `
-            <span>${category.toUpperCase()}</span>
-            <i class="fas fa-chevron-down"></i>
-        `;
-                header.onclick = () => toggleCategoryGroups(item);
-
-                const content = document.createElement('div');
-                content.className = 'accordion-content';
-
-                const groupsContainer = document.createElement('div');
-                groupsContainer.className = 'group-grid';
-
-                Object.keys(getCategoryGroups(category)).forEach(group => {
-                    const groupBtn = document.createElement('button');
-                    groupBtn.className = 'group-btn';
-                    groupBtn.textContent = group;
-                    groupBtn.onclick = () => toggleGroupSelection(group, category, groupBtn);
-                    groupsContainer.appendChild(groupBtn);
-                });
-
-                content.appendChild(groupsContainer);
-                item.appendChild(header);
-                item.appendChild(content);
-                container.appendChild(item);
-            });
-        }
-
-        function toggleCategoryGroups(item) {
-            const header = item.querySelector('.accordion-header');
-            const content = item.querySelector('.accordion-content');
-            header.classList.toggle('expanded');
-            content.classList.toggle('show');
-        }
-
-        function toggleGroupSelection(group, category, element) {
-            element.classList.toggle('selected');
-            if (!currentSet[category]) currentSet[category] = [];
-            const index = currentSet[category].indexOf(group);
-            if (index > -1) {
-                currentSet[category].splice(index, 1);
-            } else {
-                currentSet[category].push(group);
-            }
-        }
-
-        function getCategoryGroups(category) {
-            switch (currentScript) {
-                case 'hiragana': return hiraganaGroups[category];
-                case 'katakana': return katakanaGroups[category];
-                case 'kanji': return kanjiGroups[category];
-                default: return {};
-            }
-        }
-
-        // Game functions
-        function startGame() {
-            selectedGroups = {};
-
-            // Bangun selectedGroups dari currentSet
-            const allGroups = currentScript === 'kanji' ? kanjiGroups :
-                currentScript === 'hiragana' ? hiraganaGroups : katakanaGroups;
-
-            // Hitung total grup yang dipilih
-            let totalSelectedGroups = 0;
-
-            for (const category in currentSet) {
-                for (const group of currentSet[category]) {
-                    if (allGroups[category] && allGroups[category][group]) {
-                        Object.assign(selectedGroups, allGroups[category][group]);
-                        totalSelectedGroups++;
-                    }
+            for (const category in groupSet) {
+                const section = groupSet[category];
+                for (const group in section) {
+                    const btn = document.createElement('button');
+                    btn.textContent = `${category} - ${group}`;
+                    btn.className = 'group-btn';
+                    btn.onclick = () => toggleGroup(category, group, btn);
+                    container.appendChild(btn);
                 }
             }
+        }
 
-            // Validasi apakah ada grup yang dipilih
-            if (totalSelectedGroups === 0) {
+        function toggleGroup(category, group, btn) {
+            const groupSet = currentScript === 'hiragana' ? hiraganaGroups
+                : currentScript === 'katakana' ? katakanaGroups
+                    : kanjiGroups;
+
+            const key = `${category}-${group}`;
+            if (selectedGroups[key]) {
+                delete selectedGroups[key];
+                btn.classList.remove('selected');
+            } else {
+                selectedGroups[key] = groupSet[category][group];
+                btn.classList.add('selected');
+            }
+        }
+
+        // Start Game
+        function startGame() {
+            if (Object.keys(selectedGroups).length === 0) {
                 showErrorNotification();
                 return;
             }
 
-            totalQuestions = Object.keys(selectedGroups).length;
-            questionQueue = shuffleArray([...Object.keys(selectedGroups)]);
-            currentQuestionIndex = 0;
+            // Gabungkan semua karakter jadi satu
+            const allChars = {};
+            for (const key in selectedGroups) {
+                Object.assign(allChars, selectedGroups[key]);
+            }
 
-            document.getElementById('categoryContainer').classList.add('hidden');
+            questionQueue = shuffleArray(Object.keys(allChars));
+            totalQuestions = questionQueue.length;
+            currentIndex = 0;
+            correctCount = 0;
+            wrongCount = 0;
+
+            hideAll();
             document.getElementById('gameContainer').classList.remove('hidden');
-            resetCounters();
+            document.getElementById('correctCount').textContent = '0';
+            document.getElementById('wrongCount').textContent = '0';
+
+            selectedGroups = allChars;
             generateQuestion();
         }
 
@@ -1356,150 +1261,78 @@
             return array;
         }
 
-        function resetCounters() {
-            correctCount = 0;
-            wrongCount = 0;
-            document.getElementById('correctCount').textContent = '0';
-            document.getElementById('wrongCount').textContent = '0';
-        }
-
+        // Generate Question
         function generateQuestion() {
-            // Update progress bar
-            const progress = ((currentQuestionIndex) / totalQuestions) * 100;
-            document.getElementById('progressBar').style.width = `${progress}%`;
-
-            // Cek jika tidak ada pertanyaan lagi
-            if (questionQueue.length === 0 || currentQuestionIndex >= totalQuestions) {
+            if (currentIndex >= totalQuestions) {
                 return endGame();
             }
 
-            const currentChar = questionQueue.pop();
-            currentQuestionIndex++;
+            currentQuestion = questionQueue[currentIndex];
+            currentAnswer = selectedGroups[currentQuestion];
+            currentIndex++;
 
-            // Handle kanji vs hiragana/katakana
-            if (currentScript === 'kanji') {
-                const kanjiData = selectedGroups[currentChar];
-                // Pisahkan reading dan meaning
-                const parts = kanjiData.split('(');
-                currentCorrectAnswer = parts[0].trim();
-                document.getElementById('character').textContent = currentChar;
-            } else {
-                currentCorrectAnswer = selectedGroups[currentChar];
-                document.getElementById('character').textContent = currentChar;
-            }
+            const options = [currentAnswer];
+            const allAnswers = Object.values(selectedGroups);
 
-            // Generate options
-            const options = [currentCorrectAnswer];
-            const allChars = Object.keys(selectedGroups);
-
-            // Tambahkan 3 jawaban salah yang unik
-            while (options.length < 4 && allChars.length > 1) {
-                const randomIndex = Math.floor(Math.random() * allChars.length);
-                const randomChar = allChars[randomIndex];
-                const wrongAnswer = selectedGroups[randomChar];
-
-                // Untuk kanji, ambil hanya bagian reading-nya
-                const wrongAnswerValue = currentScript === 'kanji'
-                    ? wrongAnswer.split('(')[0].trim()
-                    : wrongAnswer;
-
-                if (wrongAnswerValue !== currentCorrectAnswer && !options.includes(wrongAnswerValue)) {
-                    options.push(wrongAnswerValue);
-                }
-            }
-
-            // Pastikan kita punya 4 opsi (jika memungkinkan)
             while (options.length < 4) {
-                options.push("?");
+                const rand = allAnswers[Math.floor(Math.random() * allAnswers.length)];
+                if (!options.includes(rand)) options.push(rand);
             }
 
-            // Acak urutan opsi
             options.sort(() => Math.random() - 0.5);
 
-            // Render opsi
-            const optionsContainer = document.getElementById('options');
-            optionsContainer.innerHTML = options.map(option => {
-                // Untuk kanji, tampilkan meaning jika ada
-                let meaning = '';
-                if (currentScript === 'kanji' && option !== "?") {
-                    const char = Object.keys(selectedGroups).find(
-                        key => selectedGroups[key].startsWith(option)
-                    );
-                    if (char) {
-                        const kanjiData = selectedGroups[char];
-                        const match = kanjiData.match(/\((.*)\)/);
-                        meaning = match ? match[1] : '';
-                    }
-                }
-
-                const isCorrect = option === currentCorrectAnswer;
-
-                return `
-            <button class="option-btn"
-                    onclick="checkAnswer(${isCorrect}, this)">
-                <span class="option-reading">${option}</span>
-                ${meaning ? `<span class="option-meaning">${meaning}</span>` : ''}
-            </button>
-        `;
-            }).join('');
+            document.getElementById('character').textContent = currentQuestion;
+            const container = document.getElementById('options');
+            container.innerHTML = '';
+            options.forEach(opt => {
+                const btn = document.createElement('button');
+                btn.className = 'option-btn';
+                btn.innerHTML = `<span>${opt}</span>`;
+                btn.onclick = () => checkAnswer(opt, btn);
+                container.appendChild(btn);
+            });
         }
 
-        function checkAnswer(isCorrect, element) {
-            const options = document.querySelectorAll('.option-btn');
-            options.forEach(btn => {
-                btn.disabled = true;
-                // Highlight jawaban yang benar jika user salah
-                if (!isCorrect && btn.querySelector('.option-reading').textContent === currentCorrectAnswer) {
-                    btn.classList.add('correct');
-                }
-            });
-
+        // Check Answer
+        function checkAnswer(answer, btn) {
+            const isCorrect = answer === currentAnswer;
             if (isCorrect) {
+                btn.classList.add('correct');
                 correctCount++;
                 document.getElementById('correctCount').textContent = correctCount;
-                element.classList.add('correct');
             } else {
+                btn.classList.add('wrong');
                 wrongCount++;
                 document.getElementById('wrongCount').textContent = wrongCount;
-                element.classList.add('wrong');
+
+                const buttons = document.querySelectorAll('.option-btn');
+                buttons.forEach(b => {
+                    if (b.textContent === currentAnswer) b.classList.add('correct');
+                });
             }
 
+            const allBtns = document.querySelectorAll('.option-btn');
+            allBtns.forEach(b => (b.disabled = true));
+
             setTimeout(() => {
-                if (currentQuestionIndex < totalQuestions) {
-                    generateQuestion();
-                } else {
-                    endGame();
-                }
-            }, 1500);
+                generateQuestion();
+            }, 1200);
         }
 
         function endGame() {
-            document.getElementById('gameContainer').classList.add('hidden');
-            const resultScreen = document.getElementById('resultContainer');
-            resultScreen.classList.remove('hidden');
-
-            const accuracy = totalQuestions > 0
-                ? ((correctCount / totalQuestions) * 100).toFixed(2)
-                : 0;
-
+            hideAll();
+            document.getElementById('resultContainer').classList.remove('hidden');
             document.getElementById('finalCorrect').textContent = correctCount;
             document.getElementById('finalWrong').textContent = wrongCount;
+            const accuracy = totalQuestions > 0 ? ((correctCount / totalQuestions) * 100).toFixed(2) : 0;
             document.getElementById('accuracy').textContent = `${accuracy}%`;
         }
 
-        // Notification functions
         function showErrorNotification() {
-            const errorNotif = document.getElementById('errorNotification');
-            errorNotif.classList.add('show');
-            setTimeout(() => errorNotif.classList.remove('show'), 3000);
-        }
-
-        function showComingSoonNotification() {
-            const notif = document.getElementById('comingSoonNotification');
+            const notif = document.getElementById('errorNotification');
             notif.classList.add('show');
             setTimeout(() => notif.classList.remove('show'), 3000);
         }
-
     </script>
 </body>
 

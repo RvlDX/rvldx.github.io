@@ -1328,8 +1328,15 @@
             document.getElementById('accuracy').textContent = `${accuracy}%`;
         }
 
+        // Notification functions
         function showErrorNotification() {
-            const notif = document.getElementById('errorNotification');
+            const errorNotif = document.getElementById('errorNotification');
+            errorNotif.classList.add('show');
+            setTimeout(() => errorNotif.classList.remove('show'), 3000);
+        }
+
+        function showComingSoonNotification() {
+            const notif = document.getElementById('comingSoonNotification');
             notif.classList.add('show');
             setTimeout(() => notif.classList.remove('show'), 3000);
         }

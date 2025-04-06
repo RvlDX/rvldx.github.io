@@ -857,8 +857,8 @@
             </div>
         </section>
     </div>
-  
-     <!-- Script Selection Screen -->
+
+    <!-- Script Selection Screen -->
     <div class="container hidden" id="scriptSelectionContainer">
         <div class="nav-back" onclick="showHome()">
             <i class="fas fa-arrow-left"></i> Back to Home
@@ -884,34 +884,40 @@
             </div>
         </div>
     </div>
-  
+
     <!-- Category Selection -->
     <div class="container hidden" id="categoryContainer">
         <div class="nav-back" onclick="showScriptSelection()">
             <i class="fas fa-arrow-left"></i> Back to Script Selection
         </div>
-      <h2>Select Groups</h2>
-      <div id="categoryList"></div>
-      <button onclick="startGame()">Start Quiz</button>
+        <h2 class="section-title" id="categoryTitle">Select Categories</h2>
+        <p class="text-center text-secondary mb-8" id="categoryInstruction">Choose at least one group to begin</p>
+        <div id="categoryList"></div>
+
+        <div class="category-accordion" id="categoryAccordion"></div>
+
+        <button class="btn btn-primary w-full max-w-md" onclick="startGame()">
+            <i class="fas fa-play btn-icon"></i> Start Quiz
+        </button>
     </div>
-  
+
     <!-- Game Container -->
     <div id="gameContainer" class="hidden">
-      <h2>Quiz Time!</h2>
-      <div id="character" style="font-size: 48px; margin-bottom: 20px;"></div>
-      <div id="options"></div>
-      <div>Correct: <span id="correctCount">0</span> | Wrong: <span id="wrongCount">0</span></div>
+        <h2>Quiz Time!</h2>
+        <div id="character" style="font-size: 48px; margin-bottom: 20px;"></div>
+        <div id="options"></div>
+        <div>Correct: <span id="correctCount">0</span> | Wrong: <span id="wrongCount">0</span></div>
     </div>
-  
+
     <!-- Result Container -->
     <div id="resultContainer" class="hidden">
-      <h2>Results</h2>
-      <p>Correct Answers: <span id="finalCorrect">0</span></p>
-      <p>Wrong Answers: <span id="finalWrong">0</span></p>
-      <p>Accuracy: <span id="accuracy">0%</span></p>
-      <button onclick="showHome()">Back to Home</button>
+        <h2>Results</h2>
+        <p>Correct Answers: <span id="finalCorrect">0</span></p>
+        <p>Wrong Answers: <span id="finalWrong">0</span></p>
+        <p>Accuracy: <span id="accuracy">0%</span></p>
+        <button onclick="showHome()">Back to Home</button>
     </div>
-  
+
     <!-- Notifications -->
     <div class="notification notification-error" id="errorNotification">
         <i class="fas fa-exclamation-circle notification-icon"></i>
@@ -922,7 +928,7 @@
         <i class="fas fa-hard-hat notification-icon"></i>
         <span>This feature is coming soon!</span>
     </div>
-    
+
     <script>
         // Data sets
         const hiraganaGroups = {

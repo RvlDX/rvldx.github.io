@@ -886,12 +886,13 @@
     </div>
   
     <!-- Category Selection -->
-    <div id="categoryContainer" class="hidden">
+    <div class="container hidden" id="categoryContainer">
+        <div class="nav-back" onclick="showScriptSelection()">
+            <i class="fas fa-arrow-left"></i> Back to Script Selection
+        </div>
       <h2>Select Groups</h2>
       <div id="categoryList"></div>
       <button onclick="startGame()">Start Quiz</button>
-      <button onclick="showScriptSelection()">Back</button>
-      <div id="errorNotification" class="notification">Please select at least one group!</div>
     </div>
   
     <!-- Game Container -->

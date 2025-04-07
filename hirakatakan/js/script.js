@@ -18,6 +18,96 @@ const hiraganaGroups = {
         'D-': { 'だ': 'da', 'ぢ': 'ji', 'づ': 'zu', 'で': 'de', 'ど': 'do' },
         'B-': { 'ば': 'ba', 'び': 'bi', 'ぶ': 'bu', 'べ': 'be', 'ぼ': 'bo' },
         'P-': { 'ぱ': 'pa', 'ぴ': 'pi', 'ぷ': 'pu', 'ぺ': 'pe', 'ぽ': 'po' }
+    },
+    yoon: {
+        'K-': { 'きゃ': 'kya', 'きゅ': 'kyu', 'きょ': 'kyo' },
+        'S-': { 'しゃ': 'sha', 'しゅ': 'shu', 'しょ': 'sho' },
+        'T-': { 'ちゃ': 'cha', 'ちゅ': 'chu', 'ちょ': 'cho' },
+        'N-': { 'にゃ': 'nya', 'にゅ': 'nyu', 'にょ': 'nyo' },
+        'H-': { 'ひゃ': 'hya', 'ひゅ': 'hyu', 'ひょ': 'hyo' },
+        'M-': { 'みゃ': 'mya', 'みゅ': 'myu', 'みょ': 'myo' },
+        'R-': { 'りゃ': 'rya', 'りゅ': 'ryu', 'りょ': 'ryo' },
+        'G-': { 'ぎゃ': 'gya', 'ぎゅ': 'gyu', 'ぎょ': 'gyo' },
+        'J-': { 'じゃ': 'ja', 'じゅ': 'ju', 'じょ': 'jo' },
+        'B-': { 'びゃ': 'bya', 'びゅ': 'byu', 'びょ': 'byo' },
+        'P-': { 'ぴゃ': 'pya', 'ぴゅ': 'pyu', 'ぴょ': 'pyo' }
+    },
+    particles: {
+        'Partikel Dasar': {
+            'は': 'wa (penanda topik)',
+            'が': 'ga (penanda subjek)',
+            'を': 'o (penanda objek langsung)',
+            'に': 'ni (tujuan, waktu, penerima)',
+            'で': 'de (tempat, sarana)',
+            'へ': 'e (arah)',
+            'と': 'to (dengan, dan)',
+            'も': 'mo (juga)',
+            'の': 'no (kepemilikan)',
+            'から': 'kara (dari)',
+            'まで': 'made (sampai)',
+            'や': 'ya (dan, dll)',
+            'か': 'ka (atau / tanya)',
+            'ね': 'ne (konfirmasi)',
+            'よ': 'yo (penegasan)',
+            'な': 'na (larangan / informal)',
+        },
+
+        'Partikel Kuantitas & Batasan': {
+            'だけ': 'dake (hanya)',
+            'しか': 'shika (hanya - negatif)',
+            'ばかり': 'bakari (hanya, sekitar)',
+            'ほど': 'hodo (sejauh, sebanding)',
+            'くらい': 'kurai (sekitar)',
+            'ぐらい': 'gurai (sekitar)',
+            'など': 'nado (dan lain-lain)',
+            'やら': 'yara (seperti, dll)',
+        },
+
+        'Partikel Perbandingan & Pemilihan': {
+            'より': 'yori (dibanding)',
+            'のほうが': 'no hou ga (lebih)',
+            'のに': 'noni (padahal)',
+            'でも': 'demo (meskipun, pun)',
+            'とか': 'toka (seperti, dll)',
+        },
+
+        'Partikel Kondisional': {
+            'たら': 'tara (kalau sudah)',
+            'ば': 'ba (jika)',
+            'なら': 'nara (jika)',
+            'ても': 'temo (meskipun)',
+            'のに': 'noni (walaupun)',
+            'ながら': 'nagara (sambil)',
+        },
+
+        'Partikel Penjelas Sebab/Akibat': {
+            'から': 'kara (karena)',
+            'ので': 'node (karena)',
+            'のに': 'noni (padahal)',
+            'くせに': 'kuseni (padahal - negatif)',
+        },
+
+        'Partikel Arah & Tujuan': {
+            'に': 'ni (tujuan, arah)',
+            'へ': 'e (arah)',
+            'まで': 'made (hingga)',
+            'から': 'kara (dari)',
+        },
+
+        'Partikel Kompleks & Gabungan': {
+            'として': 'toshite (sebagai)',
+            'にとって': 'ni totte (bagi)',
+            'について': 'ni tsuite (tentang)',
+            'に対して': 'ni taishite (terhadap)',
+            'によって': 'ni yotte (oleh, tergantung)',
+            'によると': 'ni yoru to (menurut)',
+            'に関して': 'ni kanshite (terkait)',
+            'を通じて': 'wo tsuujite (melalui)',
+            'を通して': 'wo tooshite (melalui)',
+            'において': 'ni oite (di, pada)',
+            'をめぐって': 'wo megutte (seputar)',
+            'に比べて': 'ni kurabete (dibanding)',
+        }
     }
 };
 
@@ -40,6 +130,19 @@ const katakanaGroups = {
         'D-': { 'ダ': 'da', 'ヂ': 'ji', 'ヅ': 'zu', 'デ': 'de', 'ド': 'do' },
         'B-': { 'バ': 'ba', 'ビ': 'bi', 'ブ': 'bu', 'ベ': 'be', 'ボ': 'bo' },
         'P-': { 'パ': 'pa', 'ピ': 'pi', 'プ': 'pu', 'ペ': 'pe', 'ポ': 'po' }
+    },
+    yoon: {
+        'K-': { 'キャ': 'kya', 'キュ': 'kyu', 'キョ': 'kyo' },
+        'S-': { 'シャ': 'sha', 'シュ': 'shu', 'ショ': 'sho' },
+        'T-': { 'チャ': 'cha', 'チュ': 'chu', 'チョ': 'cho' },
+        'N-': { 'ニャ': 'nya', 'ニュ': 'nyu', 'ニョ': 'nyo' },
+        'H-': { 'ヒャ': 'hya', 'ヒュ': 'hyu', 'ヒョ': 'hyo' },
+        'M-': { 'ミャ': 'mya', 'ミュ': 'myu', 'ミョ': 'myo' },
+        'R-': { 'リャ': 'rya', 'リュ': 'ryu', 'リョ': 'ryo' },
+        'G-': { 'ギャ': 'gya', 'ギュ': 'gyu', 'ギョ': 'gyo' },
+        'J-': { 'ジャ': 'ja', 'ジュ': 'ju', 'ジョ': 'jo' },
+        'B-': { 'ビャ': 'bya', 'ビュ': 'byu', 'ビョ': 'byo' },
+        'P-': { 'ピャ': 'pya', 'ピュ': 'pyu', 'ピョ': 'pyo' }
     },
     extended: {
         'All': { 'ヴ': 'vu', 'ウィ': 'wi', 'ウェ': 'we', 'ウォ': 'wo', 'シェ': 'she', 'ジェ': 'je', 'チェ': 'che', 'ティ': 'ti', 'ディ': 'di', 'トゥ': 'tu', 'ドゥ': 'du', 'ファ': 'fa', 'フィ': 'fi', 'フェ': 'fe', 'フォ': 'fo' }

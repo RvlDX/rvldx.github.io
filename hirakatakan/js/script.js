@@ -239,6 +239,13 @@ let totalQuestions = 10;
 
 // Navigation Functions
 function showHome() {
+    //Reset game state
+    selectedGroups = [];
+    questions = [];
+    currentQuestionIndex = 0;
+    correctCount = 0;
+    wrongCount = 0;
+    
     // Sembunyikan semua container
     document.getElementById('homeContainer').classList.remove('hidden');
     document.getElementById('scriptSelectionContainer').classList.add('hidden');
@@ -252,6 +259,13 @@ function showHome() {
 }
 
 function showScriptSelection() {
+    //Reset game state
+    selectedGroups = [];
+    questions = [];
+    currentQuestionIndex = 0;
+    correctCount = 0;
+    wrongCount = 0;
+    
     document.getElementById('homeContainer').classList.add('hidden');
     document.getElementById('scriptSelectionContainer').classList.remove('hidden');
     document.getElementById('categoryContainer').classList.add('hidden');
@@ -259,6 +273,13 @@ function showScriptSelection() {
 }
 
 function showCategorySelection(scriptType) {
+    //Reset game state
+    selectedGroups = [];
+    questions = [];
+    currentQuestionIndex = 0;
+    correctCount = 0;
+    wrongCount = 0;
+    
     currentScriptType = scriptType;
     document.getElementById('scriptSelectionContainer').classList.add('hidden');
     document.getElementById('categoryContainer').classList.remove('hidden');

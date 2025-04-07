@@ -332,7 +332,7 @@ let questions = [];
 let currentQuestionIndex = 0;
 let correctCount = 0;
 let wrongCount = 0;
-let totalQuestions = 10;
+let totalQuestions = 999;
 
 // Navigation Functions
 function showHome() {

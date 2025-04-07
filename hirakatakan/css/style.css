@@ -951,6 +951,24 @@ p {
     margin: 1rem 0;
     color: var(--success);
     font-weight: 500;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    top: calc(100% + 20px);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+    white-space: nowrap;
+    padding: 0.5rem 1rem;
+    background: var(--success);
+    color: white;
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-sm);
+}
+
+.correct-answer-message.show {
+    opacity: 1;
+    visibility: visible;
 }
 
 #resultContainer {

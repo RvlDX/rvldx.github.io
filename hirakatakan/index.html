@@ -21,17 +21,20 @@
                 <div class="feature-card">
                     <div class="feature-icon">あ</div>
                     <h3 class="feature-title">Hiragana</h3>
-                    <p class="feature-desc">46 basic characters for native Japanese words and grammar</p>
+                    <p class="feature-desc">46 basic characters for native Japanese words, grammatical particles, and
+                        word endings</p>
                 </div>
                 <div class="feature-card">
                     <div class="feature-icon">ア</div>
                     <h3 class="feature-title">Katakana</h3>
-                    <p class="feature-desc">46 characters for foreign loanwords and special names</p>
+                    <p class="feature-desc">46 characters for foreign languages, scientific terms, foreign names, and
+                        onomatopoeic sounds</p>
                 </div>
                 <div class="feature-card">
                     <div class="feature-icon">漢</div>
                     <h3 class="feature-title">Kanji</h3>
-                    <p class="feature-desc">Complex characters representing meaning with multiple readings</p>
+                    <p class="feature-desc">Complex characters representing meaning with multiple readings. Each
+                        character can have multiple readings depending on the context.</p>
                 </div>
             </div>
 
@@ -69,7 +72,7 @@
             <div class="script-card" onclick="showCategorySelection('kanji')" id="kanjiCard">
                 <div class="script-icon">漢</div>
                 <h3 class="script-name">Kanji</h3>
-                <p class="script-desc">Chinese characters with multiple readings</p>
+                <p class="script-desc">Chinese characters with multiple readings.</p>
             </div>
         </div>
     </div>
@@ -100,8 +103,12 @@
             <span class="score-correct">Correct : <span id="correctCount">0</span></span>
             <span class="score-wrong">Wrong : <span id="wrongCount">0</span></span>
         </div>
-        <div class="character-display" id="character"></div>
-        <div class="correct-answer-message" id="correctAnswerMessage"></div>
+
+        <div class="character-message-wrapper" style="position: relative; margin-bottom: 60px;">
+            <div class="character-display" id="character"></div>
+            <div class="correct-answer-message" id="correctAnswerMessage"></div>
+        </div>
+
         <div class="options-grid" id="options"></div>
     </div>
 

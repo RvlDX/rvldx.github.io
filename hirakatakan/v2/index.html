@@ -1732,6 +1732,71 @@
                 quizQuestions = [];
             });
 
+function showLearningDictionary() {
+    // Sembunyikan semua kontainer lain
+    document.getElementById('homeContainer').classList.add('hidden');
+    document.getElementById('scriptSelectionContainer').classList.add('hidden');
+    document.getElementById('categoryContainer').classList.add('hidden');
+    document.getElementById('gameContainer').classList.add('hidden');
+    document.getElementById('resultContainer').classList.add('hidden');
+
+    // Tampilkan kontainer sumber belajar
+    document.getElementById('learningContainer').classList.remove('hidden');
+
+    // Tampilkan default (Hiragana)
+    showLearningTab('hiragana');
+}
+
+function showLearningTab(scriptType) {
+    // Perbarui tab aktif
+    const scriptTabs = document.querySelectorAll('.script-tab');
+    if (scriptTabs) {
+        scriptTabs.forEach(tab => tab.classList.remove('active'));
+    }
+
+    // Kosongkan konten sebelumnya
+    const content = document.getElementById('learningContent');
+    content.innerHTML = '';
+
+    // Ambil data berdasarkan tipe skrip
+    const data = {
+        hiragana: hiraganaGroups,
+        katakana: katakanaGroups,
+        kanji: kanjiGroups
+    }[scriptType];
+
+    // Bangun konten berdasarkan data
+    for (const [category, groups] of Object.entries(data)) {
+        const categoryHTML = `
+        <div class="learning-script-container">
+            <h3 class="learning-group-title">${category.toUpperCase()}</h3>
+            ${Object.entries(groups).map(([groupName, characters]) => `
+                <div class="learning-group">
+                    <h4 class="group-subtitle">${groupName}</h4>
+                    <div class="learning-characters">
+                        ${Object.entries(characters).map(([character, reading]) => `
+                            <div class="learning-char-item">
+                                <div class="learning-char">${character}</div>
+                                <div class="learning-reading">${reading.split(' (')[0]}</div>
+                                ${scriptType === 'kanji' ?
+                `<div class="learning-meaning">${reading.split('(')[1]?.replace(')', '') || ''}</div>` :
+                ''}
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            `).join('')}
+        </div>
+    `;
+        content.insertAdjacentHTML('beforeend', categoryHTML);
+    }
+}
+
+// Inisialisasi dengan Hiragana secara default
+document.addEventListener('DOMContentLoaded', () => {
+    showLearningTab('hiragana');
+});
+
             // --- Inisialisasi Awal ---
             showPage('home-page');
 

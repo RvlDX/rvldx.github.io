@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Latihan Romaji (Kotoba & Kaiwa)</title>
+    <title>Latihan Hiragana (Kotoba & Kaiwa)</title>
 
     <style>
         /* Reset dan Font Dasar (Sama seperti sebelumnya) */
@@ -79,6 +79,18 @@
         footer a:hover { text-decoration: underline; }
         .api-warning { color: var(--error-text); font-weight: 600; margin-top: 0.5rem; display: block; }
 
+        .button-secondary {
+    background-color: var(--border-color);
+    color: var(--text-secondary);
+    border: 1px solid var(--border-color);
+    margin-top: 7px;
+}
+
+.button-secondary:hover {
+    background-color: var(--button-bg-hover);
+    color: var(--button-text);
+}
+
     </style>
 </head>
 <body>
@@ -91,26 +103,28 @@
             <h2>Pilih Jenis Latihan:</h2>
             <div class="grid-buttons">
                  <button class="button category-button" data-category="hiragana_char">Baca Karakter (Hiragana)</button>
-                <button class="button category-button" data-category="hiragana_kotoba">Kanji</button>
+                <button class="button category-button" data-category="hiragana_kotoba">Baca Kata-kata (Hiragana)</button>
                 <button class="button category-button" data-category="hiragana_kaiwa">Kalimat Pendek (Kaiwa)</button>
             </div>
         </div>
 
         <div id="quiz-area" class="hidden">
-            <div class="card">
-                 <h3>Pertanyaan (<span id="current-category-display"></span>):</h3>
-                <div id="question-display">
-                    <span class="loader">Memuat...</span> </div>
-            </div>
-
-            <label for="answer-input">Jawaban (Romaji):</label>
-            <input type="text" id="answer-input" class="input" placeholder="Ketik jawaban Romaji..." autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" disabled>
-
-            <button id="submit-button" class="button" disabled>Cek Jawaban</button>
-
-            <div id="feedback-area" class="alert hidden">
-                </div>
+    <div class="card">
+        <h3>Pertanyaan (<span id="current-category-display"></span>):</h3>
+        <div id="question-display">
+            <span class="loader">Memuat...</span>
         </div>
+    </div>
+
+    <label for="answer-input">Jawaban (Romaji):</label>
+    <input type="text" id="answer-input" class="input" placeholder="Ketik jawaban Romaji..." autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" disabled>
+
+    <button id="submit-button" class="button" disabled>Cek Jawaban</button>
+    <button id="skip-button" class="button button-secondary">Lewati</button>
+    <button id="back-button" class="button button-secondary">Kembali</button>
+
+    <div id="feedback-area" class="alert hidden"></div>
+</div>
 
     </div>
 
@@ -180,7 +194,7 @@
                 promptText = `Generate unique Hiragana character questions not repeated in the last 30 minutes. ${jsonFormatInstruction} Example: {"question": "め", "answer": "me"}`;
                 break;
             case 'hiragana_kotoba':
-                promptText = `Generate unique Hiragana vocabulary not repeated in the last 30 minutes. ${jsonFormatInstruction} Example: {"question": "ありがとう", "answer": "arigatou"}`;
+                promptText = `Generate unique Hiragana vocabulary not repeated in the last 30 minutes and use hiragana letter. ${jsonFormatInstruction} Example: {"question": "ありがとう", "answer": "arigatou"}`;
                 break;
             case 'hiragana_kaiwa':
                 promptText = `Generate unique simple Hiragana phrases not repeated in the last 30 minutes. ${jsonFormatInstruction} Example: {"question": "おはようございます", "answer": "ohayou gozaimasu"}`;
@@ -328,6 +342,17 @@
     answerInput.addEventListener('keypress', e => {
         if(e.key === 'Enter' && !isLoading) checkAnswer();
     });
+    
+    document.getElementById('skip-button').addEventListener('click', () => {
+    loadNextQuestion(); // Memuat soal baru
+    feedbackArea.classList.add('hidden'); // Sembunyikan feedback
+});
+
+document.getElementById('back-button').addEventListener('click', () => {
+    quizAreaDiv.classList.add('hidden'); // Sembunyikan area kuis
+    categorySelectionDiv.classList.remove('hidden'); // Tampilkan area kategori
+    currentCategory = null; // Reset kategori saat kembali
+});
 
     // --- Inisialisasi ---
     quizAreaDiv.classList.add('hidden');

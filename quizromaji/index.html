@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Latihan Hiragana (Kotoba & Kaiwa)</title>
+
+    <style>
+        /* Reset dan Font Dasar (Sama seperti sebelumnya) */
+        :root {
+            --bg-color: #f3f4f6; /* gray-100 */
+            --card-bg: #ffffff; /* white */
+            --text-primary: #1f2937; /* gray-800 */
+            --text-secondary: #4b5563; /* gray-600 */
+            --text-muted: #6b7280; /* gray-500 */
+            --border-color: #e5e7eb; /* gray-200 */
+            --input-border: #cbd5e1; /* blue-gray-300 */
+            --button-bg: #1f2937; /* gray-800 */
+            --button-bg-hover: #374151; /* gray-700 */
+            --button-text: #ffffff; /* white */
+            --button-disabled-bg: #9ca3af; /* gray-400 */
+            --success-bg: #dcfce7; /* green-100 */
+            --success-text: #166534; /* green-800 */
+            --success-border: #86efac; /* green-300 */
+            --error-bg: #fee2e2; /* red-100 */
+            --error-text: #991b1b; /* red-800 */
+            --error-border: #fca5a5; /* red-300 */
+            --link-color: #2563eb; /* blue-600 */
+        }
+
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        html { font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif; line-height: 1.5; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+        body { background-color: var(--bg-color); color: var(--text-primary); display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; padding: 1rem; }
+
+        /* Container Utama */
+        .container { background-color: var(--card-bg); border-radius: 0.75rem; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); padding: 1.5rem; width: 100%; max-width: 500px; margin-bottom: 2rem; }
+
+        /* Judul */
+        h1 { font-size: 1.5rem; font-weight: 700; text-align: center; margin-bottom: 1.5rem; color: var(--text-primary); }
+        h2 { font-size: 1.125rem; font-weight: 600; margin-bottom: 0.75rem; color: var(--text-secondary); }
+        h3 { font-size: 0.875rem; font-weight: 500; color: var(--text-muted); margin-bottom: 0.5rem; }
+
+        /* Grid untuk Tombol Kategori (Disesuaikan) */
+        .grid-buttons { display: grid; grid-template-columns: repeat(1, minmax(0, 1fr)); gap: 0.75rem; margin-bottom: 1.5rem; }
+        /* Jika ingin 3 tombol sejajar: grid-template-columns: repeat(3, minmax(0, 1fr)); */
+        /* Jika ingin 2 tombol: grid-template-columns: repeat(2, minmax(0, 1fr)); */
+
+
+        /* Tombol (Sama seperti sebelumnya) */
+        .button { background-color: var(--button-bg); color: var(--button-text); font-weight: 600; padding: 0.6rem 1rem; border-radius: 0.375rem; cursor: pointer; border: none; transition: background-color 0.2s ease-in-out; text-align: center; width: 100%; font-size: 0.9rem; }
+        .button:hover:not(:disabled) { background-color: var(--button-bg-hover); }
+        .button:disabled { background-color: var(--button-disabled-bg); cursor: not-allowed; opacity: 0.7; }
+
+        /* Area Kuis (Sama seperti sebelumnya) */
+        #quiz-area { }
+
+        /* Kartu Soal (Sama seperti sebelumnya) */
+        .card { border: 1px solid var(--border-color); border-radius: 0.5rem; padding: 1.5rem; background-color: var(--card-bg); box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06); margin-bottom: 1rem; }
+        #question-display { font-size: 2.5rem; /* Sedikit lebih kecil untuk kata/kalimat */ font-weight: 700; text-align: center; color: var(--text-primary); margin-bottom: 1rem; min-height: 70px; display: flex; align-items: center; justify-content: center; word-break: keep-all; /* Coba pertahankan kata bersama */ line-height: 1.3; }
+        .loader { font-size: 1rem; color: var(--text-muted); font-weight: 500; }
+
+        /* Input (Sama seperti sebelumnya) */
+        label { display: block; font-size: 0.875rem; font-weight: 500; color: var(--text-secondary); margin-bottom: 0.25rem; }
+        .input { border: 1px solid var(--input-border); border-radius: 0.375rem; padding: 0.75rem 0.75rem; width: 100%; margin-bottom: 1rem; font-size: 1rem; color: var(--text-primary); background-color: var(--card-bg); }
+        .input:focus { outline: 2px solid transparent; outline-offset: 2px; border-color: var(--link-color); box-shadow: 0 0 0 2px var(--link-color); }
+        .input::placeholder { color: var(--text-muted); }
+
+        /* Alert (Sama seperti sebelumnya) */
+        .alert { padding: 1rem; margin-top: 1rem; margin-bottom: 1rem; border-radius: 0.375rem; font-size: 0.9rem; border: 1px solid transparent; display: flex; align-items: center; }
+        .alert-success { background-color: var(--success-bg); color: var(--success-text); border-color: var(--success-border); }
+        .alert-error { background-color: var(--error-bg); color: var(--error-text); border-color: var(--error-border); }
+
+        /* Utilitas */
+        .hidden { display: none; }
+
+        /* Footer (Sama seperti sebelumnya) */
+        footer { text-align: center; margin-top: auto; padding: 1rem; font-size: 0.875rem; color: var(--text-muted); }
+        footer a { color: var(--link-color); text-decoration: none; }
+        footer a:hover { text-decoration: underline; }
+        .api-warning { color: var(--error-text); font-weight: 600; margin-top: 0.5rem; display: block; }
+
+    </style>
+</head>
+<body>
+
+    <div class="container">
+
+        <h1>Latihan Hiragana</h1>
+
+        <div id="category-selection">
+            <h2>Pilih Jenis Latihan:</h2>
+            <div class="grid-buttons">
+                 <button class="button category-button" data-category="hiragana_char">Baca Karakter Hiragana</button>
+                <button class="button category-button" data-category="hiragana_kotoba">Kosakata Hiragana (Kotoba)</button>
+                <button class="button category-button" data-category="hiragana_kaiwa">Kalimat Pendek Hiragana (Kaiwa)</button>
+            </div>
+        </div>
+
+        <div id="quiz-area" class="hidden">
+            <div class="card">
+                 <h3>Pertanyaan (<span id="current-category-display"></span>):</h3>
+                <div id="question-display">
+                    <span class="loader">Memuat...</span> </div>
+            </div>
+
+            <label for="answer-input">Jawaban (Romaji):</label>
+            <input type="text" id="answer-input" class="input" placeholder="Ketik jawaban Romaji..." autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" disabled>
+
+            <button id="submit-button" class="button" disabled>Cek Jawaban</button>
+
+            <div id="feedback-area" class="alert hidden">
+                </div>
+        </div>
+
+    </div>
+
+    <footer>
+        Dibuat dengan HTML, CSS, JS & Gemini API.
+        <strong class="api-warning">PERINGATAN: API Key terekspos di kode ini. Jangan gunakan di production!</strong>
+    </footer>
+    
+<script>
+    // --- Konfigurasi dan State Aplikasi ---
+    const GEMINI_API_KEY = "AIzaSyDhumW05-eindh-x2OblLKYxc1cT7Sxeyc"; // <<< GANTI DENGAN API KEY ANDA!
+    const GEMINI_API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${GEMINI_API_KEY}`;
+    
+    // Konfigurasi penyimpanan pertanyaan
+    const RECENT_QUESTIONS_KEY = 'recentHiraganaQuestions';
+    const THIRTY_MINUTES = 30 * 60 * 1000; // 30 menit dalam milidetik
+    const MAX_RETRIES = 5; // Maksimal percobaan ulang
+
+    let currentCategory = null;
+    let currentQuestionData = null;
+    let isWaitingForAnswer = false;
+    let isLoading = false;
+
+    // --- Referensi DOM ---
+    const categorySelectionDiv = document.getElementById('category-selection');
+    const quizAreaDiv = document.getElementById('quiz-area');
+    const categoryButtons = document.querySelectorAll('.category-button');
+    const questionDisplay = document.getElementById('question-display');
+    const answerInput = document.getElementById('answer-input');
+    const submitButton = document.getElementById('submit-button');
+    const feedbackArea = document.getElementById('feedback-area');
+    const currentCategoryDisplay = document.getElementById('current-category-display');
+
+    // --- Penyimpanan Pertanyaan ---
+    function getRecentQuestions() {
+        const stored = localStorage.getItem(RECENT_QUESTIONS_KEY);
+        return stored ? JSON.parse(stored) : [];
+    }
+
+    function saveRecentQuestions(questions) {
+        localStorage.setItem(RECENT_QUESTIONS_KEY, JSON.stringify(questions));
+    }
+
+    function addQuestionToRecent(category, questionData) {
+        const recent = getRecentQuestions();
+        recent.push({
+            category: category,
+            question: questionData.question,
+            answer: questionData.answer,
+            timestamp: Date.now()
+        });
+        saveRecentQuestions(recent);
+    }
+
+    function cleanupOldQuestions() {
+        const now = Date.now();
+        const recent = getRecentQuestions().filter(q => now - q.timestamp <= THIRTY_MINUTES);
+        saveRecentQuestions(recent);
+    }
+
+    // --- Fungsi Utama ---
+    function createGeminiPrompt(category) {
+        let promptText = "";
+        const jsonFormatInstruction = `Respond ONLY with a valid JSON object like {"question": "[generated_question]", "answer": "[generated_answer]"}. No markdown, explanations, or extra text. Use standard Hepburn Romaji.`;
+
+        switch(category) {
+            case 'hiragana_char':
+                promptText = `Generate unique Hiragana character questions not repeated in the last 30 minutes. ${jsonFormatInstruction} Example: {"question": "め", "answer": "me"}`;
+                break;
+            case 'hiragana_kotoba':
+                promptText = `Generate unique Hiragana vocabulary not repeated in the last 30 minutes. ${jsonFormatInstruction} Example: {"question": "ありがとう", "answer": "arigatou"}`;
+                break;
+            case 'hiragana_kaiwa':
+                promptText = `Generate unique simple Hiragana phrases not repeated in the last 30 minutes. ${jsonFormatInstruction} Example: {"question": "おはようございます", "answer": "ohayou gozaimasu"}`;
+                break;
+            default:
+                promptText = `Generate unique Hiragana question. ${jsonFormatInstruction}`;
+        }
+        return promptText;
+    }
+
+    async function fetchQuestionFromGemini(category) {
+        if (!GEMINI_API_KEY || GEMINI_API_KEY.includes("GANTI")) {
+            displayFeedback("Error: API Key belum diatur!", 'error');
+            return null;
+        }
+
+        cleanupOldQuestions();
+        let retries = 0;
+
+        while(retries < MAX_RETRIES) {
+            setLoadingState(true);
+            const promptText = createGeminiPrompt(category);
+
+            try {
+                const response = await fetch(GEMINI_API_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        contents: [{ parts: [{ text: promptText }] }],
+                        generationConfig: { temperature: 1.0 }
+                    })
+                });
+
+                if (!response.ok) throw new Error(`API Error: ${response.status}`);
+                
+                const data = await response.json();
+                const responseText = data.candidates[0].content.parts[0].text
+                    .replace(/^```json\s*/, '').replace(/```$/, '').trim();
+
+                const questionData = JSON.parse(responseText);
+                const recentQuestions = getRecentQuestions();
+
+                // Cek duplikat
+                const isDuplicate = recentQuestions.some(q => 
+                    q.category === category &&
+                    q.question === questionData.question &&
+                    (Date.now() - q.timestamp) <= THIRTY_MINUTES
+                );
+
+                if(!isDuplicate) {
+                    addQuestionToRecent(category, questionData);
+                    return questionData;
+                } else {
+                    retries++;
+                    console.log(`Duplikat ditemukan, mencoba lagi (${retries}/${MAX_RETRIES})`);
+                }
+
+            } catch(error) {
+                console.error("Error:", error);
+                displayFeedback(`Gagal memuat soal: ${error.message}`, 'error');
+                retries++;
+            } finally {
+                setLoadingState(false);
+            }
+        }
+        
+        displayFeedback("Gagal mendapatkan soal unik. Coba lagi nanti.", 'error');
+        return null;
+    }
+
+    function setLoadingState(loading) {
+        isLoading = loading;
+        submitButton.disabled = loading;
+        answerInput.disabled = loading;
+        questionDisplay.innerHTML = loading ? 
+            '<span class="loader">Memuat soal baru...</span>' : 
+            (currentQuestionData?.question || '');
+    }
+
+    function displayQuestion(questionData) {
+        if(!questionData) return;
+        
+        currentQuestionData = questionData;
+        questionDisplay.textContent = questionData.question;
+        questionDisplay.style.fontSize = questionData.question.length > 10 ? "1.8rem" : "3rem";
+        
+        answerInput.value = '';
+        feedbackArea.classList.add('hidden');
+        isWaitingForAnswer = true;
+        answerInput.focus();
+    }
+
+    function normalizeAnswer(answer) {
+        return answer.toLowerCase().trim()
+            .replace(/[Ａ-Ｚａ-ｚ０-９]/g, s => String.fromCharCode(s.charCodeAt(0) - 0xFEE0));
+    }
+
+    function checkAnswer() {
+        if(!isWaitingForAnswer || !currentQuestionData) return;
+
+        const userAnswer = normalizeAnswer(answerInput.value);
+        const correctAnswer = normalizeAnswer(currentQuestionData.answer);
+        const isCorrect = userAnswer === correctAnswer;
+
+        if(isCorrect) {
+            displayFeedback('Benar! Sugoi! 🎉', 'success');
+            isWaitingForAnswer = false;
+            setTimeout(loadNextQuestion, 1500);
+        } else {
+            displayFeedback(`Salah. Jawaban: ${currentQuestionData.answer}`, 'error');
+            answerInput.select();
+        }
+    }
+
+    function displayFeedback(message, type) {
+        feedbackArea.textContent = message;
+        feedbackArea.className = `alert ${type === 'success' ? 'alert-success' : 'alert-error'}`;
+        feedbackArea.classList.remove('hidden');
+    }
+
+    async function loadNextQuestion() {
+        const questionData = await fetchQuestionFromGemini(currentCategory);
+        questionData ? displayQuestion(questionData) : setLoadingState(false);
+    }
+
+    function startQuiz(category) {
+        currentCategory = category;
+        currentCategoryDisplay.textContent = {
+            'hiragana_char': 'Karakter Hiragana',
+            'hiragana_kotoba': 'Kosakata Hiragana',
+            'hiragana_kaiwa': 'Percakapan Hiragana'
+        }[category];
+
+        categorySelectionDiv.classList.add('hidden');
+        quizAreaDiv.classList.remove('hidden');
+        loadNextQuestion();
+    }
+
+    // --- Event Listeners ---
+    categoryButtons.forEach(button => {
+        button.addEventListener('click', () => startQuiz(button.dataset.category));
+    });
+
+    submitButton.addEventListener('click', checkAnswer);
+    answerInput.addEventListener('keypress', e => {
+        if(e.key === 'Enter' && !isLoading) checkAnswer();
+    });
+
+    // --- Inisialisasi ---
+    quizAreaDiv.classList.add('hidden');
+    categorySelectionDiv.classList.remove('hidden');
+    cleanupOldQuestions();
+</script>
+
+</body>
+</html>

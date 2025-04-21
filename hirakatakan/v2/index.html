@@ -855,18 +855,30 @@
             font-weight: 500;
             font-size: 0.9rem;
             max-width: 90%;
+            width: auto;
+            white-space: nowrap; /* Mencegah text wrapping */
+            text-align: center;
         }
-
+        
         body.dark-theme .notification {
             background-color: var(--dark-primary);
             color: var(--dark-primary-text);
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
         }
-
+        
         .notification.show {
             opacity: 1;
             visibility: visible;
             bottom: 25px;
+        }
+        
+        /* Untuk notifikasi yang panjang */
+        .notification.multiline {
+            white-space: normal;
+            max-width: 90%;
+            width: max-content;
+            min-width: 300px;
+            padding: 1rem;
         }
 
         /* --- Responsiveness --- */
@@ -1593,6 +1605,14 @@
             function showNotification(message, duration = 3000) {
                 clearTimeout(notificationTimeout);
                 notificationArea.textContent = message;
+                
+                // Tambahkan class multiline jika pesan panjang
+                if (message.length > 50) {
+                    notificationArea.classList.add('multiline');
+                } else {
+                    notificationArea.classList.remove('multiline');
+                }
+                
                 notificationArea.classList.add('show');
                 notificationTimeout = setTimeout(() => {
                     notificationArea.classList.remove('show');

@@ -1855,7 +1855,7 @@
             themeToggleButton.addEventListener('click', toggleTheme);
             startQuizButton.addEventListener('click', () => showPage('script-selection-page'));
             startLearningButton.addEventListener('click', () => {
-                showNotification("Membuka sumber belajar ...");
+                showNotification("Membuka sumber belajar");
             });
             scriptButtons.forEach(button => {
                 button.addEventListener('click', () => loadCategories(button.dataset.script));

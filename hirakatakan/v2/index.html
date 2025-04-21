@@ -2055,19 +2055,42 @@
 
             // --- Helper untuk mencoba memuat suara Jepang ---
             function loadJapaneseVoice() {
-                // getVoices() terkadang async, perlu event listener
-                let voices = synth.getVoices();
+                const voices = synth.getVoices();
+
+                // Tampilkan semua voice Jepang yang tersedia di console (untuk debug)
+                console.log("Daftar suara dengan lang 'ja':");
+                voices
+                    .filter(v => v.lang.startsWith('ja'))
+                    .forEach(v => console.log(`- ${v.name} (${v.lang})`));
+
                 if (voices.length > 0) {
-                    japaneseVoice = voices.find(voice => voice.lang === 'ja-JP');
-                    if (!japaneseVoice) { // Fallback jika tidak ada ja-JP spesifik
-                        japaneseVoice = voices.find(voice => voice.lang.startsWith('ja'));
+                    // Cari suara wanita Jepang yang umum, berdasarkan nama
+                    japaneseVoice = voices.find(v =>
+                        v.lang === 'ja-JP' &&
+                        (
+                            v.name.toLowerCase().includes('haruka') || // Windows
+                            v.name.toLowerCase().includes('mizuki') || // Amazon Polly (jika tersedia)
+                            v.name.toLowerCase().includes('nanami') || // macOS
+                            v.name.toLowerCase().includes('female') || // General
+                            v.name.toLowerCase().includes('google')    // Google voice (di Chrome)
+                        )
+                    );
+
+                    // Jika tidak ketemu suara wanita, ambil suara Jepang pertama yang tersedia
+                    if (!japaneseVoice) {
+                        japaneseVoice = voices.find(v => v.lang.startsWith('ja'));
                     }
-                    // console.log("Japanese voice found:", japaneseVoice);
+
+                    if (japaneseVoice) {
+                        console.log(`✅ Suara Jepang ditemukan : ${japaneseVoice.name}`);
+                    } else {
+                        console.warn("⚠️ Tidak ada suara Jepang ditemukan di sistem ini.");
+                    }
                 } else {
-                    // Jika voices belum siap, coba lagi nanti saat voiceschanged
-                    // console.log("Voices not ready yet.");
+                    console.warn("⏳ Voice list belum siap, tunggu 'voiceschanged' event.");
                 }
             }
+
             // Panggil saat voices berubah (mungkin perlu waktu untuk load)
             if (synth.onvoiceschanged !== undefined) {
                 synth.onvoiceschanged = loadJapaneseVoice;
@@ -2098,7 +2121,7 @@
                     // Jika tetap tidak ada, browser akan pakai default untuk langCode
                 }
 
-                utterance.rate = 0.9; // Sedikit lebih lambat agar jelas
+                utterance.rate = 1; // Sedikit lebih lambat agar jelas
                 utterance.pitch = 1.0;
 
                 // console.log(`Speaking: "${textToSpeak}" with voice: ${utterance.voice ? utterance.voice.name : 'Default'}`);
@@ -2109,7 +2132,6 @@
                     showNotification(`Error memainkan suara : ${event.error}`, 3000);
                 };
             }
-
 
             // --- Fungsi untuk Menampilkan Konten Kamus (MODIFIKASI DENGAN EVENT LISTENER SUARA) ---
             function showLearningContent(scriptType) {
@@ -2221,7 +2243,6 @@
             }
 
             // --- Event Listeners ---
-
             themeToggleButton.addEventListener('click', toggleTheme);
             startQuizButton.addEventListener('click', () => showPage('script-selection-page'));
 

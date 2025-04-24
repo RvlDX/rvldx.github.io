@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>クイズ 日本語 (Quiz Hirakatakan V2)</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;700&family=Poppins:wght@400;600&display=swap"
+        rel="stylesheet">
+</head>
+
+<body class="light-theme">
+    <div class="background-accent"></div>
+    <header>
+        <h1><span class="jp-char">ク</span><span class="jp-char">イ</span><span class="jp-char">ズ</span> 日本語</h1>
+        <button id="theme-toggle-button" class="theme-toggle" aria-label="Toggle theme">
+            <i class="fas fa-moon"></i>
+        </button>
+    </header>
+
+    <main class="main-container">
+        <section id="result-page" class="page active">
+            <div class="content-wrapper">
+                <h2>Hasil Quiz</h2>
+                <div class="result-summary card">
+                    <div class="result-item">
+                        <i class="fas fa-list-ol result-icon"></i>
+                        <span>Total Soal:</span>
+                        <strong id="result-total">0</strong>
+                    </div>
+                    <div class="result-item correct">
+                        <i class="fas fa-check-circle result-icon"></i>
+                        <span>Jawaban Benar:</span>
+                        <strong id="result-correct">0</strong>
+                    </div>
+                    <div class="result-item incorrect">
+                        <i class="fas fa-times-circle result-icon"></i>
+                        <span>Jawaban Salah:</span>
+                        <strong id="result-wrong">0</strong>
+                    </div>
+                    <div class="result-item percentage">
+                        <i class="fas fa-percentage result-icon"></i>
+                        <span>Persentase Benar:</span>
+                        <strong id="result-percentage">0%</strong>
+                    </div>
+                    <div class="progress-bar-container">
+                        <div id="result-progress-bar" class="progress-bar"></div>
+                    </div>
+                </div>
+                <div class="button-group vertical">
+                    <button id="try-again-button" class="btn btn-primary"><i class="fas fa-redo"></i> Coba Lagi (Soal
+                        Sama)</button>
+                    <button id="new-categories-button" class="btn btn-secondary"><i class="fas fa-layer-group"></i>
+                        Pilih Kategori Lain</button>
+                    <button id="home-button" class="btn btn-secondary"><i class="fas fa-home"></i> Kembali ke
+                        Home</button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <div id="notification-area" class="notification"></div>
+
+    <footer>
+        Copyright &copy; 2025 <a href="https://rvldx.my.id/">RvlDX</a>. All rights reserved.
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+    <script src="js/script.js"></script>
+</body>
+
+</html>

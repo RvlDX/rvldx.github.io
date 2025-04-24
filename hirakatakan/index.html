@@ -1,184 +1,65 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ja">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quiz HiraKataKan</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="icon" href="/hirakatakan/img/iconweb.ico">
-    <link rel="stylesheet" href="/hirakatakan/css/style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <title>クイズ 日本語 (Quiz Hirakatakan V2)</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;700&family=Poppins:wght@400;600&display=swap"
+        rel="stylesheet">
 </head>
 
-<body>
-    <!-- Home -->
-    <div class="container" id="homeContainer">
-        <section class="hero">
-            <h1 class="hero-title">Quiz HiraKataKan</h1>
-            <p class="hero-subtitle">Master Japanese characters through interactive quizzes and learning tools</p>
+<body class="light-theme">
+    <div class="background-accent"></div>
+    <header>
+        <h1><span class="jp-char">ク</span><span class="jp-char">イ</span><span class="jp-char">ズ</span> 日本語</h1>
+        <button id="theme-toggle-button" class="theme-toggle" aria-label="Toggle theme">
+            <i class="fas fa-moon"></i>
+        </button>
+    </header>
 
-            <div class="feature-grid">
-                <div class="feature-card">
-                    <div class="feature-icon">あ</div>
-                    <h3 class="feature-title">Hiragana</h3>
-                    <p class="feature-desc">46 basic characters for native Japanese words, grammatical particles, and
-                        word endings</p>
+    <main class="main-container">
+        <section id="home-page" class="page active">
+            <div class="content-wrapper">
+                <img src="https://static.vecteezy.com/system/resources/previews/022/041/469/non_2x/torii-gate-icon-style-vector.jpg"
+                    alt="Torii Gate Icon" class="home-icon">
+                <h2>Irasshaimase!</h2>
+                <p class="tagline">Uji pengetahuan Hiragana, Katakana, dan Kanji Anda!</p>
+                <div class="explanation card">
+                    <h3>Pengenalan Singkat</h3>
+                    <p><strong>Hiragana (ひらがな)</strong>
+                        <br>Silabari dasar untuk kata-kata asli, partikel, dll.
+                    </p>
+                    <p><strong>Katakana (カタカナ)</strong>
+                        <br>Untuk kata serapan, onomatopoeia, penekanan.
+                    </p>
+                    <p><strong>Kanji (漢字)</strong>
+                        <br>Karakter logografis dari Tiongkok.
+                    </p>
                 </div>
-                <div class="feature-card">
-                    <div class="feature-icon">ア</div>
-                    <h3 class="feature-title">Katakana</h3>
-                    <p class="feature-desc">46 characters for foreign languages, scientific terms, foreign names, and
-                        onomatopoeic sounds</p>
+                <div class="button-group">
+                    <button id="start-quiz-button" class="btn btn-primary"><i class="fas fa-play"></i> Mulai
+                        Quiz</button>
+                    <button id="start-learning-button" class="btn btn-secondary"><i class="fas fa-book-open"></i> Sumber
+                        Belajar</button>
                 </div>
-                <div class="feature-card">
-                    <div class="feature-icon">漢</div>
-                    <h3 class="feature-title">Kanji</h3>
-                    <p class="feature-desc">Complex characters representing meaning with multiple readings. Each
-                        character can have multiple readings depending on the context.</p>
-                </div>
-            </div>
-
-            <!-- In the homeContainer section -->
-            <div class="action-buttons">
-                <button class="btn btn-primary" onclick="showScriptSelection()">
-                    <i class="fas fa-play btn-icon"></i> Start Quiz
-                </button>
-                <button class="btn btn-secondary" onclick="showLearningDictionary()">
-                    <i class="fas fa-book btn-icon"></i> Start Learning
-                </button>
             </div>
         </section>
-    </div>
+    </main>
 
-    <!-- Script Selection Screen -->
-    <div class="container hidden" id="scriptSelectionContainer">
-        <div class="nav-back" onclick="showHome()">
-            <i class="fas fa-arrow-left"></i> Back to Home
-        </div>
+    <div id="notification-area" class="notification"></div>
 
-        <h2 class="section-title">Choose Script Type</h2>
+    <footer>
+        Copyright &copy; 2025 <a href="https://rvldx.my.id/">RvlDX</a>. All rights reserved.
+    </footer>
 
-        <div class="script-grid">
-            <div class="script-card" onclick="showCategorySelection('hiragana')" id="hiraganaCard">
-                <div class="script-icon">あ</div>
-                <h3 class="script-name">Hiragana</h3>
-                <p class="script-desc">Basic phonetic script for Japanese words</p>
-            </div>
-            <div class="script-card" onclick="showCategorySelection('katakana')" id="katakanaCard">
-                <div class="script-icon">ア</div>
-                <h3 class="script-name">Katakana</h3>
-                <p class="script-desc">Used for foreign words and emphasis</p>
-            </div>
-            <div class="script-card" onclick="showCategorySelection('kanji')" id="kanjiCard">
-                <div class="script-icon">漢</div>
-                <h3 class="script-name">Kanji</h3>
-                <p class="script-desc">Chinese characters with multiple readings.</p>
-            </div>
-        </div>
-    </div>
-
-    <!-- Category Selection -->
-    <div class="container hidden" id="categoryContainer">
-        <div class="nav-back" onclick="showScriptSelection()">
-            <i class="fas fa-arrow-left"></i> Back to Script Selection
-        </div>
-
-        <div id="categorySection">
-            <h2 class="category-title" id="categoryTitle">Select Hiragana Categories</h2>
-            <p class="category-instruction" id="categoryInstruction">Choose at least one group to begin</p>
-            <div class="category-container" id="categoryList"></div>
-        </div>
-
-        <button class="btn btn-primary w-full max-w-md" onclick="startGame()">
-            <i class="fas fa-play btn-icon"></i> Start Quiz
-        </button>
-    </div>
-
-    <!-- Game Container -->
-    <div id="gameContainer" class="hidden">
-        <div class="progress-container">
-            <div class="progress-bar" id="progressBar"></div>
-        </div>
-        <div class="score-board">
-            <span class="score-correct">Correct : <span id="correctCount">0</span></span>
-            <span class="score-wrong">Wrong : <span id="wrongCount">0</span></span>
-        </div>
-
-        <div class="character-message-wrapper" style="position: relative; margin-bottom: 60px;">
-            <div class="character-display" id="character"></div>
-            <div class="correct-answer-message" id="correctAnswerMessage"></div>
-        </div>
-
-        <div class="options-grid" id="options"></div>
-    </div>
-
-    <!-- Result Container -->
-    <div id="resultContainer" class="hidden">
-        <div class="result-icon">
-            <i class="fas fa-trophy"></i>
-        </div>
-        <h2 class="result-title">Quiz Completed!</h2>
-
-        <div class="result-stats">
-            <div class="stat-box">
-                <div class="stat-label">Correct Answers</div>
-                <div class="stat-value stat-correct" id="finalCorrect">0</div>
-            </div>
-            <div class="stat-box">
-                <div class="stat-label">Wrong Answers</div>
-                <div class="stat-value stat-wrong" id="finalWrong">0</div>
-            </div>
-            <div class="stat-box" style="grid-column: span 2;">
-                <div class="stat-label">Accuracy</div>
-                <div class="stat-value stat-accuracy" id="accuracy">0%</div>
-            </div>
-        </div>
-
-        <div class="result-actions">
-            <button class="btn btn-primary" onclick="showScriptSelection()">
-                <i class="fas fa-redo btn-icon"></i> Try Again
-            </button>
-            <button class="btn btn-secondary" onclick="showHome()">
-                <i class="fas fa-home btn-icon"></i> Return Home
-            </button>
-        </div>
-    </div>
-
-    <!-- Container kamus belajar -->
-    <div class="container hidden" id="learningContainer">
-        <div class="nav-back" onclick="showHome()">
-            <i class="fas fa-arrow-left"></i> Back to Home
-        </div>
-
-        <h2 class="section-title">Learning Materials</h2>
-
-        <!-- Script Navigation Tabs -->
-        <div class="script-tabs">
-            <div class="script-tab active" onclick="showLearningTab('hiragana')">Hiragana</div>
-            <div class="script-tab" onclick="showLearningTab('katakana')">Katakana</div>
-            <div class="script-tab" onclick="showLearningTab('kanji')">Kanji</div>
-        </div>
-
-        <!-- Learning Content -->
-        <div id="learningContent">
-            <!-- Hiragana content will be loaded here by default -->
-        </div>
-    </div>
-
-    <!-- Notifications -->
-    <div class="notification notification-error" id="errorNotification">
-        <i class="fas fa-exclamation-circle notification-icon"></i>
-        <span>Please select at least one character group!</span>
-    </div>
-
-    <div class="notification notification-warning" id="comingSoonNotification">
-        <i class="fas fa-hard-hat notification-icon"></i>
-        <span>This feature is coming soon!</span>
-    </div>
-    
-    <script src="/hirakatakan/js/script.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+    <script src="js/script.js"></script>
 </body>
-<footer class="copyright">
-    Copyright &copy; 2025 <a href="https://rvldx.my.id/">RvlDX</a>. All rights reserved.
-</footer>
+
 </html>

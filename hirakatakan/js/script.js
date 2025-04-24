@@ -767,9 +767,14 @@ document.addEventListener('DOMContentLoaded', () => {
             startQuizButton.addEventListener('click', () => navigateTo('/hirakatakan/selectscript.html'));
         }
 
+        if (location.pathname === "/hirakatakan") {
+            location.replace("/hirakatakan/");
+        }
+
         if (startLearningButton) {
             startLearningButton.addEventListener('click', () => {
                 // Ambil script terakhir yang dipilih atau gunakan default
+
                 const lastScript = localStorage.getItem('currentLearningScript') || 'hiragana';
                 localStorage.setItem('currentLearningScript', lastScript);
                 navigateTo('/hirakatakan/learning.html');

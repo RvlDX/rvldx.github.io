@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>クイズ 日本語 (Quiz Hirakatakan V2)</title>
+    <link rel="stylesheet" href="/hirakatakan/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;700&family=Poppins:wght@400;600&display=swap"
+        rel="stylesheet">
+</head>
+
+<body class="light-theme">
+    <div class="background-accent"></div>
+    <header>
+        <h1><span class="jp-char">ク</span><span class="jp-char">イ</span><span class="jp-char">ズ</span> 日本語</h1>
+        <button id="theme-toggle-button" class="theme-toggle" aria-label="Toggle theme">
+            <i class="fas fa-moon"></i>
+        </button>
+    </header>
+
+    <main class="main-container">
+        <section id="game-page" class="page active">
+            <div class="content-wrapper game-layout">
+                <div class="game-header">
+                    <span id="question-counter">Soal 1/10</span>
+                    <span id="current-score">Skor: 0</span>
+                </div>
+                <div id="question-display" class="question-card">
+                </div>
+                <div id="feedback-area" class="feedback-placeholder">
+                </div>
+                <div id="options-container" class="options-grid">
+                </div>
+                <div class="button-group">
+                    <button id="quit-game-button" class="btn btn-danger"><i class="fas fa-times-circle"></i>
+                        Keluar</button>
+                </div>
+                <canvas id="confetti-canvas"></canvas>
+            </div>
+        </section>
+    </main>
+
+    <div id="notification-area" class="notification"></div>
+
+    <footer>
+        Copyright &copy; 2025 <a href="https://rvldx.my.id/">RvlDX</a>. All rights reserved.
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+    <script src="/hirakatakan/js/script.js"></script>
+</body>
+
+</html>

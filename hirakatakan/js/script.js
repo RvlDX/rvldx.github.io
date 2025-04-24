@@ -280,7 +280,7 @@ document.addEventListener('DOMContentLoaded', () => {
         localStorage.setItem('selectedScript', script);
 
         // Navigasi ke halaman kategori
-        navigateTo('selectcategory.html');
+        navigateTo('/hirakatakan/selectcategory.html');
     }
 
     // --- Fungsi Helper untuk Mengambil Opsi Salah ---
@@ -368,7 +368,7 @@ document.addEventListener('DOMContentLoaded', () => {
             localStorage.setItem('totalQuestions', quizQuestions.length);
 
             // Navigasi ke halaman hasil
-            navigateTo('result.html');
+            navigateTo('/hirakatakan/result.html');
             return;
         }
 
@@ -537,7 +537,7 @@ document.addEventListener('DOMContentLoaded', () => {
         localStorage.setItem('incorrectAnswers', '0');
 
         // Navigasi ke halaman game
-        navigateTo('game.html');
+        navigateTo('/hirakatakan/game.html');
     }
 
     // --- Fungsi Confetti ---
@@ -764,7 +764,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const startLearningButton = document.getElementById('start-learning-button');
 
         if (startQuizButton) {
-            startQuizButton.addEventListener('click', () => navigateTo('selectscript.html'));
+            startQuizButton.addEventListener('click', () => navigateTo('/hirakatakan/selectscript.html'));
         }
 
         if (startLearningButton) {
@@ -772,7 +772,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 // Ambil script terakhir yang dipilih atau gunakan default
                 const lastScript = localStorage.getItem('currentLearningScript') || 'hiragana';
                 localStorage.setItem('currentLearningScript', lastScript);
-                navigateTo('learning.html');
+                navigateTo('/hirakatakan/learning.html');
             });
         }
     }
@@ -787,7 +787,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
         if (backButton) {
-            backButton.addEventListener('click', () => navigateTo('index.html'));
+            backButton.addEventListener('click', () => navigateTo('/hirakatakan/index.html'));
         }
     }
 
@@ -900,7 +900,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         if (backButton) {
-            backButton.addEventListener('click', () => navigateTo('selectscript.html'));
+            backButton.addEventListener('click', () => navigateTo('/hirakatakan/selectscript.html'));
         }
     }
 
@@ -917,7 +917,7 @@ document.addEventListener('DOMContentLoaded', () => {
         displayQuestion();
 
         if (quitGameButton) {
-            quitGameButton.addEventListener('click', () => navigateTo('index.html'));
+            quitGameButton.addEventListener('click', () => navigateTo('/hirakatakan/index.html'));
         }
     }
 
@@ -938,7 +938,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 localStorage.setItem('currentQuestionIndex', '0');
 
                 // Navigasi ke halaman game
-                navigateTo('game.html');
+                navigateTo('/hirakatakan/game.html');
             });
         }
 
@@ -947,15 +947,15 @@ document.addEventListener('DOMContentLoaded', () => {
                 // Ambil script yang dipilih dari localStorage
                 const selectedScript = localStorage.getItem('selectedScript');
                 if (selectedScript) {
-                    navigateTo('selectcategory.html');
+                    navigateTo('/hirakatakan/selectcategory.html');
                 } else {
-                    navigateTo('selectscript.html');
+                    navigateTo('/hirakatakan/selectscript.html');
                 }
             });
         }
 
         if (homeButton) {
-            homeButton.addEventListener('click', () => navigateTo('index.html'));
+            homeButton.addEventListener('click', () => navigateTo('/hirakatakan/index.html'));
         }
     }
 
@@ -986,7 +986,7 @@ document.addEventListener('DOMContentLoaded', () => {
         showLearningContent(currentLearningScript);
 
         if (backButton) {
-            backButton.addEventListener('click', () => navigateTo('index.html'));
+            backButton.addEventListener('click', () => navigateTo('/hirakatakan/index.html'));
         }
 
         // Jika voices belum siap, coba load lagi

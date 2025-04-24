@@ -993,9 +993,5 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!japaneseVoice && synth && synth.onvoiceschanged === undefined) {
             loadJapaneseVoice();
         }
-
-        if (location.pathname === "/hirakatakan") {
-        location.replace("/hirakatakan/");
-        }
     }
 });

@@ -998,12 +998,5 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!japaneseVoice && synth && synth.onvoiceschanged === undefined) {
             loadJapaneseVoice();
         }
-
-        //Memanggil template
-        fetch('/hirakatakan/templates/head.html')
-        .then(response => response.text())
-        .then(data => {
-          document.head.innerHTML += data;
-        });
     }
 });

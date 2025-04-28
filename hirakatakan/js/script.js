@@ -183,7 +183,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function applyTheme(theme) {
         document.body.classList.remove('light-theme', 'dark-theme');
         document.body.classList.add(`${theme}-theme`);
-        themeIcon.className = `fas ${theme === 'dark' ? 'fa-sun' : 'fa-moon'}`;
+        themeIcon.className = `fas ${theme === 'dark' ? 'fa-moon' : 'fa-sun'}`;
         localStorage.setItem('theme', theme);
         currentTheme = theme;
     }

@@ -1003,7 +1003,7 @@ document.addEventListener('DOMContentLoaded', () => {
         fetch('/hirakatakan/templates/head.html')
         .then(response => response.text())
         .then(data => {
-          document.getElementById('head-placeholder').innerHTML = data;
+          document.head.innerHTML += data;
         });
     }
 });

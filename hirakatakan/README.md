@@ -16,9 +16,9 @@ quiz-hirakatakan/
 │   └── style.css       ← Styling untuk semua halaman
 ├── js/
 │   └── script.js       ← Semua function ada disini
-└── assets/
-    └── audio/          ← Suara karakter
-    └── images/         ← Ikon/logo
+└── img/
+    ├── iconweb.ico     ← Ikon
+    └── logo.jpg        ← logo
 ```
 
 ## Fitur

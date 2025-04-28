@@ -30,7 +30,7 @@ quiz-hirakatakan/
 - Fitur suara untuk pengucapan karakter (jika browser mendukung)
 
 ## Penggunaan
-1. Buka `rvldx.my.id/hirakatakan/v2` untuk memulai aplikasi
+1. Buka `rvldx.my.id/hirakatakan` untuk memulai aplikasi
 2. Pilih "Mulai Quiz" untuk memulai quiz atau "Sumber Belajar" untuk melihat referensi karakter
 3. Untuk quiz, pilih jenis skrip (Hiragana, Katakana, atau Kanji) dan kategori yang ingin dipelajari
 4. Jawab pertanyaan dan lihat hasil di akhir quiz

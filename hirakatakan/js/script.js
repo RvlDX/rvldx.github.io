@@ -1000,7 +1000,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         //Memanggil template
-        fetch('templates/head.html')
+        fetch('/hirakatakan/templates/head.html')
         .then(response => response.text())
         .then(data => {
           document.getElementById('head-placeholder').innerHTML = data;

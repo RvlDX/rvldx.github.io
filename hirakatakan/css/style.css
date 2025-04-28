@@ -1007,7 +1007,7 @@ body.dark-theme .learning-header {
 /* Gaya untuk Tombol Tab Skrip di Sumber Belajar */
 /* Menggunakan .btn-script dari Quiz untuk konsistensi, tapi bisa di-override */
 .script-tabs .btn-script {
-    padding: 0.9rem 1.9rem;
+    padding: 0.8rem 1.5rem;
     font-size: 1rem;
     background-color: transparent;
     border: 1px solid var(--light-border);
@@ -1077,7 +1077,7 @@ body.dark-theme .learning-section h3 {
 
 /* Grup Subkategori (e.g., Vowels, K-) */
 .learning-group {
-    margin-bottom: 1.5rem;
+    margin-bottom: 1rem;
 }
 
 /* Judul Subkategori */
@@ -1099,8 +1099,8 @@ body.dark-theme .learning-group h4 {
 /* Grid untuk Karakter */
 .learning-characters {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(85px, 1fr));
-    gap: 0.6rem;
+    grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+    gap: 0.5rem;
 }
 
 /* Item Karakter Individual */
@@ -1113,7 +1113,7 @@ body.dark-theme .learning-group h4 {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    min-height: 75px;
+    min-height: 85px;
     box-shadow: var(--light-shadow);
     transition: transform var(--transition-speed), box-shadow var(--transition-speed);
 }
@@ -1149,7 +1149,7 @@ body.dark-theme .learning-char {
 
 /* Bacaan (Romaji) */
 .learning-reading {
-    font-size: 0.75rem;
+    font-size: 0.9rem;
     color: #6b7280;
     line-height: 1.2;
 }

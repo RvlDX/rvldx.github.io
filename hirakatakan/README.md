@@ -12,6 +12,8 @@ quiz-hirakatakan/
 ├── game.html           ← Halaman kuis interaktif
 ├── result.html         ← Halaman hasil kuis
 ├── learning.html       ← Halaman untuk belajar
+├── templates           ← Folder yang berisi template html
+│   └── head.html       ← Template head pada html
 ├── css/
 │   └── style.css       ← Styling untuk semua halaman
 ├── js/

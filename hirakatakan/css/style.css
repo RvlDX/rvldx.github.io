@@ -88,7 +88,7 @@ body.dark-theme .background-accent {
 
 /* --- Header & Footer --- */
 header {
-    padding: 1rem 1.5rem;
+    padding: 0.7em 1rem;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -108,7 +108,7 @@ body.dark-theme header {
 
 header h1 {
     margin: 0;
-    font-size: 1.4rem;
+    font-size: 1.5rem;
     font-weight: 700;
 }
 
@@ -126,7 +126,7 @@ body.dark-theme header h1 .jp-char {
 footer {
     padding: 1.5rem 1rem;
     text-align: center;
-    font-size: 0.85rem;
+    font-size: 1rem;
     color: #6b7280;
     margin-top: auto;
     border-top: 1px solid var(--light-border);
@@ -140,14 +140,14 @@ body.dark-theme footer {
 /* --- Tombol Tema --- */
 .theme-toggle {
     background: none;
-    border: 1px solid transparent;
+    border: 1px solid #a0aec0;
     color: inherit;
     cursor: pointer;
     padding: 0.5rem;
     border-radius: 50%;
-    font-size: 1.2rem;
+    font-size: 1.5rem;
     transition: background-color var(--transition-speed), border-color var(--transition-speed);
-    line-height: 1;
+    line-height: 0;
 }
 
 .theme-toggle:hover {
@@ -173,7 +173,7 @@ body.dark-theme .theme-toggle:hover {
 .page {
     display: none;
     width: 100%;
-    max-width: 700px;
+    max-width: 800px;
     animation: fadeIn 0.5s ease-in-out;
 }
 
@@ -184,12 +184,14 @@ body.dark-theme .theme-toggle:hover {
 /* Wrapper untuk konten di dalam page agar mudah di-style & center */
 .content-wrapper {
     text-align: center;
-    padding: 1rem;
+    padding: 2rem;
     background-color: var(--light-card-bg);
     border-radius: var(--border-radius);
     border: 1px solid var(--light-border);
     box-shadow: var(--light-shadow);
     margin-bottom: 1rem;
+    max-width: 800px;
+    font-size: 1.3rem;
 }
 
 body.dark-theme .content-wrapper {
@@ -216,8 +218,8 @@ body.dark-theme .content-wrapper {
     align-items: center;
     justify-content: center;
     gap: 0.5rem;
-    padding: 0.7rem 1.4rem;
-    font-size: 0.95rem;
+    padding: 0.8rem 1rem;
+    font-size: 1rem;
     font-weight: 600;
     border: none;
     border-radius: var(--border-radius);
@@ -324,7 +326,7 @@ body.dark-theme .btn:active:not(:disabled) {
 }
 
 .button-group.vertical .btn {
-    width: 90%;
+    width: 100%;
     max-width: 350px;
     margin-bottom: 0.75rem;
 }
@@ -347,14 +349,14 @@ body.dark-theme .button-group.start-game-group {
 }
 
 .home-icon {
-    width: 80px;
-    height: 80px;
+    width: 150px;
+    height: 150px;
     margin-bottom: 0.5rem;
-    border-radius: 50px;
+    border-radius: 50%;
 }
 
 .tagline {
-    font-size: 1.1rem;
+    font-size: 1rem;
     color: #6b7280;
     margin-bottom: 1.5rem;
 }
@@ -367,12 +369,12 @@ body.dark-theme .tagline {
     /* Add card style back to explanation */
     text-align: center;
     margin: 1.5rem auto;
-    padding: 1.2rem 1.5rem;
+    padding: 1.8rem 2rem;
     border: 1px solid var(--light-border);
     border-radius: var(--border-radius);
     background-color: var(--light-card-bg);
     box-shadow: var(--light-shadow);
-    max-width: 500px;
+    max-width: 700px;
 }
 
 body.dark-theme .explanation.card {
@@ -386,18 +388,19 @@ body.dark-theme .explanation.card {
     text-align: center;
     margin-bottom: 1rem;
     font-weight: 600;
+    font-size: 1.3rem;
 }
 
 .explanation p {
     margin-bottom: 0.6rem;
     line-height: 1.6;
-    font-size: 0.9rem;
+    font-size: 1rem;
 }
 
 /* --- Script Selection --- */
 .btn-script {
     font-size: 1.1rem;
-    padding: 0.8rem 1.5rem;
+    padding: 1rem 1.7rem;
 }
 
 /* --- Category Selection (Accordion Style) --- */
@@ -470,7 +473,7 @@ body.dark-theme .main-category-header:hover {
 }
 
 .main-category-item.active .subcategory-list {
-    max-height: 1000px;
+    max-height: 800px;
     padding: 1rem 1.2rem;
     border-top-color: var(--light-border);
 }
@@ -482,7 +485,7 @@ body.dark-theme .main-category-item.active .subcategory-list {
 /* Styling untuk item & label subkategori agar lebih seragam */
 .subcategory-options {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
     gap: 0.8rem;
     text-align: left;
 }
@@ -495,8 +498,8 @@ body.dark-theme .main-category-item.active .subcategory-list {
     border-radius: calc(var(--border-radius) / 1.5);
     cursor: pointer;
     transition: background-color var(--transition-speed), border-color var(--transition-speed);
-    font-size: 0.9rem;
-    min-height: 45px;
+    font-size: 1.1rem;
+    min-height: 50px;
     height: 100%;
     box-sizing: border-box;
 }
@@ -550,7 +553,7 @@ body.dark-theme .subcategory-item input[type="checkbox"] {
     justify-content: space-between;
     margin-bottom: 1rem;
     font-weight: 600;
-    font-size: 0.9rem;
+    font-size: 1rem;
     color: #6b7280;
 }
 
@@ -566,7 +569,7 @@ body.dark-theme .game-header {
     margin-bottom: 1rem;
     font-size: 3rem;
     font-weight: bold;
-    min-height: 120px;
+    min-height: 150px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -612,20 +615,20 @@ body.dark-theme .feedback-placeholder.incorrect {
 .options-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    gap: 0.8rem;
+    gap: 1rem;
     margin-bottom: 1.5rem;
 }
 
 .btn-option {
     padding: 0.8rem;
-    font-size: 1rem;
+    font-size: 1.3rem;
     border: 1px solid var(--light-border);
     background-color: var(--light-card-bg);
     color: var(--light-text);
     width: 100%;
     box-sizing: border-box;
     justify-content: center;
-    min-height: 50px;
+    min-height: 60px;
 }
 
 body.dark-theme .btn-option {
@@ -829,7 +832,7 @@ body.dark-theme .progress-bar {
     transform: translateX(-50%);
     background-color: var(--light-primary);
     color: var(--light-primary-text);
-    padding: 0.8rem 1.5rem;
+    padding: 1rem 1.5rem;
     border-radius: var(--border-radius);
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
     z-index: 1001;
@@ -837,8 +840,8 @@ body.dark-theme .progress-bar {
     visibility: hidden;
     transition: opacity 0.3s ease, visibility 0.3s ease, bottom 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     font-weight: 500;
-    font-size: 0.9rem;
-    max-width: 90%;
+    font-size: 1.3rem;
+    max-width: 100%;
     width: auto;
     white-space: nowrap;
     /* Mencegah text wrapping */
@@ -1004,8 +1007,8 @@ body.dark-theme .learning-header {
 /* Gaya untuk Tombol Tab Skrip di Sumber Belajar */
 /* Menggunakan .btn-script dari Quiz untuk konsistensi, tapi bisa di-override */
 .script-tabs .btn-script {
-    padding: 0.5rem 1.2rem;
-    font-size: 0.9rem;
+    padding: 0.9rem 1.9rem;
+    font-size: 1rem;
     background-color: transparent;
     border: 1px solid var(--light-border);
     color: var(--light-secondary-text);
@@ -1218,4 +1221,14 @@ body.dark-theme .learning-meaning {
     .learning-meaning {
         font-size: 0.65rem;
     }
+}
+
+.centered-message {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%; /* Pastikan elemen induk memiliki tinggi penuh */
+    text-align: center;
+    font-size: 1.5rem; /* Ukuran font opsional */
+    color: #555; /* Warna teks opsional */
 }

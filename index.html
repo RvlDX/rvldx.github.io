@@ -1,0 +1,1205 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crypto Portfolio Tracker</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: #0a0e27;
+            color: #fff;
+            min-height: 100vh;
+            padding: 20px;
+            overflow-x: hidden;
+        }
+
+        .background-gradient {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 20% 50%, rgba(120, 119, 198, 0.3), transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(41, 128, 185, 0.2), transparent 50%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 40px;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .crypto-logo {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #23a6d5 0%, #23d5ab 100%);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .header-title h1 {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+        .header-title p {
+            font-size: 14px;
+            color: #8b92b0;
+        }
+
+        .header-controls {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .crypto-tabs {
+            display: flex;
+            gap: 10px;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 5px;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .crypto-tab {
+            padding: 10px 20px;
+            border-radius: 8px;
+            background: transparent;
+            border: none;
+            color: #8b92b0;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .crypto-tab:hover {
+            background: rgba(255, 255, 255, 0.05);
+            color: #fff;
+        }
+
+        .crypto-tab.active {
+            background: linear-gradient(135deg, rgba(35, 166, 213, 0.3) 0%, rgba(35, 213, 171, 0.3) 100%);
+            color: #23d5ab;
+            border: 1px solid rgba(35, 213, 171, 0.3);
+        }
+
+        .edit-btn {
+            background: linear-gradient(135deg, rgba(35, 166, 213, 0.15) 0%, rgba(35, 213, 171, 0.15) 100%);
+            border: 1px solid rgba(35, 166, 213, 0.3);
+            color: #fff;
+            padding: 10px 20px;
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .edit-btn:hover {
+            background: linear-gradient(135deg, rgba(35, 166, 213, 0.25) 0%, rgba(35, 213, 171, 0.25) 100%);
+            transform: translateY(-1px);
+        }
+
+        .live-badge {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(35, 166, 213, 0.1);
+            padding: 8px 16px;
+            border-radius: 20px;
+            border: 1px solid rgba(35, 166, 213, 0.3);
+        }
+
+        .live-dot {
+            width: 8px;
+            height: 8px;
+            background: #23d5ab;
+            border-radius: 50%;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        .source-selector {
+            background: linear-gradient(135deg, rgba(35, 166, 213, 0.15) 0%, rgba(35, 213, 171, 0.15) 100%);
+            border: 1px solid rgba(35, 166, 213, 0.3);
+            border-radius: 12px;
+            padding: 10px 40px 10px 16px;
+            color: #fff;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            outline: none;
+            font-family: 'Inter', sans-serif;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%2323d5ab' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 12px center;
+            min-width: 180px;
+        }
+
+        .source-selector:hover {
+            background: linear-gradient(135deg, rgba(35, 166, 213, 0.25) 0%, rgba(35, 213, 171, 0.25) 100%);
+            border-color: rgba(35, 166, 213, 0.5);
+            transform: translateY(-1px);
+        }
+
+        .source-selector option {
+            background: #1a1f3a;
+            color: #fff;
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+
+            50% {
+                opacity: 0.5;
+                transform: scale(1.1);
+            }
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: #1a1f3a;
+            border-radius: 20px;
+            padding: 30px;
+            max-width: 500px;
+            width: 90%;
+            border: 1px solid rgba(35, 166, 213, 0.3);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .modal-header h2 {
+            font-size: 24px;
+            color: #23d5ab;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            color: #8b92b0;
+            font-size: 28px;
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+
+        .close-btn:hover {
+            color: #fff;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #8b92b0;
+            font-size: 14px;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px 16px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            color: #fff;
+            font-size: 16px;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: rgba(35, 213, 171, 0.5);
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 25px;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 12px;
+            border-radius: 10px;
+            border: none;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #23a6d5 0%, #23d5ab 100%);
+            color: #fff;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(35, 213, 171, 0.3);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.05);
+            color: #8b92b0;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.08);
+            color: #fff;
+        }
+
+        .main-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 30px;
+            transition: all 0.3s ease;
+        }
+
+        .card:hover {
+            background: rgba(255, 255, 255, 0.05);
+            border-color: rgba(35, 166, 213, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .price-card {
+            text-align: center;
+            padding: 30px;
+            background: linear-gradient(135deg, rgba(35, 166, 213, 0.1) 0%, rgba(35, 213, 171, 0.1) 100%);
+            border: 1px solid rgba(35, 166, 213, 0.2);
+        }
+
+        .price-label {
+            font-size: 13px;
+            color: #8b92b0;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .price-value {
+            font-size: 42px;
+            font-weight: 700;
+            margin-bottom: 12px;
+            background: linear-gradient(135deg, #23a6d5 0%, #23d5ab 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .price-change {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 14px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .price-change.positive {
+            background: rgba(35, 213, 171, 0.1);
+            color: #23d5ab;
+        }
+
+        .price-change.negative {
+            background: rgba(239, 68, 68, 0.1);
+            color: #ef4444;
+        }
+
+        .pnl-card {
+            padding: 30px;
+            text-align: center;
+        }
+
+        .pnl-card.profit {
+            background: linear-gradient(135deg, rgba(35, 213, 171, 0.15) 0%, rgba(16, 185, 129, 0.15) 100%);
+            border: 1px solid rgba(35, 213, 171, 0.3);
+        }
+
+        .pnl-card.loss {
+            background: linear-gradient(135deg, rgba(239, 68, 68, 0.15) 0%, rgba(220, 38, 38, 0.15) 100%);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+        }
+
+        .pnl-label {
+            font-size: 13px;
+            margin-bottom: 12px;
+            opacity: 0.9;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .pnl-amount {
+            font-size: 42px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .pnl-percentage {
+            font-size: 20px;
+            font-weight: 600;
+            opacity: 0.9;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+
+        .stat-item {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .stat-label {
+            font-size: 13px;
+            color: #8b92b0;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .stat-value {
+            font-size: 24px;
+            font-weight: 600;
+        }
+
+        .details-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .detail-card {
+            background: rgba(255, 255, 255, 0.03);
+            padding: 20px;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .detail-label {
+            font-size: 12px;
+            color: #8b92b0;
+            margin-bottom: 8px;
+        }
+
+        .detail-value {
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 30px;
+            padding: 20px;
+            color: #8b92b0;
+            font-size: 13px;
+        }
+
+        .error-banner {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            color: #ef4444;
+            padding: 15px 20px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        .loading-spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(35, 166, 213, 0.3);
+            border-top-color: #23a6d5;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .main-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .details-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .price-value {
+                font-size: 32px;
+            }
+
+            .pnl-amount {
+                font-size: 32px;
+            }
+
+            .header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .crypto-tabs {
+                width: 100%;
+                justify-content: space-between;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="background-gradient"></div>
+
+    <div class="container">
+        <div class="header">
+            <div class="logo-section">
+                <div class="crypto-logo" id="crypto-logo">₿</div>
+                <div class="header-title">
+                    <h1 id="crypto-name">Bitcoin Portfolio</h1>
+                    <p>Real-time crypto tracking</p>
+                </div>
+            </div>
+            <div class="header-controls">
+                <div class="crypto-tabs">
+                    <button class="crypto-tab active" data-crypto="XRP">XRP</button>
+                    <button class="crypto-tab" data-crypto="BTC">BTC</button>
+                    <button class="crypto-tab" data-crypto="ETH">ETH</button>
+                </div>
+                <button class="edit-btn" id="edit-btn">⚙️ Edit</button>
+                <select id="source-selector" class="source-selector">
+                    <option value="CryptoCompare IDR">CryptoCompare</option>
+                    <option value="CoinGecko IDR">CoinGecko IDR</option>
+                </select>
+                <div class="live-badge">
+                    <div class="live-dot"></div>
+                    <span id="last-update">Live</span>
+                </div>
+            </div>
+        </div>
+
+        <div id="error-message" class="error-banner"></div>
+
+        <div class="main-grid">
+            <div class="card price-card">
+                <div class="price-label" id="price-label">Current Bitcoin Price</div>
+                <div class="price-value" id="harga-live">
+                    <span class="loading-spinner"></span>
+                </div>
+                <div class="price-change" id="price-change-display"></div>
+            </div>
+
+            <div id="pnl-card" class="card pnl-card"></div>
+
+            <div class="card">
+                <div class="stats-grid">
+                    <div class="stat-item">
+                        <div class="stat-label">Buy Price</div>
+                        <div class="stat-value" id="harga-beli">-</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-label">Holdings</div>
+                        <div class="stat-value" id="jumlah-koin">-</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-label">Initial Investment</div>
+                        <div class="stat-value" id="modal-awal">-</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-label">Current Value</div>
+                        <div class="stat-value" id="nilai-sekarang">-</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="details-grid">
+                    <div class="detail-card">
+                        <div class="detail-label">Per Coin</div>
+                        <div class="detail-value" id="status-koin">-</div>
+                    </div>
+                    <div class="detail-card">
+                        <div class="detail-label">Change %</div>
+                        <div class="detail-value" id="keuntungan-persen">-</div>
+                    </div>
+                    <div class="detail-card">
+                        <div class="detail-label">Total P&L</div>
+                        <div class="detail-value" id="total-untung-rugi">-</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card" id="target-card" style="grid-column: 1 / -1;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px;">
+                    <h3 style="color: #23d5ab; font-size: 18px; text-transform: uppercase; letter-spacing: 1px;">Target
+                        Profit Simulation</h3>
+                    <div id="target-status"
+                        style="padding: 8px 16px; border-radius: 8px; font-size: 13px; font-weight: 500;">
+                        No target set
+                    </div>
+                </div>
+
+                <div id="target-content">
+                    <div style="text-align: center; padding: 40px; color: #8b92b0;">
+                        <div style="font-size: 48px; margin-bottom: 15px; font-weight: 700; color: #23a6d5;">$</div>
+                        <p style="font-size: 16px;">Set your target sell price in Edit menu to see profit simulation</p>
+                        <button onclick="document.getElementById('edit-btn').click()"
+                            style="margin-top: 20px; padding: 12px 24px; background: linear-gradient(135deg, #23a6d5 0%, #23d5ab 100%); border: none; border-radius: 10px; color: white; font-weight: 500; cursor: pointer; font-size: 14px;">
+                            Set Target Now
+                        </button>
+                    </div>
+                </div>
+
+                <div id="target-details" style="display: none;">
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px;">
+                        <div
+                            style="background: linear-gradient(135deg, rgba(35, 166, 213, 0.1) 0%, rgba(35, 213, 171, 0.1) 100%); padding: 25px; border-radius: 15px; border: 1px solid rgba(35, 166, 213, 0.3); text-align: center;">
+                            <div
+                                style="font-size: 13px; color: #8b92b0; margin-bottom: 10px; text-transform: uppercase; letter-spacing: 1px;">
+                                Target Price</div>
+                            <div style="font-size: 36px; font-weight: 700; color: #23d5ab;" id="target-price-display">-
+                            </div>
+                        </div>
+                        <div
+                            style="background: linear-gradient(135deg, rgba(35, 213, 171, 0.1) 0%, rgba(16, 185, 129, 0.1) 100%); padding: 25px; border-radius: 15px; border: 1px solid rgba(35, 213, 171, 0.3); text-align: center;">
+                            <div
+                                style="font-size: 13px; color: #8b92b0; margin-bottom: 10px; text-transform: uppercase; letter-spacing: 1px;">
+                                Net Profit</div>
+                            <div style="font-size: 36px; font-weight: 700; margin-bottom: 5px;"
+                                id="net-profit-highlight">-</div>
+                            <div style="font-size: 18px; font-weight: 600;" id="target-roi-highlight">-</div>
+                        </div>
+                    </div>
+
+                    <div class="stats-grid">
+                        <div class="stat-item">
+                            <div class="stat-label">Sell Value</div>
+                            <div class="stat-value" id="sell-value">-</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-label">Gross Profit</div>
+                            <div class="stat-value" id="gross-profit">-</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-label">Trading Fee</div>
+                            <div class="stat-value" id="admin-fee-display" style="color: #ef4444;">-</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-label">Net Profit</div>
+                            <div class="stat-value" id="net-profit">-</div>
+                        </div>
+                    </div>
+
+                    <div
+                        style="margin-top: 20px; padding: 15px; background: rgba(255, 255, 255, 0.03); border-radius: 10px; border-left: 4px solid #23a6d5;">
+                        <div
+                            style="font-size: 13px; color: #8b92b0; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 1px;">
+                            Fee Breakdown:</div>
+                        <div
+                            style="display: flex; justify-content: space-between; font-size: 14px; margin-bottom: 5px;">
+                            <span style="color: #8b92b0;">Buy Fee (<span id="fee-percent-buy">-</span>):</span>
+                            <span id="buy-fee">-</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; font-size: 14px;">
+                            <span style="color: #8b92b0;">Sell Fee (<span id="fee-percent-sell">-</span>):</span>
+                            <span id="sell-fee">-</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            <span id="data-source-info">Updates every 10s • Switch crypto or data source above</span>
+        </div>
+    </div>
+
+    <!-- Edit Modal -->
+    <div class="modal" id="edit-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modal-title">Edit Bitcoin Holdings</h2>
+                <button class="close-btn" id="close-modal">&times;</button>
+            </div>
+            <form id="edit-form">
+                <div class="form-group">
+                    <label for="buy-price">Harga Beli (IDR)</label>
+                    <input type="number" id="buy-price" step="0.01" min="0" required>
+                </div>
+                <div class="form-group">
+                    <label for="holdings">Jumlah Holdings</label>
+                    <input type="number" id="holdings" step="0.00000001" min="0" required>
+                </div>
+                <div class="form-group">
+                    <label for="target-price">Target Harga Jual (IDR) - Opsional</label>
+                    <input type="number" id="target-price" step="0.01" min="0"
+                        placeholder="Kosongkan jika tidak ada target">
+                </div>
+                <div class="form-group">
+                    <label for="admin-fee">Fee Trading (%) - Default 0.1%</label>
+                    <input type="number" id="admin-fee" step="0.01" min="0" max="100" value="0.1">
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn btn-secondary" id="cancel-btn">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Save</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Crypto configurations
+        const CRYPTO_CONFIG = {
+            BTC: {
+                name: 'Bitcoin',
+                symbol: 'BTC',
+                logo: '₿',
+                coingeckoId: 'bitcoin',
+                cryptoCompareSymbol: 'BTC',
+                defaultBuyPrice: 0,
+                defaultHoldings: 0
+            },
+            XRP: {
+                name: 'Ripple',
+                symbol: 'XRP',
+                logo: '✕',
+                coingeckoId: 'ripple',
+                cryptoCompareSymbol: 'XRP',
+                defaultBuyPrice: 34600,
+                defaultHoldings: 11.3
+            },
+            ETH: {
+                name: 'Ethereum',
+                symbol: 'ETH',
+                logo: 'Ξ',
+                coingeckoId: 'ethereum',
+                cryptoCompareSymbol: 'ETH',
+                defaultBuyPrice: 0,
+                defaultHoldings: 0
+            }
+        };
+
+        let currentCrypto = localStorage.getItem('lastSelectedCrypto') || 'XRP';
+        let updateInterval = null;
+        let lastSuccessfulPrice = null;
+
+        // Load saved data from localStorage
+        function loadSavedData(crypto) {
+            const saved = localStorage.getItem(`crypto_${crypto}`);
+            if (saved) {
+                return JSON.parse(saved);
+            }
+            return {
+                buyPrice: CRYPTO_CONFIG[crypto].defaultBuyPrice,
+                holdings: CRYPTO_CONFIG[crypto].defaultHoldings,
+                targetPrice: 0,
+                adminFee: 0.1
+            };
+        }
+
+        // Save data to localStorage
+        function saveData(crypto, buyPrice, holdings, targetPrice, adminFee) {
+            localStorage.setItem(`crypto_${crypto}`, JSON.stringify({
+                buyPrice: parseFloat(buyPrice),
+                holdings: parseFloat(holdings),
+                targetPrice: parseFloat(targetPrice) || 0,
+                adminFee: parseFloat(adminFee) || 0.1
+            }));
+        }
+
+        // Get current crypto data
+        function getCurrentData() {
+            return loadSavedData(currentCrypto);
+        }
+
+        // API Sources
+        function getAPISources(crypto) {
+            const config = CRYPTO_CONFIG[crypto];
+            return [
+                {
+                    name: 'CryptoCompare IDR',
+                    url: `https://min-api.cryptocompare.com/data/price?fsym=${config.cryptoCompareSymbol}&tsyms=IDR`,
+                    parse: (data) => ({
+                        price: data.IDR,
+                        change24h: 0
+                    })
+                },
+                {
+                    name: 'CoinGecko IDR',
+                    url: `https://api.coingecko.com/api/v3/simple/price?ids=${config.coingeckoId}&vs_currencies=idr&include_24hr_change=true`,
+                    parse: (data) => ({
+                        price: data[config.coingeckoId].idr,
+                        change24h: data[config.coingeckoId].idr_24h_change || 0
+                    })
+                }
+            ];
+        }
+
+        function formatRupiah(angka) {
+            return new Intl.NumberFormat('id-ID', {
+                style: 'currency',
+                currency: 'IDR',
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 0
+            }).format(angka);
+        }
+
+        function formatTime() {
+            return new Date().toLocaleTimeString('id-ID', {
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit'
+            });
+        }
+
+        function showError(message) {
+            const errorEl = document.getElementById('error-message');
+            errorEl.textContent = '⚠️ ' + message;
+            errorEl.style.display = 'block';
+        }
+
+        function hideError() {
+            document.getElementById('error-message').style.display = 'none';
+        }
+
+        function formatCrypto(amount, symbol) {
+            // Remove trailing zeros and unnecessary decimal point
+            let formatted = parseFloat(amount.toFixed(8)).toString();
+            return formatted + ' ' + symbol;
+        }
+
+        function updateUI() {
+            const config = CRYPTO_CONFIG[currentCrypto];
+            const data = getCurrentData();
+
+            document.getElementById('crypto-logo').textContent = config.logo;
+            document.getElementById('crypto-name').textContent = `${config.name} Portfolio`;
+            document.getElementById('price-label').textContent = `Current ${config.name} Price`;
+            document.getElementById('modal-title').textContent = `Edit ${config.name} Holdings`;
+
+            document.getElementById('harga-beli').textContent = formatRupiah(data.buyPrice);
+            document.getElementById('jumlah-koin').textContent = formatCrypto(data.holdings, config.symbol);
+            document.getElementById('modal-awal').textContent = formatRupiah(data.buyPrice * data.holdings);
+        }
+
+        async function fetchWithTimeout(url, timeout = 8000) {
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), timeout);
+
+            try {
+                const response = await fetch(url, {
+                    signal: controller.signal,
+                    cache: 'no-cache'
+                });
+                clearTimeout(timeoutId);
+                return response;
+            } catch (error) {
+                clearTimeout(timeoutId);
+                throw error;
+            }
+        }
+
+        async function fetchPriceData(specificSource = null) {
+            const sources = getAPISources(currentCrypto);
+            let sourceIndex = 0;
+
+            if (specificSource) {
+                const idx = sources.findIndex(s => s.name === specificSource);
+                if (idx !== -1) sourceIndex = idx;
+            }
+
+            const apiSource = sources[sourceIndex];
+
+            try {
+                console.log(`📡 Fetching ${currentCrypto} from ${apiSource.name}...`);
+                const response = await fetchWithTimeout(apiSource.url);
+
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}`);
+                }
+
+                const data = await response.json();
+                const parsed = await apiSource.parse(data);
+
+                if (!parsed.price || isNaN(parsed.price) || parsed.price <= 0) {
+                    throw new Error('Invalid price data');
+                }
+
+                hideError();
+                console.log(`✅ ${apiSource.name} success: ${formatRupiah(parsed.price)}`);
+
+                const selector = document.getElementById('source-selector');
+                if (selector.value !== apiSource.name) {
+                    selector.value = apiSource.name;
+                }
+
+                return parsed;
+
+            } catch (error) {
+                console.error(`❌ ${apiSource.name} failed:`, error.message);
+
+                if (specificSource) {
+                    showError(`${apiSource.name} failed. Retrying...`);
+                    throw error;
+                }
+
+                // Try next source
+                if (sourceIndex < sources.length - 1) {
+                    return await fetchPriceData(sources[sourceIndex + 1].name);
+                }
+
+                throw new Error(`All API sources failed`);
+            }
+        }
+
+        function updateDisplay(hargaLive, change24h) {
+            const data = getCurrentData();
+            const config = CRYPTO_CONFIG[currentCrypto];
+
+            // Handle zero values
+            if (data.buyPrice === 0 || data.holdings === 0) {
+                document.getElementById('harga-live').textContent = formatRupiah(hargaLive);
+                document.getElementById('nilai-sekarang').textContent = formatRupiah(0);
+                document.getElementById('status-koin').textContent = '-';
+                document.getElementById('keuntungan-persen').textContent = '-';
+                document.getElementById('total-untung-rugi').textContent = '-';
+
+                const pnlCard = document.getElementById('pnl-card');
+                pnlCard.className = 'card pnl-card';
+                pnlCard.innerHTML = `
+                    <div class="pnl-label">⚠️ No Holdings</div>
+                    <div class="pnl-amount">-</div>
+                    <div class="pnl-percentage">Set your buy price and holdings</div>
+                `;
+
+                document.getElementById('target-content').style.display = 'block';
+                document.getElementById('target-details').style.display = 'none';
+                const statusEl = document.getElementById('target-status');
+                statusEl.textContent = 'No target set';
+                statusEl.style.background = 'rgba(255, 255, 255, 0.05)';
+                statusEl.style.color = '#8b92b0';
+                statusEl.style.border = '1px solid rgba(255, 255, 255, 0.1)';
+                document.getElementById('last-update').textContent = 'Updated ' + formatTime();
+                return;
+            }
+
+            const nilaiSekarang = hargaLive * data.holdings;
+            const perbedaanHarga = hargaLive - data.buyPrice;
+            const persentase = (perbedaanHarga / data.buyPrice) * 100;
+            const totalUntungRugi = perbedaanHarga * data.holdings;
+            const isProfit = totalUntungRugi >= 0;
+
+            document.getElementById('harga-live').textContent = formatRupiah(hargaLive);
+
+            const priceChangeEl = document.getElementById('price-change-display');
+            if (change24h !== 0) {
+                priceChangeEl.className = 'price-change ' + (change24h >= 0 ? 'positive' : 'negative');
+                priceChangeEl.textContent = (change24h >= 0 ? '↑' : '↓') + ' ' + Math.abs(change24h).toFixed(2) + '% (24h)';
+            } else {
+                priceChangeEl.className = 'price-change';
+                priceChangeEl.textContent = 'Live Price';
+            }
+
+            const pnlCard = document.getElementById('pnl-card');
+            pnlCard.className = 'card pnl-card ' + (isProfit ? 'profit' : 'loss');
+            pnlCard.innerHTML = `
+                <div class="pnl-label">${isProfit ? '📈 Total Profit' : '📉 Total Loss'}</div>
+                <div class="pnl-amount">${formatRupiah(Math.abs(totalUntungRugi))}</div>
+                <div class="pnl-percentage">${(persentase >= 0 ? '+' : '')}${persentase.toFixed(2)}%</div>
+            `;
+
+            document.getElementById('nilai-sekarang').textContent = formatRupiah(nilaiSekarang);
+
+            const statusKoinEl = document.getElementById('status-koin');
+            statusKoinEl.textContent = (perbedaanHarga >= 0 ? '+' : '') + formatRupiah(perbedaanHarga);
+            statusKoinEl.style.color = perbedaanHarga >= 0 ? '#23d5ab' : '#ef4444';
+
+            const persenEl = document.getElementById('keuntungan-persen');
+            persenEl.textContent = (persentase >= 0 ? '+' : '') + persentase.toFixed(2) + '%';
+            persenEl.style.color = persentase >= 0 ? '#23d5ab' : '#ef4444';
+
+            const totalEl = document.getElementById('total-untung-rugi');
+            totalEl.textContent = (totalUntungRugi >= 0 ? '+' : '') + formatRupiah(totalUntungRugi);
+            totalEl.style.color = totalUntungRugi >= 0 ? '#23d5ab' : '#ef4444';
+
+            // Calculate target profit if target price is set
+            if (data.targetPrice && data.targetPrice > 0) {
+                document.getElementById('target-content').style.display = 'none';
+                document.getElementById('target-details').style.display = 'block';
+
+                const targetSellValue = data.targetPrice * data.holdings;
+                const buyValue = data.buyPrice * data.holdings;
+                const grossProfit = targetSellValue - buyValue;
+
+                // Calculate fees (buy fee + sell fee)
+                const buyFee = buyValue * (data.adminFee / 100);
+                const sellFee = targetSellValue * (data.adminFee / 100);
+                const totalFee = buyFee + sellFee;
+
+                const netProfit = grossProfit - totalFee;
+                const targetROI = (netProfit / buyValue) * 100;
+
+                // Update status badge
+                const statusEl = document.getElementById('target-status');
+                statusEl.textContent = 'Target Active';
+                statusEl.style.background = 'rgba(35, 213, 171, 0.2)';
+                statusEl.style.color = '#23d5ab';
+                statusEl.style.border = '1px solid rgba(35, 213, 171, 0.3)';
+
+                // Main highlight
+                document.getElementById('target-price-display').textContent = formatRupiah(data.targetPrice);
+                document.getElementById('net-profit-highlight').textContent = formatRupiah(netProfit);
+                document.getElementById('net-profit-highlight').style.color = netProfit >= 0 ? '#23d5ab' : '#ef4444';
+                document.getElementById('target-roi-highlight').textContent = (targetROI >= 0 ? '+' : '') + targetROI.toFixed(2) + '% ROI';
+                document.getElementById('target-roi-highlight').style.color = targetROI >= 0 ? '#23d5ab' : '#ef4444';
+
+                // Stats grid
+                document.getElementById('sell-value').textContent = formatRupiah(targetSellValue);
+                document.getElementById('gross-profit').textContent = formatRupiah(grossProfit);
+                document.getElementById('admin-fee-display').textContent = formatRupiah(totalFee);
+                document.getElementById('net-profit').textContent = formatRupiah(netProfit);
+                document.getElementById('net-profit').style.color = netProfit >= 0 ? '#23d5ab' : '#ef4444';
+
+                // Fee breakdown
+                document.getElementById('fee-percent-buy').textContent = data.adminFee + '%';
+                document.getElementById('fee-percent-sell').textContent = data.adminFee + '%';
+                document.getElementById('buy-fee').textContent = formatRupiah(buyFee);
+                document.getElementById('sell-fee').textContent = formatRupiah(sellFee);
+            } else {
+                document.getElementById('target-content').style.display = 'block';
+                document.getElementById('target-details').style.display = 'none';
+
+                const statusEl = document.getElementById('target-status');
+                statusEl.textContent = 'No target set';
+                statusEl.style.background = 'rgba(255, 255, 255, 0.05)';
+                statusEl.style.color = '#8b92b0';
+                statusEl.style.border = '1px solid rgba(255, 255, 255, 0.1)';
+            }
+
+            document.getElementById('last-update').textContent = 'Updated ' + formatTime();
+
+            lastSuccessfulPrice = hargaLive;
+        }
+
+        async function updateMonitor(specificSource = null) {
+            try {
+                const priceData = await fetchPriceData(specificSource);
+                updateDisplay(priceData.price, priceData.change24h);
+
+            } catch (error) {
+                console.error('API failed:', error);
+
+                if (lastSuccessfulPrice) {
+                    showError(`Using last known price. Will retry in 10s...`);
+                    updateDisplay(lastSuccessfulPrice, 0);
+                } else {
+                    showError('Cannot fetch price data. Check your internet connection.');
+                    document.getElementById('harga-live').innerHTML = '<span style="font-size: 20px;">Connection Error</span>';
+                }
+            }
+        }
+
+        function switchCrypto(crypto) {
+            currentCrypto = crypto;
+            lastSuccessfulPrice = null;
+
+            // Save to localStorage
+            localStorage.setItem('lastSelectedCrypto', crypto);
+
+            // Update active tab
+            document.querySelectorAll('.crypto-tab').forEach(tab => {
+                tab.classList.toggle('active', tab.dataset.crypto === crypto);
+            });
+
+            // Clear interval and restart
+            if (updateInterval) {
+                clearInterval(updateInterval);
+            }
+
+            updateUI();
+            document.getElementById('harga-live').innerHTML = '<span class="loading-spinner"></span>';
+            updateMonitor();
+            updateInterval = setInterval(updateMonitor, 10000);
+        }
+
+        // Modal functions
+        function openModal() {
+            const data = getCurrentData();
+            document.getElementById('buy-price').value = data.buyPrice;
+            document.getElementById('holdings').value = data.holdings;
+            document.getElementById('target-price').value = data.targetPrice || '';
+            document.getElementById('admin-fee').value = data.adminFee || 0.1;
+            document.getElementById('edit-modal').classList.add('active');
+        }
+
+        function closeModal() {
+            document.getElementById('edit-modal').classList.remove('active');
+        }
+
+        function handleFormSubmit(e) {
+            e.preventDefault();
+            const buyPrice = parseFloat(document.getElementById('buy-price').value);
+            const holdings = parseFloat(document.getElementById('holdings').value);
+            const targetPrice = parseFloat(document.getElementById('target-price').value) || 0;
+            const adminFee = parseFloat(document.getElementById('admin-fee').value) || 0.1;
+
+            // Validation
+            if (buyPrice < 0 || holdings < 0) {
+                alert('Harga beli dan jumlah holdings tidak boleh negatif!');
+                return;
+            }
+
+            if (targetPrice < 0 || adminFee < 0) {
+                alert('Target harga dan fee tidak boleh negatif!');
+                return;
+            }
+
+            if (buyPrice === 0 && holdings === 0) {
+                if (!confirm('Anda akan mengatur harga beli dan holdings ke 0. Lanjutkan?')) {
+                    return;
+                }
+            }
+
+            saveData(currentCrypto, buyPrice, holdings, targetPrice, adminFee);
+            updateUI();
+            updateMonitor();
+            closeModal();
+        }
+
+        // Event listeners
+        document.addEventListener('DOMContentLoaded', () => {
+            // Set active tab based on current crypto
+            document.querySelectorAll('.crypto-tab').forEach(tab => {
+                tab.classList.toggle('active', tab.dataset.crypto === currentCrypto);
+            });
+
+            // Crypto tabs
+            document.querySelectorAll('.crypto-tab').forEach(tab => {
+                tab.addEventListener('click', () => {
+                    switchCrypto(tab.dataset.crypto);
+                });
+            });
+
+            // Source selector
+            document.getElementById('source-selector').addEventListener('change', (e) => {
+                const selectedSource = e.target.value;
+                console.log(`🔄 User changed source to: ${selectedSource}`);
+                document.getElementById('harga-live').innerHTML = '<span class="loading-spinner"></span>';
+
+                if (updateInterval) {
+                    clearInterval(updateInterval);
+                }
+
+                updateMonitor(selectedSource);
+                updateInterval = setInterval(() => updateMonitor(selectedSource), 10000);
+            });
+
+            // Modal
+            document.getElementById('edit-btn').addEventListener('click', openModal);
+            document.getElementById('close-modal').addEventListener('click', closeModal);
+            document.getElementById('cancel-btn').addEventListener('click', closeModal);
+            document.getElementById('edit-form').addEventListener('submit', handleFormSubmit);
+
+            // Close modal on outside click
+            document.getElementById('edit-modal').addEventListener('click', (e) => {
+                if (e.target.id === 'edit-modal') {
+                    closeModal();
+                }
+            });
+
+            // Initialize
+            updateUI();
+            updateMonitor();
+            updateInterval = setInterval(updateMonitor, 10000);
+        });
+    </script>
+</body>
+
+</html>

@@ -3,204 +3,113 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Crypto Tracker</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Crypto Portfolio</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lightweight-charts@4.0.1/dist/lightweight-charts.standalone.production.js"></script>
+    <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
     <style>
         :root {
             --bg-body: #000000;
-            --bg-card: #141414;
-            --bg-input: #1f1f1f;
-            --text-primary: #eeeeee;
-            --text-secondary: #707070;
-            --text-tertiary: #4a4a4a;
-            --accent-green: #81c784;
-            --accent-green-dim: rgba(129, 199, 132, 0.15);
-            --accent-red: #e57373;
-            --accent-red-dim: rgba(229, 115, 115, 0.15);
-            --border-color: #262626;
-            --radius-card: 18px;
-            --radius-elem: 8px;
+            --bg-card: #121212;
+            --bg-input: #1e1e1e;
+            --text-primary: #e0e0e0;
+            --text-secondary: #757575;
+            --accent-green: #0ecb81;
+            --accent-red: #f6465d;
+            --border-color: #2a2a2a;
+            --radius-card: 16px;
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 
         body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            font-family: 'Inter', sans-serif;
             background: var(--bg-body);
             color: var(--text-primary);
-            min-height: 100vh;
             padding: 12px;
             display: flex;
             justify-content: center;
+            min-height: 100vh;
         }
 
         .container {
             width: 100%;
-            max-width: 480px;
+            max-width: 450px;
             display: flex;
             flex-direction: column;
             gap: 12px;
+            padding-bottom: 30px;
         }
 
-        /* --- Header & Buttons --- */
-        .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 5px;
-        }
+        /* HEADER */
+        .header { display: flex; justify-content: space-between; align-items: center; padding: 4px; }
+        .app-title { font-size: 18px; font-weight: 700; color: #fff; }
+        .settings-btn { background: none; border: none; color: #fff; cursor: pointer; padding: 8px; }
 
-        .app-title {
-            font-size: 18px;
-            font-weight: 600;
-            color: var(--text-primary);
-            margin-left: 5px;
-        }
-
-        .icon-btn {
-            background: transparent;
-            border: none;
-            color: var(--text-primary);
-            cursor: pointer;
-            padding: 8px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        .icon-btn:hover { background: rgba(255,255,255,0.1); }
-
-        /* --- Cards --- */
-        .card {
-            background: var(--bg-card);
-            border-radius: var(--radius-card);
-            padding: 16px;
-            border: 1px solid var(--border-color);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .card-header {
-            font-size: 13px;
-            font-weight: 600;
-            color: var(--text-primary);
-            margin-bottom: 12px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding-left: 2px;
-        }
-
-        /* --- Data Rows --- */
-        .data-row {
-            padding: 10px 0;
-            border-bottom: 1px solid var(--border-color);
-            display: flex;
-            flex-direction: row;
-            justify-content: space-between;
-            align-items: center;
-            min-height: 40px;
-        }
-
-        .data-row.vertical {
-            flex-direction: column;
-            align-items: flex-start;
-            gap: 5px;
-        }
-
-        .data-row:last-child { border-bottom: none; padding-bottom: 0; }
-
-        .data-label { font-size: 13px; font-weight: 400; color: var(--text-secondary); }
-        .data-value {
-            font-size: 14px; font-weight: 500; color: var(--text-primary);
-            font-family: 'Roboto Mono', monospace;
-            display: flex; align-items: center; gap: 8px; text-align: right;
-        }
-
-        /* --- Pills & Tabs --- */
-        .status-pill {
-            display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px;
-            border-radius: 50px; font-size: 11px; font-weight: 600;
-            background: var(--bg-input); color: var(--text-secondary);
-            transition: all 0.2s;
-        }
-        .status-pill.active { background: var(--accent-green-dim); color: var(--accent-green); }
-        .status-pill.danger { background: var(--accent-red-dim); color: var(--accent-red); }
-        .status-dot { width: 5px; height: 5px; border-radius: 50%; background-color: currentColor; }
-
-        .tabs-container { display: flex; gap: 8px; padding: 0 5px 8px 5px; }
-        .crypto-tab {
+        /* TABS */
+        .tabs { display: flex; gap: 8px; margin-bottom: 4px; }
+        .tab {
             background: var(--bg-card); border: 1px solid var(--border-color);
-            color: var(--text-secondary); padding: 6px 14px; border-radius: 50px;
-            font-size: 12px; font-weight: 500; cursor: pointer; transition: all 0.2s;
+            color: var(--text-secondary); padding: 8px 16px; border-radius: 20px;
+            font-size: 13px; font-weight: 500; cursor: pointer; transition: 0.2s; flex: 1; text-align: center;
         }
-        .crypto-tab.active {
-            background: var(--accent-green-dim); color: var(--accent-green); border-color: transparent;
-        }
+        .tab.active { background: rgba(14, 203, 129, 0.15); color: var(--accent-green); border-color: var(--accent-green); }
 
-        /* --- Typography & Elements --- */
-        .price-large {
-            font-size: 26px; font-weight: 600; letter-spacing: -0.5px; margin-bottom: 4px;
-        }
+        /* CARDS */
+        .card { background: var(--bg-card); border-radius: var(--radius-card); padding: 16px; border: 1px solid var(--border-color); }
+        .card-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; font-size: 13px; font-weight: 600; color: #fff; }
+        .badge { font-size: 10px; padding: 2px 8px; border-radius: 4px; background: #1f2b24; color: var(--accent-green); transition: opacity 0.3s;}
+        .badge.pulse { opacity: 0.5; }
 
-        .eye-toggle { cursor: pointer; opacity: 0.5; margin-left: 6px; display: flex; align-items: center; }
-        .eye-toggle:hover { opacity: 1; }
-        .value-hidden { font-size: 0 !important; }
-        .value-hidden::after { content: '••••••'; font-size: 14px; color: var(--text-tertiary); }
-
-        /* --- Source Selector --- */
-        .source-select-container { position: relative; display: flex; align-items: center; }
-        .header-source-select {
-            background: transparent; border: none; color: var(--text-secondary);
-            font-size: 11px; font-weight: 500; cursor: pointer; outline: none;
-            padding: 4px 0; text-align: right; font-family: 'Inter', sans-serif;
-            appearance: none; -webkit-appearance: none;
-        }
-        .header-source-select:hover { color: var(--accent-green); }
-        .header-source-select option { background: var(--bg-card); color: var(--text-primary); padding: 10px; }
-        .select-arrow { font-size: 8px; color: var(--text-secondary); margin-left: 4px; pointer-events: none; }
-
-        /* --- TOAST NOTIFICATION (New) --- */
-        #toast-container {
-            position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%);
-            z-index: 2000; display: flex; flex-direction: column; gap: 10px;
-            pointer-events: none; width: 90%; max-width: 350px;
-        }
-
-        .toast {
-            background: #252525; color: #fff; padding: 12px 16px; border-radius: 12px;
-            font-size: 13px; font-weight: 500; text-align: center;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.3); border: 1px solid #333;
-            opacity: 0; transform: translateY(20px); transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
-
-        .toast.show { opacity: 1; transform: translateY(0); }
-
-        /* --- Modals --- */
-        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 1000; align-items: center; justify-content: center; backdrop-filter: blur(2px); }
-        .modal.active { display: flex; }
-        .modal-content { background: #1a1a1a; width: 85%; max-width: 350px; border-radius: 16px; padding: 20px; border: 1px solid var(--border-color); }
-        .form-group { margin-bottom: 12px; }
-        .form-group label { display: block; color: var(--text-secondary); font-size: 11px; margin-bottom: 6px; }
-        .form-group input { width: 100%; background: #252525; border: 1px solid #333; color: #fff; padding: 10px; border-radius: 8px; font-size: 13px; outline: none; }
-        .form-group input:focus { border-color: var(--accent-green); }
-        
-        .modal-btns { display: flex; justify-content: flex-end; gap: 10px; margin-top: 20px; }
-        .btn { padding: 8px 16px; border-radius: 50px; font-size: 12px; font-weight: 600; border: none; cursor: pointer; }
-        .btn-cancel { background: transparent; color: #888; }
-        .btn-cancel:hover { color: #fff; }
-        .btn-save { background: var(--accent-green); color: #050505; }
-        .btn-danger { background: var(--accent-red); color: #050505; }
-
-        .loading-spinner { width: 14px; height: 14px; border: 2px solid #333; border-top-color: #fff; border-radius: 50%; animation: spin 1s linear infinite; display: inline-block; }
-        @keyframes spin { to { transform: rotate(360deg); } }
-
-        /* Utility for Icons */
-        .svg-icon { vertical-align: middle; width: 14px; height: 14px; display: inline-block; }
-        .svg-icon-lg { width: 20px; height: 20px; }
+        /* PRICE SECTION */
+        .price-big { font-size: 32px; font-weight: 600; color: #fff; letter-spacing: -0.5px; font-family: 'Roboto Mono', monospace; }
+        .price-change { font-size: 13px; font-weight: 500; margin-top: 4px; display: flex; align-items: center; gap: 4px;}
         .text-green { color: var(--accent-green); }
         .text-red { color: var(--accent-red); }
+
+        /* CHART CONTAINER */
+        #chart-wrap { height: 300px; width: 100%; border-radius: 12px; overflow: hidden; margin-top: 5px; }
+
+        /* DATA ROWS */
+        .row { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid var(--border-color); }
+        .row:last-child { border: none; padding-bottom: 0; }
+        .lbl { font-size: 13px; color: var(--text-secondary); display: flex; align-items: center; gap: 6px; }
+        .val { font-size: 14px; color: #fff; font-family: 'Roboto Mono', monospace; font-weight: 500; }
+
+        /* TOAST & MODAL */
+        #toast-container { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); z-index: 2000; width: max-content; }
+        .toast { background: #252525; color: #fff; padding: 10px 20px; border-radius: 50px; font-size: 12px; border: 1px solid #333; display: none; }
+        .toast.show { display: block; animation: fadeUp 0.3s forwards; }
+        
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 999; align-items: center; justify-content: center; backdrop-filter: blur(3px); }
+        .modal.active { display: flex; }
+        .modal-box { background: #1a1a1a; width: 85%; max-width: 320px; border-radius: 16px; padding: 20px; border: 1px solid #333; }
+        .inp-group { margin-bottom: 15px; }
+        .inp-group label { display: block; font-size: 11px; color: #888; margin-bottom: 5px; }
+        .inp-group input { width: 100%; background: #252525; border: 1px solid #333; color: #fff; padding: 10px; border-radius: 8px; font-size: 14px; outline: none; }
+        .modal-btns { display: flex; justify-content: flex-end; gap: 10px; margin-top: 20px; }
+        .btn { padding: 8px 16px; border-radius: 6px; border: none; font-size: 12px; font-weight: 600; cursor: pointer; }
+        .btn-cancel { background: transparent; color: #888; }
+        .btn-save { background: var(--accent-green); color: #000; }
+
+        @keyframes fadeUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .loading-dot { display: inline-block; width: 6px; height: 6px; background: #fff; border-radius: 50%; animation: blink 1s infinite; }
+        @keyframes blink { 0%, 100% { opacity: 0.2; } 50% { opacity: 1; } }
+        
+        /* ICONS & VISIBILITY */
+        .icon-btn { cursor: pointer; color: #fff; background: transparent; border: none; }
+        
+        /* Eye Button Wrapper */
+        .eye-btn {
+            cursor: pointer; display: flex; align-items: center; justify-content: center;
+            opacity: 0.6; transition: 0.2s; background: none; border: none; padding: 0; color: inherit;
+        }
+        .eye-btn:hover { opacity: 1; }
+        .eye-btn svg { width: 14px; height: 14px; }
+        
+        .value-hidden { font-size: 0 !important; }
+        .value-hidden::after { content: '••••••'; font-size: 14px; color: var(--text-tertiary); letter-spacing: 2px; }
     </style>
 </head>
 
@@ -208,549 +117,334 @@
 
     <div class="container">
         <div class="header">
-            <div class="app-title" id="crypto-name">Zygisk Portfolio</div>
-            <button class="icon-btn" id="edit-btn" title="Pengaturan">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z"/>
-                    <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
-                </svg>
+            <div class="app-title">Crypto Portfolio</div>
+            <button class="settings-btn" id="btn-settings">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
             </button>
         </div>
 
-        <div class="tabs-container">
-            <button class="crypto-tab active" data-crypto="XRP">XRP</button>
-            <button class="crypto-tab" data-crypto="BTC">Bitcoin</button>
-            <button class="crypto-tab" data-crypto="ETH">Ethereum</button>
-        </div>
-
-        <div id="error-message" style="display: none; background: rgba(229, 115, 115, 0.1); border: 1px solid var(--accent-red); color: var(--accent-red); padding: 8px 12px; border-radius: 8px; font-size: 12px; margin-bottom: 10px; display: flex; align-items: center; gap: 8px;">
+        <div class="tabs">
+            <div class="tab active" onclick="switchCoin('XRP')">XRP</div>
+            <div class="tab" onclick="switchCoin('BTC')">BTC</div>
+            <div class="tab" onclick="switchCoin('ETH')">ETH</div>
         </div>
 
         <div class="card">
-            <div class="card-header">
-                <span>Informasi Dasar</span>
-                <div class="source-select-container">
-                    <select id="source-selector" class="header-source-select">
-                        <option value="CryptoCompare IDR">CryptoCompare</option>
-                        <option value="CoinGecko IDR">CoinGecko</option>
-                    </select>
-                    <span class="select-arrow">▼</span>
-                </div>
+            <div class="card-head">
+                <span>Harga Pasar (IDR)</span>
+                <span class="badge" id="live-indicator">● Live</span>
             </div>
+            <div class="price-big" id="price-display">
+                <span class="loading-dot"></span><span class="loading-dot"></span>
+            </div>
+            <div class="price-change" id="change-display">--</div>
             
-            <div class="data-row vertical">
-                <div class="data-label">Harga Saat Ini</div>
-                <div class="price-large" id="harga-live">
-                    <span class="loading-spinner"></span>
+            <div style="margin-top: 15px; padding-top: 10px; border-top: 1px solid #222;">
+                <div class="row" style="padding: 0;">
+                    <span class="lbl">Estimasi PnL</span>
+                    <span class="val" id="pnl-display">Rp 0</span>
                 </div>
-                <div style="font-size: 12px; display: flex; align-items: center; gap: 4px;" id="price-change-display">Live</div>
-            </div>
-
-            <div class="data-row" style="border-bottom:none; padding-bottom:0;">
-                <div class="data-label">Total PnL</div>
-                <div class="data-value" id="total-untung-rugi" style="font-weight: 600;">Rp 0</div>
             </div>
         </div>
 
+        <div class="card" style="padding: 0;">
+            <div style="padding: 12px 16px; border-bottom: 1px solid #222; display:flex; justify-content:space-between; align-items: center;">
+                <span style="font-size:13px; font-weight:600; color:#fff;">Chart (Binance)</span>
+                <span style="font-size:10px; color:#666;">30 Menit</span>
+            </div>
+            <div id="chart-wrap"></div>
+        </div>
+
         <div class="card">
-            <div class="card-header">
-                <span>Dasbor</span>
-                <div class="status-pill active" id="pnl-pill-status">
-                    <span class="status-dot"></span> <span id="keuntungan-persen">0.00%</span>
-                </div>
+            <div class="card-head"><span>Portofolio Saya</span></div>
+            <div class="row">
+                <span class="lbl">Holdings</span>
+                <span class="val" id="holdings-display">0</span>
             </div>
-
-            <div class="data-row">
-                <div class="data-label">Holdings</div>
-                <div class="data-value" id="jumlah-koin">-</div>
-            </div>
-
-            <div class="data-row">
-                <div class="data-label">Avg. Buy</div>
-                <div class="data-value" id="harga-beli">-</div>
-            </div>
-
-            <div class="data-row">
-                <div class="data-label" style="display:flex; align-items:center;">
-                    Modal
-                    <span class="eye-toggle" id="toggle-investment">
-                        <svg id="eye-investment" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
-                        <svg id="eye-off-investment" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display: none;"><line x1="1" y1="1" x2="23" y2="23"/><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/></svg>
-                    </span>
-                </div>
-                <div class="data-value value-hidden" id="modal-awal">-</div>
-            </div>
-
-            <div class="data-row">
-                <div class="data-label" style="display:flex; align-items:center;">
-                    Aset
-                    <span class="eye-toggle" id="toggle-current">
-                        <svg id="eye-current" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
-                        <svg id="eye-off-current" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display: none;"><line x1="1" y1="1" x2="23" y2="23"/><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/></svg>
-                    </span>
-                </div>
-                <div class="data-value value-hidden" id="nilai-sekarang">-</div>
+            <div class="row">
+                <span class="lbl">Avg. Buy</span>
+                <span class="val" id="buy-display">Rp 0</span>
             </div>
             
-            <div style="display:none">
-                <span id="status-koin"></span>
+            <div class="row">
+                <div class="lbl">
+                    Modal Awal
+                    <button class="eye-btn" id="toggle-modal">
+                        <svg class="icon-hide" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
+                        <svg class="icon-show" style="display:none;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                    </button>
+                </div>
+                <span class="val value-hidden" id="initial-display">Rp 0</span>
+            </div>
+
+            <div class="row">
+                <div class="lbl">
+                    Aset Sekarang
+                    <button class="eye-btn" id="toggle-value">
+                        <svg class="icon-hide" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
+                        <svg class="icon-show" style="display:none;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                    </button>
+                </div>
+                <span class="val value-hidden" id="value-display">Rp 0</span>
             </div>
         </div>
 
         <div class="card" id="target-card">
-            <div class="card-header">
-                <span>Simulasi Target</span>
-                <span class="status-pill" id="target-status">Off</span>
+            <div class="card-head">
+                <span>Target Profit</span>
+                <span class="badge" id="target-status" style="background:#222; color:#777;">Off</span>
             </div>
-            
-            <div id="target-content" style="color: var(--text-secondary); font-size: 12px; padding: 5px 0;">
-                Set target harga di menu edit.
+            <div class="row">
+                <span class="lbl">Target Jual</span>
+                <span class="val" style="color:var(--accent-green);" id="target-price-display">-</span>
             </div>
-
-            <div id="target-details" style="display: none;">
-                <div class="data-row">
-                    <div class="data-label">Target Jual</div>
-                    <div class="data-value" style="color: var(--accent-green);" id="target-price-display">-</div>
-                </div>
-                <div class="data-row">
-                    <div class="data-label">Net Profit</div>
-                    <div class="data-value" id="net-profit-highlight">-</div>
-                </div>
-                <div class="data-row">
-                    <div class="data-label">Est. Fee</div>
-                    <div class="data-value" id="admin-fee-display" style="color: var(--accent-red);">-</div>
-                </div>
+            <div class="row">
+                <span class="lbl">Net Profit</span>
+                <span class="val" id="net-profit-display">-</span>
             </div>
-        </div>
-
-        <div style="display:none;" id="pnl-card"></div>
-        <div style="text-align: center; font-size: 10px; color: var(--text-secondary); margin-top: 10px;">
-            Updated: <span id="last-update">Live</span>
-        </div>
-
-    </div>
-
-    <div id="toast-container"></div>
-
-    <div class="modal" id="edit-modal">
-        <div class="modal-content">
-            <h3 style="margin-bottom:15px; font-size:16px;">Pengaturan</h3>
-            <form id="edit-form">
-                <div class="form-group">
-                    <label for="buy-price">Harga Beli (IDR)</label>
-                    <input type="number" id="buy-price" step="0.01" min="0" required>
-                </div>
-                <div class="form-group">
-                    <label for="holdings">Jumlah Holdings</label>
-                    <input type="number" id="holdings" step="0.00000001" min="0" required>
-                </div>
-                <div class="form-group">
-                    <label for="target-price">Target Jual (Opsional)</label>
-                    <input type="number" id="target-price" step="0.01" min="0">
-                </div>
-                <div class="form-group">
-                    <label for="admin-fee">Fee Trading (%)</label>
-                    <input type="number" id="admin-fee" step="0.01" min="0" max="100" value="0.1">
-                </div>
-                <div class="modal-btns">
-                    <button type="button" class="btn btn-cancel" id="cancel-btn">Batal</button>
-                    <button type="submit" class="btn btn-save">Simpan</button>
-                </div>
-            </form>
         </div>
     </div>
 
-    <div class="modal" id="confirm-modal">
-        <div class="modal-content" style="max-width: 280px;">
-            <div style="text-align: center; margin-bottom: 20px;">
-                <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="var(--accent-red)" stroke-width="2" style="margin-bottom: 10px;">
-                    <circle cx="12" cy="12" r="10"></circle>
-                    <line x1="12" y1="8" x2="12" y2="12"></line>
-                    <line x1="12" y1="16" x2="12.01" y2="16"></line>
-                </svg>
-                <p style="font-size: 14px; color: var(--text-primary);" id="confirm-message">Apakah Anda yakin?</p>
+    <div id="toast-container"><div class="toast" id="toast-msg"></div></div>
+
+    <div class="modal" id="modal">
+        <div class="modal-box">
+            <h3 style="color:#fff; margin-bottom:15px;">Edit Aset</h3>
+            <div class="inp-group">
+                <label>Harga Beli (IDR)</label>
+                <input type="number" id="inp-buy">
             </div>
-            <div class="modal-btns" style="justify-content: center;">
-                <button type="button" class="btn btn-cancel" id="confirm-cancel-btn">Batal</button>
-                <button type="button" class="btn btn-danger" id="confirm-ok-btn">Reset 0</button>
+            <div class="inp-group">
+                <label>Jumlah Koin</label>
+                <input type="number" id="inp-amount">
+            </div>
+            <div class="inp-group">
+                <label>Target Jual (IDR)</label>
+                <input type="number" id="inp-target">
+            </div>
+            <div class="modal-btns">
+                <button class="btn btn-cancel" onclick="closeModal()">Batal</button>
+                <button class="btn btn-save" onclick="saveData()">Simpan</button>
             </div>
         </div>
     </div>
 
     <script>
-        // --- SVG ICONS CONSTANTS ---
-        const ICONS = {
-            ARROW_UP: '<svg class="svg-icon text-green" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="18 15 12 9 6 15"/></svg>',
-            ARROW_DOWN: '<svg class="svg-icon text-red" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>',
-            WARNING: '<svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>'
+        // ==========================================
+        //  PENGATURAN USER (HARDCODE)
+        // ==========================================
+        const PORTFOLIO_DATA = {
+            XRP: { 
+                buy: 31055,      
+                amount: 22.6,      
+                target: 40000,   
+                fee: 0.1         
+            },
+            BTC: { buy: 0, amount: 0, target: 0, fee: 0.1 },
+            ETH: { buy: 0, amount: 0, target: 0, fee: 0.1 }
+        };
+        // ==========================================
+
+        const CONFIG = {
+            BTC: { symbol: 'BTC', tvSymbol: 'BINANCE:BTCIDR' },
+            XRP: { symbol: 'XRP', tvSymbol: 'BINANCE:XRPIDR' },
+            ETH: { symbol: 'ETH', tvSymbol: 'BINANCE:ETHIDR' }
         };
 
-        const CRYPTO_CONFIG = {
-            BTC: { name: 'Bitcoin', symbol: 'BTC', coingeckoId: 'bitcoin', cryptoCompareSymbol: 'BTC', defaultBuyPrice: 0, defaultHoldings: 0 },
-            XRP: { name: 'Ripple', symbol: 'XRP', coingeckoId: 'ripple', cryptoCompareSymbol: 'XRP', defaultBuyPrice: 31055.34, defaultHoldings: 22.6 },
-            ETH: { name: 'Ethereum', symbol: 'ETH', coingeckoId: 'ethereum', cryptoCompareSymbol: 'ETH', defaultBuyPrice: 0, defaultHoldings: 0 }
-        };
+        let currentCoin = 'XRP';
+        let updateInterval;
+        let userData = {};
 
-        let currentCrypto = localStorage.getItem('lastSelectedCrypto') || 'XRP';
-        let updateInterval = null;
-        let lastSuccessfulPrice = null;
+        const el = (id) => document.getElementById(id);
+        const fmtMoney = (n) => new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0, maximumFractionDigits: 0 }).format(n);
         
-        // --- NOTIFICATION SYSTEM (TOAST) ---
-        function showToast(message) {
-            const container = document.getElementById('toast-container');
-            const toast = document.createElement('div');
-            toast.className = 'toast';
-            toast.textContent = message;
-            container.appendChild(toast);
-
-            // Animation sequence
-            requestAnimationFrame(() => {
-                toast.classList.add('show');
-            });
-
-            setTimeout(() => {
-                toast.classList.remove('show');
-                toast.addEventListener('transitionend', () => {
-                    toast.remove();
-                });
-            }, 3000); // Hide after 3 seconds
-        }
-
-        // --- CUSTOM CONFIRM DIALOG ---
-        let confirmCallback = null;
-        function showConfirmDialog(message, onConfirm) {
-            const modal = document.getElementById('confirm-modal');
-            document.getElementById('confirm-message').textContent = message;
-            modal.classList.add('active');
-            confirmCallback = onConfirm;
-        }
-
-        function closeConfirmDialog() {
-            document.getElementById('confirm-modal').classList.remove('active');
-            confirmCallback = null;
-        }
-
-        // --- MAIN LOGIC ---
-
-        function loadSavedData(crypto) {
-            const saved = localStorage.getItem(`crypto_${crypto}`);
-            if (saved) return JSON.parse(saved);
-            return { buyPrice: CRYPTO_CONFIG[crypto].defaultBuyPrice, holdings: CRYPTO_CONFIG[crypto].defaultHoldings, targetPrice: 0, adminFee: 0.1 };
-        }
-
-        function saveData(crypto, buyPrice, holdings, targetPrice, adminFee) {
-            localStorage.setItem(`crypto_${crypto}`, JSON.stringify({
-                buyPrice: parseFloat(buyPrice),
-                holdings: parseFloat(holdings),
-                targetPrice: parseFloat(targetPrice) || 0,
-                adminFee: parseFloat(adminFee) || 0.1
-            }));
-            showToast("Data tersimpan ✅");
-        }
-
-        function getCurrentData() { return loadSavedData(currentCrypto); }
-
-        function getAPISources(crypto) {
-            const config = CRYPTO_CONFIG[crypto];
-            return [
-                { name: 'CryptoCompare IDR', url: `https://min-api.cryptocompare.com/data/price?fsym=${config.cryptoCompareSymbol}&tsyms=IDR`, parse: (data) => ({ price: data.IDR, change24h: 0 }) },
-                { name: 'CoinGecko IDR', url: `https://api.coingecko.com/api/v3/simple/price?ids=${config.coingeckoId}&vs_currencies=idr&include_24hr_change=true`, parse: (data) => ({ price: data[config.coingeckoId].idr, change24h: data[config.coingeckoId].idr_24h_change || 0 }) }
-            ];
-        }
-
-        function formatRupiah(angka) {
-            return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0, maximumFractionDigits: 0 }).format(angka);
-        }
-
-        function formatTime() {
-            return new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
-        }
-
-        function showError(message) {
-            const errorEl = document.getElementById('error-message');
-            errorEl.innerHTML = ICONS.WARNING + '<span>' + message + '</span>';
-            errorEl.style.display = 'flex';
-        }
-
-        function hideError() {
-            document.getElementById('error-message').style.display = 'none';
-        }
-
-        function formatCrypto(amount, symbol) {
-            let formatted = parseFloat(amount.toFixed(8)).toString();
-            return formatted + ' ' + symbol;
-        }
-
-        function updateUI() {
-            const config = CRYPTO_CONFIG[currentCrypto];
-            const data = getCurrentData();
-
-            document.getElementById('crypto-name').textContent = `${config.name} Portfolio`;
-            document.getElementById('harga-beli').textContent = formatRupiah(data.buyPrice);
-            document.getElementById('jumlah-koin').textContent = formatCrypto(data.holdings, config.symbol);
-            document.getElementById('modal-awal').textContent = formatRupiah(data.buyPrice * data.holdings);
-        }
-
-        async function fetchWithTimeout(url, timeout = 8000) {
-            const controller = new AbortController();
-            const timeoutId = setTimeout(() => controller.abort(), timeout);
-            try {
-                const response = await fetch(url, { signal: controller.signal, cache: 'no-cache' });
-                clearTimeout(timeoutId);
-                return response;
-            } catch (error) {
-                clearTimeout(timeoutId);
-                throw error;
-            }
-        }
-
-        async function fetchPriceData(specificSource = null) {
-            const sources = getAPISources(currentCrypto);
-            let sourceIndex = 0;
-            if (specificSource) {
-                const idx = sources.findIndex(s => s.name === specificSource);
-                if (idx !== -1) sourceIndex = idx;
-            }
-            const apiSource = sources[sourceIndex];
-
-            try {
-                console.log(`📡 Fetching ${currentCrypto} from ${apiSource.name}...`);
-                const response = await fetchWithTimeout(apiSource.url);
-                if (!response.ok) throw new Error(`HTTP ${response.status}`);
-                const data = await response.json();
-                const parsed = await apiSource.parse(data);
-                if (!parsed.price || isNaN(parsed.price) || parsed.price <= 0) throw new Error('Invalid price data');
-                hideError();
-                const selector = document.getElementById('source-selector');
-                if (selector.value !== apiSource.name) selector.value = apiSource.name;
-                return parsed;
-            } catch (error) {
-                console.error(`❌ ${apiSource.name} failed:`, error.message);
-                if (specificSource) { showError(`${apiSource.name} gagal. Retrying...`); throw error; }
-                if (sourceIndex < sources.length - 1) return await fetchPriceData(sources[sourceIndex + 1].name);
-                throw new Error(`Semua sumber API gagal`);
-            }
-        }
-
-        function updateDisplay(hargaLive, change24h) {
-            const data = getCurrentData();
-            const config = CRYPTO_CONFIG[currentCrypto];
-
-            const priceChangeEl = document.getElementById('price-change-display');
-            document.getElementById('harga-live').textContent = formatRupiah(hargaLive);
-
-            // Use SVG Icons for Arrows
-            if (change24h !== 0) {
-                const icon = change24h >= 0 ? ICONS.ARROW_UP : ICONS.ARROW_DOWN;
-                const colorClass = change24h >= 0 ? 'text-green' : 'text-red';
-                priceChangeEl.innerHTML = `${icon} <span class="${colorClass}">${Math.abs(change24h).toFixed(2)}% (24h)</span>`;
+        function loadStorage() {
+            const saved = localStorage.getItem('crypto_portfolio_final');
+            if (saved) {
+                userData = JSON.parse(saved);
+                for(let key in PORTFOLIO_DATA) {
+                    if(PORTFOLIO_DATA[key].buy > 0 && userData[key].buy === 0) {
+                        userData[key] = PORTFOLIO_DATA[key];
+                    }
+                }
             } else {
-                priceChangeEl.innerHTML = '<span style="color:var(--text-secondary)">Live</span>';
+                userData = JSON.parse(JSON.stringify(PORTFOLIO_DATA));
+                localStorage.setItem('crypto_portfolio_final', JSON.stringify(userData));
+            }
+        }
+        loadStorage();
+
+        function showToast(msg) {
+            const t = el('toast-msg');
+            t.textContent = msg;
+            t.classList.add('show');
+            setTimeout(() => t.classList.remove('show'), 3000);
+        }
+
+        // TRADINGVIEW WIDGET
+        function loadTvWidget() {
+            el('chart-wrap').innerHTML = ''; 
+            new TradingView.widget({
+                "autosize": true,
+                "symbol": CONFIG[currentCoin].tvSymbol,
+                "interval": "30", 
+                "timezone": "Asia/Jakarta",
+                "theme": "dark",
+                "style": "1",
+                "locale": "id",
+                "toolbar_bg": "#121212",
+                "enable_publishing": false,
+                "hide_top_toolbar": true,
+                "save_image": false,
+                "container_id": "chart-wrap",
+                "backgroundColor": "rgba(18, 18, 18, 1)",
+                "gridLineColor": "rgba(42, 42, 42, 0.3)"
+            });
+        }
+
+        // DATA POLLING
+        async function fetchMarketData() {
+            const url = `https://min-api.cryptocompare.com/data/pricemultifull?fsyms=${currentCoin}&tsyms=IDR`;
+            try {
+                const res = await fetch(url);
+                const json = await res.json();
+                
+                const badge = el('live-indicator');
+                badge.classList.add('pulse');
+                setTimeout(() => badge.classList.remove('pulse'), 500);
+
+                const raw = json.RAW[currentCoin].IDR;
+                updateUI(raw.PRICE, raw.CHANGEPCT24HOUR);
+            } catch (e) { console.log("Fetch error"); }
+        }
+
+        function updateUI(price, change24h) {
+            el('price-display').textContent = fmtMoney(price);
+            
+            const changeEl = el('change-display');
+            if (change24h !== undefined) {
+                const sign = change24h >= 0 ? '+' : '';
+                const color = change24h >= 0 ? 'text-green' : 'text-red';
+                changeEl.innerHTML = `<span class="${color}">${sign}${change24h.toFixed(2)}% (24h)</span>`;
             }
 
-            if (data.buyPrice === 0 || data.holdings === 0) {
-                document.getElementById('nilai-sekarang').textContent = formatRupiah(0);
-                document.getElementById('status-koin').textContent = '-';
-                document.getElementById('keuntungan-persen').textContent = '0.00%';
-                document.getElementById('total-untung-rugi').textContent = 'Rp 0';
+            const data = userData[currentCoin];
+            el('holdings-display').textContent = data.amount;
+            el('buy-display').textContent = fmtMoney(data.buy);
+            
+            // Modal Awal
+            const initial = data.buy * data.amount;
+            el('initial-display').textContent = fmtMoney(initial);
+
+            // Aset Sekarang
+            const currentVal = price * data.amount;
+            el('value-display').textContent = fmtMoney(currentVal);
+
+            // PnL Logic
+            if(data.amount > 0 && data.buy > 0) {
+                const diff = price - data.buy;
+                const pnl = diff * data.amount;
+                const percent = (diff / data.buy) * 100;
                 
-                const pill = document.getElementById('pnl-pill-status');
-                pill.className = 'status-pill';
+                const sign = pnl >= 0 ? '+' : '';
+                const color = pnl >= 0 ? 'text-green' : 'text-red';
                 
-                document.getElementById('target-content').style.display = 'block';
-                document.getElementById('target-details').style.display = 'none';
-                document.getElementById('target-status').textContent = 'Off';
-                document.getElementById('target-status').className = 'status-pill';
-                document.getElementById('last-update').textContent = formatTime();
-                return;
+                el('pnl-display').innerHTML = `<span class="${color}">${sign}${fmtMoney(pnl)} (${percent.toFixed(2)}%)</span>`;
+            } else {
+                el('pnl-display').textContent = "Rp 0";
             }
-
-            const nilaiSekarang = hargaLive * data.holdings;
-            const perbedaanHarga = hargaLive - data.buyPrice;
-            const persentase = (perbedaanHarga / data.buyPrice) * 100;
-            const totalUntungRugi = perbedaanHarga * data.holdings;
-            const isProfit = totalUntungRugi >= 0;
-
-            document.getElementById('nilai-sekarang').textContent = formatRupiah(nilaiSekarang);
-            document.getElementById('status-koin').textContent = (perbedaanHarga >= 0 ? '+' : '') + formatRupiah(perbedaanHarga);
-            
-            const persenEl = document.getElementById('keuntungan-persen');
-            persenEl.textContent = (persentase >= 0 ? '+' : '') + persentase.toFixed(2) + '%';
-            
-            const pill = document.getElementById('pnl-pill-status');
-            pill.className = isProfit ? 'status-pill active' : 'status-pill danger';
-
-            const totalEl = document.getElementById('total-untung-rugi');
-            totalEl.textContent = (totalUntungRugi >= 0 ? '+' : '') + formatRupiah(totalUntungRugi);
-            totalEl.style.color = totalUntungRugi >= 0 ? 'var(--accent-green)' : 'var(--accent-red)';
 
             // Target Logic
-            if (data.targetPrice && data.targetPrice > 0) {
-                document.getElementById('target-content').style.display = 'none';
-                document.getElementById('target-details').style.display = 'block';
-
-                const targetSellValue = data.targetPrice * data.holdings;
-                const buyValue = data.buyPrice * data.holdings;
-                const grossProfit = targetSellValue - buyValue;
-                const buyFee = buyValue * (data.adminFee / 100);
-                const sellFee = targetSellValue * (data.adminFee / 100);
-                const totalFee = buyFee + sellFee;
-                const netProfit = grossProfit - totalFee;
-
-                const statusEl = document.getElementById('target-status');
-                statusEl.textContent = 'On';
-                statusEl.className = 'status-pill active';
-
-                document.getElementById('target-price-display').textContent = formatRupiah(data.targetPrice);
-                document.getElementById('net-profit-highlight').textContent = formatRupiah(netProfit);
-                document.getElementById('net-profit-highlight').style.color = netProfit >= 0 ? 'var(--accent-green)' : 'var(--accent-red)';
-                document.getElementById('admin-fee-display').textContent = formatRupiah(totalFee);
+            const targetEl = el('target-card');
+            if (data.target && data.target > 0) {
+                targetEl.style.display = 'block';
+                el('target-status').textContent = 'Active';
+                el('target-status').style.color = '#0ecb81';
+                
+                const targetVal = data.target * data.amount;
+                const buyVal = data.buy * data.amount;
+                const fee = (targetVal + buyVal) * (data.fee / 100);
+                const net = (targetVal - buyVal) - fee;
+                
+                el('target-price-display').textContent = fmtMoney(data.target);
+                el('net-profit-display').textContent = fmtMoney(net);
+                el('net-profit-display').style.color = net >= 0 ? '#0ecb81' : '#f6465d';
             } else {
-                document.getElementById('target-content').style.display = 'block';
-                document.getElementById('target-details').style.display = 'none';
-                const statusEl = document.getElementById('target-status');
-                statusEl.textContent = 'Off';
-                statusEl.className = 'status-pill';
-            }
-
-            document.getElementById('last-update').textContent = formatTime();
-            lastSuccessfulPrice = hargaLive;
-        }
-
-        async function updateMonitor(specificSource = null) {
-            try {
-                const priceData = await fetchPriceData(specificSource);
-                updateDisplay(priceData.price, priceData.change24h);
-            } catch (error) {
-                console.error('API failed:', error);
-                if (lastSuccessfulPrice) {
-                    showError(`Offline. Last: ${formatRupiah(lastSuccessfulPrice)}`);
-                    updateDisplay(lastSuccessfulPrice, 0);
-                } else {
-                    showError('Koneksi Error');
-                }
+                targetEl.style.display = 'none';
             }
         }
 
-        function switchCrypto(crypto) {
-            currentCrypto = crypto;
-            lastSuccessfulPrice = null;
-            localStorage.setItem('lastSelectedCrypto', crypto);
-            document.querySelectorAll('.crypto-tab').forEach(tab => {
-                tab.classList.toggle('active', tab.dataset.crypto === crypto);
-            });
-            if (updateInterval) clearInterval(updateInterval);
-            updateUI();
-            document.getElementById('harga-live').innerHTML = '<span class="loading-spinner"></span>';
-            updateMonitor();
-            updateInterval = setInterval(updateMonitor, 10000);
+        function switchCoin(coin) {
+            currentCoin = coin;
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            el('price-display').innerHTML = '<span class="loading-dot"></span><span class="loading-dot"></span>';
+            el('pnl-display').textContent = 'Rp 0';
+            
+            if(updateInterval) clearInterval(updateInterval);
+            loadTvWidget();
+            fetchMarketData();
+            updateInterval = setInterval(fetchMarketData, 1000); // 1 DETIK
+            updateUI(0); 
         }
 
-        function openModal() {
-            const data = getCurrentData();
-            document.getElementById('buy-price').value = data.buyPrice;
-            document.getElementById('holdings').value = data.holdings;
-            document.getElementById('target-price').value = data.targetPrice || '';
-            document.getElementById('admin-fee').value = data.adminFee || 0.1;
-            document.getElementById('edit-modal').classList.add('active');
-        }
-
-        function closeModal() {
-            document.getElementById('edit-modal').classList.remove('active');
-        }
-
-        function handleFormSubmit(e) {
-            e.preventDefault();
-            const buyPrice = parseFloat(document.getElementById('buy-price').value);
-            const holdings = parseFloat(document.getElementById('holdings').value);
-            const targetPrice = parseFloat(document.getElementById('target-price').value) || 0;
-            const adminFee = parseFloat(document.getElementById('admin-fee').value) || 0.1;
-
-            if (buyPrice < 0 || holdings < 0) {
-                showToast("Data tidak boleh negatif"); // Toast instead of Alert
-                return;
-            }
-
-            if (buyPrice === 0 && holdings === 0) {
-                // Use custom confirm modal instead of native confirm()
-                showConfirmDialog("Anda akan mengatur holdings ke 0. Lanjutkan?", () => {
-                    saveData(currentCrypto, buyPrice, holdings, targetPrice, adminFee);
-                    updateUI();
-                    updateMonitor();
-                    closeModal();
-                    closeConfirmDialog();
-                });
-                return;
-            }
-
-            saveData(currentCrypto, buyPrice, holdings, targetPrice, adminFee);
-            updateUI();
-            updateMonitor();
+        // MODAL
+        const modal = el('modal');
+        el('btn-settings').onclick = () => {
+            const d = userData[currentCoin];
+            el('inp-buy').value = d.buy;
+            el('inp-amount').value = d.amount;
+            el('inp-target').value = d.target || 0;
+            modal.classList.add('active');
+        };
+        
+        function closeModal() { modal.classList.remove('active'); }
+        
+        function saveData() {
+            const buy = parseFloat(el('inp-buy').value) || 0;
+            const amt = parseFloat(el('inp-amount').value) || 0;
+            const trg = parseFloat(el('inp-target').value) || 0;
+            
+            userData[currentCoin] = { buy: buy, amount: amt, target: trg, fee: 0.1 };
+            localStorage.setItem('crypto_portfolio_final', JSON.stringify(userData));
+            
             closeModal();
+            showToast("Tersimpan");
+            fetchMarketData(); 
         }
 
-        document.addEventListener('DOMContentLoaded', () => {
-            document.querySelectorAll('.crypto-tab').forEach(tab => {
-                tab.classList.toggle('active', tab.dataset.crypto === currentCrypto);
-                tab.addEventListener('click', () => switchCrypto(tab.dataset.crypto));
-            });
+        // --- EYE TOGGLE LOGIC (FIXED) ---
+        function toggleVisibility(btnId, valueId) {
+            const btn = el(btnId);
+            const val = el(valueId);
+            const showIcon = btn.querySelector('.icon-show');
+            const hideIcon = btn.querySelector('.icon-hide');
+            
+            // Logic:
+            // 1. Toggle class 'value-hidden'
+            // 2. Jika hidden (titik2) -> Tampilkan Slashed Eye (icon-hide)
+            // 3. Jika visible (angka) -> Tampilkan Open Eye (icon-show)
+            
+            const isHidden = val.classList.toggle('value-hidden');
+            
+            if(isHidden) {
+                hideIcon.style.display = 'block'; // Tampilkan mata coret
+                showIcon.style.display = 'none';
+            } else {
+                hideIcon.style.display = 'none';
+                showIcon.style.display = 'block'; // Tampilkan mata terbuka
+            }
+        }
 
-            document.getElementById('source-selector').addEventListener('change', (e) => {
-                const selectedSource = e.target.value;
-                document.getElementById('harga-live').innerHTML = '<span class="loading-spinner"></span>';
-                if (updateInterval) clearInterval(updateInterval);
-                updateMonitor(selectedSource);
-                updateInterval = setInterval(() => updateMonitor(selectedSource), 10000);
-            });
+        el('toggle-modal').onclick = () => toggleVisibility('toggle-modal', 'initial-display');
+        el('toggle-value').onclick = () => toggleVisibility('toggle-value', 'value-display');
 
-            document.getElementById('edit-btn').addEventListener('click', openModal);
-            document.getElementById('cancel-btn').addEventListener('click', closeModal);
-            document.getElementById('edit-form').addEventListener('submit', handleFormSubmit);
-            document.getElementById('edit-modal').addEventListener('click', (e) => {
-                if (e.target.id === 'edit-modal') closeModal();
-            });
-
-            // Confirm Modal Listeners
-            document.getElementById('confirm-cancel-btn').addEventListener('click', closeConfirmDialog);
-            document.getElementById('confirm-ok-btn').addEventListener('click', () => {
-                if (confirmCallback) confirmCallback();
-            });
-
-            let investmentVisible = false;
-            let currentVisible = false;
-
-            document.getElementById('toggle-investment').addEventListener('click', () => {
-                investmentVisible = !investmentVisible;
-                const valueEl = document.getElementById('modal-awal');
-                const eyeOn = document.getElementById('eye-investment');
-                const eyeOff = document.getElementById('eye-off-investment');
-                if (investmentVisible) {
-                    valueEl.classList.remove('value-hidden');
-                    eyeOff.style.display = 'inline'; eyeOn.style.display = 'none';
-                } else {
-                    valueEl.classList.add('value-hidden');
-                    eyeOff.style.display = 'none'; eyeOn.style.display = 'inline';
-                }
-            });
-
-            document.getElementById('toggle-current').addEventListener('click', () => {
-                currentVisible = !currentVisible;
-                const valueEl = document.getElementById('nilai-sekarang');
-                const eyeOn = document.getElementById('eye-current');
-                const eyeOff = document.getElementById('eye-off-current');
-                if (currentVisible) {
-                    valueEl.classList.remove('value-hidden');
-                    eyeOff.style.display = 'inline'; eyeOn.style.display = 'none';
-                } else {
-                    valueEl.classList.add('value-hidden');
-                    eyeOff.style.display = 'none'; eyeOn.style.display = 'inline';
-                }
-            });
-
-            updateUI();
-            updateMonitor();
-            updateInterval = setInterval(updateMonitor, 10000);
-        });
+        window.onload = () => {
+            loadTvWidget();
+            fetchMarketData();
+            updateInterval = setInterval(fetchMarketData, 1000); // 1 DETIK
+        };
     </script>
 </body>
 </html>

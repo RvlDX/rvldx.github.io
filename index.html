@@ -4,9 +4,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Crypto Portfolio Tracker</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <title>Crypto Tracker - Zygisk Compact</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
     <style>
+        :root {
+            --bg-body: #000000;
+            --bg-card: #141414;
+            --bg-input: #1f1f1f;
+            --text-primary: #eeeeee;
+            --text-secondary: #707070;
+            --text-tertiary: #4a4a4a;
+            --accent-green: #81c784;
+            --accent-green-dim: rgba(129, 199, 132, 0.15);
+            --accent-red: #e57373;
+            --accent-red-dim: rgba(229, 115, 115, 0.15);
+            --border-color: #262626;
+            --radius-card: 18px;
+            --radius-elem: 8px;
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -15,921 +31,357 @@
 
         body {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-            background: #0a0e27;
-            color: #fff;
+            background: var(--bg-body);
+            color: var(--text-primary);
             min-height: 100vh;
-            padding: 20px;
-            overflow-x: hidden;
-        }
-
-        .background-gradient {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: radial-gradient(circle at 20% 50%, rgba(120, 119, 198, 0.3), transparent 50%),
-                radial-gradient(circle at 80% 80%, rgba(41, 128, 185, 0.2), transparent 50%);
-            pointer-events: none;
-            z-index: 0;
+            padding: 12px;
+            display: flex;
+            justify-content: center;
         }
 
         .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            position: relative;
-            z-index: 1;
+            width: 100%;
+            max-width: 480px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
         }
 
+        /* --- Header Section --- */
         .header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 40px;
-            flex-wrap: wrap;
-            gap: 20px;
-        }
-
-        .logo-section {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-
-        .crypto-logo {
-            width: 50px;
-            height: 50px;
-            background: linear-gradient(135deg, #23a6d5 0%, #23d5ab 100%);
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 24px;
-            font-weight: bold;
-        }
-
-        .header-title h1 {
-            font-size: 28px;
-            font-weight: 700;
-            margin-bottom: 5px;
-        }
-
-        .header-title p {
-            font-size: 14px;
-            color: #8b92b0;
-        }
-
-        .header-controls {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            flex-wrap: wrap;
-        }
-
-        .edit-source-row {
-            display: contents;
-        }
-
-        .crypto-tabs {
-            display: flex;
-            gap: 10px;
-            background: rgba(255, 255, 255, 0.05);
             padding: 5px;
-            border-radius: 12px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            margin-bottom: 0;
         }
 
-        .crypto-tab {
-            padding: 10px 20px;
-            border-radius: 8px;
+        .app-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-left: 5px;
+        }
+
+        .icon-btn {
             background: transparent;
             border: none;
-            color: #8b92b0;
-            font-size: 14px;
-            font-weight: 500;
+            color: var(--text-primary);
             cursor: pointer;
-            transition: all 0.3s ease;
-            font-family: 'Inter', sans-serif;
-        }
-
-        .crypto-tab:hover {
-            background: rgba(255, 255, 255, 0.05);
-            color: #fff;
-        }
-
-        .crypto-tab.active {
-            background: linear-gradient(135deg, rgba(35, 166, 213, 0.3) 0%, rgba(35, 213, 171, 0.3) 100%);
-            color: #23d5ab;
-            border: 1px solid rgba(35, 213, 171, 0.3);
-        }
-
-        .edit-btn {
-            background: linear-gradient(135deg, rgba(35, 166, 213, 0.15) 0%, rgba(35, 213, 171, 0.15) 100%);
-            border: 1px solid rgba(35, 166, 213, 0.3);
-            color: #fff;
-            padding: 10px 20px;
-            border-radius: 12px;
-            cursor: pointer;
-            font-size: 14px;
-            font-weight: 500;
-            transition: all 0.3s ease;
-            font-family: 'Inter', sans-serif;
-        }
-
-        .edit-btn:hover {
-            background: linear-gradient(135deg, rgba(35, 166, 213, 0.25) 0%, rgba(35, 213, 171, 0.25) 100%);
-            transform: translateY(-1px);
-        }
-
-        .live-badge {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            background: rgba(35, 166, 213, 0.1);
-            padding: 8px 16px;
-            border-radius: 20px;
-            border: 1px solid rgba(35, 166, 213, 0.3);
-        }
-
-        .live-dot {
-            width: 8px;
-            height: 8px;
-            background: #23d5ab;
+            padding: 8px;
             border-radius: 50%;
-            animation: pulse 2s ease-in-out infinite;
-        }
-
-        .source-selector {
-            background: linear-gradient(135deg, rgba(35, 166, 213, 0.15) 0%, rgba(35, 213, 171, 0.15) 100%);
-            border: 1px solid rgba(35, 166, 213, 0.3);
-            border-radius: 12px;
-            padding: 10px 40px 10px 16px;
-            color: #fff;
-            font-size: 14px;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            outline: none;
-            font-family: 'Inter', sans-serif;
-            appearance: none;
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%2323d5ab' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
-            background-repeat: no-repeat;
-            background-position: right 12px center;
-            min-width: 180px;
-        }
-
-        .source-selector:hover {
-            background: linear-gradient(135deg, rgba(35, 166, 213, 0.25) 0%, rgba(35, 213, 171, 0.25) 100%);
-            border-color: rgba(35, 166, 213, 0.5);
-            transform: translateY(-1px);
-        }
-
-        .source-selector option {
-            background: #1a1f3a;
-            color: #fff;
-        }
-
-        @keyframes pulse {
-
-            0%,
-            100% {
-                opacity: 1;
-                transform: scale(1);
-            }
-
-            50% {
-                opacity: 0.5;
-                transform: scale(1.1);
-            }
-        }
-
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.8);
-            z-index: 1000;
+            display: flex;
             align-items: center;
             justify-content: center;
         }
-
-        .modal.active {
-            display: flex;
+        
+        .icon-btn:hover {
+            background: rgba(255,255,255,0.1);
         }
 
-        .modal-content {
-            background: #1a1f3a;
-            border-radius: 20px;
-            padding: 30px;
-            max-width: 500px;
-            width: 90%;
-            border: 1px solid rgba(35, 166, 213, 0.3);
+        /* --- Card Styles (Compact) --- */
+        .card {
+            background: var(--bg-card);
+            border-radius: var(--radius-card);
+            padding: 16px;
+            border: 1px solid var(--border-color);
+            position: relative;
+            overflow: hidden;
         }
 
-        .modal-header {
+        .card-header {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 12px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 25px;
+            padding-left: 2px;
         }
 
-        .modal-header h2 {
-            font-size: 24px;
-            color: #23d5ab;
-        }
-
-        .close-btn {
-            background: none;
-            border: none;
-            color: #8b92b0;
-            font-size: 28px;
-            cursor: pointer;
-            transition: color 0.3s;
-        }
-
-        .close-btn:hover {
-            color: #fff;
-        }
-
-        .form-group {
-            margin-bottom: 20px;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 8px;
-            color: #8b92b0;
-            font-size: 14px;
-        }
-
-        .form-group input {
-            width: 100%;
-            padding: 12px 16px;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 10px;
-            color: #fff;
-            font-size: 16px;
-            font-family: 'Inter', sans-serif;
-        }
-
-        .form-group input:focus {
-            outline: none;
-            border-color: rgba(35, 213, 171, 0.5);
-        }
-
-        .modal-actions {
+        /* --- Data Row Style --- */
+        .data-row {
+            padding: 10px 0;
+            border-bottom: 1px solid var(--border-color);
             display: flex;
-            gap: 10px;
-            margin-top: 25px;
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: center;
+            min-height: 40px;
         }
 
-        .btn {
-            flex: 1;
-            padding: 12px;
-            border-radius: 10px;
-            border: none;
-            font-size: 16px;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.3s;
-            font-family: 'Inter', sans-serif;
+        .data-row.vertical {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 5px;
         }
 
-        .btn-primary {
-            background: linear-gradient(135deg, #23a6d5 0%, #23d5ab 100%);
-            color: #fff;
+        .data-row:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
         }
 
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(35, 213, 171, 0.3);
-        }
-
-        .btn-secondary {
-            background: rgba(255, 255, 255, 0.05);
-            color: #8b92b0;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .btn-secondary:hover {
-            background: rgba(255, 255, 255, 0.08);
-            color: #fff;
-        }
-
-        .main-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
-            margin-bottom: 20px;
-        }
-
-        .card {
-            background: rgba(255, 255, 255, 0.03);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 20px;
-            padding: 30px;
-            transition: all 0.3s ease;
-        }
-
-        .card:hover {
-            background: rgba(255, 255, 255, 0.05);
-            border-color: rgba(35, 166, 213, 0.3);
-            transform: translateY(-2px);
-        }
-
-        .price-card {
-            text-align: center;
-            padding: 30px;
-            background: linear-gradient(135deg, rgba(35, 166, 213, 0.1) 0%, rgba(35, 213, 171, 0.1) 100%);
-            border: 1px solid rgba(35, 166, 213, 0.2);
-        }
-
-        .price-label {
+        .data-label {
             font-size: 13px;
-            color: #8b92b0;
-            margin-bottom: 10px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
+            font-weight: 400;
+            color: var(--text-secondary);
         }
 
-        .price-value {
-            font-size: 42px;
-            font-weight: 700;
-            margin-bottom: 12px;
-            background: linear-gradient(135deg, #23a6d5 0%, #23d5ab 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .price-change {
-            display: inline-flex;
+        .data-value {
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--text-primary);
+            font-family: 'Roboto Mono', monospace;
+            display: flex;
             align-items: center;
             gap: 8px;
-            padding: 6px 14px;
-            border-radius: 8px;
-            font-size: 14px;
-            font-weight: 600;
+            text-align: right;
         }
 
-        .price-change.positive {
-            background: rgba(35, 213, 171, 0.1);
-            color: #23d5ab;
-        }
-
-        .price-change.negative {
-            background: rgba(239, 68, 68, 0.1);
-            color: #ef4444;
-        }
-
-        .pnl-card {
-            padding: 30px;
-            text-align: center;
-        }
-
-        .pnl-card.profit {
-            background: linear-gradient(135deg, rgba(35, 213, 171, 0.15) 0%, rgba(16, 185, 129, 0.15) 100%);
-            border: 1px solid rgba(35, 213, 171, 0.3);
-        }
-
-        .pnl-card.loss {
-            background: linear-gradient(135deg, rgba(239, 68, 68, 0.15) 0%, rgba(220, 38, 38, 0.15) 100%);
-            border: 1px solid rgba(239, 68, 68, 0.3);
-        }
-
-        .pnl-label {
-            font-size: 13px;
-            margin-bottom: 12px;
-            opacity: 0.9;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .pnl-amount {
-            font-size: 42px;
-            font-weight: 700;
-            margin-bottom: 8px;
-        }
-
-        .pnl-percentage {
-            font-size: 20px;
-            font-weight: 600;
-            opacity: 0.9;
-        }
-
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 20px;
-        }
-
-        .stat-item {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-
-        .stat-label {
-            font-size: 13px;
-            color: #8b92b0;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            display: flex;
-            align-items: center;
-        }
-
-        .stat-value {
-            font-size: 24px;
-            font-weight: 600;
-        }
-
-        .details-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 20px;
-            margin-top: 20px;
-        }
-
-        .detail-card {
-            background: rgba(255, 255, 255, 0.03);
-            padding: 20px;
-            border-radius: 12px;
-            border: 1px solid rgba(255, 255, 255, 0.05);
-        }
-
-        .detail-label {
-            font-size: 12px;
-            color: #8b92b0;
-            margin-bottom: 8px;
-        }
-
-        .detail-value {
-            font-size: 18px;
-            font-weight: 600;
-        }
-
-        .footer {
-            text-align: center;
-            margin-top: 30px;
-            padding: 20px;
-            color: #8b92b0;
-            font-size: 13px;
-        }
-
-        .error-banner {
-            background: rgba(239, 68, 68, 0.1);
-            border: 1px solid rgba(239, 68, 68, 0.3);
-            color: #ef4444;
-            padding: 15px 20px;
-            border-radius: 12px;
-            margin-bottom: 20px;
-            display: none;
-        }
-
-        .loading-spinner {
-            display: inline-block;
-            width: 20px;
-            height: 20px;
-            border: 3px solid rgba(35, 166, 213, 0.3);
-            border-top-color: #23a6d5;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-        }
-
-        @keyframes spin {
-            to {
-                transform: rotate(360deg);
-            }
-        }
-
-        .eye-toggle {
-            cursor: pointer;
+        /* --- Status/Pill --- */
+        .status-pill {
             display: inline-flex;
             align-items: center;
-            justify-content: center;
-            width: 20px;
-            height: 20px;
-            margin-left: 6px;
-            opacity: 0.6;
-            transition: opacity 0.3s;
-            flex-shrink: 0;
+            gap: 6px;
+            padding: 4px 10px;
+            border-radius: 50px;
+            font-size: 11px;
+            font-weight: 600;
+            background: var(--bg-input);
+            color: var(--text-secondary);
+            transition: all 0.2s;
+        }
+        .status-pill.active { background: var(--accent-green-dim); color: var(--accent-green); }
+        .status-pill.danger { background: var(--accent-red-dim); color: var(--accent-red); }
+        .status-dot { width: 5px; height: 5px; border-radius: 50%; background-color: currentColor; }
+
+        /* --- Tabs --- */
+        .tabs-container {
+            display: flex;
+            gap: 8px;
+            padding: 0 5px 8px 5px;
         }
 
-        .eye-toggle:hover {
-            opacity: 1;
+        .crypto-tab {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            color: var(--text-secondary);
+            padding: 6px 14px;
+            border-radius: 50px;
+            font-size: 12px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .crypto-tab.active {
+            background: var(--accent-green-dim);
+            color: var(--accent-green);
+            border-color: transparent;
         }
 
-        .eye-toggle svg {
-            width: 16px;
-            height: 16px;
+        .price-large {
+            font-size: 26px;
+            font-weight: 600;
+            letter-spacing: -0.5px;
+            margin-bottom: 4px;
         }
 
-        .value-hidden::before {
-            content: 'Rp ******';
-            display: inline-block;
+        .eye-toggle { cursor: pointer; opacity: 0.5; margin-left: 6px; display: flex; align-items: center; }
+        .eye-toggle:hover { opacity: 1; }
+        .value-hidden { font-size: 0 !important; }
+        .value-hidden::after { content: '••••••'; font-size: 14px; color: var(--text-tertiary); }
+
+        /* --- Source Selector (New Position Styling) --- */
+        .source-select-container {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+        
+        .header-source-select {
+            background: transparent;
+            border: none;
+            color: var(--text-secondary); /* Warna label pudar */
+            font-size: 11px;
+            font-weight: 500;
+            cursor: pointer;
+            outline: none;
+            padding: 4px 0;
+            text-align: right;
+            font-family: 'Inter', sans-serif;
+            appearance: none; /* Hilangkan panah default browser */
+            -webkit-appearance: none;
+            -moz-appearance: none;
         }
 
-        .value-hidden {
-            font-size: 0;
-            user-select: none;
+        .header-source-select:hover {
+            color: var(--accent-green); /* Hijau saat di-hover */
         }
 
-        .value-hidden::before {
-            font-size: 24px;
+        .header-source-select option {
+            background: var(--bg-card);
+            color: var(--text-primary);
+            padding: 10px;
         }
 
-        @media (max-width: 768px) {
-            body {
-                padding: 10px;
-            }
+        /* --- Modal --- */
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 1000; align-items: center; justify-content: center; }
+        .modal.active { display: flex; }
+        .modal-content { background: #1a1a1a; width: 85%; max-width: 350px; border-radius: 16px; padding: 20px; border: 1px solid var(--border-color); }
+        .form-group { margin-bottom: 12px; }
+        .form-group label { display: block; color: var(--text-secondary); font-size: 11px; margin-bottom: 6px; }
+        .form-group input { width: 100%; background: #252525; border: 1px solid #333; color: #fff; padding: 10px; border-radius: 8px; font-size: 13px; outline: none; }
+        .modal-btns { display: flex; justify-content: flex-end; gap: 10px; margin-top: 20px; }
+        .btn { padding: 8px 16px; border-radius: 6px; font-size: 12px; font-weight: 600; border: none; cursor: pointer; }
+        .btn-cancel { background: transparent; color: #888; }
+        .btn-save { background: var(--accent-green); color: #000; }
+        
+        .loading-spinner { width: 14px; height: 14px; border: 2px solid #333; border-top-color: #fff; border-radius: 50%; animation: spin 1s linear infinite; display: inline-block; }
+        @keyframes spin { to { transform: rotate(360deg); } }
 
-            .container {
-                max-width: 100%;
-            }
-
-            .main-grid {
-                grid-template-columns: 1fr;
-                gap: 15px;
-            }
-
-            .stats-grid {
-                grid-template-columns: 1fr;
-                gap: 15px;
-            }
-
-            .details-grid {
-                grid-template-columns: 1fr;
-                gap: 15px;
-            }
-
-            .card {
-                padding: 20px;
-            }
-
-            .price-value {
-                font-size: 28px;
-            }
-
-            .pnl-amount {
-                font-size: 28px;
-            }
-
-            .pnl-percentage {
-                font-size: 16px;
-            }
-
-            .header {
-                flex-direction: column;
-                align-items: stretch;
-                gap: 15px;
-                margin-bottom: 20px;
-            }
-
-            .logo-section {
-                justify-content: center;
-            }
-
-            .header-title {
-                text-align: center;
-            }
-
-            .header-title h1 {
-                font-size: 22px;
-            }
-
-            .header-controls {
-                flex-direction: column;
-                gap: 10px;
-            }
-
-            .crypto-tabs {
-                width: 100%;
-                justify-content: space-between;
-            }
-
-            .crypto-tab {
-                flex: 1;
-                padding: 12px 10px;
-                font-size: 13px;
-            }
-
-            .edit-source-row {
-                display: grid;
-                grid-template-columns: 1fr 1fr;
-                gap: 10px;
-                width: 100%;
-            }
-
-            .edit-btn {
-                width: 100%;
-                justify-content: center;
-                display: flex;
-                align-items: center;
-            }
-
-            .source-selector {
-                width: 100%;
-            }
-
-            .live-badge {
-                width: 100%;
-                justify-content: center;
-            }
-
-            .stat-value {
-                font-size: 20px;
-            }
-
-            .stat-value.value-hidden {
-                font-size: 0 !important;
-            }
-
-            .stat-value.value-hidden::before {
-                font-size: 20px;
-            }
-
-            .detail-value {
-                font-size: 16px;
-            }
-
-            .modal-content {
-                width: 95%;
-                padding: 20px;
-                max-height: 90vh;
-                overflow-y: auto;
-            }
-
-            .modal-header h2 {
-                font-size: 20px;
-            }
-
-            #target-card>div:first-child {
-                flex-direction: column;
-                gap: 15px;
-                align-items: flex-start !important;
-            }
-
-            #target-details>div:first-child {
-                grid-template-columns: 1fr !important;
-                gap: 15px !important;
-            }
-
-            #target-details>div:first-child>div {
-                padding: 20px !important;
-            }
-
-            #target-details>div:first-child>div>div:last-child {
-                font-size: 28px !important;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .header-title h1 {
-                font-size: 20px;
-            }
-
-            .price-value {
-                font-size: 24px;
-            }
-
-            .pnl-amount {
-                font-size: 24px;
-            }
-
-            .crypto-tab {
-                padding: 10px 8px;
-                font-size: 12px;
-            }
+        /* Helper untuk panah kecil kustom */
+        .select-arrow {
+            font-size: 8px;
+            color: var(--text-secondary);
+            margin-left: 4px;
+            pointer-events: none;
         }
     </style>
 </head>
 
 <body>
-    <div class="background-gradient"></div>
 
     <div class="container">
         <div class="header">
-            <div class="logo-section">
-                <div class="crypto-logo" id="crypto-logo">₿</div>
-                <div class="header-title">
-                    <h1 id="crypto-name">Bitcoin Portfolio</h1>
-                    <p>Real-time crypto tracking</p>
-                </div>
-            </div>
-            <div class="header-controls">
-                <div class="crypto-tabs">
-                    <button class="crypto-tab active" data-crypto="XRP">XRP</button>
-                    <button class="crypto-tab" data-crypto="BTC">BTC</button>
-                    <button class="crypto-tab" data-crypto="ETH">ETH</button>
-                </div>
-                <div class="edit-source-row">
-                    <button class="edit-btn" id="edit-btn">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                            stroke-width="2" style="vertical-align: middle; margin-right: 5px;">
-                            <circle cx="12" cy="12" r="3"></circle>
-                            <path d="M12 1v6m0 6v6m-6-6h6m6 0h-6"></path>
-                            <path
-                                d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z">
-                            </path>
-                        </svg>
-                        Edit
-                    </button>
-                    <select id="source-selector" class="source-selector">
-                        <option value="CryptoCompare IDR">CryptoCompare</option>
-                        <option value="CoinGecko IDR">CoinGecko IDR</option>
-                    </select>
-                </div>
-                <div class="live-badge">
-                    <div class="live-dot"></div>
-                    <span id="last-update">Live</span>
-                </div>
-            </div>
+            <div class="app-title" id="crypto-name">Zygisk Portfolio</div>
+            <button class="icon-btn" id="edit-btn">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+            </button>
         </div>
 
-        <div id="error-message" class="error-banner"></div>
+        <div class="tabs-container">
+            <button class="crypto-tab active" data-crypto="XRP">XRP</button>
+            <button class="crypto-tab" data-crypto="BTC">Bitcoin</button>
+            <button class="crypto-tab" data-crypto="ETH">Ethereum</button>
+        </div>
 
-        <div class="main-grid">
-            <div class="card price-card">
-                <div class="price-label" id="price-label">Current Bitcoin Price</div>
-                <div class="price-value" id="harga-live">
+        <div id="error-message" style="color: var(--accent-red); font-size: 12px; margin-bottom: 5px; display: none; padding-left: 5px;"></div>
+
+        <div class="card">
+            <div class="card-header">
+                <span>Informasi Dasar</span>
+                
+                <div class="source-select-container">
+                    <select id="source-selector" class="header-source-select">
+                        <option value="CryptoCompare IDR">CryptoCompare</option>
+                        <option value="CoinGecko IDR">CoinGecko</option>
+                    </select>
+                    <span class="select-arrow">▼</span>
+                </div>
+            </div>
+            
+            <div class="data-row vertical">
+                <div class="data-label">Harga Saat Ini</div>
+                <div class="price-large" id="harga-live">
                     <span class="loading-spinner"></span>
                 </div>
-                <div class="price-change" id="price-change-display"></div>
+                <div style="font-size: 12px;" id="price-change-display">Live</div>
             </div>
 
-            <div id="pnl-card" class="card pnl-card"></div>
-
-            <div class="card">
-                <div class="stats-grid">
-                    <div class="stat-item">
-                        <div class="stat-label">Buy Price</div>
-                        <div class="stat-value" id="harga-beli">-</div>
-                    </div>
-                    <div class="stat-item">
-                        <div class="stat-label">Holdings</div>
-                        <div class="stat-value" id="jumlah-koin">-</div>
-                    </div>
-                    <div class="stat-item">
-                        <div class="stat-label">
-                            Initial Investment
-                            <span class="eye-toggle" id="toggle-investment" title="Show/Hide">
-                                <svg id="eye-investment" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                    stroke-width="2">
-                                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
-                                    <circle cx="12" cy="12" r="3"></circle>
-                                </svg>
-                                <svg id="eye-off-investment" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                    stroke-width="2" style="display: none;">
-                                    <path
-                                        d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24">
-                                    </path>
-                                    <line x1="1" y1="1" x2="23" y2="23"></line>
-                                </svg>
-                            </span>
-                        </div>
-                        <div class="stat-value value-hidden" id="modal-awal">-</div>
-                    </div>
-                    <div class="stat-item">
-                        <div class="stat-label">
-                            Current Value
-                            <span class="eye-toggle" id="toggle-current" title="Show/Hide">
-                                <svg id="eye-current" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                    stroke-width="2">
-                                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
-                                    <circle cx="12" cy="12" r="3"></circle>
-                                </svg>
-                                <svg id="eye-off-current" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                    stroke-width="2" style="display: none;">
-                                    <path
-                                        d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24">
-                                    </path>
-                                    <line x1="1" y1="1" x2="23" y2="23"></line>
-                                </svg>
-                            </span>
-                        </div>
-                        <div class="stat-value value-hidden" id="nilai-sekarang">-</div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="card">
-                <div class="details-grid">
-                    <div class="detail-card">
-                        <div class="detail-label">Per Coin</div>
-                        <div class="detail-value" id="status-koin">-</div>
-                    </div>
-                    <div class="detail-card">
-                        <div class="detail-label">Change %</div>
-                        <div class="detail-value" id="keuntungan-persen">-</div>
-                    </div>
-                    <div class="detail-card">
-                        <div class="detail-label">Total P&L</div>
-                        <div class="detail-value" id="total-untung-rugi">-</div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="card" id="target-card" style="grid-column: 1 / -1;">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px;">
-                    <h3 style="color: #23d5ab; font-size: 18px; text-transform: uppercase; letter-spacing: 1px;">Target
-                        Profit Simulation</h3>
-                    <div id="target-status"
-                        style="padding: 8px 16px; border-radius: 8px; font-size: 13px; font-weight: 500;">
-                        No target set
-                    </div>
-                </div>
-
-                <div id="target-content">
-                    <div style="text-align: center; padding: 40px; color: #8b92b0;">
-                        <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="#23a6d5" stroke-width="2"
-                            style="margin: 0 auto 15px;">
-                            <circle cx="12" cy="12" r="10"></circle>
-                            <path d="M12 6v6l4 2"></path>
-                        </svg>
-                        <p style="font-size: 16px;">Set your target sell price in Edit menu to see profit simulation</p>
-                        <button onclick="document.getElementById('edit-btn').click()"
-                            style="margin-top: 20px; padding: 12px 24px; background: linear-gradient(135deg, #23a6d5 0%, #23d5ab 100%); border: none; border-radius: 10px; color: white; font-weight: 500; cursor: pointer; font-size: 14px;">
-                            Set Target Now
-                        </button>
-                    </div>
-                </div>
-
-                <div id="target-details" style="display: none;">
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px;">
-                        <div
-                            style="background: linear-gradient(135deg, rgba(35, 166, 213, 0.1) 0%, rgba(35, 213, 171, 0.1) 100%); padding: 25px; border-radius: 15px; border: 1px solid rgba(35, 166, 213, 0.3); text-align: center;">
-                            <div
-                                style="font-size: 13px; color: #8b92b0; margin-bottom: 10px; text-transform: uppercase; letter-spacing: 1px;">
-                                Target Price</div>
-                            <div style="font-size: 36px; font-weight: 700; color: #23d5ab;" id="target-price-display">-
-                            </div>
-                        </div>
-                        <div
-                            style="background: linear-gradient(135deg, rgba(35, 213, 171, 0.1) 0%, rgba(16, 185, 129, 0.1) 100%); padding: 25px; border-radius: 15px; border: 1px solid rgba(35, 213, 171, 0.3); text-align: center;">
-                            <div
-                                style="font-size: 13px; color: #8b92b0; margin-bottom: 10px; text-transform: uppercase; letter-spacing: 1px;">
-                                Net Profit</div>
-                            <div style="font-size: 36px; font-weight: 700; margin-bottom: 5px;"
-                                id="net-profit-highlight">-</div>
-                            <div style="font-size: 18px; font-weight: 600;" id="target-roi-highlight">-</div>
-                        </div>
-                    </div>
-
-                    <div class="stats-grid">
-                        <div class="stat-item">
-                            <div class="stat-label">Sell Value</div>
-                            <div class="stat-value" id="sell-value">-</div>
-                        </div>
-                        <div class="stat-item">
-                            <div class="stat-label">Gross Profit</div>
-                            <div class="stat-value" id="gross-profit">-</div>
-                        </div>
-                        <div class="stat-item">
-                            <div class="stat-label">Trading Fee</div>
-                            <div class="stat-value" id="admin-fee-display" style="color: #ef4444;">-</div>
-                        </div>
-                        <div class="stat-item">
-                            <div class="stat-label">Net Profit</div>
-                            <div class="stat-value" id="net-profit">-</div>
-                        </div>
-                    </div>
-
-                    <div
-                        style="margin-top: 20px; padding: 15px; background: rgba(255, 255, 255, 0.03); border-radius: 10px; border-left: 4px solid #23a6d5;">
-                        <div
-                            style="font-size: 13px; color: #8b92b0; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 1px;">
-                            Fee Breakdown:</div>
-                        <div
-                            style="display: flex; justify-content: space-between; font-size: 14px; margin-bottom: 5px;">
-                            <span style="color: #8b92b0;">Buy Fee (<span id="fee-percent-buy">-</span>):</span>
-                            <span id="buy-fee">-</span>
-                        </div>
-                        <div style="display: flex; justify-content: space-between; font-size: 14px;">
-                            <span style="color: #8b92b0;">Sell Fee (<span id="fee-percent-sell">-</span>):</span>
-                            <span id="sell-fee">-</span>
-                        </div>
-                    </div>
-                </div>
+            <div class="data-row" style="border-bottom:none; padding-bottom:0;">
+                <div class="data-label">Total PnL</div>
+                <div class="data-value" id="total-untung-rugi" style="font-weight: 600;">Rp 0</div>
             </div>
         </div>
 
-        <div class="footer">
-            <span id="data-source-info">Updates every 10s • Switch crypto or data source above</span>
+        <div class="card">
+            <div class="card-header">
+                <span>Dasbor</span>
+                <div class="status-pill active" id="pnl-pill-status">
+                    <span class="status-dot"></span> <span id="keuntungan-persen">0.00%</span>
+                </div>
+            </div>
+
+            <div class="data-row">
+                <div class="data-label">Holdings</div>
+                <div class="data-value" id="jumlah-koin">-</div>
+            </div>
+
+            <div class="data-row">
+                <div class="data-label">Avg. Buy</div>
+                <div class="data-value" id="harga-beli">-</div>
+            </div>
+
+            <div class="data-row">
+                <div class="data-label" style="display:flex; align-items:center;">
+                    Modal
+                    <span class="eye-toggle" id="toggle-investment">
+                        <svg id="eye-investment" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                        <svg id="eye-off-investment" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display: none;"><line x1="1" y1="1" x2="23" y2="23"/><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/></svg>
+                    </span>
+                </div>
+                <div class="data-value value-hidden" id="modal-awal">-</div>
+            </div>
+
+            <div class="data-row">
+                <div class="data-label" style="display:flex; align-items:center;">
+                    Aset
+                    <span class="eye-toggle" id="toggle-current">
+                        <svg id="eye-current" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                        <svg id="eye-off-current" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display: none;"><line x1="1" y1="1" x2="23" y2="23"/><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/></svg>
+                    </span>
+                </div>
+                <div class="data-value value-hidden" id="nilai-sekarang">-</div>
+            </div>
+            
+            <div style="display:none">
+                <span id="status-koin"></span>
+            </div>
         </div>
+
+        <div class="card" id="target-card">
+            <div class="card-header">
+                <span>Simulasi Target</span>
+                <span class="status-pill" id="target-status">Off</span>
+            </div>
+            
+            <div id="target-content" style="color: var(--text-secondary); font-size: 12px; padding: 5px 0;">
+                Set target harga di menu edit.
+            </div>
+
+            <div id="target-details" style="display: none;">
+                <div class="data-row">
+                    <div class="data-label">Target Jual</div>
+                    <div class="data-value" style="color: var(--accent-green);" id="target-price-display">-</div>
+                </div>
+                <div class="data-row">
+                    <div class="data-label">Net Profit</div>
+                    <div class="data-value" id="net-profit-highlight">-</div>
+                </div>
+                <div class="data-row">
+                    <div class="data-label">Est. Fee</div>
+                    <div class="data-value" id="admin-fee-display" style="color: var(--accent-red);">-</div>
+                </div>
+            </div>
+            
+            <div style="display:none">
+                <span id="sell-value"></span><span id="gross-profit"></span><span id="net-profit"></span>
+                <span id="target-roi-highlight"></span><span id="fee-percent-buy"></span>
+                <span id="buy-fee"></span><span id="fee-percent-sell"></span><span id="sell-fee"></span>
+             </div>
+        </div>
+
+        <div style="display:none;" id="pnl-card"></div>
+        <div style="text-align: center; font-size: 10px; color: var(--text-secondary); margin-top: 10px;">
+            Updated: <span id="last-update">Live</span>
+        </div>
+
     </div>
 
-    <!-- Edit Modal -->
     <div class="modal" id="edit-modal">
         <div class="modal-content">
-            <div class="modal-header">
-                <h2 id="modal-title">Edit Bitcoin Holdings</h2>
-                <button class="close-btn" id="close-modal">&times;</button>
-            </div>
+            <h3 style="margin-bottom:15px; font-size:16px;">Pengaturan</h3>
             <form id="edit-form">
                 <div class="form-group">
                     <label for="buy-price">Harga Beli (IDR)</label>
@@ -940,73 +392,38 @@
                     <input type="number" id="holdings" step="0.00000001" min="0" required>
                 </div>
                 <div class="form-group">
-                    <label for="target-price">Target Harga Jual (IDR) - Opsional</label>
-                    <input type="number" id="target-price" step="0.01" min="0"
-                        placeholder="Kosongkan jika tidak ada target">
+                    <label for="target-price">Target Jual (Opsional)</label>
+                    <input type="number" id="target-price" step="0.01" min="0">
                 </div>
                 <div class="form-group">
-                    <label for="admin-fee">Fee Trading (%) - Default 0.1%</label>
+                    <label for="admin-fee">Fee Trading (%)</label>
                     <input type="number" id="admin-fee" step="0.01" min="0" max="100" value="0.1">
                 </div>
-                <div class="modal-actions">
-                    <button type="button" class="btn btn-secondary" id="cancel-btn">Cancel</button>
-                    <button type="submit" class="btn btn-primary">Save</button>
+                <div class="modal-btns">
+                    <button type="button" class="btn btn-cancel" id="cancel-btn">Batal</button>
+                    <button type="submit" class="btn btn-save">Simpan</button>
                 </div>
             </form>
         </div>
     </div>
 
     <script>
-        // Crypto configurations
         const CRYPTO_CONFIG = {
-            BTC: {
-                name: 'Bitcoin',
-                symbol: 'BTC',
-                logo: '₿',
-                coingeckoId: 'bitcoin',
-                cryptoCompareSymbol: 'BTC',
-                defaultBuyPrice: 0,
-                defaultHoldings: 0
-            },
-            XRP: {
-                name: 'Ripple',
-                symbol: 'XRP',
-                logo: '✕',
-                coingeckoId: 'ripple',
-                cryptoCompareSymbol: 'XRP',
-                defaultBuyPrice: 31055.34,
-                defaultHoldings: 22.6
-            },
-            ETH: {
-                name: 'Ethereum',
-                symbol: 'ETH',
-                logo: 'Ξ',
-                coingeckoId: 'ethereum',
-                cryptoCompareSymbol: 'ETH',
-                defaultBuyPrice: 0,
-                defaultHoldings: 0
-            }
+            BTC: { name: 'Bitcoin', symbol: 'BTC', logo: '₿', coingeckoId: 'bitcoin', cryptoCompareSymbol: 'BTC', defaultBuyPrice: 0, defaultHoldings: 0 },
+            XRP: { name: 'Ripple', symbol: 'XRP', logo: '✕', coingeckoId: 'ripple', cryptoCompareSymbol: 'XRP', defaultBuyPrice: 31055.34, defaultHoldings: 22.6 },
+            ETH: { name: 'Ethereum', symbol: 'ETH', logo: 'Ξ', coingeckoId: 'ethereum', cryptoCompareSymbol: 'ETH', defaultBuyPrice: 0, defaultHoldings: 0 }
         };
 
         let currentCrypto = localStorage.getItem('lastSelectedCrypto') || 'XRP';
         let updateInterval = null;
         let lastSuccessfulPrice = null;
 
-        // Load saved data from localStorage
         function loadSavedData(crypto) {
             const saved = localStorage.getItem(`crypto_${crypto}`);
-            if (saved) {
-                return JSON.parse(saved);
-            }
-            return {
-                buyPrice: CRYPTO_CONFIG[crypto].defaultBuyPrice,
-                holdings: CRYPTO_CONFIG[crypto].defaultHoldings,
-                targetPrice: 0,
-                adminFee: 0.1
-            };
+            if (saved) return JSON.parse(saved);
+            return { buyPrice: CRYPTO_CONFIG[crypto].defaultBuyPrice, holdings: CRYPTO_CONFIG[crypto].defaultHoldings, targetPrice: 0, adminFee: 0.1 };
         }
 
-        // Save data to localStorage
         function saveData(crypto, buyPrice, holdings, targetPrice, adminFee) {
             localStorage.setItem(`crypto_${crypto}`, JSON.stringify({
                 buyPrice: parseFloat(buyPrice),
@@ -1016,49 +433,22 @@
             }));
         }
 
-        // Get current crypto data
-        function getCurrentData() {
-            return loadSavedData(currentCrypto);
-        }
+        function getCurrentData() { return loadSavedData(currentCrypto); }
 
-        // API Sources
         function getAPISources(crypto) {
             const config = CRYPTO_CONFIG[crypto];
             return [
-                {
-                    name: 'CryptoCompare IDR',
-                    url: `https://min-api.cryptocompare.com/data/price?fsym=${config.cryptoCompareSymbol}&tsyms=IDR`,
-                    parse: (data) => ({
-                        price: data.IDR,
-                        change24h: 0
-                    })
-                },
-                {
-                    name: 'CoinGecko IDR',
-                    url: `https://api.coingecko.com/api/v3/simple/price?ids=${config.coingeckoId}&vs_currencies=idr&include_24hr_change=true`,
-                    parse: (data) => ({
-                        price: data[config.coingeckoId].idr,
-                        change24h: data[config.coingeckoId].idr_24h_change || 0
-                    })
-                }
+                { name: 'CryptoCompare IDR', url: `https://min-api.cryptocompare.com/data/price?fsym=${config.cryptoCompareSymbol}&tsyms=IDR`, parse: (data) => ({ price: data.IDR, change24h: 0 }) },
+                { name: 'CoinGecko IDR', url: `https://api.coingecko.com/api/v3/simple/price?ids=${config.coingeckoId}&vs_currencies=idr&include_24hr_change=true`, parse: (data) => ({ price: data[config.coingeckoId].idr, change24h: data[config.coingeckoId].idr_24h_change || 0 }) }
             ];
         }
 
         function formatRupiah(angka) {
-            return new Intl.NumberFormat('id-ID', {
-                style: 'currency',
-                currency: 'IDR',
-                minimumFractionDigits: 0,
-                maximumFractionDigits: 0
-            }).format(angka);
+            return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0, maximumFractionDigits: 0 }).format(angka);
         }
 
         function formatTime() {
-            return new Date().toLocaleTimeString('id-ID', {
-                hour: '2-digit',
-                minute: '2-digit',
-                second: '2-digit'
-            });
+            return new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
         }
 
         function showError(message) {
@@ -1072,7 +462,6 @@
         }
 
         function formatCrypto(amount, symbol) {
-            // Remove trailing zeros and unnecessary decimal point
             let formatted = parseFloat(amount.toFixed(8)).toString();
             return formatted + ' ' + symbol;
         }
@@ -1081,11 +470,7 @@
             const config = CRYPTO_CONFIG[currentCrypto];
             const data = getCurrentData();
 
-            document.getElementById('crypto-logo').textContent = config.logo;
             document.getElementById('crypto-name').textContent = `${config.name} Portfolio`;
-            document.getElementById('price-label').textContent = `Current ${config.name} Price`;
-            document.getElementById('modal-title').textContent = `Edit ${config.name} Holdings`;
-
             document.getElementById('harga-beli').textContent = formatRupiah(data.buyPrice);
             document.getElementById('jumlah-koin').textContent = formatCrypto(data.holdings, config.symbol);
             document.getElementById('modal-awal').textContent = formatRupiah(data.buyPrice * data.holdings);
@@ -1094,12 +479,8 @@
         async function fetchWithTimeout(url, timeout = 8000) {
             const controller = new AbortController();
             const timeoutId = setTimeout(() => controller.abort(), timeout);
-
             try {
-                const response = await fetch(url, {
-                    signal: controller.signal,
-                    cache: 'no-cache'
-                });
+                const response = await fetch(url, { signal: controller.signal, cache: 'no-cache' });
                 clearTimeout(timeoutId);
                 return response;
             } catch (error) {
@@ -1111,52 +492,27 @@
         async function fetchPriceData(specificSource = null) {
             const sources = getAPISources(currentCrypto);
             let sourceIndex = 0;
-
             if (specificSource) {
                 const idx = sources.findIndex(s => s.name === specificSource);
                 if (idx !== -1) sourceIndex = idx;
             }
-
             const apiSource = sources[sourceIndex];
 
             try {
                 console.log(`📡 Fetching ${currentCrypto} from ${apiSource.name}...`);
                 const response = await fetchWithTimeout(apiSource.url);
-
-                if (!response.ok) {
-                    throw new Error(`HTTP ${response.status}`);
-                }
-
+                if (!response.ok) throw new Error(`HTTP ${response.status}`);
                 const data = await response.json();
                 const parsed = await apiSource.parse(data);
-
-                if (!parsed.price || isNaN(parsed.price) || parsed.price <= 0) {
-                    throw new Error('Invalid price data');
-                }
-
+                if (!parsed.price || isNaN(parsed.price) || parsed.price <= 0) throw new Error('Invalid price data');
                 hideError();
-                console.log(`✅ ${apiSource.name} success: ${formatRupiah(parsed.price)}`);
-
                 const selector = document.getElementById('source-selector');
-                if (selector.value !== apiSource.name) {
-                    selector.value = apiSource.name;
-                }
-
+                if (selector.value !== apiSource.name) selector.value = apiSource.name;
                 return parsed;
-
             } catch (error) {
                 console.error(`❌ ${apiSource.name} failed:`, error.message);
-
-                if (specificSource) {
-                    showError(`${apiSource.name} failed. Retrying...`);
-                    throw error;
-                }
-
-                // Try next source
-                if (sourceIndex < sources.length - 1) {
-                    return await fetchPriceData(sources[sourceIndex + 1].name);
-                }
-
+                if (specificSource) { showError(`${apiSource.name} failed. Retrying...`); throw error; }
+                if (sourceIndex < sources.length - 1) return await fetchPriceData(sources[sourceIndex + 1].name);
                 throw new Error(`All API sources failed`);
             }
         }
@@ -1165,31 +521,32 @@
             const data = getCurrentData();
             const config = CRYPTO_CONFIG[currentCrypto];
 
-            // Handle zero values
+            const priceChangeEl = document.getElementById('price-change-display');
+            document.getElementById('harga-live').textContent = formatRupiah(hargaLive);
+
+            if (change24h !== 0) {
+                priceChangeEl.style.color = change24h >= 0 ? 'var(--accent-green)' : 'var(--accent-red)';
+                priceChangeEl.textContent = (change24h >= 0 ? '↑' : '↓') + ' ' + Math.abs(change24h).toFixed(2) + '% (24h)';
+            } else {
+                priceChangeEl.style.color = 'var(--text-secondary)';
+                priceChangeEl.textContent = 'Live';
+            }
+
             if (data.buyPrice === 0 || data.holdings === 0) {
-                document.getElementById('harga-live').textContent = formatRupiah(hargaLive);
                 document.getElementById('nilai-sekarang').textContent = formatRupiah(0);
                 document.getElementById('status-koin').textContent = '-';
-                document.getElementById('keuntungan-persen').textContent = '-';
-                document.getElementById('total-untung-rugi').textContent = '-';
-
-                const pnlCard = document.getElementById('pnl-card');
-                pnlCard.className = 'card pnl-card';
-                const warningIcon = '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align: middle; margin-right: 5px;"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>';
-                pnlCard.innerHTML = `
-                    <div class="pnl-label">${warningIcon}No Holdings</div>
-                    <div class="pnl-amount">-</div>
-                    <div class="pnl-percentage">Set your buy price and holdings</div>
-                `;
-
+                document.getElementById('keuntungan-persen').textContent = '0.00%';
+                document.getElementById('total-untung-rugi').textContent = 'Rp 0';
+                
+                // Reset Pill
+                const pill = document.getElementById('pnl-pill-status');
+                pill.className = 'status-pill';
+                
                 document.getElementById('target-content').style.display = 'block';
                 document.getElementById('target-details').style.display = 'none';
-                const statusEl = document.getElementById('target-status');
-                statusEl.textContent = 'No target set';
-                statusEl.style.background = 'rgba(255, 255, 255, 0.05)';
-                statusEl.style.color = '#8b92b0';
-                statusEl.style.border = '1px solid rgba(255, 255, 255, 0.1)';
-                document.getElementById('last-update').textContent = 'Updated ' + formatTime();
+                document.getElementById('target-status').textContent = 'Off';
+                document.getElementById('target-status').className = 'status-pill';
+                document.getElementById('last-update').textContent = formatTime();
                 return;
             }
 
@@ -1199,40 +556,20 @@
             const totalUntungRugi = perbedaanHarga * data.holdings;
             const isProfit = totalUntungRugi >= 0;
 
-            document.getElementById('harga-live').textContent = formatRupiah(hargaLive);
-
-            const priceChangeEl = document.getElementById('price-change-display');
-            if (change24h !== 0) {
-                priceChangeEl.className = 'price-change ' + (change24h >= 0 ? 'positive' : 'negative');
-                priceChangeEl.textContent = (change24h >= 0 ? '↑' : '↓') + ' ' + Math.abs(change24h).toFixed(2) + '% (24h)';
-            } else {
-                priceChangeEl.className = 'price-change';
-                priceChangeEl.textContent = 'Live Price';
-            }
-
-            const pnlCard = document.getElementById('pnl-card');
-            pnlCard.className = 'card pnl-card ' + (isProfit ? 'profit' : 'loss');
-            pnlCard.innerHTML = `
-                <div class="pnl-label">${isProfit ? 'Total Profit' : 'Total Loss'}</div>
-                <div class="pnl-amount">${formatRupiah(Math.abs(totalUntungRugi))}</div>
-                <div class="pnl-percentage">${(persentase >= 0 ? '+' : '')}${persentase.toFixed(2)}%</div>
-            `;
-
             document.getElementById('nilai-sekarang').textContent = formatRupiah(nilaiSekarang);
-
-            const statusKoinEl = document.getElementById('status-koin');
-            statusKoinEl.textContent = (perbedaanHarga >= 0 ? '+' : '') + formatRupiah(perbedaanHarga);
-            statusKoinEl.style.color = perbedaanHarga >= 0 ? '#23d5ab' : '#ef4444';
-
+            document.getElementById('status-koin').textContent = (perbedaanHarga >= 0 ? '+' : '') + formatRupiah(perbedaanHarga);
+            
             const persenEl = document.getElementById('keuntungan-persen');
             persenEl.textContent = (persentase >= 0 ? '+' : '') + persentase.toFixed(2) + '%';
-            persenEl.style.color = persentase >= 0 ? '#23d5ab' : '#ef4444';
+            
+            const pill = document.getElementById('pnl-pill-status');
+            pill.className = isProfit ? 'status-pill active' : 'status-pill danger';
 
             const totalEl = document.getElementById('total-untung-rugi');
             totalEl.textContent = (totalUntungRugi >= 0 ? '+' : '') + formatRupiah(totalUntungRugi);
-            totalEl.style.color = totalUntungRugi >= 0 ? '#23d5ab' : '#ef4444';
+            totalEl.style.color = totalUntungRugi >= 0 ? 'var(--accent-green)' : 'var(--accent-red)';
 
-            // Calculate target profit if target price is set
+            // Target Logic
             if (data.targetPrice && data.targetPrice > 0) {
                 document.getElementById('target-content').style.display = 'none';
                 document.getElementById('target-details').style.display = 'block';
@@ -1240,54 +577,28 @@
                 const targetSellValue = data.targetPrice * data.holdings;
                 const buyValue = data.buyPrice * data.holdings;
                 const grossProfit = targetSellValue - buyValue;
-
-                // Calculate fees (buy fee + sell fee)
                 const buyFee = buyValue * (data.adminFee / 100);
                 const sellFee = targetSellValue * (data.adminFee / 100);
                 const totalFee = buyFee + sellFee;
-
                 const netProfit = grossProfit - totalFee;
-                const targetROI = (netProfit / buyValue) * 100;
 
-                // Update status badge
                 const statusEl = document.getElementById('target-status');
-                statusEl.textContent = 'Target Active';
-                statusEl.style.background = 'rgba(35, 213, 171, 0.2)';
-                statusEl.style.color = '#23d5ab';
-                statusEl.style.border = '1px solid rgba(35, 213, 171, 0.3)';
+                statusEl.textContent = 'On';
+                statusEl.className = 'status-pill active';
 
-                // Main highlight
                 document.getElementById('target-price-display').textContent = formatRupiah(data.targetPrice);
                 document.getElementById('net-profit-highlight').textContent = formatRupiah(netProfit);
-                document.getElementById('net-profit-highlight').style.color = netProfit >= 0 ? '#23d5ab' : '#ef4444';
-                document.getElementById('target-roi-highlight').textContent = (targetROI >= 0 ? '+' : '') + targetROI.toFixed(2) + '% ROI';
-                document.getElementById('target-roi-highlight').style.color = targetROI >= 0 ? '#23d5ab' : '#ef4444';
-
-                // Stats grid
-                document.getElementById('sell-value').textContent = formatRupiah(targetSellValue);
-                document.getElementById('gross-profit').textContent = formatRupiah(grossProfit);
+                document.getElementById('net-profit-highlight').style.color = netProfit >= 0 ? 'var(--accent-green)' : 'var(--accent-red)';
                 document.getElementById('admin-fee-display').textContent = formatRupiah(totalFee);
-                document.getElementById('net-profit').textContent = formatRupiah(netProfit);
-                document.getElementById('net-profit').style.color = netProfit >= 0 ? '#23d5ab' : '#ef4444';
-
-                // Fee breakdown
-                document.getElementById('fee-percent-buy').textContent = data.adminFee + '%';
-                document.getElementById('fee-percent-sell').textContent = data.adminFee + '%';
-                document.getElementById('buy-fee').textContent = formatRupiah(buyFee);
-                document.getElementById('sell-fee').textContent = formatRupiah(sellFee);
             } else {
                 document.getElementById('target-content').style.display = 'block';
                 document.getElementById('target-details').style.display = 'none';
-
                 const statusEl = document.getElementById('target-status');
-                statusEl.textContent = 'No target set';
-                statusEl.style.background = 'rgba(255, 255, 255, 0.05)';
-                statusEl.style.color = '#8b92b0';
-                statusEl.style.border = '1px solid rgba(255, 255, 255, 0.1)';
+                statusEl.textContent = 'Off';
+                statusEl.className = 'status-pill';
             }
 
-            document.getElementById('last-update').textContent = 'Updated ' + formatTime();
-
+            document.getElementById('last-update').textContent = formatTime();
             lastSuccessfulPrice = hargaLive;
         }
 
@@ -1295,16 +606,13 @@
             try {
                 const priceData = await fetchPriceData(specificSource);
                 updateDisplay(priceData.price, priceData.change24h);
-
             } catch (error) {
                 console.error('API failed:', error);
-
                 if (lastSuccessfulPrice) {
-                    showError(`Using last known price. Will retry in 10s...`);
+                    showError(`Offline. Last: ${formatRupiah(lastSuccessfulPrice)}`);
                     updateDisplay(lastSuccessfulPrice, 0);
                 } else {
-                    showError('Cannot fetch price data. Check your internet connection.');
-                    document.getElementById('harga-live').innerHTML = '<span style="font-size: 20px;">Connection Error</span>';
+                    showError('Koneksi Error');
                 }
             }
         }
@@ -1312,27 +620,17 @@
         function switchCrypto(crypto) {
             currentCrypto = crypto;
             lastSuccessfulPrice = null;
-
-            // Save to localStorage
             localStorage.setItem('lastSelectedCrypto', crypto);
-
-            // Update active tab
             document.querySelectorAll('.crypto-tab').forEach(tab => {
                 tab.classList.toggle('active', tab.dataset.crypto === crypto);
             });
-
-            // Clear interval and restart
-            if (updateInterval) {
-                clearInterval(updateInterval);
-            }
-
+            if (updateInterval) clearInterval(updateInterval);
             updateUI();
             document.getElementById('harga-live').innerHTML = '<span class="loading-spinner"></span>';
             updateMonitor();
             updateInterval = setInterval(updateMonitor, 10000);
         }
 
-        // Modal functions
         function openModal() {
             const data = getCurrentData();
             document.getElementById('buy-price').value = data.buyPrice;
@@ -1353,22 +651,7 @@
             const targetPrice = parseFloat(document.getElementById('target-price').value) || 0;
             const adminFee = parseFloat(document.getElementById('admin-fee').value) || 0.1;
 
-            // Validation
-            if (buyPrice < 0 || holdings < 0) {
-                alert('Harga beli dan jumlah holdings tidak boleh negatif!');
-                return;
-            }
-
-            if (targetPrice < 0 || adminFee < 0) {
-                alert('Target harga dan fee tidak boleh negatif!');
-                return;
-            }
-
-            if (buyPrice === 0 && holdings === 0) {
-                if (!confirm('Anda akan mengatur harga beli dan holdings ke 0. Lanjutkan?')) {
-                    return;
-                }
-            }
+            if (buyPrice < 0 || holdings < 0) return alert('Tidak boleh negatif');
 
             saveData(currentCrypto, buyPrice, holdings, targetPrice, adminFee);
             updateUI();
@@ -1376,48 +659,28 @@
             closeModal();
         }
 
-        // Event listeners
         document.addEventListener('DOMContentLoaded', () => {
-            // Set active tab based on current crypto
             document.querySelectorAll('.crypto-tab').forEach(tab => {
                 tab.classList.toggle('active', tab.dataset.crypto === currentCrypto);
+                tab.addEventListener('click', () => switchCrypto(tab.dataset.crypto));
             });
 
-            // Crypto tabs
-            document.querySelectorAll('.crypto-tab').forEach(tab => {
-                tab.addEventListener('click', () => {
-                    switchCrypto(tab.dataset.crypto);
-                });
-            });
-
-            // Source selector
             document.getElementById('source-selector').addEventListener('change', (e) => {
                 const selectedSource = e.target.value;
-                console.log(`🔄 User changed source to: ${selectedSource}`);
                 document.getElementById('harga-live').innerHTML = '<span class="loading-spinner"></span>';
-
-                if (updateInterval) {
-                    clearInterval(updateInterval);
-                }
-
+                if (updateInterval) clearInterval(updateInterval);
                 updateMonitor(selectedSource);
                 updateInterval = setInterval(() => updateMonitor(selectedSource), 10000);
             });
 
-            // Modal
             document.getElementById('edit-btn').addEventListener('click', openModal);
-            document.getElementById('close-modal').addEventListener('click', closeModal);
+            document.getElementById('close-modal')?.addEventListener('click', closeModal);
             document.getElementById('cancel-btn').addEventListener('click', closeModal);
             document.getElementById('edit-form').addEventListener('submit', handleFormSubmit);
-
-            // Close modal on outside click
             document.getElementById('edit-modal').addEventListener('click', (e) => {
-                if (e.target.id === 'edit-modal') {
-                    closeModal();
-                }
+                if (e.target.id === 'edit-modal') closeModal();
             });
 
-            // Toggle visibility for investment values
             let investmentVisible = false;
             let currentVisible = false;
 
@@ -1426,15 +689,12 @@
                 const valueEl = document.getElementById('modal-awal');
                 const eyeOn = document.getElementById('eye-investment');
                 const eyeOff = document.getElementById('eye-off-investment');
-
                 if (investmentVisible) {
                     valueEl.classList.remove('value-hidden');
-                    eyeOff.style.display = 'block';
-                    eyeOn.style.display = 'none';
+                    eyeOff.style.display = 'inline'; eyeOn.style.display = 'none';
                 } else {
                     valueEl.classList.add('value-hidden');
-                    eyeOff.style.display = 'none';
-                    eyeOn.style.display = 'block';
+                    eyeOff.style.display = 'none'; eyeOn.style.display = 'inline';
                 }
             });
 
@@ -1443,24 +703,19 @@
                 const valueEl = document.getElementById('nilai-sekarang');
                 const eyeOn = document.getElementById('eye-current');
                 const eyeOff = document.getElementById('eye-off-current');
-
                 if (currentVisible) {
                     valueEl.classList.remove('value-hidden');
-                    eyeOff.style.display = 'block';
-                    eyeOn.style.display = 'none';
+                    eyeOff.style.display = 'inline'; eyeOn.style.display = 'none';
                 } else {
                     valueEl.classList.add('value-hidden');
-                    eyeOff.style.display = 'none';
-                    eyeOn.style.display = 'block';
+                    eyeOff.style.display = 'none'; eyeOn.style.display = 'inline';
                 }
             });
 
-            // Initialize
             updateUI();
             updateMonitor();
             updateInterval = setInterval(updateMonitor, 10000);
         });
     </script>
 </body>
-
 </html>

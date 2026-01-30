@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Crypto Tracker - Zygisk Compact</title>
+    <title>Crypto Tracker - Zygisk Style</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -23,11 +23,7 @@
             --radius-elem: 8px;
         }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
@@ -47,13 +43,12 @@
             gap: 12px;
         }
 
-        /* --- Header Section --- */
+        /* --- Header & Buttons --- */
         .header {
             display: flex;
             justify-content: space-between;
             align-items: center;
             padding: 5px;
-            margin-bottom: 0;
         }
 
         .app-title {
@@ -74,12 +69,9 @@
             align-items: center;
             justify-content: center;
         }
-        
-        .icon-btn:hover {
-            background: rgba(255,255,255,0.1);
-        }
+        .icon-btn:hover { background: rgba(255,255,255,0.1); }
 
-        /* --- Card Styles (Compact) --- */
+        /* --- Cards --- */
         .card {
             background: var(--bg-card);
             border-radius: var(--radius-card);
@@ -100,7 +92,7 @@
             padding-left: 2px;
         }
 
-        /* --- Data Row Style --- */
+        /* --- Data Rows --- */
         .data-row {
             padding: 10px 0;
             border-bottom: 1px solid var(--border-color);
@@ -117,74 +109,39 @@
             gap: 5px;
         }
 
-        .data-row:last-child {
-            border-bottom: none;
-            padding-bottom: 0;
-        }
+        .data-row:last-child { border-bottom: none; padding-bottom: 0; }
 
-        .data-label {
-            font-size: 13px;
-            font-weight: 400;
-            color: var(--text-secondary);
-        }
-
+        .data-label { font-size: 13px; font-weight: 400; color: var(--text-secondary); }
         .data-value {
-            font-size: 14px;
-            font-weight: 500;
-            color: var(--text-primary);
+            font-size: 14px; font-weight: 500; color: var(--text-primary);
             font-family: 'Roboto Mono', monospace;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            text-align: right;
+            display: flex; align-items: center; gap: 8px; text-align: right;
         }
 
-        /* --- Status/Pill --- */
+        /* --- Pills & Tabs --- */
         .status-pill {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            padding: 4px 10px;
-            border-radius: 50px;
-            font-size: 11px;
-            font-weight: 600;
-            background: var(--bg-input);
-            color: var(--text-secondary);
+            display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px;
+            border-radius: 50px; font-size: 11px; font-weight: 600;
+            background: var(--bg-input); color: var(--text-secondary);
             transition: all 0.2s;
         }
         .status-pill.active { background: var(--accent-green-dim); color: var(--accent-green); }
         .status-pill.danger { background: var(--accent-red-dim); color: var(--accent-red); }
         .status-dot { width: 5px; height: 5px; border-radius: 50%; background-color: currentColor; }
 
-        /* --- Tabs --- */
-        .tabs-container {
-            display: flex;
-            gap: 8px;
-            padding: 0 5px 8px 5px;
-        }
-
+        .tabs-container { display: flex; gap: 8px; padding: 0 5px 8px 5px; }
         .crypto-tab {
-            background: var(--bg-card);
-            border: 1px solid var(--border-color);
-            color: var(--text-secondary);
-            padding: 6px 14px;
-            border-radius: 50px;
-            font-size: 12px;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.2s;
+            background: var(--bg-card); border: 1px solid var(--border-color);
+            color: var(--text-secondary); padding: 6px 14px; border-radius: 50px;
+            font-size: 12px; font-weight: 500; cursor: pointer; transition: all 0.2s;
         }
         .crypto-tab.active {
-            background: var(--accent-green-dim);
-            color: var(--accent-green);
-            border-color: transparent;
+            background: var(--accent-green-dim); color: var(--accent-green); border-color: transparent;
         }
 
+        /* --- Typography & Elements --- */
         .price-large {
-            font-size: 26px;
-            font-weight: 600;
-            letter-spacing: -0.5px;
-            margin-bottom: 4px;
+            font-size: 26px; font-weight: 600; letter-spacing: -0.5px; margin-bottom: 4px;
         }
 
         .eye-toggle { cursor: pointer; opacity: 0.5; margin-left: 6px; display: flex; align-items: center; }
@@ -192,61 +149,58 @@
         .value-hidden { font-size: 0 !important; }
         .value-hidden::after { content: '••••••'; font-size: 14px; color: var(--text-tertiary); }
 
-        /* --- Source Selector (New Position Styling) --- */
-        .source-select-container {
-            position: relative;
-            display: flex;
-            align-items: center;
-        }
-        
+        /* --- Source Selector --- */
+        .source-select-container { position: relative; display: flex; align-items: center; }
         .header-source-select {
-            background: transparent;
-            border: none;
-            color: var(--text-secondary); /* Warna label pudar */
-            font-size: 11px;
-            font-weight: 500;
-            cursor: pointer;
-            outline: none;
-            padding: 4px 0;
-            text-align: right;
-            font-family: 'Inter', sans-serif;
-            appearance: none; /* Hilangkan panah default browser */
-            -webkit-appearance: none;
-            -moz-appearance: none;
+            background: transparent; border: none; color: var(--text-secondary);
+            font-size: 11px; font-weight: 500; cursor: pointer; outline: none;
+            padding: 4px 0; text-align: right; font-family: 'Inter', sans-serif;
+            appearance: none; -webkit-appearance: none;
+        }
+        .header-source-select:hover { color: var(--accent-green); }
+        .header-source-select option { background: var(--bg-card); color: var(--text-primary); padding: 10px; }
+        .select-arrow { font-size: 8px; color: var(--text-secondary); margin-left: 4px; pointer-events: none; }
+
+        /* --- TOAST NOTIFICATION (New) --- */
+        #toast-container {
+            position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%);
+            z-index: 2000; display: flex; flex-direction: column; gap: 10px;
+            pointer-events: none; width: 90%; max-width: 350px;
         }
 
-        .header-source-select:hover {
-            color: var(--accent-green); /* Hijau saat di-hover */
+        .toast {
+            background: #252525; color: #fff; padding: 12px 16px; border-radius: 12px;
+            font-size: 13px; font-weight: 500; text-align: center;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3); border: 1px solid #333;
+            opacity: 0; transform: translateY(20px); transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
-        .header-source-select option {
-            background: var(--bg-card);
-            color: var(--text-primary);
-            padding: 10px;
-        }
+        .toast.show { opacity: 1; transform: translateY(0); }
 
-        /* --- Modal --- */
-        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 1000; align-items: center; justify-content: center; }
+        /* --- Modals --- */
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 1000; align-items: center; justify-content: center; backdrop-filter: blur(2px); }
         .modal.active { display: flex; }
         .modal-content { background: #1a1a1a; width: 85%; max-width: 350px; border-radius: 16px; padding: 20px; border: 1px solid var(--border-color); }
         .form-group { margin-bottom: 12px; }
         .form-group label { display: block; color: var(--text-secondary); font-size: 11px; margin-bottom: 6px; }
         .form-group input { width: 100%; background: #252525; border: 1px solid #333; color: #fff; padding: 10px; border-radius: 8px; font-size: 13px; outline: none; }
-        .modal-btns { display: flex; justify-content: flex-end; gap: 10px; margin-top: 20px; }
-        .btn { padding: 8px 16px; border-radius: 6px; font-size: 12px; font-weight: 600; border: none; cursor: pointer; }
-        .btn-cancel { background: transparent; color: #888; }
-        .btn-save { background: var(--accent-green); color: #000; }
+        .form-group input:focus { border-color: var(--accent-green); }
         
+        .modal-btns { display: flex; justify-content: flex-end; gap: 10px; margin-top: 20px; }
+        .btn { padding: 8px 16px; border-radius: 50px; font-size: 12px; font-weight: 600; border: none; cursor: pointer; }
+        .btn-cancel { background: transparent; color: #888; }
+        .btn-cancel:hover { color: #fff; }
+        .btn-save { background: var(--accent-green); color: #050505; }
+        .btn-danger { background: var(--accent-red); color: #050505; }
+
         .loading-spinner { width: 14px; height: 14px; border: 2px solid #333; border-top-color: #fff; border-radius: 50%; animation: spin 1s linear infinite; display: inline-block; }
         @keyframes spin { to { transform: rotate(360deg); } }
 
-        /* Helper untuk panah kecil kustom */
-        .select-arrow {
-            font-size: 8px;
-            color: var(--text-secondary);
-            margin-left: 4px;
-            pointer-events: none;
-        }
+        /* Utility for Icons */
+        .svg-icon { vertical-align: middle; width: 14px; height: 14px; display: inline-block; }
+        .svg-icon-lg { width: 20px; height: 20px; }
+        .text-green { color: var(--accent-green); }
+        .text-red { color: var(--accent-red); }
     </style>
 </head>
 
@@ -255,8 +209,11 @@
     <div class="container">
         <div class="header">
             <div class="app-title" id="crypto-name">Zygisk Portfolio</div>
-            <button class="icon-btn" id="edit-btn">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+            <button class="icon-btn" id="edit-btn" title="Pengaturan">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z"/>
+                    <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+                </svg>
             </button>
         </div>
 
@@ -266,12 +223,12 @@
             <button class="crypto-tab" data-crypto="ETH">Ethereum</button>
         </div>
 
-        <div id="error-message" style="color: var(--accent-red); font-size: 12px; margin-bottom: 5px; display: none; padding-left: 5px;"></div>
+        <div id="error-message" style="display: none; background: rgba(229, 115, 115, 0.1); border: 1px solid var(--accent-red); color: var(--accent-red); padding: 8px 12px; border-radius: 8px; font-size: 12px; margin-bottom: 10px; display: flex; align-items: center; gap: 8px;">
+        </div>
 
         <div class="card">
             <div class="card-header">
                 <span>Informasi Dasar</span>
-                
                 <div class="source-select-container">
                     <select id="source-selector" class="header-source-select">
                         <option value="CryptoCompare IDR">CryptoCompare</option>
@@ -286,7 +243,7 @@
                 <div class="price-large" id="harga-live">
                     <span class="loading-spinner"></span>
                 </div>
-                <div style="font-size: 12px;" id="price-change-display">Live</div>
+                <div style="font-size: 12px; display: flex; align-items: center; gap: 4px;" id="price-change-display">Live</div>
             </div>
 
             <div class="data-row" style="border-bottom:none; padding-bottom:0;">
@@ -364,12 +321,6 @@
                     <div class="data-value" id="admin-fee-display" style="color: var(--accent-red);">-</div>
                 </div>
             </div>
-            
-            <div style="display:none">
-                <span id="sell-value"></span><span id="gross-profit"></span><span id="net-profit"></span>
-                <span id="target-roi-highlight"></span><span id="fee-percent-buy"></span>
-                <span id="buy-fee"></span><span id="fee-percent-sell"></span><span id="sell-fee"></span>
-             </div>
         </div>
 
         <div style="display:none;" id="pnl-card"></div>
@@ -378,6 +329,8 @@
         </div>
 
     </div>
+
+    <div id="toast-container"></div>
 
     <div class="modal" id="edit-modal">
         <div class="modal-content">
@@ -407,16 +360,77 @@
         </div>
     </div>
 
+    <div class="modal" id="confirm-modal">
+        <div class="modal-content" style="max-width: 280px;">
+            <div style="text-align: center; margin-bottom: 20px;">
+                <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="var(--accent-red)" stroke-width="2" style="margin-bottom: 10px;">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <line x1="12" y1="8" x2="12" y2="12"></line>
+                    <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                </svg>
+                <p style="font-size: 14px; color: var(--text-primary);" id="confirm-message">Apakah Anda yakin?</p>
+            </div>
+            <div class="modal-btns" style="justify-content: center;">
+                <button type="button" class="btn btn-cancel" id="confirm-cancel-btn">Batal</button>
+                <button type="button" class="btn btn-danger" id="confirm-ok-btn">Reset 0</button>
+            </div>
+        </div>
+    </div>
+
     <script>
+        // --- SVG ICONS CONSTANTS ---
+        const ICONS = {
+            ARROW_UP: '<svg class="svg-icon text-green" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="18 15 12 9 6 15"/></svg>',
+            ARROW_DOWN: '<svg class="svg-icon text-red" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>',
+            WARNING: '<svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>'
+        };
+
         const CRYPTO_CONFIG = {
-            BTC: { name: 'Bitcoin', symbol: 'BTC', logo: '₿', coingeckoId: 'bitcoin', cryptoCompareSymbol: 'BTC', defaultBuyPrice: 0, defaultHoldings: 0 },
-            XRP: { name: 'Ripple', symbol: 'XRP', logo: '✕', coingeckoId: 'ripple', cryptoCompareSymbol: 'XRP', defaultBuyPrice: 31055.34, defaultHoldings: 22.6 },
-            ETH: { name: 'Ethereum', symbol: 'ETH', logo: 'Ξ', coingeckoId: 'ethereum', cryptoCompareSymbol: 'ETH', defaultBuyPrice: 0, defaultHoldings: 0 }
+            BTC: { name: 'Bitcoin', symbol: 'BTC', coingeckoId: 'bitcoin', cryptoCompareSymbol: 'BTC', defaultBuyPrice: 0, defaultHoldings: 0 },
+            XRP: { name: 'Ripple', symbol: 'XRP', coingeckoId: 'ripple', cryptoCompareSymbol: 'XRP', defaultBuyPrice: 31055.34, defaultHoldings: 22.6 },
+            ETH: { name: 'Ethereum', symbol: 'ETH', coingeckoId: 'ethereum', cryptoCompareSymbol: 'ETH', defaultBuyPrice: 0, defaultHoldings: 0 }
         };
 
         let currentCrypto = localStorage.getItem('lastSelectedCrypto') || 'XRP';
         let updateInterval = null;
         let lastSuccessfulPrice = null;
+        
+        // --- NOTIFICATION SYSTEM (TOAST) ---
+        function showToast(message) {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            toast.className = 'toast';
+            toast.textContent = message;
+            container.appendChild(toast);
+
+            // Animation sequence
+            requestAnimationFrame(() => {
+                toast.classList.add('show');
+            });
+
+            setTimeout(() => {
+                toast.classList.remove('show');
+                toast.addEventListener('transitionend', () => {
+                    toast.remove();
+                });
+            }, 3000); // Hide after 3 seconds
+        }
+
+        // --- CUSTOM CONFIRM DIALOG ---
+        let confirmCallback = null;
+        function showConfirmDialog(message, onConfirm) {
+            const modal = document.getElementById('confirm-modal');
+            document.getElementById('confirm-message').textContent = message;
+            modal.classList.add('active');
+            confirmCallback = onConfirm;
+        }
+
+        function closeConfirmDialog() {
+            document.getElementById('confirm-modal').classList.remove('active');
+            confirmCallback = null;
+        }
+
+        // --- MAIN LOGIC ---
 
         function loadSavedData(crypto) {
             const saved = localStorage.getItem(`crypto_${crypto}`);
@@ -431,6 +445,7 @@
                 targetPrice: parseFloat(targetPrice) || 0,
                 adminFee: parseFloat(adminFee) || 0.1
             }));
+            showToast("Data tersimpan ✅");
         }
 
         function getCurrentData() { return loadSavedData(currentCrypto); }
@@ -453,8 +468,8 @@
 
         function showError(message) {
             const errorEl = document.getElementById('error-message');
-            errorEl.textContent = '⚠️ ' + message;
-            errorEl.style.display = 'block';
+            errorEl.innerHTML = ICONS.WARNING + '<span>' + message + '</span>';
+            errorEl.style.display = 'flex';
         }
 
         function hideError() {
@@ -511,9 +526,9 @@
                 return parsed;
             } catch (error) {
                 console.error(`❌ ${apiSource.name} failed:`, error.message);
-                if (specificSource) { showError(`${apiSource.name} failed. Retrying...`); throw error; }
+                if (specificSource) { showError(`${apiSource.name} gagal. Retrying...`); throw error; }
                 if (sourceIndex < sources.length - 1) return await fetchPriceData(sources[sourceIndex + 1].name);
-                throw new Error(`All API sources failed`);
+                throw new Error(`Semua sumber API gagal`);
             }
         }
 
@@ -524,12 +539,13 @@
             const priceChangeEl = document.getElementById('price-change-display');
             document.getElementById('harga-live').textContent = formatRupiah(hargaLive);
 
+            // Use SVG Icons for Arrows
             if (change24h !== 0) {
-                priceChangeEl.style.color = change24h >= 0 ? 'var(--accent-green)' : 'var(--accent-red)';
-                priceChangeEl.textContent = (change24h >= 0 ? '↑' : '↓') + ' ' + Math.abs(change24h).toFixed(2) + '% (24h)';
+                const icon = change24h >= 0 ? ICONS.ARROW_UP : ICONS.ARROW_DOWN;
+                const colorClass = change24h >= 0 ? 'text-green' : 'text-red';
+                priceChangeEl.innerHTML = `${icon} <span class="${colorClass}">${Math.abs(change24h).toFixed(2)}% (24h)</span>`;
             } else {
-                priceChangeEl.style.color = 'var(--text-secondary)';
-                priceChangeEl.textContent = 'Live';
+                priceChangeEl.innerHTML = '<span style="color:var(--text-secondary)">Live</span>';
             }
 
             if (data.buyPrice === 0 || data.holdings === 0) {
@@ -538,7 +554,6 @@
                 document.getElementById('keuntungan-persen').textContent = '0.00%';
                 document.getElementById('total-untung-rugi').textContent = 'Rp 0';
                 
-                // Reset Pill
                 const pill = document.getElementById('pnl-pill-status');
                 pill.className = 'status-pill';
                 
@@ -651,7 +666,22 @@
             const targetPrice = parseFloat(document.getElementById('target-price').value) || 0;
             const adminFee = parseFloat(document.getElementById('admin-fee').value) || 0.1;
 
-            if (buyPrice < 0 || holdings < 0) return alert('Tidak boleh negatif');
+            if (buyPrice < 0 || holdings < 0) {
+                showToast("Data tidak boleh negatif"); // Toast instead of Alert
+                return;
+            }
+
+            if (buyPrice === 0 && holdings === 0) {
+                // Use custom confirm modal instead of native confirm()
+                showConfirmDialog("Anda akan mengatur holdings ke 0. Lanjutkan?", () => {
+                    saveData(currentCrypto, buyPrice, holdings, targetPrice, adminFee);
+                    updateUI();
+                    updateMonitor();
+                    closeModal();
+                    closeConfirmDialog();
+                });
+                return;
+            }
 
             saveData(currentCrypto, buyPrice, holdings, targetPrice, adminFee);
             updateUI();
@@ -674,11 +704,16 @@
             });
 
             document.getElementById('edit-btn').addEventListener('click', openModal);
-            document.getElementById('close-modal')?.addEventListener('click', closeModal);
             document.getElementById('cancel-btn').addEventListener('click', closeModal);
             document.getElementById('edit-form').addEventListener('submit', handleFormSubmit);
             document.getElementById('edit-modal').addEventListener('click', (e) => {
                 if (e.target.id === 'edit-modal') closeModal();
+            });
+
+            // Confirm Modal Listeners
+            document.getElementById('confirm-cancel-btn').addEventListener('click', closeConfirmDialog);
+            document.getElementById('confirm-ok-btn').addEventListener('click', () => {
+                if (confirmCallback) confirmCallback();
             });
 
             let investmentVisible = false;

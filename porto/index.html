@@ -81,7 +81,7 @@
         #toast-container { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); z-index: 2000; width: max-content; }
         .toast { background: #252525; color: #fff; padding: 10px 20px; border-radius: 50px; font-size: 12px; border: 1px solid #333; display: none; }
         .toast.show { display: block; animation: fadeUp 0.3s forwards; }
-        
+
         .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 999; align-items: center; justify-content: center; backdrop-filter: blur(3px); }
         .modal.active { display: flex; }
         .modal-box { background: #1a1a1a; width: 85%; max-width: 320px; border-radius: 16px; padding: 20px; border: 1px solid #333; }
@@ -96,18 +96,15 @@
         @keyframes fadeUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
         .loading-dot { display: inline-block; width: 6px; height: 6px; background: #fff; border-radius: 50%; animation: blink 1s infinite; }
         @keyframes blink { 0%, 100% { opacity: 0.2; } 50% { opacity: 1; } }
-        
+
         /* ICONS & VISIBILITY */
         .icon-btn { cursor: pointer; color: #fff; background: transparent; border: none; }
-        
-        /* Eye Button Wrapper */
         .eye-btn {
             cursor: pointer; display: flex; align-items: center; justify-content: center;
             opacity: 0.6; transition: 0.2s; background: none; border: none; padding: 0; color: inherit;
         }
         .eye-btn:hover { opacity: 1; }
         .eye-btn svg { width: 14px; height: 14px; }
-        
         .value-hidden { font-size: 0 !important; }
         .value-hidden::after { content: '••••••'; font-size: 14px; color: var(--text-tertiary); letter-spacing: 2px; }
     </style>
@@ -131,25 +128,25 @@
 
         <div class="card">
             <div class="card-head">
-                <span>Harga Pasar (IDR)</span>
+                <span>Harga Pasar (<span class="currency-label">IDR</span>)</span>
                 <span class="badge" id="live-indicator">● Live</span>
             </div>
             <div class="price-big" id="price-display">
                 <span class="loading-dot"></span><span class="loading-dot"></span>
             </div>
             <div class="price-change" id="change-display">--</div>
-            
+
             <div style="margin-top: 15px; padding-top: 10px; border-top: 1px solid #222;">
                 <div class="row" style="padding: 0;">
                     <span class="lbl">Estimasi PnL</span>
-                    <span class="val" id="pnl-display">Rp 0</span>
+                    <span class="val" id="pnl-display">0</span>
                 </div>
             </div>
         </div>
 
         <div class="card" style="padding: 0;">
             <div style="padding: 12px 16px; border-bottom: 1px solid #222; display:flex; justify-content:space-between; align-items: center;">
-                <span style="font-size:13px; font-weight:600; color:#fff;">Chart (Binance)</span>
+                <span style="font-size:13px; font-weight:600; color:#fff;">Chart</span>
                 <span style="font-size:10px; color:#666;">30 Menit</span>
             </div>
             <div id="chart-wrap"></div>
@@ -163,9 +160,9 @@
             </div>
             <div class="row">
                 <span class="lbl">Avg. Buy</span>
-                <span class="val" id="buy-display">Rp 0</span>
+                <span class="val" id="buy-display">0</span>
             </div>
-            
+
             <div class="row">
                 <div class="lbl">
                     Modal Awal
@@ -174,7 +171,7 @@
                         <svg class="icon-show" style="display:none;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
                     </button>
                 </div>
-                <span class="val value-hidden" id="initial-display">Rp 0</span>
+                <span class="val value-hidden" id="initial-display">0</span>
             </div>
 
             <div class="row">
@@ -185,7 +182,7 @@
                         <svg class="icon-show" style="display:none;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
                     </button>
                 </div>
-                <span class="val value-hidden" id="value-display">Rp 0</span>
+                <span class="val value-hidden" id="value-display">0</span>
             </div>
         </div>
 
@@ -211,16 +208,16 @@
         <div class="modal-box">
             <h3 style="color:#fff; margin-bottom:15px;">Edit Aset</h3>
             <div class="inp-group">
-                <label>Harga Beli (IDR)</label>
-                <input type="number" id="inp-buy">
+                <label>Harga Beli (<span class="currency-label">IDR</span>)</label>
+                <input type="number" id="inp-buy" step="any">
             </div>
             <div class="inp-group">
-                <label>Jumlah Koin</label>
-                <input type="number" id="inp-amount">
+                <label>Jumlah Koin/Oz</label>
+                <input type="number" id="inp-amount" step="any">
             </div>
             <div class="inp-group">
-                <label>Target Jual (IDR)</label>
-                <input type="number" id="inp-target">
+                <label>Target Jual (<span class="currency-label">IDR</span>)</label>
+                <input type="number" id="inp-target" step="any">
             </div>
             <div class="modal-btns">
                 <button class="btn btn-cancel" onclick="closeModal()">Batal</button>
@@ -231,34 +228,21 @@
 
     <script>
         // ==========================================
-        //  PENGATURAN USER (HARDCODE)
+        //  PENGATURAN USER
         // ==========================================
         const PORTFOLIO_DATA = {
-            XRP: { 
-                buy: 31055,      
-                amount: 22.6,      
-                target: 40000,   
-                fee: 0.1         
-            },
-            BTC: { 
-                buy: 0,      
-                amount: 0,      
-                target: 0,   
-                fee: 0.1         
-            },
-            XAU: { 
-                buy: 0,      
-                amount: 0,      
-                target: 0,   
-                fee: 0.1         
-            }
+            XRP: { buy: 31055, amount: 22.6, target: 40000, fee: 0.1 },
+            BTC: { buy: 0, amount: 0, target: 0, fee: 0.1 },
+            XAU: { buy: 0, amount: 0, target: 0, fee: 0.1 } 
         };
         // ==========================================
 
         const CONFIG = {
-            BTC: { symbol: 'BTC', tvSymbol: 'BINANCE:BTCIDR' },
-            XRP: { symbol: 'XRP', tvSymbol: 'BINANCE:XRPIDR' },
-            XAU: { symbol: 'XAU', tvSymbol: 'FOREXCOM:XAUUSD' }
+            // apiSymbol: simbol yang dipakai untuk request ke API (trik untuk XAU)
+            BTC: { symbol: 'BTC', apiSymbol: 'BTC', tvSymbol: 'BINANCE:BTCIDR', currency: 'IDR' },
+            XRP: { symbol: 'XRP', apiSymbol: 'XRP', tvSymbol: 'BINANCE:XRPIDR', currency: 'IDR' },
+            // Gunakan PAXG (Paxos Gold) sebagai proxy harga emas fisik
+            XAU: { symbol: 'XAU', apiSymbol: 'PAXG', tvSymbol: 'FOREXCOM:XAUUSD', currency: 'USD' }
         };
 
         let currentCoin = 'XRP';
@@ -266,16 +250,30 @@
         let userData = {};
 
         const el = (id) => document.getElementById(id);
-        const fmtMoney = (n) => new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0, maximumFractionDigits: 0 }).format(n);
-        
+
+        // -- FUNGSI UPDATE: FORMAT UANG DENGAN SPASI --
+        const fmtMoney = (n) => {
+            const cur = CONFIG[currentCoin].currency;
+            if (cur === 'USD') {
+                // Format angka saja untuk USD, lalu tambah '$ ' manual
+                const num = new Intl.NumberFormat('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(n);
+                return '$ ' + num; 
+            } else {
+                // Format angka saja untuk IDR, lalu tambah 'Rp ' manual
+                const num = new Intl.NumberFormat('id-ID', { minimumFractionDigits: 0, maximumFractionDigits: 0 }).format(n);
+                return 'Rp ' + num;
+            }
+        };
+
         function loadStorage() {
             const saved = localStorage.getItem('crypto_portfolio_final');
             if (saved) {
                 userData = JSON.parse(saved);
                 for(let key in PORTFOLIO_DATA) {
-                    if(PORTFOLIO_DATA[key].buy > 0 && userData[key].buy === 0) {
+                    if(PORTFOLIO_DATA[key].buy > 0 && (!userData[key] || userData[key].buy === 0)) {
                         userData[key] = PORTFOLIO_DATA[key];
                     }
+                    if(!userData[key]) userData[key] = PORTFOLIO_DATA[key];
                 }
             } else {
                 userData = JSON.parse(JSON.stringify(PORTFOLIO_DATA));
@@ -291,7 +289,6 @@
             setTimeout(() => t.classList.remove('show'), 3000);
         }
 
-        // TRADINGVIEW WIDGET
         function loadTvWidget() {
             el('chart-wrap').innerHTML = ''; 
             new TradingView.widget({
@@ -312,25 +309,34 @@
             });
         }
 
-        // DATA POLLING
         async function fetchMarketData() {
-            const url = `https://min-api.cryptocompare.com/data/pricemultifull?fsyms=${currentCoin}&tsyms=IDR`;
+            const conf = CONFIG[currentCoin];
+            const sym = conf.apiSymbol; 
+            const targetCur = conf.currency;
+            
+            const url = `https://min-api.cryptocompare.com/data/pricemultifull?fsyms=${sym}&tsyms=${targetCur}`;
+            
             try {
                 const res = await fetch(url);
                 const json = await res.json();
-                
+
                 const badge = el('live-indicator');
                 badge.classList.add('pulse');
                 setTimeout(() => badge.classList.remove('pulse'), 500);
 
-                const raw = json.RAW[currentCoin].IDR;
-                updateUI(raw.PRICE, raw.CHANGEPCT24HOUR);
-            } catch (e) { console.log("Fetch error"); }
+                if (json.RAW && json.RAW[sym] && json.RAW[sym][targetCur]) {
+                    const raw = json.RAW[sym][targetCur];
+                    updateUI(raw.PRICE, raw.CHANGEPCT24HOUR);
+                }
+            } catch (e) { console.log("Fetch error", e); }
         }
 
         function updateUI(price, change24h) {
+            const curCode = CONFIG[currentCoin].currency;
+            document.querySelectorAll('.currency-label').forEach(span => span.textContent = curCode);
+
             el('price-display').textContent = fmtMoney(price);
-            
+
             const changeEl = el('change-display');
             if (change24h !== undefined) {
                 const sign = change24h >= 0 ? '+' : '';
@@ -341,41 +347,37 @@
             const data = userData[currentCoin];
             el('holdings-display').textContent = data.amount;
             el('buy-display').textContent = fmtMoney(data.buy);
-            
-            // Modal Awal
+
             const initial = data.buy * data.amount;
             el('initial-display').textContent = fmtMoney(initial);
 
-            // Aset Sekarang
             const currentVal = price * data.amount;
             el('value-display').textContent = fmtMoney(currentVal);
 
-            // PnL Logic
             if(data.amount > 0 && data.buy > 0) {
                 const diff = price - data.buy;
                 const pnl = diff * data.amount;
                 const percent = (diff / data.buy) * 100;
-                
+
                 const sign = pnl >= 0 ? '+' : '';
                 const color = pnl >= 0 ? 'text-green' : 'text-red';
-                
+
                 el('pnl-display').innerHTML = `<span class="${color}">${sign}${fmtMoney(pnl)} (${percent.toFixed(2)}%)</span>`;
             } else {
-                el('pnl-display').textContent = "Rp 0";
+                el('pnl-display').textContent = fmtMoney(0);
             }
 
-            // Target Logic
             const targetEl = el('target-card');
             if (data.target && data.target > 0) {
                 targetEl.style.display = 'block';
                 el('target-status').textContent = 'Active';
                 el('target-status').style.color = '#0ecb81';
-                
+
                 const targetVal = data.target * data.amount;
                 const buyVal = data.buy * data.amount;
                 const fee = (targetVal + buyVal) * (data.fee / 100);
                 const net = (targetVal - buyVal) - fee;
-                
+
                 el('target-price-display').textContent = fmtMoney(data.target);
                 el('net-profit-display').textContent = fmtMoney(net);
                 el('net-profit-display').style.color = net >= 0 ? '#0ecb81' : '#f6465d';
@@ -388,18 +390,17 @@
             currentCoin = coin;
             document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
             event.target.classList.add('active');
-            
+
             el('price-display').innerHTML = '<span class="loading-dot"></span><span class="loading-dot"></span>';
-            el('pnl-display').textContent = 'Rp 0';
-            
+            el('pnl-display').textContent = fmtMoney(0);
+
             if(updateInterval) clearInterval(updateInterval);
             loadTvWidget();
             fetchMarketData();
-            updateInterval = setInterval(fetchMarketData, 1000); // 1 DETIK
+            updateInterval = setInterval(fetchMarketData, 2000); 
             updateUI(0); 
         }
 
-        // MODAL
         const modal = el('modal');
         el('btn-settings').onclick = () => {
             const d = userData[currentCoin];
@@ -408,42 +409,36 @@
             el('inp-target').value = d.target || 0;
             modal.classList.add('active');
         };
-        
+
         function closeModal() { modal.classList.remove('active'); }
-        
+
         function saveData() {
             const buy = parseFloat(el('inp-buy').value) || 0;
             const amt = parseFloat(el('inp-amount').value) || 0;
             const trg = parseFloat(el('inp-target').value) || 0;
-            
+
             userData[currentCoin] = { buy: buy, amount: amt, target: trg, fee: 0.1 };
             localStorage.setItem('crypto_portfolio_final', JSON.stringify(userData));
-            
+
             closeModal();
             showToast("Tersimpan");
             fetchMarketData(); 
         }
 
-        // --- EYE TOGGLE LOGIC (FIXED) ---
         function toggleVisibility(btnId, valueId) {
             const btn = el(btnId);
             const val = el(valueId);
             const showIcon = btn.querySelector('.icon-show');
             const hideIcon = btn.querySelector('.icon-hide');
-            
-            // Logic:
-            // 1. Toggle class 'value-hidden'
-            // 2. Jika hidden (titik2) -> Tampilkan Slashed Eye (icon-hide)
-            // 3. Jika visible (angka) -> Tampilkan Open Eye (icon-show)
-            
+
             const isHidden = val.classList.toggle('value-hidden');
-            
+
             if(isHidden) {
-                hideIcon.style.display = 'block'; // Tampilkan mata coret
+                hideIcon.style.display = 'block'; 
                 showIcon.style.display = 'none';
             } else {
                 hideIcon.style.display = 'none';
-                showIcon.style.display = 'block'; // Tampilkan mata terbuka
+                showIcon.style.display = 'block'; 
             }
         }
 
@@ -453,7 +448,7 @@
         window.onload = () => {
             loadTvWidget();
             fetchMarketData();
-            updateInterval = setInterval(fetchMarketData, 1000); // 1 DETIK
+            updateInterval = setInterval(fetchMarketData, 2000); 
         };
     </script>
 </body>

@@ -1,78 +1,460 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
+
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Neo-Brutalist Portfolio</title>
-    <link rel="stylesheet" href="style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Crypto Portfolio</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lightweight-charts@4.0.1/dist/lightweight-charts.standalone.production.js"></script>
+    <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
+    <style>
+        :root {
+            --bg-body: #000000;
+            --bg-card: #121212;
+            --bg-input: #1e1e1e;
+            --text-primary: #e0e0e0;
+            --text-secondary: #757575;
+            --accent-green: #0ecb81;
+            --accent-red: #f6465d;
+            --border-color: #2a2a2a;
+            --radius-card: 16px;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg-body);
+            color: var(--text-primary);
+            padding: 12px;
+            display: flex;
+            justify-content: center;
+            min-height: 100vh;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 450px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            padding-bottom: 30px;
+        }
+
+        /* HEADER */
+        .header { display: flex; justify-content: space-between; align-items: center; padding: 4px; }
+        .app-title { font-size: 18px; font-weight: 700; color: #fff; }
+        .settings-btn { background: none; border: none; color: #fff; cursor: pointer; padding: 8px; }
+
+        /* TABS */
+        .tabs { display: flex; gap: 8px; margin-bottom: 4px; }
+        .tab {
+            background: var(--bg-card); border: 1px solid var(--border-color);
+            color: var(--text-secondary); padding: 8px 16px; border-radius: 20px;
+            font-size: 13px; font-weight: 500; cursor: pointer; transition: 0.2s; flex: 1; text-align: center;
+        }
+        .tab.active { background: rgba(14, 203, 129, 0.15); color: var(--accent-green); border-color: var(--accent-green); }
+
+        /* CARDS */
+        .card { background: var(--bg-card); border-radius: var(--radius-card); padding: 16px; border: 1px solid var(--border-color); }
+        .card-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; font-size: 13px; font-weight: 600; color: #fff; }
+        .badge { font-size: 10px; padding: 2px 8px; border-radius: 4px; background: #1f2b24; color: var(--accent-green); transition: opacity 0.3s;}
+        .badge.pulse { opacity: 0.5; }
+
+        /* PRICE SECTION */
+        .price-big { font-size: 32px; font-weight: 600; color: #fff; letter-spacing: -0.5px; font-family: 'Roboto Mono', monospace; }
+        .price-change { font-size: 13px; font-weight: 500; margin-top: 4px; display: flex; align-items: center; gap: 4px;}
+        .text-green { color: var(--accent-green); }
+        .text-red { color: var(--accent-red); }
+
+        /* CHART CONTAINER */
+        #chart-wrap { height: 300px; width: 100%; border-radius: 12px; overflow: hidden; margin-top: 5px; }
+
+        /* DATA ROWS */
+        .row { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid var(--border-color); }
+        .row:last-child { border: none; padding-bottom: 0; }
+        .lbl { font-size: 13px; color: var(--text-secondary); display: flex; align-items: center; gap: 6px; }
+        .val { font-size: 14px; color: #fff; font-family: 'Roboto Mono', monospace; font-weight: 500; }
+
+        /* TOAST & MODAL */
+        #toast-container { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); z-index: 2000; width: max-content; }
+        .toast { background: #252525; color: #fff; padding: 10px 20px; border-radius: 50px; font-size: 12px; border: 1px solid #333; display: none; }
+        .toast.show { display: block; animation: fadeUp 0.3s forwards; }
+        
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 999; align-items: center; justify-content: center; backdrop-filter: blur(3px); }
+        .modal.active { display: flex; }
+        .modal-box { background: #1a1a1a; width: 85%; max-width: 320px; border-radius: 16px; padding: 20px; border: 1px solid #333; }
+        .inp-group { margin-bottom: 15px; }
+        .inp-group label { display: block; font-size: 11px; color: #888; margin-bottom: 5px; }
+        .inp-group input { width: 100%; background: #252525; border: 1px solid #333; color: #fff; padding: 10px; border-radius: 8px; font-size: 14px; outline: none; }
+        .modal-btns { display: flex; justify-content: flex-end; gap: 10px; margin-top: 20px; }
+        .btn { padding: 8px 16px; border-radius: 6px; border: none; font-size: 12px; font-weight: 600; cursor: pointer; }
+        .btn-cancel { background: transparent; color: #888; }
+        .btn-save { background: var(--accent-green); color: #000; }
+
+        @keyframes fadeUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .loading-dot { display: inline-block; width: 6px; height: 6px; background: #fff; border-radius: 50%; animation: blink 1s infinite; }
+        @keyframes blink { 0%, 100% { opacity: 0.2; } 50% { opacity: 1; } }
+        
+        /* ICONS & VISIBILITY */
+        .icon-btn { cursor: pointer; color: #fff; background: transparent; border: none; }
+        
+        /* Eye Button Wrapper */
+        .eye-btn {
+            cursor: pointer; display: flex; align-items: center; justify-content: center;
+            opacity: 0.6; transition: 0.2s; background: none; border: none; padding: 0; color: inherit;
+        }
+        .eye-btn:hover { opacity: 1; }
+        .eye-btn svg { width: 14px; height: 14px; }
+        
+        .value-hidden { font-size: 0 !important; }
+        .value-hidden::after { content: '••••••'; font-size: 14px; color: var(--text-tertiary); letter-spacing: 2px; }
+    </style>
 </head>
+
 <body>
-    <nav>
-        <div class="logo">Your Name</div>
-        <div class="hamburger">
-            <div class="bar"></div>
-            <div class="bar"></div>
-            <div class="bar"></div>
-        </div>
-        <ul class="nav-links">
-            <li><a href="#home" data-section="home">Home</a></li>
-            <li><a href="#skills" data-section="skills">Skills</a></li>
-            <li><a href="#experience" data-section="experience">Experience</a></li>
-            <li><a href="#education" data-section="education">Education</a></li>
-            <li><a href="#about" data-section="about">About</a></li>
-        </ul>
-    </nav>
 
-    <section id="home" class="section active">
-        <h2>Home</h2>
-        <p>Brief description about yourself and your work.</p>
-        <div class="projects">
-            <h3>Projects</h3>
-            <p>List your projects here.</p>
+    <div class="container">
+        <div class="header">
+            <div class="app-title">Crypto Portfolio</div>
+            <button class="settings-btn" id="btn-settings">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+            </button>
         </div>
-    </section>
 
-    <section id="skills" class="section">
-        <h2>Skills</h2>
-        <p>List your skills here.</p>
-    </section>
+        <div class="tabs">
+            <div class="tab active" onclick="switchCoin('XRP')">XRP</div>
+            <div class="tab" onclick="switchCoin('BTC')">BTC</div>
+            <div class="tab" onclick="switchCoin('ETH')">ETH</div>
+        </div>
 
-    <section id="experience" class="section">
-        <h2>Experience</h2>
-        <div class="experience-item">
-            <h3>Elementary School</h3>
-            <p>Details about your elementary school experience.</p>
+        <div class="card">
+            <div class="card-head">
+                <span>Harga Pasar (IDR)</span>
+                <span class="badge" id="live-indicator">● Live</span>
+            </div>
+            <div class="price-big" id="price-display">
+                <span class="loading-dot"></span><span class="loading-dot"></span>
+            </div>
+            <div class="price-change" id="change-display">--</div>
+            
+            <div style="margin-top: 15px; padding-top: 10px; border-top: 1px solid #222;">
+                <div class="row" style="padding: 0;">
+                    <span class="lbl">Estimasi PnL</span>
+                    <span class="val" id="pnl-display">Rp 0</span>
+                </div>
+            </div>
         </div>
-        <div class="experience-item">
-            <h3>Junior High School</h3>
-            <p>Details about your junior high school experience.</p>
-        </div>
-        <div class="experience-item">
-            <h3>High School</h3>
-            <p>Details about your high school experience.</p>
-        </div>
-        <div class="experience-item">
-            <h3>University</h3>
-            <p>Details about your university experience.</p>
-        </div>
-    </section>
 
-    <section id="education" class="section">
-        <h2>Education</h2>
-        <p>Your education details.</p>
-    </section>
-
-    <section id="about" class="section">
-        <h2>About</h2>
-        <p>Short profile about yourself.</p>
-        <div class="social-links">
-            <a href="#" target="_blank">Instagram</a>
-            <a href="#" target="_blank">Facebook</a>
-            <a href="#" target="_blank">GitHub</a>
-            <a href="#" target="_blank">LinkedIn</a>
+        <div class="card" style="padding: 0;">
+            <div style="padding: 12px 16px; border-bottom: 1px solid #222; display:flex; justify-content:space-between; align-items: center;">
+                <span style="font-size:13px; font-weight:600; color:#fff;">Chart (Binance)</span>
+                <span style="font-size:10px; color:#666;">30 Menit</span>
+            </div>
+            <div id="chart-wrap"></div>
         </div>
-    </section>
 
-    <script src="script.js"></script>
+        <div class="card">
+            <div class="card-head"><span>Portofolio Saya</span></div>
+            <div class="row">
+                <span class="lbl">Holdings</span>
+                <span class="val" id="holdings-display">0</span>
+            </div>
+            <div class="row">
+                <span class="lbl">Avg. Buy</span>
+                <span class="val" id="buy-display">Rp 0</span>
+            </div>
+            
+            <div class="row">
+                <div class="lbl">
+                    Modal Awal
+                    <button class="eye-btn" id="toggle-modal">
+                        <svg class="icon-hide" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
+                        <svg class="icon-show" style="display:none;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                    </button>
+                </div>
+                <span class="val value-hidden" id="initial-display">Rp 0</span>
+            </div>
+
+            <div class="row">
+                <div class="lbl">
+                    Aset Sekarang
+                    <button class="eye-btn" id="toggle-value">
+                        <svg class="icon-hide" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
+                        <svg class="icon-show" style="display:none;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                    </button>
+                </div>
+                <span class="val value-hidden" id="value-display">Rp 0</span>
+            </div>
+        </div>
+
+        <div class="card" id="target-card">
+            <div class="card-head">
+                <span>Target Profit</span>
+                <span class="badge" id="target-status" style="background:#222; color:#777;">Off</span>
+            </div>
+            <div class="row">
+                <span class="lbl">Target Jual</span>
+                <span class="val" style="color:var(--accent-green);" id="target-price-display">-</span>
+            </div>
+            <div class="row">
+                <span class="lbl">Net Profit</span>
+                <span class="val" id="net-profit-display">-</span>
+            </div>
+        </div>
+    </div>
+
+    <div id="toast-container"><div class="toast" id="toast-msg"></div></div>
+
+    <div class="modal" id="modal">
+        <div class="modal-box">
+            <h3 style="color:#fff; margin-bottom:15px;">Edit Aset</h3>
+            <div class="inp-group">
+                <label>Harga Beli (IDR)</label>
+                <input type="number" id="inp-buy">
+            </div>
+            <div class="inp-group">
+                <label>Jumlah Koin</label>
+                <input type="number" id="inp-amount">
+            </div>
+            <div class="inp-group">
+                <label>Target Jual (IDR)</label>
+                <input type="number" id="inp-target">
+            </div>
+            <div class="modal-btns">
+                <button class="btn btn-cancel" onclick="closeModal()">Batal</button>
+                <button class="btn btn-save" onclick="saveData()">Simpan</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ==========================================
+        //  PENGATURAN USER (HARDCODE)
+        // ==========================================
+        const PORTFOLIO_DATA = {
+            XRP: { 
+                buy: 31055,      
+                amount: 22.6,      
+                target: 40000,   
+                fee: 0.1         
+            },
+            BTC: { 
+                buy: 0,      
+                amount: 0,      
+                target: 0,   
+                fee: 0.1         
+            },
+            ETH: { 
+                buy: 0,      
+                amount: 0,      
+                target: 0,   
+                fee: 0.1         
+            }
+        };
+        // ==========================================
+
+        const CONFIG = {
+            BTC: { symbol: 'BTC', tvSymbol: 'BINANCE:BTCIDR' },
+            XRP: { symbol: 'XRP', tvSymbol: 'BINANCE:XRPIDR' },
+            ETH: { symbol: 'ETH', tvSymbol: 'BINANCE:ETHIDR' }
+        };
+
+        let currentCoin = 'XRP';
+        let updateInterval;
+        let userData = {};
+
+        const el = (id) => document.getElementById(id);
+        const fmtMoney = (n) => new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0, maximumFractionDigits: 0 }).format(n);
+        
+        function loadStorage() {
+            const saved = localStorage.getItem('crypto_portfolio_final');
+            if (saved) {
+                userData = JSON.parse(saved);
+                for(let key in PORTFOLIO_DATA) {
+                    if(PORTFOLIO_DATA[key].buy > 0 && userData[key].buy === 0) {
+                        userData[key] = PORTFOLIO_DATA[key];
+                    }
+                }
+            } else {
+                userData = JSON.parse(JSON.stringify(PORTFOLIO_DATA));
+                localStorage.setItem('crypto_portfolio_final', JSON.stringify(userData));
+            }
+        }
+        loadStorage();
+
+        function showToast(msg) {
+            const t = el('toast-msg');
+            t.textContent = msg;
+            t.classList.add('show');
+            setTimeout(() => t.classList.remove('show'), 3000);
+        }
+
+        // TRADINGVIEW WIDGET
+        function loadTvWidget() {
+            el('chart-wrap').innerHTML = ''; 
+            new TradingView.widget({
+                "autosize": true,
+                "symbol": CONFIG[currentCoin].tvSymbol,
+                "interval": "30", 
+                "timezone": "Asia/Jakarta",
+                "theme": "dark",
+                "style": "1",
+                "locale": "id",
+                "toolbar_bg": "#121212",
+                "enable_publishing": false,
+                "hide_top_toolbar": true,
+                "save_image": false,
+                "container_id": "chart-wrap",
+                "backgroundColor": "rgba(18, 18, 18, 1)",
+                "gridLineColor": "rgba(42, 42, 42, 0.3)"
+            });
+        }
+
+        // DATA POLLING
+        async function fetchMarketData() {
+            const url = `https://min-api.cryptocompare.com/data/pricemultifull?fsyms=${currentCoin}&tsyms=IDR`;
+            try {
+                const res = await fetch(url);
+                const json = await res.json();
+                
+                const badge = el('live-indicator');
+                badge.classList.add('pulse');
+                setTimeout(() => badge.classList.remove('pulse'), 500);
+
+                const raw = json.RAW[currentCoin].IDR;
+                updateUI(raw.PRICE, raw.CHANGEPCT24HOUR);
+            } catch (e) { console.log("Fetch error"); }
+        }
+
+        function updateUI(price, change24h) {
+            el('price-display').textContent = fmtMoney(price);
+            
+            const changeEl = el('change-display');
+            if (change24h !== undefined) {
+                const sign = change24h >= 0 ? '+' : '';
+                const color = change24h >= 0 ? 'text-green' : 'text-red';
+                changeEl.innerHTML = `<span class="${color}">${sign}${change24h.toFixed(2)}% (24h)</span>`;
+            }
+
+            const data = userData[currentCoin];
+            el('holdings-display').textContent = data.amount;
+            el('buy-display').textContent = fmtMoney(data.buy);
+            
+            // Modal Awal
+            const initial = data.buy * data.amount;
+            el('initial-display').textContent = fmtMoney(initial);
+
+            // Aset Sekarang
+            const currentVal = price * data.amount;
+            el('value-display').textContent = fmtMoney(currentVal);
+
+            // PnL Logic
+            if(data.amount > 0 && data.buy > 0) {
+                const diff = price - data.buy;
+                const pnl = diff * data.amount;
+                const percent = (diff / data.buy) * 100;
+                
+                const sign = pnl >= 0 ? '+' : '';
+                const color = pnl >= 0 ? 'text-green' : 'text-red';
+                
+                el('pnl-display').innerHTML = `<span class="${color}">${sign}${fmtMoney(pnl)} (${percent.toFixed(2)}%)</span>`;
+            } else {
+                el('pnl-display').textContent = "Rp 0";
+            }
+
+            // Target Logic
+            const targetEl = el('target-card');
+            if (data.target && data.target > 0) {
+                targetEl.style.display = 'block';
+                el('target-status').textContent = 'Active';
+                el('target-status').style.color = '#0ecb81';
+                
+                const targetVal = data.target * data.amount;
+                const buyVal = data.buy * data.amount;
+                const fee = (targetVal + buyVal) * (data.fee / 100);
+                const net = (targetVal - buyVal) - fee;
+                
+                el('target-price-display').textContent = fmtMoney(data.target);
+                el('net-profit-display').textContent = fmtMoney(net);
+                el('net-profit-display').style.color = net >= 0 ? '#0ecb81' : '#f6465d';
+            } else {
+                targetEl.style.display = 'none';
+            }
+        }
+
+        function switchCoin(coin) {
+            currentCoin = coin;
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            el('price-display').innerHTML = '<span class="loading-dot"></span><span class="loading-dot"></span>';
+            el('pnl-display').textContent = 'Rp 0';
+            
+            if(updateInterval) clearInterval(updateInterval);
+            loadTvWidget();
+            fetchMarketData();
+            updateInterval = setInterval(fetchMarketData, 1000); // 1 DETIK
+            updateUI(0); 
+        }
+
+        // MODAL
+        const modal = el('modal');
+        el('btn-settings').onclick = () => {
+            const d = userData[currentCoin];
+            el('inp-buy').value = d.buy;
+            el('inp-amount').value = d.amount;
+            el('inp-target').value = d.target || 0;
+            modal.classList.add('active');
+        };
+        
+        function closeModal() { modal.classList.remove('active'); }
+        
+        function saveData() {
+            const buy = parseFloat(el('inp-buy').value) || 0;
+            const amt = parseFloat(el('inp-amount').value) || 0;
+            const trg = parseFloat(el('inp-target').value) || 0;
+            
+            userData[currentCoin] = { buy: buy, amount: amt, target: trg, fee: 0.1 };
+            localStorage.setItem('crypto_portfolio_final', JSON.stringify(userData));
+            
+            closeModal();
+            showToast("Tersimpan");
+            fetchMarketData(); 
+        }
+
+        // --- EYE TOGGLE LOGIC (FIXED) ---
+        function toggleVisibility(btnId, valueId) {
+            const btn = el(btnId);
+            const val = el(valueId);
+            const showIcon = btn.querySelector('.icon-show');
+            const hideIcon = btn.querySelector('.icon-hide');
+            
+            // Logic:
+            // 1. Toggle class 'value-hidden'
+            // 2. Jika hidden (titik2) -> Tampilkan Slashed Eye (icon-hide)
+            // 3. Jika visible (angka) -> Tampilkan Open Eye (icon-show)
+            
+            const isHidden = val.classList.toggle('value-hidden');
+            
+            if(isHidden) {
+                hideIcon.style.display = 'block'; // Tampilkan mata coret
+                showIcon.style.display = 'none';
+            } else {
+                hideIcon.style.display = 'none';
+                showIcon.style.display = 'block'; // Tampilkan mata terbuka
+            }
+        }
+
+        el('toggle-modal').onclick = () => toggleVisibility('toggle-modal', 'initial-display');
+        el('toggle-value').onclick = () => toggleVisibility('toggle-value', 'value-display');
+
+        window.onload = () => {
+            loadTvWidget();
+            fetchMarketData();
+            updateInterval = setInterval(fetchMarketData, 1000); // 1 DETIK
+        };
+    </script>
 </body>
 </html>

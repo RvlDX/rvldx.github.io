@@ -126,7 +126,7 @@
         <div class="tabs">
             <div class="tab active" onclick="switchCoin('XRP')">XRP</div>
             <div class="tab" onclick="switchCoin('BTC')">BTC</div>
-            <div class="tab" onclick="switchCoin('ETH')">ETH</div>
+            <div class="tab" onclick="switchCoin('XAU')">XAU</div>
         </div>
 
         <div class="card">
@@ -246,7 +246,7 @@
                 target: 0,   
                 fee: 0.1         
             },
-            ETH: { 
+            XAU: { 
                 buy: 0,      
                 amount: 0,      
                 target: 0,   
@@ -258,7 +258,7 @@
         const CONFIG = {
             BTC: { symbol: 'BTC', tvSymbol: 'BINANCE:BTCIDR' },
             XRP: { symbol: 'XRP', tvSymbol: 'BINANCE:XRPIDR' },
-            ETH: { symbol: 'ETH', tvSymbol: 'BINANCE:ETHIDR' }
+            ETH: { symbol: 'XAU', tvSymbol: 'FOREXCOM:XAUUSD' }
         };
 
         let currentCoin = 'XRP';

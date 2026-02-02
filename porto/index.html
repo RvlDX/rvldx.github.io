@@ -108,58 +108,85 @@
         .value-hidden { font-size: 0 !important; }
         .value-hidden::after { content: '••••••'; font-size: 14px; color: var(--text-tertiary); letter-spacing: 2px; }
     
-        /* --- RESPONSIVE DESKTOP & TABLET (Min-width: 768px) --- */
-        @media (min-width: 768px) {
-            /* 1. Lebarkan Container & Ubah jadi Grid */
+        /* --- DESKTOP PRO DASHBOARD (Min-width: 1024px) --- */
+        @media (min-width: 1024px) {
+            body {
+                align-items: center;
+                background: #050505; /* Background sedikit lebih gelap biar kontras */
+            }
+        
             .container {
-                max-width: 1000px; /* Lebar nyaman untuk monitor */
+                max-width: 1200px;
+                padding-bottom: 0;
+                
+                /* MAGIC GRID LAYOUT */
                 display: grid;
-                grid-template-columns: 1fr 1fr 1fr; /* 3 Kolom */
+                grid-template-columns: 320px 1fr; /* Kiri 320px, Kanan sisa layar */
+                grid-template-rows: auto auto 1fr; /* Header, Tabs, Konten */
+                grid-template-areas: 
+                    "head head"
+                    "tabs tabs"
+                    "side main";
                 gap: 20px;
-                align-items: start;
-                padding-bottom: 50px;
+                height: 90vh; /* Agar pas satu layar monitor */
             }
         
-            /* 2. Header & Tabs: Full Width di Atas */
-            .header, .tabs {
-                grid-column: 1 / -1; /* Mementang dari kolom 1 sampai akhir */
+            /* 1. Header & Tabs */
+            .header { grid-area: head; border-bottom: 1px solid #222; padding-bottom: 15px; margin-bottom: 0;}
+            .app-title { font-size: 24px; }
+            
+            .tabs { 
+                grid-area: tabs; 
+                justify-content: flex-start; 
+                border-bottom: 1px solid #222;
+                padding-bottom: 15px;
+                margin: 0;
+            }
+            .tab { 
+                flex: none; 
+                width: 100px; /* Ukuran tab fix biar rapi */
             }
         
-            /* 3. Kartu Harga (Kiri Atas) */
-            .card:nth-of-type(1) { 
-                grid-column: span 1; 
-                height: 100%; /* Agar tinggi sama */
+            /* 2. SIDEBAR KIRI (Data Angka) */
+            /* Kita bungkus elemen-elemen ini seolah-olah dalam satu container virtual */
+            
+            /* Kartu Harga (Price) */
+            .card:nth-of-type(1) {
+                grid-area: side;
+                align-self: start; /* Nempel ke atas */
+                margin-bottom: 0;
             }
         
-            /* 4. Kartu Chart: Paling Besar & Tinggi */
+            /* Kartu Portfolio & Target (Kita pakai trick absolute/margin utk menata di sidebar) */
+            /* Karena struktur HTML-nya flat, kita akali dengan Grid Area placement */
+            
+            /* Price Card (Urutan 1 di HTML) -> Masuk Grid 'side' baris 1 */
+            .card:nth-of-type(1) { grid-row: 1; grid-column: 1; margin-bottom: 15px; }
+        
+            /* Portfolio Card (Urutan 3 di HTML) -> Masuk Grid 'side' baris 2 */
+            .card:nth-of-type(3) { grid-row: 2; grid-column: 1; margin-bottom: 15px; }
+        
+            /* Target Card (Urutan 4 di HTML) -> Masuk Grid 'side' baris 3 */
+            #target-card { grid-row: 3; grid-column: 1; }
+        
+        
+            /* 3. MAIN AREA KANAN (Chart) */
             .card:nth-of-type(2) {
-                grid-column: 2 / -1; /* Mengambil sisa 2 kolom di kanan */
-                grid-row: span 2; /* Memanjang ke bawah 2 baris */
-                height: 500px; /* Chart lebih tinggi di desktop */
+                grid-area: main;
+                grid-column: 2;
+                grid-row: 1 / span 4; /* Chart memanjang ke bawah menutupi tinggi sidebar */
+                height: 100%;
                 display: flex;
                 flex-direction: column;
+                border: 1px solid #2a2a2a;
             }
+        
             #chart-wrap {
-                flex: 1; /* Chart mengisi sisa ruang kartu */
-                height: auto !important; /* Override height inline */
+                flex: 1; /* Chart ngisi penuh sisa ruang */
+                height: auto !important;
+                min-height: 500px; /* Tinggi minimal chart */
+                border-radius: 0 0 16px 16px;
             }
-        
-            /* 5. Kartu Portofolio & Target: Di kolom kiri, bawah kartu harga */
-            .card:nth-of-type(3), /* Portofolio Saya */
-            #target-card {        /* Target Profit */
-                grid-column: 1 / 2;
-            }
-        
-            /* 6. Tombol Settings di Header lebih terlihat */
-            .settings-btn {
-                background: #333;
-                border-radius: 50%;
-                transition: 0.2s;
-            }
-            .settings-btn:hover { background: #444; }
-        
-            /* 7. Modal diperbesar sedikit */
-            .modal-box { max-width: 400px; padding: 30px; }
         }
     </style>
 </head>

@@ -136,6 +136,59 @@
 
         /* BUTTON */
         .btn-action { width: 100%; padding: 12px; background: #fff; color: #000; font-weight: 700; border-radius: 12px; border: none; cursor: pointer; margin-top: 5px; display: flex; justify-content: center; gap: 8px;}
+        /* --- RESPONSIVE DESKTOP (Min-width 768px) --- */
+        @media (min-width: 768px) {
+            /* 1. Lebarkan Container Utama */
+            .container {
+                max-width: 900px; /* Lebih lebar, tidak sempit seperti HP */
+                padding-bottom: 60px;
+            }
+        
+            /* 2. Ubah Header agar lebih proporsional */
+            .header {
+                margin-bottom: 20px;
+                padding: 10px;
+            }
+            .app-title { font-size: 24px; }
+            
+            /* 3. Tampilan Tab lebih besar */
+            .tabs {
+                justify-content: flex-start; /* Rata kiri, bukan stretch */
+                margin-bottom: 20px;
+            }
+            .tab {
+                flex: 0 0 auto; /* Ukuran sesuai konten teks */
+                padding: 12px 24px;
+                font-size: 14px;
+            }
+        
+            /* 4. Grid System untuk Kartu (Bento Grid Style) */
+            /* Kita ubah isi tab content menjadi grid 2 kolom */
+            .content-section.active {
+                display: grid;
+                grid-template-columns: 1fr 1fr; /* Membagi layar jadi 2 kolom */
+                gap: 15px;
+                align-items: start;
+            }
+        
+            /* Pengecualian: Biarkan kartu profil (Identity Card) memenuhi lebar kolom pertama */
+            #overview .card:first-child {
+                grid-row: span 2; /* Biarkan profil memanjang ke bawah */
+            }
+        
+            /* 5. Stats Grid menjadi 4 kolom sejajar */
+            .stats-grid {
+                grid-template-columns: repeat(4, 1fr);
+            }
+            
+            /* 6. Tombol Action lebih kecil di desktop */
+            .btn-action {
+                width: auto;
+                padding: 12px 40px;
+                margin-left: auto; /* Posisi ke kanan */
+                margin-right: 0;
+            }
+        }
     </style>
 </head>
 

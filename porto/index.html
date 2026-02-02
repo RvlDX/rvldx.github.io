@@ -108,93 +108,78 @@
         .value-hidden { font-size: 0 !important; }
         .value-hidden::after { content: '••••••'; font-size: 14px; color: var(--text-tertiary); letter-spacing: 2px; }
     
-        /* --- FIXED PRO DASHBOARD LAYOUT (Min-width: 1024px) --- */
+        /* --- FIXED PRO DASHBOARD (Desktop: Grid ID-based) --- */
         @media (min-width: 1024px) {
             body {
-                background: #0b0e11; /* Hitam elegan, tidak terlalu pekat */
                 align-items: flex-start;
                 padding-top: 20px;
-                /* Tambahkan scroll karena chart sekarang tinggi */
-                overflow-y: auto; 
+                overflow-y: auto;
             }
 
             .container {
-                max-width: 1280px; /* Lebar standar laptop */
+                max-width: 1350px; /* Lebar monitor */
                 
-                /* Layout Grid: 2 Kolom (Main Kiri, Sidebar Kanan) */
+                /* Layout 2 Kolom: Kiri (Chart) - Kanan (Sidebar 340px) */
                 display: grid;
-                grid-template-columns: 1fr 340px; /* Kiri flexible, Kanan fix 340px */
-                /* Baris: Header -> Tabs -> (Harga | Portofolio) -> (Chart | Target) */
-                grid-template-rows: auto auto auto 1fr;
+                grid-template-columns: 1fr 340px; 
+                
+                /* Baris: Header -> Tabs -> (Chart | Harga) -> (Chart | Target) -> (Chart | Porto) */
+                grid-template-rows: auto auto min-content min-content 1fr;
                 gap: 20px;
                 padding-bottom: 50px;
             }
 
-            /* 1. HEADER (Full Width) */
-            .header { 
-                grid-column: 1 / -1; 
-                border-bottom: 1px solid #2a2a2a;
-                padding-bottom: 15px;
-            }
-            .app-title { font-size: 24px; }
+            /* 1. Header & Tabs */
+            .header { grid-column: 1 / -1; border-bottom: 1px solid #2a2a2a; }
+            .tabs { grid-column: 1 / -1; justify-content: flex-start; margin-bottom: 0; }
+            .tab { flex: none; width: auto; padding: 10px 30px; }
 
-            /* 2. TABS (Full Width) */
-            .tabs { 
-                grid-column: 1 / -1;
-                justify-content: flex-start; 
-                margin-bottom: 0;
-            }
-            .tab { flex: none; width: auto; padding: 10px 30px; font-size: 14px; }
-
-            /* 3. KARTU HARGA (Posisi: Kiri Atas) */
-            .card:nth-of-type(1) {
-                grid-column: 1; /* Kolom Kiri */
-                grid-row: 3;    /* Baris ke-3 */
-                
-                /* Tampilan Horizontal ala Ticker Bar */
-                display: flex;
-                flex-direction: row;
-                align-items: center;
-                justify-content: space-between;
-                padding: 20px 30px;
-            }
-            /* Penyesuaian isi kartu harga biar rapi mendatar */
-            .card:nth-of-type(1) .card-head { margin-bottom: 0; margin-right: 20px; order: 1; }
-            .card:nth-of-type(1) .price-big { font-size: 28px; margin: 0 20px; order: 2; }
-            .card:nth-of-type(1) .price-change { order: 3; margin-top: 0; margin-right: auto; }
-            /* Memindahkan Estimasi PnL ke paling kanan */
-            .card:nth-of-type(1) > div:last-child { 
-                order: 4;
-                border-top: none !important; margin-top: 0 !important; padding-top: 0 !important; 
-                border-left: 1px solid #333; padding-left: 20px; 
-            }
-
-            /* 4. KARTU CHART (Posisi: Kiri Bawah - GEDEEE) */
-            .card:nth-of-type(2) {
-                grid-column: 1; /* Kolom Kiri */
-                grid-row: 4;    /* Baris ke-4 */
-                
-                /* --- BAGIAN YANG DIUBAH MENJADI 800px --- */
-                height: 800px !important;
-                
+            /* 2. CHART (KIRI - MEMANJANG KE BAWAH) */
+            /* Menggunakan ID #card-chart agar presisi */
+            #card-chart {
+                grid-column: 1;
+                grid-row: 3 / span 3; /* Nutupin 3 baris di sebelah kanannya */
+                height: 585px !important; /* Tinggi Chart Besar */
                 display: flex; flex-direction: column;
                 border: 1px solid #2a2a2a;
             }
-            #chart-wrap { flex: 1; height: 400px !important; }
+            #chart-wrap { flex: 1; height: auto !important; }
 
-            /* 5. SIDEBAR: PORTOFOLIO (Posisi: Kanan Atas - Sejajar Harga) */
-            .card:nth-of-type(3) {
-                grid-column: 2; /* Kolom Kanan */
-                grid-row: 3;    /* Baris ke-3 */
+            /* --- SIDEBAR KANAN (Urutan: Harga > Target > Porto) --- */
+            
+            /* 3. HARGA PASAR (Kanan Atas) */
+            #card-price {
+                grid-column: 2;
+                grid-row: 3;
                 height: fit-content;
+                /* Kembalikan ke layout vertikal agar muat di sidebar */
+                display: block !important; 
+                padding: 16px;
             }
+            /* Reset CSS horizontal jika ada sisa */
+            #card-price .card-head { margin: 0 0 12px 0; border: none; }
+            #card-price .price-big { margin: 0; }
+            #card-price .price-change { margin-top: 4px; }
+            #card-price > div:last-child { border-top: 1px solid #222 !important; border-left: none !important; margin-top: 15px !important; padding-top: 10px !important; padding-left: 0 !important; }
 
-            /* 6. SIDEBAR: TARGET PROFIT (Posisi: Kanan Bawah - Di bawah Portofolio) */
+            /* 4. TARGET PROFIT (Kanan Tengah - Langsung dibawah Harga) */
             #target-card {
-                grid-column: 2; /* Kolom Kanan */
-                grid-row: 4;    /* Baris ke-4 */
-                align-self: start; /* Nempel ke atas, jangan melar ke bawah */
-                display: block !important; /* Paksa tampil untuk layouting */
+                grid-column: 2;
+                grid-row: 4;
+                display: block !important;
+                height: fit-content;
+                margin-top: 0;
+            }
+            #target-card .row { padding: 12px 0; gap: 0; justify-content: space-between; }
+            #target-card .card-head { border: none; padding-right: 0; margin-bottom: 12px; }
+            #target-card .lbl { display: inline-block; margin: 0; }
+
+            /* 5. PORTOFOLIO (Kanan Bawah - Dibawah Target) */
+            #card-porto {
+                grid-column: 2;
+                grid-row: 5;
+                height: fit-content;
+                align-self: start; /* Nempel ke atas (ke arah Target) */
             }
         }
     </style>
@@ -216,7 +201,7 @@
             <div class="tab" onclick="switchCoin('XAU')">XAU</div>
         </div>
 
-        <div class="card">
+        <div class="card" id="card-price">
             <div class="card-head">
                 <span>Harga Pasar (<span class="currency-label">IDR</span>)</span>
                 <span class="badge" id="live-indicator">● Live</span>
@@ -234,7 +219,7 @@
             </div>
         </div>
 
-        <div class="card" style="padding: 0;">
+        <div class="card" id="card-chart" style="padding: 0;">
             <div style="padding: 12px 16px; border-bottom: 1px solid #222; display:flex; justify-content:space-between; align-items: center;">
                 <span style="font-size:13px; font-weight:600; color:#fff;">Chart</span>
                 <span style="font-size:10px; color:#666;">30 Menit</span>
@@ -242,7 +227,7 @@
             <div id="chart-wrap"></div>
         </div>
 
-        <div class="card">
+        <div class="card" id="card-porto">
             <div class="card-head"><span>Portofolio Saya</span></div>
             <div class="row">
                 <span class="lbl">Holdings</span>
@@ -317,15 +302,11 @@
     </div>
 
     <script>
-        // ==========================================
-        //  PENGATURAN USER
-        // ==========================================
         const PORTFOLIO_DATA = {
             XRP: { buy: 31055, amount: 22.6, target: 40000, fee: 0.1 },
             BTC: { buy: 0, amount: 0, target: 0, fee: 0.1 },
             XAU: { buy: 0, amount: 0, target: 0, fee: 0.1 } 
         };
-        // ==========================================
 
         const CONFIG = {
             BTC: { symbol: 'BTC', apiSymbol: 'BTC', tvSymbol: 'BINANCE:BTCIDR', currency: 'IDR' },
@@ -398,17 +379,13 @@
             const conf = CONFIG[currentCoin];
             const sym = conf.apiSymbol; 
             const targetCur = conf.currency;
-            
             const url = `https://min-api.cryptocompare.com/data/pricemultifull?fsyms=${sym}&tsyms=${targetCur}`;
-            
             try {
                 const res = await fetch(url);
                 const json = await res.json();
-
                 const badge = el('live-indicator');
                 badge.classList.add('pulse');
                 setTimeout(() => badge.classList.remove('pulse'), 500);
-
                 if (json.RAW && json.RAW[sym] && json.RAW[sym][targetCur]) {
                     const raw = json.RAW[sym][targetCur];
                     updateUI(raw.PRICE, raw.CHANGEPCT24HOUR);
@@ -419,50 +396,39 @@
         function updateUI(price, change24h) {
             const curCode = CONFIG[currentCoin].currency;
             document.querySelectorAll('.currency-label').forEach(span => span.textContent = curCode);
-
             el('price-display').textContent = fmtMoney(price);
-
             const changeEl = el('change-display');
             if (change24h !== undefined) {
                 const sign = change24h >= 0 ? '+' : '';
                 const color = change24h >= 0 ? 'text-green' : 'text-red';
                 changeEl.innerHTML = `<span class="${color}">${sign}${change24h.toFixed(2)}% (24h)</span>`;
             }
-
             const data = userData[currentCoin];
             el('holdings-display').textContent = data.amount;
             el('buy-display').textContent = fmtMoney(data.buy);
-
             const initial = data.buy * data.amount;
             el('initial-display').textContent = fmtMoney(initial);
-
             const currentVal = price * data.amount;
             el('value-display').textContent = fmtMoney(currentVal);
-
             if(data.amount > 0 && data.buy > 0) {
                 const diff = price - data.buy;
                 const pnl = diff * data.amount;
                 const percent = (diff / data.buy) * 100;
-
                 const sign = pnl >= 0 ? '+' : '';
                 const color = pnl >= 0 ? 'text-green' : 'text-red';
-
                 el('pnl-display').innerHTML = `<span class="${color}">${sign}${fmtMoney(pnl)} (${percent.toFixed(2)}%)</span>`;
             } else {
                 el('pnl-display').textContent = fmtMoney(0);
             }
-
             const targetEl = el('target-card');
             if (data.target && data.target > 0) {
                 targetEl.style.display = 'block';
                 el('target-status').textContent = 'Active';
                 el('target-status').style.color = '#0ecb81';
-
                 const targetVal = data.target * data.amount;
                 const buyVal = data.buy * data.amount;
                 const fee = (targetVal + buyVal) * (data.fee / 100);
                 const net = (targetVal - buyVal) - fee;
-
                 el('target-price-display').textContent = fmtMoney(data.target);
                 el('net-profit-display').textContent = fmtMoney(net);
                 el('net-profit-display').style.color = net >= 0 ? '#0ecb81' : '#f6465d';
@@ -475,10 +441,8 @@
             currentCoin = coin;
             document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
             event.target.classList.add('active');
-
             el('price-display').innerHTML = '<span class="loading-dot"></span><span class="loading-dot"></span>';
             el('pnl-display').textContent = fmtMoney(0);
-
             if(updateInterval) clearInterval(updateInterval);
             loadTvWidget();
             fetchMarketData();
@@ -501,10 +465,8 @@
             const buy = parseFloat(el('inp-buy').value) || 0;
             const amt = parseFloat(el('inp-amount').value) || 0;
             const trg = parseFloat(el('inp-target').value) || 0;
-
             userData[currentCoin] = { buy: buy, amount: amt, target: trg, fee: 0.1 };
             localStorage.setItem('crypto_portfolio_final', JSON.stringify(userData));
-
             closeModal();
             showToast("Tersimpan");
             fetchMarketData(); 
@@ -515,9 +477,7 @@
             const val = el(valueId);
             const showIcon = btn.querySelector('.icon-show');
             const hideIcon = btn.querySelector('.icon-hide');
-
             const isHidden = val.classList.toggle('value-hidden');
-
             if(isHidden) {
                 hideIcon.style.display = 'block'; 
                 showIcon.style.display = 'none';

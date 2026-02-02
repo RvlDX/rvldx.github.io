@@ -107,6 +107,60 @@
         .eye-btn svg { width: 14px; height: 14px; }
         .value-hidden { font-size: 0 !important; }
         .value-hidden::after { content: '••••••'; font-size: 14px; color: var(--text-tertiary); letter-spacing: 2px; }
+    
+        /* --- RESPONSIVE DESKTOP & TABLET (Min-width: 768px) --- */
+        @media (min-width: 768px) {
+            /* 1. Lebarkan Container & Ubah jadi Grid */
+            .container {
+                max-width: 1000px; /* Lebar nyaman untuk monitor */
+                display: grid;
+                grid-template-columns: 1fr 1fr 1fr; /* 3 Kolom */
+                gap: 20px;
+                align-items: start;
+                padding-bottom: 50px;
+            }
+        
+            /* 2. Header & Tabs: Full Width di Atas */
+            .header, .tabs {
+                grid-column: 1 / -1; /* Mementang dari kolom 1 sampai akhir */
+            }
+        
+            /* 3. Kartu Harga (Kiri Atas) */
+            .card:nth-of-type(1) { 
+                grid-column: span 1; 
+                height: 100%; /* Agar tinggi sama */
+            }
+        
+            /* 4. Kartu Chart: Paling Besar & Tinggi */
+            .card:nth-of-type(2) {
+                grid-column: 2 / -1; /* Mengambil sisa 2 kolom di kanan */
+                grid-row: span 2; /* Memanjang ke bawah 2 baris */
+                height: 500px; /* Chart lebih tinggi di desktop */
+                display: flex;
+                flex-direction: column;
+            }
+            #chart-wrap {
+                flex: 1; /* Chart mengisi sisa ruang kartu */
+                height: auto !important; /* Override height inline */
+            }
+        
+            /* 5. Kartu Portofolio & Target: Di kolom kiri, bawah kartu harga */
+            .card:nth-of-type(3), /* Portofolio Saya */
+            #target-card {        /* Target Profit */
+                grid-column: 1 / 2;
+            }
+        
+            /* 6. Tombol Settings di Header lebih terlihat */
+            .settings-btn {
+                background: #333;
+                border-radius: 50%;
+                transition: 0.2s;
+            }
+            .settings-btn:hover { background: #444; }
+        
+            /* 7. Modal diperbesar sedikit */
+            .modal-box { max-width: 400px; padding: 30px; }
+        }
     </style>
 </head>
 

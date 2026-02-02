@@ -8,6 +8,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/lightweight-charts@4.0.1/dist/lightweight-charts.standalone.production.js"></script>
     <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    
     <style>
         :root {
             --bg-body: #000000;
@@ -93,6 +95,12 @@
         .btn-cancel { background: transparent; color: #888; }
         .btn-save { background: var(--accent-green); color: #000; }
 
+        /* Custom Style untuk tambahan fitur Berita & DCA Calculator */
+        .news-item { display: block; text-decoration: none; padding: 8px 0; border-bottom: 1px solid #222; }
+        .news-title { font-size: 12px; color: #fff; line-height: 1.4; margin-bottom: 2px; }
+        .news-info { font-size: 10px; color: #555; }
+        .dca-res { font-size: 11px; margin-top: 8px; padding: 10px; background: #1f2b24; border-radius: 8px; border: 1px dashed var(--accent-green); display: none; }
+
         @keyframes fadeUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
         .loading-dot { display: inline-block; width: 6px; height: 6px; background: #fff; border-radius: 50%; animation: blink 1s infinite; }
         @keyframes blink { 0%, 100% { opacity: 0.2; } 50% { opacity: 1; } }
@@ -107,80 +115,29 @@
         .eye-btn svg { width: 14px; height: 14px; }
         .value-hidden { font-size: 0 !important; }
         .value-hidden::after { content: '••••••'; font-size: 14px; color: var(--text-tertiary); letter-spacing: 2px; }
-    
+
         /* --- FIXED PRO DASHBOARD (Desktop: Grid ID-based) --- */
         @media (min-width: 1024px) {
-            body {
-                align-items: flex-start;
-                padding-top: 20px;
-                overflow-y: auto;
-            }
-
+            body { align-items: flex-start; padding-top: 20px; overflow-y: auto; }
             .container {
-                max-width: 1350px; /* Lebar monitor */
-                
-                /* Layout 2 Kolom: Kiri (Chart) - Kanan (Sidebar 340px) */
+                max-width: 1350px; 
                 display: grid;
                 grid-template-columns: 1fr 340px; 
-                
-                /* Baris: Header -> Tabs -> (Chart | Harga) -> (Chart | Target) -> (Chart | Porto) */
                 grid-template-rows: auto auto min-content min-content 1fr;
                 gap: 20px;
                 padding-bottom: 50px;
             }
-
-            /* 1. Header & Tabs */
             .header { grid-column: 1 / -1; border-bottom: 1px solid #2a2a2a; }
             .tabs { grid-column: 1 / -1; justify-content: flex-start; margin-bottom: 0; }
             .tab { flex: none; width: auto; padding: 10px 30px; }
-
-            /* 2. CHART (KIRI - MEMANJANG KE BAWAH) */
-            /* Menggunakan ID #card-chart agar presisi */
-            #card-chart {
-                grid-column: 1;
-                grid-row: 3 / span 3; /* Nutupin 3 baris di sebelah kanannya */
-                height: 585px !important; /* Tinggi Chart Besar */
-                display: flex; flex-direction: column;
-                border: 1px solid #2a2a2a;
-            }
+            #card-chart { grid-column: 1; grid-row: 3 / span 3; height: 585px !important; display: flex; flex-direction: column; border: 1px solid #2a2a2a; }
             #chart-wrap { flex: 1; height: auto !important; }
-
-            /* --- SIDEBAR KANAN (Urutan: Harga > Target > Porto) --- */
+            #card-price { grid-column: 2; grid-row: 3; height: fit-content; display: block !important; padding: 16px; }
+            #target-card { grid-column: 2; grid-row: 4; display: block !important; height: fit-content; margin-top: 0; }
+            #card-porto { grid-column: 2; grid-row: 5; height: fit-content; align-self: start; }
             
-            /* 3. HARGA PASAR (Kanan Atas) */
-            #card-price {
-                grid-column: 2;
-                grid-row: 3;
-                height: fit-content;
-                /* Kembalikan ke layout vertikal agar muat di sidebar */
-                display: block !important; 
-                padding: 16px;
-            }
-            /* Reset CSS horizontal jika ada sisa */
-            #card-price .card-head { margin: 0 0 12px 0; border: none; }
-            #card-price .price-big { margin: 0; }
-            #card-price .price-change { margin-top: 4px; }
-            #card-price > div:last-child { border-top: 1px solid #222 !important; border-left: none !important; margin-top: 15px !important; padding-top: 10px !important; padding-left: 0 !important; }
-
-            /* 4. TARGET PROFIT (Kanan Tengah - Langsung dibawah Harga) */
-            #target-card {
-                grid-column: 2;
-                grid-row: 4;
-                display: block !important;
-                height: fit-content;
-                margin-top: 0;
-            }
-            #target-card .row { padding: 12px 0; gap: 0; justify-content: space-between; }
-            #target-card .card-head { border: none; padding-right: 0; margin-bottom: 12px; }
-            #target-card .lbl { display: inline-block; margin: 0; }
-
-            /* 5. PORTOFOLIO (Kanan Bawah - Dibawah Target) */
-            #card-porto {
-                grid-column: 2;
-                grid-row: 5;
-                height: fit-content;
-                align-self: start; /* Nempel ke atas (ke arah Target) */
-            }
+            /* Penempatan News Section agar tidak merusak grid desktop */
+            #card-news { grid-column: 1; grid-row: 6; }
         }
     </style>
 </head>
@@ -227,53 +184,29 @@
             <div id="chart-wrap"></div>
         </div>
 
+        <div class="card" id="card-news">
+            <div class="card-head">Berita Terkini</div>
+            <div id="news-container" style="font-size:12px; color:#888;">Memuat berita...</div>
+        </div>
+
         <div class="card" id="card-porto">
             <div class="card-head"><span>Portofolio Saya</span></div>
+            <div class="row"><span class="lbl">Holdings</span><span class="val" id="holdings-display">0</span></div>
+            <div class="row"><span class="lbl">Avg. Buy</span><span class="val" id="buy-display">0</span></div>
             <div class="row">
-                <span class="lbl">Holdings</span>
-                <span class="val" id="holdings-display">0</span>
-            </div>
-            <div class="row">
-                <span class="lbl">Avg. Buy</span>
-                <span class="val" id="buy-display">0</span>
-            </div>
-
-            <div class="row">
-                <div class="lbl">
-                    Modal Awal
-                    <button class="eye-btn" id="toggle-modal">
-                        <svg class="icon-hide" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
-                        <svg class="icon-show" style="display:none;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
-                    </button>
-                </div>
+                <div class="lbl">Modal Awal <button class="eye-btn" id="toggle-modal"><svg class="icon-hide" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg></button></div>
                 <span class="val value-hidden" id="initial-display">0</span>
             </div>
-
             <div class="row">
-                <div class="lbl">
-                    Aset Sekarang
-                    <button class="eye-btn" id="toggle-value">
-                        <svg class="icon-hide" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
-                        <svg class="icon-show" style="display:none;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
-                    </button>
-                </div>
+                <div class="lbl">Aset Sekarang <button class="eye-btn" id="toggle-value"><svg class="icon-hide" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button></div>
                 <span class="val value-hidden" id="value-display">0</span>
             </div>
         </div>
 
         <div class="card" id="target-card">
-            <div class="card-head">
-                <span>Target Profit</span>
-                <span class="badge" id="target-status" style="background:#222; color:#777;">Off</span>
-            </div>
-            <div class="row">
-                <span class="lbl">Target Jual</span>
-                <span class="val" style="color:var(--accent-green);" id="target-price-display">-</span>
-            </div>
-            <div class="row">
-                <span class="lbl">Net Profit</span>
-                <span class="val" id="net-profit-display">-</span>
-            </div>
+            <div class="card-head"><span>Target Profit</span><span class="badge" id="target-status" style="background:#222; color:#777;">Off</span></div>
+            <div class="row"><span class="lbl">Target Jual</span><span class="val" style="color:var(--accent-green);" id="target-price-display">-</span></div>
+            <div class="row"><span class="lbl">Net Profit</span><span class="val" id="net-profit-display">-</span></div>
         </div>
     </div>
 
@@ -294,6 +227,19 @@
                 <label>Target Jual (<span class="currency-label">IDR</span>)</label>
                 <input type="number" id="inp-target" step="any">
             </div>
+
+            <div style="border-top:1px solid #333; margin-top:15px; padding-top:15px;">
+                <p style="font-size:10px; font-weight:700; color:var(--accent-green); margin-bottom:8px;">KALKULATOR DCA</p>
+                <div class="inp-group">
+                    <label>Rencana Buy Baru (IDR)</label>
+                    <input type="number" id="inp-dca" placeholder="Masukkan jumlah Rp" oninput="calcDCA()">
+                </div>
+                <div id="dca-box" class="dca-res">
+                    <p style="color:#aaa; font-size:10px;">Est. Koin: <span id="res-dca-coins" style="color:#fff">0</span></p>
+                    <p style="color:#aaa; font-size:10px;">Avg. Buy Baru: <span id="res-dca-avg" style="color:#fff">0</span></p>
+                </div>
+            </div>
+
             <div class="modal-btns">
                 <button class="btn btn-cancel" onclick="closeModal()">Batal</button>
                 <button class="btn btn-save" onclick="saveData()">Simpan</button>
@@ -315,6 +261,7 @@
         };
 
         let currentCoin = 'XRP';
+        let currentLivePrice = 0;
         let updateInterval;
         let userData = {};
 
@@ -323,11 +270,9 @@
         const fmtMoney = (n) => {
             const cur = CONFIG[currentCoin].currency;
             if (cur === 'USD') {
-                const num = new Intl.NumberFormat('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(n);
-                return '$ ' + num; 
+                return '$ ' + new Intl.NumberFormat('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(n); 
             } else {
-                const num = new Intl.NumberFormat('id-ID', { minimumFractionDigits: 0, maximumFractionDigits: 0 }).format(n);
-                return 'Rp ' + num;
+                return 'Rp ' + new Intl.NumberFormat('id-ID', { minimumFractionDigits: 0, maximumFractionDigits: 0 }).format(n);
             }
         };
 
@@ -336,9 +281,6 @@
             if (saved) {
                 userData = JSON.parse(saved);
                 for(let key in PORTFOLIO_DATA) {
-                    if(PORTFOLIO_DATA[key].buy > 0 && (!userData[key] || userData[key].buy === 0)) {
-                        userData[key] = PORTFOLIO_DATA[key];
-                    }
                     if(!userData[key]) userData[key] = PORTFOLIO_DATA[key];
                 }
             } else {
@@ -348,151 +290,133 @@
         }
         loadStorage();
 
-        function showToast(msg) {
-            const t = el('toast-msg');
-            t.textContent = msg;
-            t.classList.add('show');
-            setTimeout(() => t.classList.remove('show'), 3000);
+        // Overwrite showToast dengan SweetAlert2 (sesuai permintaan perbaikan teknis)
+        function showToast(msg, type='success') {
+            Swal.fire({
+                icon: type, title: msg, toast: true, position: 'bottom',
+                showConfirmButton: false, timer: 2500, background: '#1a1a1a', color: '#fff'
+            });
+        }
+
+        async function fetchNews() {
+            const container = el('news-container');
+            container.innerHTML = '<span class="loading-dot"></span>';
+            try {
+                const res = await fetch(`https://min-api.cryptocompare.com/data/v2/news/?categories=${currentCoin}&lang=EN`);
+                const json = await res.json();
+                container.innerHTML = json.Data.slice(0, 3).map(n => `
+                    <a href="${n.url}" target="_blank" class="news-item">
+                        <p class="news-title">${n.title}</p>
+                        <p class="news-info">${n.source} • ${new Date(n.published_on * 1000).toLocaleDateString()}</p>
+                    </a>
+                `).join('');
+            } catch (e) { container.innerHTML = 'Gagal memuat berita.'; }
+        }
+
+        function calcDCA() {
+            const money = parseFloat(el('inp-dca').value) || 0;
+            const box = el('dca-box');
+            if (money > 0 && currentLivePrice > 0) {
+                box.style.display = 'block';
+                const newCoins = money / currentLivePrice;
+                const totalCoins = userData[currentCoin].amount + newCoins;
+                const totalCost = (userData[currentCoin].buy * userData[currentCoin].amount) + money;
+                el('res-dca-coins').textContent = newCoins.toFixed(4);
+                el('res-dca-avg').textContent = fmtMoney(totalCost / totalCoins);
+            } else { box.style.display = 'none'; }
         }
 
         function loadTvWidget() {
             el('chart-wrap').innerHTML = ''; 
             new TradingView.widget({
-                "autosize": true,
-                "symbol": CONFIG[currentCoin].tvSymbol,
-                "interval": "30", 
-                "timezone": "Asia/Jakarta",
-                "theme": "dark",
-                "style": "1",
-                "locale": "id",
-                "toolbar_bg": "#121212",
-                "enable_publishing": false,
-                "hide_top_toolbar": true,
-                "save_image": false,
-                "container_id": "chart-wrap",
-                "backgroundColor": "rgba(18, 18, 18, 1)",
+                "autosize": true, "symbol": CONFIG[currentCoin].tvSymbol, "interval": "30",
+                "timezone": "Asia/Jakarta", "theme": "dark", "style": "1", "locale": "id",
+                "container_id": "chart-wrap", "backgroundColor": "#121212",
                 "gridLineColor": "rgba(42, 42, 42, 0.3)"
             });
         }
 
         async function fetchMarketData() {
             const conf = CONFIG[currentCoin];
-            const sym = conf.apiSymbol; 
-            const targetCur = conf.currency;
-            const url = `https://min-api.cryptocompare.com/data/pricemultifull?fsyms=${sym}&tsyms=${targetCur}`;
+            const url = `https://min-api.cryptocompare.com/data/pricemultifull?fsyms=${conf.apiSymbol}&tsyms=${conf.currency}`;
             try {
                 const res = await fetch(url);
                 const json = await res.json();
-                const badge = el('live-indicator');
-                badge.classList.add('pulse');
-                setTimeout(() => badge.classList.remove('pulse'), 500);
-                if (json.RAW && json.RAW[sym] && json.RAW[sym][targetCur]) {
-                    const raw = json.RAW[sym][targetCur];
+                if (json.RAW && json.RAW[conf.apiSymbol]) {
+                    const raw = json.RAW[conf.apiSymbol][conf.currency];
+                    currentLivePrice = raw.PRICE;
                     updateUI(raw.PRICE, raw.CHANGEPCT24HOUR);
                 }
             } catch (e) { console.log("Fetch error", e); }
         }
 
         function updateUI(price, change24h) {
-            const curCode = CONFIG[currentCoin].currency;
-            document.querySelectorAll('.currency-label').forEach(span => span.textContent = curCode);
+            document.querySelectorAll('.currency-label').forEach(span => span.textContent = CONFIG[currentCoin].currency);
             el('price-display').textContent = fmtMoney(price);
-            const changeEl = el('change-display');
             if (change24h !== undefined) {
-                const sign = change24h >= 0 ? '+' : '';
                 const color = change24h >= 0 ? 'text-green' : 'text-red';
-                changeEl.innerHTML = `<span class="${color}">${sign}${change24h.toFixed(2)}% (24h)</span>`;
+                el('change-display').innerHTML = `<span class="${color}">${change24h >= 0 ? '+' : ''}${change24h.toFixed(2)}% (24h)</span>`;
             }
             const data = userData[currentCoin];
             el('holdings-display').textContent = data.amount;
             el('buy-display').textContent = fmtMoney(data.buy);
-            const initial = data.buy * data.amount;
-            el('initial-display').textContent = fmtMoney(initial);
-            const currentVal = price * data.amount;
-            el('value-display').textContent = fmtMoney(currentVal);
+            el('initial-display').textContent = fmtMoney(data.buy * data.amount);
+            el('value-display').textContent = fmtMoney(price * data.amount);
+            
             if(data.amount > 0 && data.buy > 0) {
-                const diff = price - data.buy;
-                const pnl = diff * data.amount;
-                const percent = (diff / data.buy) * 100;
-                const sign = pnl >= 0 ? '+' : '';
-                const color = pnl >= 0 ? 'text-green' : 'text-red';
-                el('pnl-display').innerHTML = `<span class="${color}">${sign}${fmtMoney(pnl)} (${percent.toFixed(2)}%)</span>`;
-            } else {
-                el('pnl-display').textContent = fmtMoney(0);
+                const pnl = (price - data.buy) * data.amount;
+                el('pnl-display').innerHTML = `<span class="${pnl >= 0 ? 'text-green' : 'text-red'}">${pnl >= 0 ? '+' : ''}${fmtMoney(pnl)} ( ${((pnl/(data.buy*data.amount))*100).toFixed(2)}% )</span>`;
             }
-            const targetEl = el('target-card');
-            if (data.target && data.target > 0) {
-                targetEl.style.display = 'block';
-                el('target-status').textContent = 'Active';
-                el('target-status').style.color = '#0ecb81';
-                const targetVal = data.target * data.amount;
-                const buyVal = data.buy * data.amount;
-                const fee = (targetVal + buyVal) * (data.fee / 100);
-                const net = (targetVal - buyVal) - fee;
+            
+            if (data.target > 0) {
+                el('target-card').style.display = 'block';
+                el('target-status').textContent = 'Active'; el('target-status').style.color = '#0ecb81';
                 el('target-price-display').textContent = fmtMoney(data.target);
-                el('net-profit-display').textContent = fmtMoney(net);
-                el('net-profit-display').style.color = net >= 0 ? '#0ecb81' : '#f6465d';
-            } else {
-                targetEl.style.display = 'none';
-            }
+                el('net-profit-display').textContent = fmtMoney((data.target - data.buy) * data.amount);
+            } else { el('target-card').style.display = 'none'; }
         }
 
         function switchCoin(coin) {
             currentCoin = coin;
             document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
             event.target.classList.add('active');
-            el('price-display').innerHTML = '<span class="loading-dot"></span><span class="loading-dot"></span>';
-            el('pnl-display').textContent = fmtMoney(0);
             if(updateInterval) clearInterval(updateInterval);
-            loadTvWidget();
-            fetchMarketData();
+            loadTvWidget(); fetchMarketData(); fetchNews();
             updateInterval = setInterval(fetchMarketData, 2000); 
-            updateUI(0); 
         }
 
-        const modal = el('modal');
         el('btn-settings').onclick = () => {
             const d = userData[currentCoin];
-            el('inp-buy').value = d.buy;
-            el('inp-amount').value = d.amount;
-            el('inp-target').value = d.target || 0;
-            modal.classList.add('active');
+            el('inp-buy').value = d.buy; el('inp-amount').value = d.amount; el('inp-target').value = d.target || 0;
+            el('inp-dca').value = ''; el('dca-box').style.display = 'none';
+            el('modal').classList.add('active');
         };
 
-        function closeModal() { modal.classList.remove('active'); }
+        function closeModal() { el('modal').classList.remove('active'); }
 
         function saveData() {
-            const buy = parseFloat(el('inp-buy').value) || 0;
-            const amt = parseFloat(el('inp-amount').value) || 0;
-            const trg = parseFloat(el('inp-target').value) || 0;
-            userData[currentCoin] = { buy: buy, amount: amt, target: trg, fee: 0.1 };
+            userData[currentCoin] = {
+                buy: parseFloat(el('inp-buy').value) || 0,
+                amount: parseFloat(el('inp-amount').value) || 0,
+                target: parseFloat(el('inp-target').value) || 0,
+                fee: 0.1
+            };
             localStorage.setItem('crypto_portfolio_final', JSON.stringify(userData));
             closeModal();
-            showToast("Tersimpan");
+            showToast("Data Tersimpan");
             fetchMarketData(); 
         }
 
         function toggleVisibility(btnId, valueId) {
-            const btn = el(btnId);
             const val = el(valueId);
-            const showIcon = btn.querySelector('.icon-show');
-            const hideIcon = btn.querySelector('.icon-hide');
-            const isHidden = val.classList.toggle('value-hidden');
-            if(isHidden) {
-                hideIcon.style.display = 'block'; 
-                showIcon.style.display = 'none';
-            } else {
-                hideIcon.style.display = 'none';
-                showIcon.style.display = 'block'; 
-            }
+            val.classList.toggle('value-hidden');
         }
 
         el('toggle-modal').onclick = () => toggleVisibility('toggle-modal', 'initial-display');
         el('toggle-value').onclick = () => toggleVisibility('toggle-value', 'value-display');
 
         window.onload = () => {
-            loadTvWidget();
-            fetchMarketData();
+            loadTvWidget(); fetchMarketData(); fetchNews();
             updateInterval = setInterval(fetchMarketData, 2000); 
         };
     </script>

@@ -108,93 +108,89 @@
         .value-hidden { font-size: 0 !important; }
         .value-hidden::after { content: '••••••'; font-size: 14px; color: var(--text-tertiary); letter-spacing: 2px; }
     
-        /* --- FIXED PRO DASHBOARD (Min-width: 1024px) --- */
+        /* --- FIXED PRO DASHBOARD LAYOUT (Min-width: 1024px) --- */
         @media (min-width: 1024px) {
             body {
-                /* Background sedikit lebih terang dari hitam pekat biar mata gak sakit */
-                background: #0b0e11; 
-                align-items: flex-start; /* Jangan center vertikal */
+                background: #0b0e11; /* Hitam elegan, tidak terlalu pekat */
+                align-items: flex-start;
                 padding-top: 20px;
             }
-        
+
             .container {
-                max-width: 1200px;
-                padding-bottom: 50px;
+                max-width: 1280px; /* Lebar standar laptop */
                 
-                /* GRID SYSTEM 2 KOLOM */
+                /* Layout Grid: 2 Kolom (Main Kiri, Sidebar Kanan) */
                 display: grid;
-                grid-template-columns: 340px 1fr; /* Kiri 340px, Kanan sisa layar */
-                /* Baris: Header, Tabs, Content 1, Content 2, Content 3 */
-                grid-template-rows: auto auto auto auto auto; 
+                grid-template-columns: 1fr 340px; /* Kiri flexible, Kanan fix 340px */
+                /* Baris: Header -> Tabs -> (Harga | Portofolio) -> (Chart | Target) */
+                grid-template-rows: auto auto auto 1fr;
                 gap: 20px;
-                align-items: start; /* PENTING: Biar elemen gak melar ke bawah */
+                padding-bottom: 50px;
             }
-        
-            /* 1. Header & Tabs (Full Width) */
+
+            /* 1. HEADER (Full Width) */
             .header { 
-                grid-column: 1 / -1; /* Rentang dari kiri ke kanan mentok */
+                grid-column: 1 / -1; 
                 border-bottom: 1px solid #2a2a2a;
                 padding-bottom: 15px;
-                margin-bottom: 0;
             }
-            
+            .app-title { font-size: 24px; }
+
+            /* 2. TABS (Full Width) */
             .tabs { 
                 grid-column: 1 / -1;
                 justify-content: flex-start; 
-                margin-bottom: 5px;
+                margin-bottom: 0;
             }
-            .tab { 
-                flex: none; 
-                width: auto; 
-                padding: 8px 24px;
-            }
-        
-            /* 2. SIDEBAR KIRI (Manual Placement biar Rapi) */
-            
-            /* Kartu Harga (Urutan 1 di HTML sebelah tabs) */
-            .card:nth-of-type(1) { 
-                grid-column: 1; 
-                grid-row: 3; /* Baris ke-3 setelah header & tabs */
-            }
-        
-            /* Kartu Target (Urutan 4 di HTML - ID #target-card) */
-            #target-card {
-                grid-column: 1;
-                grid-row: 4; /* Baris ke-4, tepat di bawah harga */
-                display: block !important; /* Paksa muncul buat layouting */
-            }
-        
-            /* Kartu Portfolio (Urutan 3 di HTML) */
-            .card:nth-of-type(3) {
-                grid-column: 1;
-                grid-row: 5; /* Baris ke-5, tepat di bawah target */
-            }
-        
-            /* 3. CHART (KANAN - Main Content) */
-            .card:nth-of-type(2) {
-                grid-column: 2; /* Kolom Kanan */
-                grid-row: 3 / span 3; /* Mulai baris 3, panjang ke bawah 3 baris (nutupin sidebar) */
+            .tab { flex: none; width: auto; padding: 10px 30px; font-size: 14px; }
+
+            /* 3. KARTU HARGA (Posisi: Kiri Atas) */
+            .card:nth-of-type(1) {
+                grid-column: 1; /* Kolom Kiri */
+                grid-row: 3;    /* Baris ke-3 */
                 
-                height: 600px; /* KITA KUNCI TINGGINYA */
+                /* Tampilan Horizontal ala Ticker Bar */
                 display: flex;
-                flex-direction: column;
+                flex-direction: row;
+                align-items: center;
+                justify-content: space-between;
+                padding: 20px 30px;
+            }
+            /* Penyesuaian isi kartu harga biar rapi mendatar */
+            .card:nth-of-type(1) .card-head { margin-bottom: 0; margin-right: 20px; order: 1; }
+            .card:nth-of-type(1) .price-big { font-size: 28px; margin: 0 20px; order: 2; }
+            .card:nth-of-type(1) .price-change { order: 3; margin-top: 0; margin-right: auto; }
+            /* Memindahkan Estimasi PnL ke paling kanan */
+            .card:nth-of-type(1) > div:last-child { 
+                order: 4;
+                border-top: none !important; margin-top: 0 !important; padding-top: 0 !important; 
+                border-left: 1px solid #333; padding-left: 20px; 
+            }
+
+            /* 4. KARTU CHART (Posisi: Kiri Bawah - GEDEEE) */
+            .card:nth-of-type(2) {
+                grid-column: 1; /* Kolom Kiri */
+                grid-row: 4;    /* Baris ke-4 */
+                height: 550px;  /* Tinggi fix biar chart luas */
+                display: flex; flex-direction: column;
                 border: 1px solid #2a2a2a;
-                background: #131722; /* Warna khas trading view */
             }
-        
-            #chart-wrap {
-                flex: 1;
-                height: auto !important;
-                min-height: 0; /* Fix untuk flex child overflow */
+            #chart-wrap { flex: 1; height: auto !important; }
+
+            /* 5. SIDEBAR: PORTOFOLIO (Posisi: Kanan Atas - Sejajar Harga) */
+            .card:nth-of-type(3) {
+                grid-column: 2; /* Kolom Kanan */
+                grid-row: 3;    /* Baris ke-3 */
+                height: fit-content;
             }
-        
-            /* Kosmetik Tambahan Biar Gak "Murah" */
-            .card {
-                box-shadow: 0 4px 20px rgba(0,0,0,0.4); /* Kasih bayangan */
-                border: 1px solid #2a2a2a;
+
+            /* 6. SIDEBAR: TARGET PROFIT (Posisi: Kanan Bawah - Di bawah Portofolio) */
+            #target-card {
+                grid-column: 2; /* Kolom Kanan */
+                grid-row: 4;    /* Baris ke-4 */
+                align-self: start; /* Nempel ke atas, jangan melar ke bawah */
+                display: block !important; /* Paksa tampil untuk layouting */
             }
-            
-            .price-big { font-size: 36px; } /* Font harga digedein dikit */
         }
     </style>
 </head>
@@ -205,7 +201,7 @@
         <div class="header">
             <div class="app-title">Crypto Portfolio</div>
             <button class="settings-btn" id="btn-settings">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
             </button>
         </div>
 
@@ -327,10 +323,8 @@
         // ==========================================
 
         const CONFIG = {
-            // apiSymbol: simbol yang dipakai untuk request ke API (trik untuk XAU)
             BTC: { symbol: 'BTC', apiSymbol: 'BTC', tvSymbol: 'BINANCE:BTCIDR', currency: 'IDR' },
             XRP: { symbol: 'XRP', apiSymbol: 'XRP', tvSymbol: 'BINANCE:XRPIDR', currency: 'IDR' },
-            // Gunakan PAXG (Paxos Gold) sebagai proxy harga emas fisik
             XAU: { symbol: 'XAU', apiSymbol: 'PAXG', tvSymbol: 'FOREXCOM:XAUUSD', currency: 'USD' }
         };
 
@@ -340,15 +334,12 @@
 
         const el = (id) => document.getElementById(id);
 
-        // -- FUNGSI UPDATE: FORMAT UANG DENGAN SPASI --
         const fmtMoney = (n) => {
             const cur = CONFIG[currentCoin].currency;
             if (cur === 'USD') {
-                // Format angka saja untuk USD, lalu tambah '$ ' manual
                 const num = new Intl.NumberFormat('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(n);
                 return '$ ' + num; 
             } else {
-                // Format angka saja untuk IDR, lalu tambah 'Rp ' manual
                 const num = new Intl.NumberFormat('id-ID', { minimumFractionDigits: 0, maximumFractionDigits: 0 }).format(n);
                 return 'Rp ' + num;
             }

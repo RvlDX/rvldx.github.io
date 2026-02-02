@@ -114,6 +114,8 @@
                 background: #0b0e11; /* Hitam elegan, tidak terlalu pekat */
                 align-items: flex-start;
                 padding-top: 20px;
+                /* Tambahkan scroll karena chart sekarang tinggi */
+                overflow-y: auto; 
             }
 
             .container {
@@ -171,11 +173,14 @@
             .card:nth-of-type(2) {
                 grid-column: 1; /* Kolom Kiri */
                 grid-row: 4;    /* Baris ke-4 */
-                height: 550px;  /* Tinggi fix biar chart luas */
+                
+                /* --- BAGIAN YANG DIUBAH MENJADI 800px --- */
+                height: 800px !important;
+                
                 display: flex; flex-direction: column;
                 border: 1px solid #2a2a2a;
             }
-            #chart-wrap { flex: 1; height: auto !important; }
+            #chart-wrap { flex: 1; height: 400px !important; }
 
             /* 5. SIDEBAR: PORTOFOLIO (Posisi: Kanan Atas - Sejajar Harga) */
             .card:nth-of-type(3) {

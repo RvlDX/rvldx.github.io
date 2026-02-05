@@ -5,10 +5,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Crypto Portofolio</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Roboto+Mono:wght@400;500&display=swap"
+        rel="stylesheet">
     <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    
+
     <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-firestore-compat.js"></script>
@@ -23,13 +25,12 @@
             appId: "1:785947352765:web:3423737ace6aa1b4e821d4",
             measurementId: "G-HFVV78DZCN"
         };
-
         firebase.initializeApp(firebaseConfig);
         const auth = firebase.auth();
         const db = firebase.firestore();
         const provider = new firebase.auth.GoogleAuthProvider();
     </script>
-    
+
     <style>
         :root {
             --bg-body: #000000;
@@ -43,7 +44,12 @@
             --radius-card: 16px;
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
 
         body {
             font-family: 'Inter', sans-serif;
@@ -65,104 +71,484 @@
         }
 
         /* HEADER */
-        .header { display: flex; justify-content: space-between; align-items: center; }
-        .app-title { font-size: 18px; font-weight: 700; color: #fff; }
-        
-        /* Tombol Simetris */
-        .header-btns { display: flex; gap: 8px; align-items: center; }
-        .settings-btn { 
-            background: none; border: none; color: #fff; cursor: pointer; 
-            padding: 8px; display: flex; align-items: center; justify-content: center;
-            transition: opacity 0.2s;
-        }
-        .auth-icon-btn {
-            background: var(--bg-card);
-            border: 1px solid var(--border-color);
-            color: var(--text-primary);
-            padding: 6px 12px;
-            border-radius: 8px;
-            font-size: 11px;
-            font-weight: 600;
-            cursor: pointer;
-            height: 34px; /* Menyamakan tinggi dengan tombol svg */
+        .header {
             display: flex;
+            justify-content: space-between;
             align-items: center;
         }
-        .auth-icon-btn:hover { border-color: var(--accent-green); color: var(--accent-green); }
+
+        .app-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: #fff;
+        }
+
+        .settings-btn {
+            background: none;
+            border: none;
+            color: #fff;
+            cursor: pointer;
+            padding: 8px;
+        }
+
+        .auth-btn-minimal {
+            background: transparent;
+            border: 1px solid var(--border-color);
+            color: var(--text-primary);
+            font-size: 11px;
+            font-weight: 600;
+            padding: 5px 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: 0.2s;
+            height: 32px;
+            /* Menyamakan tinggi dengan tombol ikon */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .auth-btn-minimal:hover {
+            border-color: var(--accent-green);
+            background: rgba(14, 203, 129, 0.05);
+        }
+
+        .settings-btn {
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            cursor: pointer;
+            padding: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: 0.2s;
+        }
+
+        .settings-btn:hover {
+            color: var(--text-primary);
+        }
 
         /* TABS */
-        .tabs { 
-            display: flex; gap: 8px; margin-bottom: 4px; 
-            overflow-x: auto; padding-bottom: 5px; flex-wrap: nowrap;
+        .tabs {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 4px;
+            overflow-x: auto;
+            padding-bottom: 5px;
+            flex-wrap: nowrap;
         }
-        .tabs::-webkit-scrollbar { display: none; }
+
+        .tabs::-webkit-scrollbar {
+            display: none;
+        }
+
         .tab {
-            background: var(--bg-card); border: 1px solid var(--border-color);
-            color: var(--text-secondary); padding: 8px 16px; border-radius: 20px;
-            font-size: 13px; font-weight: 500; cursor: pointer; transition: 0.2s; 
-            flex: 0 0 auto; text-align: center;
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            color: var(--text-secondary);
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: 0.2s;
+            flex: 0 0 auto;
+            text-align: center;
         }
-        .tab.active { background: rgba(14, 203, 129, 0.15); color: var(--accent-green); border-color: var(--accent-green); }
-        .tab-add { width: 40px; padding: 0; display: flex; align-items: center; justify-content: center; font-size: 18px; border-style: dashed; border-color: #444; }
-        .tab-add:hover { border-color: var(--accent-green); color: var(--accent-green); }
+
+        .tab.active {
+            background: rgba(14, 203, 129, 0.15);
+            color: var(--accent-green);
+            border-color: var(--accent-green);
+        }
+
+        .tab-add {
+            width: 40px;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            border-style: dashed;
+            border-color: #444;
+        }
+
+        .tab-add:hover {
+            border-color: var(--accent-green);
+            color: var(--accent-green);
+        }
 
         /* CARDS */
-        .card { background: var(--bg-card); border-radius: var(--radius-card); padding: 16px; border: 1px solid var(--border-color); }
-        .card-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; font-size: 13px; font-weight: 600; color: #fff; }
-        .badge { font-size: 10px; padding: 2px 8px; border-radius: 4px; background: #1f2b24; color: var(--accent-green); }
-        
-        .price-big { font-size: 32px; font-weight: 600; color: #fff; letter-spacing: -0.5px; font-family: 'Roboto Mono', monospace; }
-        .price-change { font-size: 13px; font-weight: 500; margin-top: 4px; display: flex; align-items: center; gap: 4px;}
-        .text-green { color: var(--accent-green); }
-        .text-red { color: var(--accent-red); }
+        .card {
+            background: var(--bg-card);
+            border-radius: var(--radius-card);
+            padding: 16px;
+            border: 1px solid var(--border-color);
+        }
 
-        #chart-wrap { height: 350px; width: 100%; border-radius: 12px; overflow: hidden; margin-top: 5px; }
+        .card-head {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+            font-size: 13px;
+            font-weight: 600;
+            color: #fff;
+        }
 
-        .row { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid var(--border-color); }
-        .row:last-child { border: none; padding-bottom: 0; }
-        .lbl { font-size: 13px; color: var(--text-secondary); display: flex; align-items: center; gap: 6px; }
-        .val { font-size: 14px; color: #fff; font-family: 'Roboto Mono', monospace; font-weight: 500; }
+        .badge {
+            font-size: 10px;
+            padding: 2px 8px;
+            border-radius: 4px;
+            background: #1f2b24;
+            color: var(--accent-green);
+        }
 
-        .fng-bar-bg { width: 100%; height: 8px; background: #333; border-radius: 10px; position: relative; overflow: hidden; margin-top: 8px; }
-        .fng-bar-fill { height: 100%; width: 50%; background: linear-gradient(90deg, #f6465d 0%, #f3ba2f 50%, #0ecb81 100%); transition: width 1s; }
-        .fng-val { font-size: 20px; font-weight: 700; color: #fff; }
-        .fng-state { font-size: 12px; color: #aaa; }
+        /* PRICE SECTION */
+        .price-big {
+            font-size: 32px;
+            font-weight: 600;
+            color: #fff;
+            letter-spacing: -0.5px;
+            font-family: 'Roboto Mono', monospace;
+        }
 
-        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 999; align-items: center; justify-content: center; backdrop-filter: blur(3px); }
-        .modal.active { display: flex; }
-        .modal-box { background: #1a1a1a; width: 85%; max-width: 320px; border-radius: 16px; padding: 20px; border: 1px solid #333; }
-        .inp-group { margin-bottom: 15px; }
-        .inp-group label { display: block; font-size: 11px; color: #888; margin-bottom: 5px; }
-        .inp-group input, .inp-group select { width: 100%; background: #252525; border: 1px solid #333; color: #fff; padding: 10px; border-radius: 8px; font-size: 14px; outline: none; }
-        .modal-btns { display: flex; justify-content: flex-end; gap: 10px; margin-top: 20px; }
-        .btn { padding: 8px 16px; border-radius: 6px; border: none; font-size: 12px; font-weight: 600; cursor: pointer; }
-        .btn-cancel { background: transparent; color: #888; }
-        .btn-save { background: var(--accent-green); color: #000; }
+        .price-change {
+            font-size: 13px;
+            font-weight: 500;
+            margin-top: 4px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
 
-        .eye-btn { cursor: pointer; background: none; border: none; padding: 0; color: inherit; opacity: 0.6; display: flex; }
-        .value-hidden { color: transparent !important; position: relative; }
-        .value-hidden::after { content: '••••••'; color: var(--text-secondary); letter-spacing: 2px; position: absolute; top: 50%; transform: translateY(-50%); }
-        .row .val.value-hidden::after { font-size: 14px; right: 0; }
-        .price-big.value-hidden::after { font-size: 24px; letter-spacing: 4px; left: 0; }
+        .text-green {
+            color: var(--accent-green);
+        }
 
-        /* Desktop Layout */
+        .text-red {
+            color: var(--accent-red);
+        }
+
+        /* CHART */
+        #chart-wrap {
+            height: 350px;
+            width: 100%;
+            border-radius: 12px;
+            overflow: hidden;
+            margin-top: 5px;
+        }
+
+        /* ROWS */
+        .row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .row:last-child {
+            border: none;
+            padding-bottom: 0;
+        }
+
+        .lbl {
+            font-size: 13px;
+            color: var(--text-secondary);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .val {
+            font-size: 14px;
+            color: #fff;
+            font-family: 'Roboto Mono', monospace;
+            font-weight: 500;
+        }
+
+        /* FEAR & GREED STYLE */
+        .fng-bar-bg {
+            width: 100%;
+            height: 8px;
+            background: #333;
+            border-radius: 10px;
+            position: relative;
+            overflow: hidden;
+            margin-top: 8px;
+        }
+
+        .fng-bar-fill {
+            height: 100%;
+            width: 50%;
+            background: linear-gradient(90deg, #f6465d 0%, #f3ba2f 50%, #0ecb81 100%);
+            transition: width 1s;
+        }
+
+        .fng-val {
+            font-size: 20px;
+            font-weight: 700;
+            color: #fff;
+        }
+
+        .fng-state {
+            font-size: 12px;
+            color: #aaa;
+        }
+
+        /* MODAL */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 999;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(3px);
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-box {
+            background: #1a1a1a;
+            width: 85%;
+            max-width: 320px;
+            border-radius: 16px;
+            padding: 20px;
+            border: 1px solid #333;
+        }
+
+        .inp-group {
+            margin-bottom: 15px;
+        }
+
+        .inp-group label {
+            display: block;
+            font-size: 11px;
+            color: #888;
+            margin-bottom: 5px;
+        }
+
+        .inp-group input,
+        .inp-group select {
+            width: 100%;
+            background: #252525;
+            border: 1px solid #333;
+            color: #fff;
+            padding: 10px;
+            border-radius: 8px;
+            font-size: 14px;
+            outline: none;
+        }
+
+        .modal-btns {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .btn {
+            padding: 8px 16px;
+            border-radius: 6px;
+            border: none;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .btn-cancel {
+            background: transparent;
+            color: #888;
+        }
+
+        .btn-save {
+            background: var(--accent-green);
+            color: #000;
+        }
+
+        /* UTILS */
+        .eye-btn {
+            cursor: pointer;
+            background: none;
+            border: none;
+            padding: 0;
+            color: inherit;
+            opacity: 0.6;
+            display: flex;
+        }
+
+        .eye-btn:hover {
+            opacity: 1;
+        }
+
+        .value-hidden {
+            color: transparent !important;
+            position: relative;
+        }
+
+        .value-hidden::after {
+            content: '••••••';
+            color: var(--text-secondary);
+            letter-spacing: 2px;
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        .row .val.value-hidden::after {
+            font-size: 14px;
+            right: 0;
+        }
+
+        .price-big.value-hidden::after {
+            font-size: 24px;
+            letter-spacing: 4px;
+            left: 0;
+        }
+
+        /* SWEETALERT DARK THEME */
+        .dark-toast {
+            background: #1a1a1a !important;
+            border: 1px solid #333 !important;
+        }
+
+        .dark-toast-title {
+            color: #fff !important;
+        }
+
+        .swal2-icon.swal2-success {
+            border-color: #0ecb81 !important;
+            color: #0ecb81 !important;
+        }
+
+        .swal2-icon.swal2-success [class^='swal2-success-line'] {
+            background-color: #0ecb81 !important;
+        }
+
+        .swal2-icon.swal2-success .swal2-success-ring {
+            border-color: #0ecb81 !important;
+        }
+
+        .news-item {
+            display: block;
+            text-decoration: none;
+            padding: 8px 0;
+            border-bottom: 1px solid #222;
+        }
+
+        .news-title {
+            font-size: 12px;
+            color: #fff;
+            line-height: 1.4;
+            margin-bottom: 2px;
+        }
+
+        .news-info {
+            font-size: 10px;
+            color: #555;
+        }
+
+        .dca-res {
+            font-size: 11px;
+            margin-top: 8px;
+            padding: 10px;
+            background: #1f2b24;
+            border-radius: 8px;
+            border: 1px dashed var(--accent-green);
+            display: none;
+        }
+
+        /* --- DESKTOP GRID LAYOUT FIX (FINAL) --- */
         @media (min-width: 1024px) {
-            body { align-items: flex-start; overflow-y: auto; }
-            .container {
-                max-width: 1350px; display: grid;
-                grid-template-columns: 1fr 340px; 
-                grid-template-rows: repeat(7, min-content);
-                gap: 20px; padding-bottom: 50px; align-items: start;
+            body {
+                align-items: flex-start;
+                overflow-y: auto;
             }
-            .header, .tabs, #card-news { grid-column: 1 / -1; }
-            #card-chart { grid-column: 1; grid-row: 3 / 6; display: flex; height: 100% !important; flex-direction: column; }
-            #chart-wrap { flex: 1; min-height: 0; } 
-            #card-price { grid-column: 2; grid-row: 3; height: fit-content; }
-            #target-card { grid-column: 2; grid-row: 4; margin: 0; height: fit-content; }
-            #card-porto { grid-column: 2; grid-row: 5; margin: 0; height: fit-content; }
-            #card-fng { grid-column: 1; grid-row: 6; height: 100%; display: flex; flex-direction: column; justify-content: center; }
-            #card-total { grid-column: 2; grid-row: 6; height: 100%; display: flex; flex-direction: column; justify-content: center; } 
-            #card-news { grid-column: 1 / -1; grid-row: 7; }
+
+            .container {
+                max-width: 1350px;
+                display: grid;
+                grid-template-columns: 1fr 340px;
+                grid-template-rows: repeat(7, min-content);
+                gap: 20px;
+                padding-bottom: 50px;
+                align-items: start;
+            }
+
+            .header {
+                grid-column: 1 / -1;
+                margin-bottom: 0;
+            }
+
+            .tabs {
+                grid-column: 1 / -1;
+                margin-bottom: 0;
+            }
+
+            #card-chart {
+                grid-column: 1;
+                grid-row: 3 / 6;
+                display: flex;
+                height: 100% !important;
+                flex-direction: column;
+            }
+
+            #chart-wrap {
+                flex: 1;
+                min-height: 0;
+            }
+
+            #card-price {
+                grid-column: 2;
+                grid-row: 3;
+                height: fit-content;
+            }
+
+            #target-card {
+                grid-column: 2;
+                grid-row: 4;
+                margin: 0;
+                height: fit-content;
+            }
+
+            #card-porto {
+                grid-column: 2;
+                grid-row: 5;
+                margin: 0;
+                height: fit-content;
+            }
+
+            #card-fng {
+                grid-column: 1;
+                grid-row: 6;
+                height: 100%;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+            }
+
+            #card-total {
+                grid-column: 2;
+                grid-row: 6;
+                height: 100%;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+            }
+
+            #card-news {
+                grid-column: 1 / -1;
+                grid-row: 7;
+            }
         }
     </style>
 </head>
@@ -172,11 +558,19 @@
     <div class="container">
         <div class="header">
             <div class="app-title">Crypto Portfolio</div>
-            <div class="header-btns">
-                <button class="auth-icon-btn" id="btn-login" onclick="login()">Login</button>
-                <button class="auth-icon-btn" id="btn-logout" onclick="logout()" style="display:none; color: var(--accent-red);">Logout</button>
-                <button class="settings-btn" id="btn-settings" title="Edit Koin">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+            <div style="display:flex; gap:8px; align-items: center;">
+                <button class="auth-btn-minimal" id="btn-login" onclick="login()">Login</button>
+                <button class="auth-btn-minimal" id="btn-logout" onclick="logout()"
+                    style="display:none; color: var(--accent-red);">Logout</button>
+
+                <button class="settings-btn" id="btn-settings" title="Pengaturan">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="3"></circle>
+                        <path
+                            d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z">
+                        </path>
+                    </svg>
                 </button>
             </div>
         </div>
@@ -184,24 +578,34 @@
         <div class="tabs" id="tab-container"></div>
 
         <div class="card" id="card-price">
-            <div class="card-head"><span>Harga Pasar (<span class="currency-label">IDR</span>)</span><span class="badge" id="live-indicator">● Live</span></div>
+            <div class="card-head">
+                <span>Harga Pasar (<span class="currency-label">IDR</span>)</span>
+                <span class="badge" id="live-indicator">● Live</span>
+            </div>
             <div class="price-big" id="price-display">--</div>
             <div class="price-change" id="change-display">--</div>
             <div style="margin-top: 15px; padding-top: 10px; border-top: 1px solid #222;">
-                <div class="row" style="padding: 0;"><span class="lbl">Estimasi PnL</span><span class="val" id="pnl-display">0</span></div>
+                <div class="row" style="padding: 0;">
+                    <span class="lbl">Estimasi PnL</span>
+                    <span class="val" id="pnl-display">0</span>
+                </div>
             </div>
         </div>
 
         <div class="card" id="card-chart" style="padding: 0;">
-            <div style="padding: 12px 16px; border-bottom: 1px solid #222; display:flex; justify-content:space-between; align-items: center;">
-                <span style="font-size:13px; font-weight:600; color:#fff;">Chart</span><span style="font-size:10px; color:#666;">30 Menit</span>
+            <div
+                style="padding: 12px 16px; border-bottom: 1px solid #222; display:flex; justify-content:space-between; align-items: center;">
+                <span style="font-size:13px; font-weight:600; color:#fff;">Chart</span>
+                <span style="font-size:10px; color:#666;">30 Menit</span>
             </div>
             <div id="chart-wrap"></div>
         </div>
 
         <div class="card" id="target-card">
-            <div class="card-head"><span>Target Profit</span><span class="badge" id="target-status" style="background:#222; color:#777;">Off</span></div>
-            <div class="row"><span class="lbl">Target Jual</span><span class="val" style="color:var(--accent-green);" id="target-price-display">-</span></div>
+            <div class="card-head"><span>Target Profit</span><span class="badge" id="target-status"
+                    style="background:#222; color:#777;">Off</span></div>
+            <div class="row"><span class="lbl">Target Jual</span><span class="val" style="color:var(--accent-green);"
+                    id="target-price-display">-</span></div>
             <div class="row"><span class="lbl">Net Profit</span><span class="val" id="net-profit-display">-</span></div>
         </div>
 
@@ -209,24 +613,70 @@
             <div class="card-head"><span>Holdings Saya</span></div>
             <div class="row"><span class="lbl">Jumlah Koin</span><span class="val" id="holdings-display">0</span></div>
             <div class="row"><span class="lbl">Avg. Buy</span><span class="val" id="buy-display">0</span></div>
-            <div class="row"><div class="lbl">Modal Awal <button class="eye-btn" onclick="toggleVis('initial-display')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg></button></div><span class="val value-hidden" id="initial-display">Rp 0</span></div>
-            <div class="row"><div class="lbl">Aset Sekarang <button class="eye-btn" onclick="toggleVis('value-display')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg></button></div><span class="val value-hidden" id="value-display">Rp 0</span></div>
+            <div class="row">
+                <div class="lbl">
+                    Modal Awal
+                    <button class="eye-btn" onclick="toggleVis('initial-display')">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <path
+                                d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24" />
+                            <line x1="1" y1="1" x2="23" y2="23" />
+                        </svg>
+                    </button>
+                </div>
+                <span class="val value-hidden" id="initial-display">Rp 0</span>
+            </div>
+            <div class="row">
+                <div class="lbl">
+                    Aset Sekarang
+                    <button class="eye-btn" onclick="toggleVis('value-display')">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <path
+                                d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24" />
+                            <line x1="1" y1="1" x2="23" y2="23" />
+                        </svg>
+                    </button>
+                </div>
+                <span class="val value-hidden" id="value-display">Rp 0</span>
+            </div>
         </div>
 
         <div class="card" id="card-fng">
             <div class="card-head">Fear & Greed Index</div>
             <div style="display:flex; justify-content:space-between; align-items:flex-end;">
-                <div><div class="fng-val" id="fng-value">--</div><div class="fng-state" id="fng-text">Loading...</div></div>
-                <div style="text-align:right; font-size:10px; color:#555;">Source: alternative.me</div>
+                <div>
+                    <div class="fng-val" id="fng-value">--</div>
+                    <div class="fng-state" id="fng-text">Loading...</div>
+                </div>
+                <div style="text-align:right; font-size:10px; color:#555;">
+                    Source: alternative.me
+                </div>
             </div>
-            <div class="fng-bar-bg"><div class="fng-bar-fill" id="fng-fill" style="width:0%"></div></div>
+            <div class="fng-bar-bg">
+                <div class="fng-bar-fill" id="fng-fill" style="width:0%"></div>
+            </div>
         </div>
 
         <div class="card" id="card-total">
-            <div class="card-head"><span>Total Estimasi Aset <button class="eye-btn" onclick="toggleVis('total-asset-display')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg></button></span></div>
+            <div class="card-head">
+                <span>Total Estimasi Aset</span>
+                <button class="eye-btn" onclick="toggleVis('total-asset-display')">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path
+                            d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24" />
+                        <line x1="1" y1="1" x2="23" y2="23" />
+                    </svg>
+                </button>
+            </div>
             <div class="price-big value-hidden" id="total-asset-display">Rp 0</div>
             <div style="font-size: 11px; color: #666; margin-top: 8px;">*Estimasi seluruh koin portofolio</div>
-            <div style="margin-top:10px; text-align:right;"><button onclick="updateTotalAssets()" style="background:#252525; border:1px solid #333; color:#aaa; font-size:10px; padding:4px 8px; border-radius:4px; cursor:pointer;">Refresh Total</button></div>
+            <div style="margin-top:10px; text-align:right;">
+                <button onclick="updateTotalAssets()"
+                    style="background:#252525; border:1px solid #333; color:#aaa; font-size:10px; padding:4px 8px; border-radius:4px; cursor:pointer;">Refresh
+                    Total</button>
+            </div>
         </div>
 
         <div class="card" id="card-news">
@@ -238,16 +688,26 @@
     <div class="modal" id="modal">
         <div class="modal-box">
             <h3 style="color:#fff; margin-bottom:15px;">Edit Aset</h3>
-            <div class="inp-group"><label>Harga Beli (<span class="currency-label">IDR</span>)</label><input type="number" id="inp-buy" step="any"></div>
+            <div class="inp-group"><label>Harga Beli (<span class="currency-label">IDR</span>)</label><input
+                    type="number" id="inp-buy" step="any"></div>
             <div class="inp-group"><label>Jumlah Koin/Oz</label><input type="number" id="inp-amount" step="any"></div>
-            <div class="inp-group"><label>Target Jual (<span class="currency-label">IDR</span>)</label><input type="number" id="inp-target" step="any"></div>
+            <div class="inp-group"><label>Target Jual (<span class="currency-label">IDR</span>)</label><input
+                    type="number" id="inp-target" step="any"></div>
             <div style="border-top:1px solid #333; margin-top:15px; padding-top:15px;">
-                <p style="font-size:10px; font-weight:700; color:var(--accent-green); margin-bottom:8px;">KALKULATOR DCA</p>
-                <div class="inp-group"><input type="number" id="inp-dca" placeholder="Masukkan jumlah Rp/USD" oninput="calcDCA()"></div>
-                <div id="dca-box" class="dca-res"><p style="color:#aaa; font-size:10px;">Est. Koin: <span id="res-dca-coins" style="color:#fff">0</span></p><p style="color:#aaa; font-size:10px;">Avg. Buy Baru: <span id="res-dca-avg" style="color:#fff">0</span></p></div>
+                <p style="font-size:10px; font-weight:700; color:var(--accent-green); margin-bottom:8px;">KALKULATOR DCA
+                </p>
+                <div class="inp-group"><input type="number" id="inp-dca" placeholder="Masukkan jumlah Rp/USD"
+                        oninput="calcDCA()"></div>
+                <div id="dca-box" class="dca-res">
+                    <p style="color:#aaa; font-size:10px;">Est. Koin: <span id="res-dca-coins"
+                            style="color:#fff">0</span></p>
+                    <p style="color:#aaa; font-size:10px;">Avg. Buy Baru: <span id="res-dca-avg"
+                            style="color:#fff">0</span></p>
+                </div>
             </div>
             <div class="modal-btns" style="justify-content: space-between;">
-                <button class="btn" style="background: #3a1c1c; color: #ff4d4d;" onclick="deleteCurrentCoin()">Hapus</button>
+                <button class="btn" style="background: #3a1c1c; color: #ff4d4d;"
+                    onclick="deleteCurrentCoin()">Hapus</button>
                 <div style="display:flex; gap:10px;">
                     <button class="btn btn-cancel" onclick="el('modal').classList.remove('active')">Batal</button>
                     <button class="btn btn-save" onclick="saveData()">Simpan</button>
@@ -259,9 +719,14 @@
     <div class="modal" id="modal-add">
         <div class="modal-box">
             <h3 style="color:#fff; margin-bottom:15px;">Tambah Aset Baru</h3>
-            <div class="inp-group"><label>Simbol (Ex: SOL, ETH)</label><input type="text" id="add-symbol" placeholder="CONTOH: SOL" oninput="this.value = this.value.toUpperCase()"></div>
-            <div class="inp-group"><label>Mata Uang</label><select id="add-currency"><option value="IDR">IDR (Rupiah)</option><option value="USD">USD (Dollar)</option></select></div>
-            <div class="inp-group"><label>ID TradingView</label><input type="text" id="add-tv-symbol" placeholder="EX: BINANCE:SOLIDR"></div>
+            <div class="inp-group"><label>Simbol (Ex: SOL, ETH)</label><input type="text" id="add-symbol"
+                    placeholder="CONTOH: SOL" oninput="this.value = this.value.toUpperCase()"></div>
+            <div class="inp-group"><label>Mata Uang</label><select id="add-currency">
+                    <option value="IDR">IDR</option>
+                    <option value="USD">USD</option>
+                </select></div>
+            <div class="inp-group"><label>ID TradingView</label><input type="text" id="add-tv-symbol"
+                    placeholder="EX: BINANCE:SOLIDR"></div>
             <div class="modal-btns">
                 <button class="btn btn-cancel" onclick="el('modal-add').classList.remove('active')">Batal</button>
                 <button class="btn btn-save" onclick="executeAddCoin()">Tambah</button>
@@ -271,79 +736,59 @@
 
     <script>
         // --- STATE ---
-        let appData = {
-            activeCoin: 'XRP',
-            coins: {
-                XRP: { symbol: 'XRP', currency: 'IDR', tvSymbol: 'BINANCE:XRPIDR', buy: 0, amount: 0, target: 0 }
-            }
-        };
+        let appData = { activeCoin: 'XRP', coins: { XRP: { symbol: 'XRP', currency: 'IDR', tvSymbol: 'BINANCE:XRPIDR', buy: 0, amount: 0, target: 0 } } };
         let currentLivePrice = 0;
         let updateInterval;
         const el = (id) => document.getElementById(id);
-
         const fmtMoney = (n, cur) => {
-            const c = cur || (appData.coins[appData.activeCoin]?.currency || 'IDR');
-            if (c === 'USD') return '$ ' + new Intl.NumberFormat('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(n);
-            return 'Rp ' + new Intl.NumberFormat('id-ID', { minimumFractionDigits: 0, maximumFractionDigits: 0 }).format(n);
+            const c = cur || appData.coins[appData.activeCoin].currency;
+            if (c === 'USD') {
+                return '$ ' + n.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+            }
+            // Untuk Rupiah (IDR), kita buat bulat tanpa desimal
+            return 'Rp ' + n.toLocaleString('id-ID', { minimumFractionDigits: 0, maximumFractionDigits: 0 });
         };
 
-        // --- FIREBASE LOGIC ---
-        function login() {
-            auth.signInWithPopup(provider).catch(error => {
-                Swal.fire('Error', 'Gagal Login: ' + error.message, 'error');
-            });
-        }
-
-        function logout() {
-            auth.signOut().then(() => {
-                location.reload();
-            });
-        }
+        // --- FIREBASE SYNC ---
+        function login() { auth.signInWithPopup(provider).catch(e => Swal.fire('Error', e.message, 'error')); }
+        function logout() { auth.signOut().then(() => location.reload()); }
 
         auth.onAuthStateChanged(user => {
             if (user) {
                 el('btn-login').style.display = 'none';
-                el('btn-logout').style.display = 'block';
+                el('btn-logout').style.display = 'flex';
+                // Menampilkan "Logout" dan inisial nama jika Anda mau, atau cukup "Logout" saja
+                el('btn-logout').textContent = 'Logout';
                 loadFromFirestore(user.uid);
             } else {
-                el('btn-login').style.display = 'block';
+                el('btn-login').style.display = 'flex';
                 el('btn-logout').style.display = 'none';
-                loadLocalStorageFallback();
+                loadLocal();
             }
         });
-
         async function saveToFirestore() {
-            const user = auth.currentUser;
-            if (user) {
-                await db.collection('users').doc(user.uid).set(appData);
-            } else {
-                localStorage.setItem('crypto_pro_v2', JSON.stringify(appData));
-            }
+            if (auth.currentUser) await db.collection('users').doc(auth.currentUser.uid).set(appData);
+            localStorage.setItem('crypto_pro_v2', JSON.stringify(appData));
         }
 
         async function loadFromFirestore(uid) {
             const doc = await db.collection('users').doc(uid).get();
-            if (doc.exists) {
-                appData = doc.data();
-            }
+            if (doc.exists) appData = doc.data();
             initApp();
         }
 
-        function loadLocalStorageFallback() {
+        function loadLocal() {
             const saved = localStorage.getItem('crypto_pro_v2');
             if (saved) appData = JSON.parse(saved);
             initApp();
         }
 
-        // --- CORE APP LOGIC ---
         function initApp() {
-            if (!appData.coins[appData.activeCoin]) appData.activeCoin = Object.keys(appData.coins)[0] || 'XRP';
-            renderTabs();
-            switchCoin(appData.activeCoin, true);
-            fetchFearAndGreed();
-            setTimeout(updateTotalAssets, 1000);
+            renderTabs(); switchCoin(appData.activeCoin, true);
+            fetchFearAndGreed(); setTimeout(updateTotalAssets, 1000);
         }
 
+        // --- UI LOGIC ---
         function renderTabs() {
             const container = el('tab-container'); container.innerHTML = '';
             Object.keys(appData.coins).forEach(key => {
@@ -351,7 +796,7 @@
                 div.textContent = key; div.onclick = () => switchCoin(key);
                 container.appendChild(div);
             });
-            const btnAdd = document.createElement('div'); btnAdd.className = 'tab tab-add'; btnAdd.innerHTML = '+'; 
+            const btnAdd = document.createElement('div'); btnAdd.className = 'tab tab-add'; btnAdd.innerHTML = '+';
             btnAdd.onclick = () => el('modal-add').classList.add('active');
             container.appendChild(btnAdd);
         }
@@ -360,14 +805,14 @@
             if (!force && appData.activeCoin === key) return;
             appData.activeCoin = key;
             document.querySelectorAll('.tab').forEach(t => t.classList.toggle('active', t.textContent === key));
-            if(updateInterval) clearInterval(updateInterval);
+            if (updateInterval) clearInterval(updateInterval);
             loadTvWidget(); fetchMarketData(); fetchNews();
             updateInterval = setInterval(fetchMarketData, 5000);
         }
 
         async function fetchMarketData() {
             const c = appData.coins[appData.activeCoin];
-            if(!c) return;
+            if (!c) return;
             try {
                 const res = await fetch(`https://min-api.cryptocompare.com/data/pricemultifull?fsyms=${c.symbol}&tsyms=${c.currency}`);
                 const json = await res.json();
@@ -376,32 +821,31 @@
                     currentLivePrice = raw.PRICE;
                     updateUI(raw.PRICE, raw.CHANGEPCT24HOUR);
                 }
-            } catch (e) {}
+            } catch (e) { }
         }
 
         function updateUI(price, change) {
             const d = appData.coins[appData.activeCoin];
             document.querySelectorAll('.currency-label').forEach(s => s.textContent = d.currency);
             el('price-display').textContent = fmtMoney(price);
-            el('change-display').innerHTML = `<span class="${change>=0?'text-green':'text-red'}">${change>=0?'+':''}${change.toFixed(2)}% (24h)</span>`;
+            el('change-display').innerHTML = `<span class="${change >= 0 ? 'text-green' : 'text-red'}">${change >= 0 ? '+' : ''}${change.toFixed(2)}% (24h)</span>`;
             el('holdings-display').textContent = d.amount;
             el('buy-display').textContent = fmtMoney(d.buy);
             el('initial-display').textContent = fmtMoney(d.buy * d.amount);
             el('value-display').textContent = fmtMoney(price * d.amount);
-            
-            if(d.amount > 0 && d.buy > 0) {
-                const pnl = (price - d.buy) * d.amount;
-                const pct = ((pnl/(d.buy*d.amount))*100).toFixed(2);
-                el('pnl-display').innerHTML = `<span class="${pnl>=0?'text-green':'text-red'}">${pnl>=0?'+':''}${fmtMoney(pnl)} (${pct}%)</span>`;
-            } else el('pnl-display').textContent = fmtMoney(0);
 
-            if(d.target > 0) {
-                el('target-status').textContent='Set'; el('target-status').style.color='#0ecb81';
-                el('target-price-display').textContent=fmtMoney(d.target);
-                el('net-profit-display').textContent=fmtMoney((d.target-d.buy)*d.amount);
+            if (d.amount > 0 && d.buy > 0) {
+                const pnl = (price - d.buy) * d.amount;
+                const pct = ((pnl / (d.buy * d.amount)) * 100).toFixed(2);
+                el('pnl-display').innerHTML = `<span class="${pnl >= 0 ? 'text-green' : 'text-red'}">${fmtMoney(pnl)} (${pct}%)</span>`;
+            }
+            if (d.target > 0) {
+                el('target-status').textContent = 'Set'; el('target-status').style.color = '#0ecb81';
+                el('target-price-display').textContent = fmtMoney(d.target);
+                el('net-profit-display').textContent = fmtMoney((d.target - d.buy) * d.amount);
             } else {
-                el('target-status').textContent='Off'; el('target-status').style.color='#777';
-                el('target-price-display').textContent='-'; el('net-profit-display').textContent='-';
+                el('target-status').textContent = 'Off'; el('target-status').style.color = '#777';
+                el('target-price-display').textContent = '-'; el('net-profit-display').textContent = '-';
             }
         }
 
@@ -413,7 +857,7 @@
                 el('fng-value').textContent = val;
                 el('fng-text').textContent = json.data[0].value_classification;
                 el('fng-fill').style.width = val + '%';
-            } catch(e) {}
+            } catch (e) { }
         }
 
         async function updateTotalAssets() {
@@ -422,73 +866,71 @@
             try {
                 const res = await fetch(`https://min-api.cryptocompare.com/data/pricemulti?fsyms=${symbols}&tsyms=IDR`);
                 const json = await res.json();
-                let totalIDR = 0;
+                let total = 0;
                 coins.forEach(c => {
-                    if (json[c.symbol] && c.amount > 0) totalIDR += (json[c.symbol].IDR * c.amount);
+                    if (json[c.symbol]) total += (json[c.symbol].IDR * c.amount);
                 });
-                el('total-asset-display').textContent = 'Rp ' + new Intl.NumberFormat('id-ID').format(totalIDR);
-            } catch (e) {}
+
+                // PERBAIKAN DI SINI: Tambahkan maximumFractionDigits: 0
+                el('total-asset-display').textContent = 'Rp ' + total.toLocaleString('id-ID', {
+                    minimumFractionDigits: 0,
+                    maximumFractionDigits: 0
+                });
+            } catch (e) {
+                console.log("Error update total:", e);
+            }
+        }
+
+        function saveData() {
+            const d = appData.coins[appData.activeCoin];
+            d.buy = parseFloat(el('inp-buy').value) || 0; d.amount = parseFloat(el('inp-amount').value) || 0; d.target = parseFloat(el('inp-target').value) || 0;
+            saveToFirestore(); el('modal').classList.remove('active'); fetchMarketData(); updateTotalAssets();
+            showToast("Disimpan");
         }
 
         function executeAddCoin() {
             const s = el('add-symbol').value.trim().toUpperCase();
             const t = el('add-tv-symbol').value.trim();
-            if(!s || !t) return;
+            if (!s || !t) return;
             appData.coins[s] = { symbol: s, currency: el('add-currency').value, tvSymbol: t, buy: 0, amount: 0, target: 0 };
             saveToFirestore(); el('modal-add').classList.remove('active'); renderTabs(); switchCoin(s);
         }
 
         function deleteCurrentCoin() {
-            if(Object.keys(appData.coins).length <= 1) return;
-            Swal.fire({title:'Hapus?', icon:'warning', showCancelButton:true, confirmButtonColor:'#d33'}).then(r=>{
-                if(r.isConfirmed) {
-                    delete appData.coins[appData.activeCoin];
-                    appData.activeCoin = Object.keys(appData.coins)[0];
-                    saveToFirestore(); el('modal').classList.remove('active'); initApp();
-                }
+            if (Object.keys(appData.coins).length <= 1) return;
+            Swal.fire({ title: 'Hapus?', icon: 'warning', showCancelButton: true }).then(r => {
+                if (r.isConfirmed) { delete appData.coins[appData.activeCoin]; appData.activeCoin = Object.keys(appData.coins)[0]; saveToFirestore(); initApp(); el('modal').classList.remove('active'); }
             });
         }
 
-        function saveData() {
-            const d = appData.coins[appData.activeCoin];
-            d.buy = parseFloat(el('inp-buy').value)||0;
-            d.amount = parseFloat(el('inp-amount').value)||0;
-            d.target = parseFloat(el('inp-target').value)||0;
-            saveToFirestore(); el('modal').classList.remove('active'); fetchMarketData(); updateTotalAssets();
-            showToast("Disimpan");
-        }
-
         function loadTvWidget() {
-            el('chart-wrap').innerHTML='';
-            new TradingView.widget({ "autosize": true, "symbol": appData.coins[appData.activeCoin].tvSymbol, "interval": "30", "timezone": "Asia/Jakarta", "theme": "dark", "container_id": "chart-wrap" });
+            el('chart-wrap').innerHTML = '';
+            new TradingView.widget({ "autosize": true, "symbol": appData.coins[appData.activeCoin].tvSymbol, "interval": "30", "theme": "dark", "container_id": "chart-wrap" });
         }
 
         async function fetchNews() {
             const res = await fetch(`https://min-api.cryptocompare.com/data/v2/news/?categories=${appData.coins[appData.activeCoin].symbol}&lang=EN`);
             const json = await res.json();
-            el('news-container').innerHTML = json.Data.slice(0,3).map(n=>`<a href="${n.url}" target="_blank" class="news-item"><p class="news-title">${n.title}</p></a>`).join('');
+            el('news-container').innerHTML = json.Data.slice(0, 3).map(n => `<a href="${n.url}" target="_blank" class="news-item"><p class="news-title">${n.title}</p><p class="news-info">${n.source} • ${new Date(n.published_on * 1000).toLocaleDateString()}</p></a>`).join('');
         }
 
         function calcDCA() {
-            const m = parseFloat(el('inp-dca').value)||0; const d = appData.coins[appData.activeCoin];
-            if(m>0 && currentLivePrice>0) {
-                el('dca-box').style.display='block';
-                const n = m/currentLivePrice; el('res-dca-coins').textContent=n.toFixed(4);
-                el('res-dca-avg').textContent=fmtMoney(((d.buy*d.amount)+m)/(d.amount+n));
-            } else el('dca-box').style.display='none';
+            const m = parseFloat(el('inp-dca').value) || 0; const d = appData.coins[appData.activeCoin];
+            if (m > 0 && currentLivePrice > 0) {
+                el('dca-box').style.display = 'block';
+                const n = m / currentLivePrice; el('res-dca-coins').textContent = n.toFixed(4);
+                el('res-dca-avg').textContent = fmtMoney(((d.buy * d.amount) + m) / (d.amount + n));
+            } else el('dca-box').style.display = 'none';
         }
 
-        function showToast(msg) {
-            Swal.fire({ icon:'success', title:msg, toast:true, position:'bottom', showConfirmButton:false, timer:1500, background:'#1a1a1a', color:'#fff' });
-        }
-
+        function showToast(msg) { Swal.fire({ icon: 'success', title: msg, toast: true, position: 'bottom', showConfirmButton: false, timer: 1500, background: '#1a1a1a', color: '#fff' }); }
         function toggleVis(id) { el(id).classList.toggle('value-hidden'); }
-        
         el('btn-settings').onclick = () => {
             const d = appData.coins[appData.activeCoin];
-            el('inp-buy').value=d.buy; el('inp-amount').value=d.amount; el('inp-target').value=d.target||0;
+            el('inp-buy').value = d.buy; el('inp-amount').value = d.amount; el('inp-target').value = d.target || 0;
             el('modal').classList.add('active');
         };
     </script>
 </body>
+
 </html>

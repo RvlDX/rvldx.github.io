@@ -1,13 +1,16 @@
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Wager Protocol - Secure</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Space+Mono:wght@400;700&display=swap"
+        rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
+
     <script>
         tailwind.config = {
             theme: {
@@ -19,31 +22,62 @@
         }
     </script>
     <style>
-        body { background-color: #0B1120; color: #E2E8F0; }
-        .input-dark { background: #0F172A; border: 1px solid #334155; color: #E2E8F0; }
-        .input-dark:focus { border-color: #10B981; outline: none; }
+        body {
+            background-color: #0B1120;
+            color: #E2E8F0;
+        }
+
+        .input-dark {
+            background: #0F172A;
+            border: 1px solid #334155;
+            color: #E2E8F0;
+        }
+
+        .input-dark:focus {
+            border-color: #10B981;
+            outline: none;
+        }
+
         /* Animasi */
-        .fade-in { animation: fadeIn 0.5s ease-out; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .fade-in {
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
     </style>
 </head>
+
 <body class="min-h-screen pb-10 relative overflow-x-hidden">
 
-    <div id="loginOverlay" class="fixed inset-0 z-[100] bg-[#0B1120] flex flex-col items-center justify-center p-6 hidden">
+    <div id="loginOverlay"
+        class="fixed inset-0 z-[100] bg-[#0B1120] flex flex-col items-center justify-center p-6 hidden">
         <div class="text-center mb-10">
-            <div class="w-16 h-16 bg-accent/10 rounded-full flex items-center justify-center mx-auto mb-4 border border-accent/50 shadow-[0_0_15px_rgba(16,185,129,0.3)]">
+            <div
+                class="w-16 h-16 bg-accent/10 rounded-full flex items-center justify-center mx-auto mb-4 border border-accent/50 shadow-[0_0_15px_rgba(16,185,129,0.3)]">
                 <i class="fas fa-fingerprint text-2xl text-accent"></i>
             </div>
             <h2 class="text-2xl font-bold tracking-tight text-white">IDENTIFY YOURSELF</h2>
             <p class="text-muted text-sm font-mono mt-2">Who is accessing the terminal?</p>
         </div>
-        
+
         <div class="space-y-4 w-full max-w-xs">
-            <button onclick="setIdentity('Player 1')" class="w-full bg-slate-800 hover:bg-slate-700 border border-slate-700 hover:border-accent text-white py-4 rounded-xl transition-all group relative overflow-hidden">
+            <button onclick="setIdentity('Player 1')"
+                class="w-full bg-slate-800 hover:bg-slate-700 border border-slate-700 hover:border-accent text-white py-4 rounded-xl transition-all group relative overflow-hidden">
                 <div class="absolute inset-0 w-1 bg-accent transition-all group-hover:w-full opacity-10"></div>
                 <span class="font-bold relative z-10">PLAYER 1 (Cowok)</span>
             </button>
-            <button onclick="setIdentity('Player 2')" class="w-full bg-slate-800 hover:bg-slate-700 border border-slate-700 hover:border-pink-500 text-white py-4 rounded-xl transition-all group relative overflow-hidden">
+            <button onclick="setIdentity('Player 2')"
+                class="w-full bg-slate-800 hover:bg-slate-700 border border-slate-700 hover:border-pink-500 text-white py-4 rounded-xl transition-all group relative overflow-hidden">
                 <div class="absolute inset-0 w-1 bg-pink-500 transition-all group-hover:w-full opacity-10"></div>
                 <span class="font-bold relative z-10">PLAYER 2 (Cewek)</span>
             </button>
@@ -57,45 +91,53 @@
                 <h1 class="font-bold text-sm tracking-widest">WAGER<span class="text-accent">NET</span></h1>
             </div>
             <div class="flex items-center gap-3">
-                <span id="userDisplay" class="text-[10px] font-mono bg-slate-800 px-2 py-1 rounded text-accent border border-slate-700">GUEST</span>
-                <button onclick="logout()" class="text-slate-500 hover:text-white"><i class="fas fa-sign-out-alt"></i></button>
+                <span id="userDisplay"
+                    class="text-[10px] font-mono bg-slate-800 px-2 py-1 rounded text-accent border border-slate-700">GUEST</span>
+                <button onclick="logout()" class="text-slate-500 hover:text-white"><i
+                        class="fas fa-sign-out-alt"></i></button>
             </div>
         </div>
     </nav>
 
     <div class="max-w-xl mx-auto px-4 mt-6">
-        
+
         <div class="bg-card rounded-xl border border-slate-700 shadow-xl overflow-hidden mb-8">
             <div class="p-3 border-b border-slate-800 bg-slate-900/50 flex justify-between items-center">
                 <h2 class="font-mono text-xs text-accent">CREATE NEW CONTRACT</h2>
                 <div class="flex bg-slate-900 rounded p-1 border border-slate-800">
-                    <button id="btnDirect" class="px-3 py-1 text-[10px] font-bold rounded bg-slate-700 text-white" onclick="toggleType('direct')">DIRECT</button>
-                    <button id="btnChoice" class="px-3 py-1 text-[10px] font-bold rounded text-muted" onclick="toggleType('choice')">CHOICE</button>
+                    <button id="btnDirect" class="px-3 py-1 text-[10px] font-bold rounded bg-slate-700 text-white"
+                        onclick="toggleType('direct')">DIRECT</button>
+                    <button id="btnChoice" class="px-3 py-1 text-[10px] font-bold rounded text-muted"
+                        onclick="toggleType('choice')">CHOICE</button>
                 </div>
             </div>
 
             <form id="wagerForm" onsubmit="submitWager(event)" class="p-5">
                 <div class="mb-4">
-                    <input type="text" id="title" placeholder="Context (e.g. Mobile Legends Match)" class="w-full input-dark rounded-lg px-4 py-3 text-sm font-bold" required>
+                    <input type="text" id="title" placeholder="Context (e.g. Mobile Legends Match)"
+                        class="w-full input-dark rounded-lg px-4 py-3 text-sm font-bold" required>
                 </div>
 
                 <div id="inputDirect" class="mb-4">
-                    <textarea id="directRequest" rows="2" placeholder="Input Demand..." class="w-full input-dark rounded-lg px-4 py-3 text-sm font-mono"></textarea>
+                    <textarea id="directRequest" rows="2" placeholder="Input Demand..."
+                        class="w-full input-dark rounded-lg px-4 py-3 text-sm font-mono"></textarea>
                 </div>
 
                 <div id="inputChoice" class="mb-4 hidden">
-                    <textarea id="choiceOptions" rows="2" placeholder="Option A, Option B, Option C" class="w-full input-dark rounded-lg px-4 py-3 text-sm font-mono"></textarea>
+                    <textarea id="choiceOptions" rows="2" placeholder="Option A, Option B, Option C"
+                        class="w-full input-dark rounded-lg px-4 py-3 text-sm font-mono"></textarea>
                     <p class="text-[10px] text-muted mt-2">Partner will choose one.</p>
                 </div>
 
-                <button type="submit" class="w-full bg-accent hover:bg-emerald-400 text-bg font-bold py-3 rounded-lg text-sm uppercase tracking-widest shadow-[0_0_15px_rgba(16,185,129,0.4)] transition-all">
+                <button type="submit"
+                    class="w-full bg-accent hover:bg-emerald-400 text-bg font-bold py-3 rounded-lg text-sm uppercase tracking-widest shadow-[0_0_15px_rgba(16,185,129,0.4)] transition-all">
                     Initiate Protocol
                 </button>
             </form>
         </div>
 
         <div id="wagerList" class="space-y-4 pb-20">
-            </div>
+        </div>
 
     </div>
 
@@ -104,14 +146,14 @@
         import { getFirestore, collection, addDoc, onSnapshot, query, orderBy, updateDoc, doc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
         // --- GANTI CONFIG DI SINI ---
-	const firebaseConfig = {
-  		apiKey: "AIzaSyDTLkvNNwh4LoJuLW1JhsF1S_ZOY1k-PAM",
-  		authDomain: "webchoice-9b2c0.firebaseapp.com",
-  		projectId: "webchoice-9b2c0",
-  		storageBucket: "webchoice-9b2c0.firebasestorage.app",
-  		messagingSenderId: "754013239435",
-  		appId: "1:754013239435:web:496f9a5851d0586ee43c8e"
-	};
+        const firebaseConfig = {
+            apiKey: "AIzaSyDTLkvNNwh4LoJuLW1JhsF1S_ZOY1k-PAM",
+            authDomain: "webchoice-9b2c0.firebaseapp.com",
+            projectId: "webchoice-9b2c0",
+            storageBucket: "webchoice-9b2c0.firebasestorage.app",
+            messagingSenderId: "754013239435",
+            appId: "1:754013239435:web:496f9a5851d0586ee43c8e"
+        };
 
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
@@ -130,7 +172,7 @@
                 document.getElementById('userDisplay').innerText = currentUser.toUpperCase();
             }
         }
-        
+
         window.setIdentity = (role) => {
             localStorage.setItem('wagerUser', role);
             currentUser = role;
@@ -151,8 +193,8 @@
             currentType = type;
             document.getElementById('btnDirect').className = type === 'direct' ? "px-3 py-1 text-[10px] font-bold rounded bg-slate-700 text-white" : "px-3 py-1 text-[10px] font-bold rounded text-muted";
             document.getElementById('btnChoice').className = type === 'choice' ? "px-3 py-1 text-[10px] font-bold rounded bg-slate-700 text-white" : "px-3 py-1 text-[10px] font-bold rounded text-muted";
-            
-            if(type === 'direct') {
+
+            if (type === 'direct') {
                 document.getElementById('inputDirect').classList.remove('hidden');
                 document.getElementById('inputChoice').classList.add('hidden');
             } else {
@@ -165,7 +207,7 @@
         window.submitWager = async (e) => {
             e.preventDefault();
             const title = document.getElementById('title').value;
-            
+
             let data = {
                 title: title,
                 type: currentType,
@@ -176,10 +218,10 @@
 
             if (currentType === 'direct') {
                 data.content = document.getElementById('directRequest').value;
-                if(!data.content) return alert("Empty demand.");
+                if (!data.content) return alert("Empty demand.");
             } else {
                 const rawOptions = document.getElementById('choiceOptions').value;
-                if(!rawOptions) return alert("Options required.");
+                if (!rawOptions) return alert("Options required.");
                 data.options = rawOptions.split(',').map(opt => opt.trim()).filter(opt => opt !== "");
                 data.selectedOption = null;
             }
@@ -194,7 +236,7 @@
 
         // --- RENDER LIST (Logika Siapa Melihat Apa) ---
         const q = query(wagersRef, orderBy("timestamp", "desc"));
-        
+
         onSnapshot(q, (snapshot) => {
             const listContainer = document.getElementById('wagerList');
             listContainer.innerHTML = "";
@@ -207,10 +249,10 @@
             snapshot.forEach((docSnap) => {
                 const wager = docSnap.data();
                 const id = docSnap.id;
-                
+
                 // Cek Kepemilikan
                 const isMyWager = wager.createdBy === currentUser;
-                
+
                 let contentHtml = "";
                 let footerHtml = "";
 
@@ -233,7 +275,7 @@
                         const clickAction = isMyWager ? "" : `onclick="selectOption('${id}', 'OPT_VAL')"`;
                         const instruction = isMyWager ? `<div class="text-[10px] text-yellow-500 mb-2 font-mono"><i class="fas fa-clock"></i> WAITING FOR PARTNER TO CHOOSE...</div>` : `<div class="text-[10px] text-accent mb-2 font-mono animate-pulse"><i class="fas fa-exclamation-circle"></i> ACTION REQUIRED: CHOOSE ONE</div>`;
 
-                        let btns = wager.options.map(opt => 
+                        let btns = wager.options.map(opt =>
                             `<button ${isMyWager ? '' : `onclick="selectOption('${id}', '${opt}')"`} class="w-full text-left px-4 py-3 text-sm rounded border ${isMyWager ? 'border-slate-800 bg-slate-900 text-slate-500' : 'border-slate-600 bg-slate-800 hover:border-accent hover:bg-slate-700 text-white'} transition-all mb-2 font-mono" ${isDisabled}>
                                 [ ] ${opt}
                              </button>`
@@ -290,31 +332,32 @@
                         </div>
                     </div>
                 `;
-                
+
                 listContainer.innerHTML += cardHtml;
             });
         });
 
         // --- DATABASE ACTIONS ---
         window.markComplete = async (id) => {
-            if(confirm("Confirm that reward has been received?")) {
+            if (confirm("Confirm that reward has been received?")) {
                 await updateDoc(doc(db, "wagers", id), { status: 'completed' });
             }
         }
 
         window.selectOption = async (id, option) => {
             // Langsung update database, karena yang klik pasti pihak "Penerima" (Logic di render sudah handle ini)
-            if(confirm(`Lock in option: "${option}"?`)) {
+            if (confirm(`Lock in option: "${option}"?`)) {
                 await updateDoc(doc(db, "wagers", id), { selectedOption: option });
             }
         }
 
         window.deleteWager = async (id) => {
-            if(confirm("Terminate this contract?")) {
+            if (confirm("Terminate this contract?")) {
                 await deleteDoc(doc(db, "wagers", id));
             }
         }
 
     </script>
 </body>
+
 </html>

@@ -1,271 +1,117 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RevolverDX - RPG Portfolio</title>
-    <link href="https://fonts.googleapis.com/css2?family=MedievalSharp&family=UnifrakturMaguntia&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <title>Dapur Tradisional - Rasa Autentik</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
-        :root {
-            --primary-gold: #FFD700;
-            --dark-bg: #1a120b;
-            --parchment: #f0e6d3;
-            --metal-border: #63594e;
-            --health-red: #cc0000;
-        }
-
-        body {
-            background: url('https://img.freepik.com/free-photo/old-brown-paper-texture-background_1373-431.jpg') fixed;
-            font-family: 'MedievalSharp', cursive;
-            color: #3d2f1f;
-            min-height: 100vh;
-        }
-
-        /* RPG Style Navbar */
-        .navbar {
-            background: rgba(26, 18, 11, 0.9) !important;
-            border-bottom: 3px solid var(--primary-gold);
-            box-shadow: 0 0 20px rgba(0,0,0,0.5);
-        }
-
-        .navbar-brand {
-            font-family: 'UnifrakturMaguntia', cursive;
-            font-size: 2.5rem;
-            color: var(--primary-gold) !important;
-            text-shadow: 2px 2px 2px #000;
-        }
-
-        .nav-link {
-            color: var(--parchment) !important;
-            font-size: 1.2rem;
-            position: relative;
-            margin: 0 15px;
-        }
-
-        .nav-link::before {
-            content: '⚔';
-            margin-right: 8px;
-        }
-
-        /* Character Sheet Style */
-        .character-sheet {
-            background: url('https://www.transparenttextures.com/patterns/old-paper.png');
-            border: 15px solid transparent;
-            border-image: url('https://www.freeiconspng.com/uploads/gold-frame-png-5.png') 30 round;
-            box-shadow: 0 0 30px rgba(0,0,0,0.5);
-            margin: 2rem auto;
-            padding: 2rem;
-        }
-
-        /* Stats Container */
-        .stats-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 1rem;
-            padding: 1rem;
-            background: rgba(0,0,0,0.7);
-            border: 3px solid var(--metal-border);
-        }
-
-        .stat-card {
-            background: rgba(240, 230, 211, 0.9);
-            padding: 1rem;
-            border: 2px solid var(--metal-border);
-            position: relative;
-        }
-
-        .stat-card h3 {
-            color: var(--health-red);
-            border-bottom: 2px solid var(--metal-border);
-            padding-bottom: 0.5rem;
-        }
-
-        /* Skill Tree */
-        .skill-tree {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 1rem;
-            padding: 2rem;
-            background: rgba(0,0,0,0.5);
-        }
-
-        .skill-node {
-            background: url('https://www.transparenttextures.com/patterns/black-paper.png');
-            border: 2px solid var(--primary-gold);
-            padding: 1rem;
-            text-align: center;
-            transition: all 0.3s ease;
-            cursor: pointer;
-        }
-
-        .skill-node:hover {
-            transform: scale(1.05);
-            box-shadow: 0 0 15px var(--primary-gold);
-        }
-
-        /* Health Bar */
-        .health-bar {
-            width: 100%;
-            height: 20px;
-            background: #444;
-            border: 2px solid #000;
-            border-radius: 5px;
-            overflow: hidden;
-        }
-
-        .health-fill {
-            height: 100%;
-            background: linear-gradient(to right, #cc0000, #ff4444);
-            transition: width 0.5s ease;
-        }
-
-        /* Quest Log */
-        .quest-log {
-            background: rgba(0,0,0,0.8);
-            border: 3px solid var(--metal-border);
-            padding: 1rem;
-            color: var(--parchment);
-        }
-
-        .quest-entry {
-            padding: 1rem;
-            border-bottom: 1px solid var(--metal-border);
-        }
-
-        /* RPG Buttons */
-        .btn-rpg {
-            background: linear-gradient(to bottom, #63594e, #3d2f1f);
-            border: 2px solid var(--primary-gold);
-            color: var(--primary-gold);
-            padding: 10px 25px;
-            font-size: 1.1rem;
-            text-transform: uppercase;
-            transition: all 0.3s ease;
-        }
-
-        .btn-rpg:hover {
-            background: linear-gradient(to bottom, #3d2f1f, #63594e);
-            box-shadow: 0 0 15px var(--primary-gold);
-        }
-
-        /* Profile Image Frame */
-        .profile-frame {
-            border: 15px solid transparent;
-            border-image: url('https://www.freeiconspng.com/uploads/gold-frame-png-5.png') 30 round;
-            padding: 10px;
-            background: #fff;
-        }
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Playfair+Display:wght@700&display=swap');
+        
+        body { font-family: 'Poppins', sans-serif; }
+        .hero-font { font-family: 'Playfair Display', serif; }
+        .glass { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); }
+        .card-hover:hover { transform: translateY(-10px); transition: all 0.3s ease; }
     </style>
 </head>
-<body>
-    <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
-        <div class="container">
-            <a class="navbar-brand" href="#">RevolverDX</a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto">
-                    <li class="nav-item"><a class="nav-link" href="#stats">Character Sheet</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#skills">Skill Tree</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#quests">Quest Log</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#inventory">Inventory</a></li>
-                </ul>
-            </div>
+<body class="bg-orange-50 text-gray-800">
+
+    <nav class="fixed w-full z-50 glass shadow-sm py-4 px-6 flex justify-between items-center">
+        <div class="text-2xl font-bold text-orange-600">DAPUR<span class="text-yellow-600">KITA</span></div>
+        <div class="space-x-6 hidden md:block">
+            <a href="#home" class="hover:text-orange-600 transition">Beranda</a>
+            <a href="#produk" class="hover:text-orange-600 transition">Produk</a>
+            <a href="#tentang" class="hover:text-orange-600 transition">Tentang Kami</a>
         </div>
+        <a href="https://wa.me/628123456789" class="bg-green-500 text-white px-5 py-2 rounded-full font-semibold hover:bg-green-600 transition shadow-lg">
+            <i class="fab fa-whatsapp mr-2"></i>Pesan Sekarang
+        </a>
     </nav>
 
-    <main class="container mt-5">
-        <!-- Character Sheet Section -->
-        <section id="stats" class="character-sheet mt-5">
-            <div class="text-center mb-4">
-                <div class="profile-frame d-inline-block">
-                    <img src="your-profile.jpg" alt="Character Avatar" class="img-fluid" style="max-width: 200px;">
+    <header id="home" class="pt-32 pb-20 px-6 text-center bg-gradient-to-b from-orange-100 to-orange-50">
+        <h1 class="hero-font text-5xl md:text-7xl text-gray-900 mb-4">Cita Rasa <span class="text-orange-600">Nusantara</span></h1>
+        <p class="text-lg text-gray-600 max-w-2xl mx-auto mb-8">Menghadirkan kudapan tradisional dengan bahan premium dan resep warisan keluarga yang dijamin bikin ketagihan.</p>
+        <div class="flex justify-center gap-4">
+            <a href="#produk" class="bg-orange-600 text-white px-8 py-3 rounded-lg shadow-xl hover:bg-orange-700 transition">Lihat Menu</a>
+        </div>
+    </header>
+
+    <section id="produk" class="py-20 px-6 max-w-6xl mx-auto">
+        <div class="text-center mb-16">
+            <h2 class="text-3xl font-bold mb-2">Produk Unggulan</h2>
+            <div class="w-20 h-1 bg-orange-500 mx-auto"></div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div class="bg-white rounded-2xl overflow-hidden shadow-lg card-hover">
+                <div class="h-56 bg-gray-200 flex items-center justify-center text-gray-400">
+                   <i class="fas fa-utensils fa-3x"></i>
                 </div>
-                <h2 class="mt-3">Level 99 Network Archmage</h2>
-                <div class="health-bar mx-auto" style="width: 300px;">
-                    <div class="health-fill" style="width: 100%"></div>
+                <div class="p-6">
+                    <span class="text-xs font-bold text-orange-500 uppercase">Best Seller</span>
+                    <h3 class="text-xl font-bold mt-2">Geblek Gurih</h3>
+                    <p class="text-gray-500 text-sm mt-2">Khas Kulon Progo, kenyal di dalam renyah di luar. Cocok untuk teman ngeteh.</p>
+                    <div class="mt-4 flex justify-between items-center">
+                        <span class="text-orange-600 font-bold text-xl">Rp 15.000</span>
+                        <button class="bg-gray-100 p-2 rounded-full hover:bg-orange-100"><i class="fas fa-plus text-orange-600"></i></button>
+                    </div>
                 </div>
             </div>
 
-            <div class="stats-container">
-                <div class="stat-card">
-                    <h3>⚔ Core Skills</h3>
-                    <ul>
-                        <li>Network Sorcery ★★★★★</li>
-                        <li>System Alchemy ★★★★☆</li>
-                        <li>Cyber Defense ★★★★☆</li>
-                    </ul>
+            <div class="bg-white rounded-2xl overflow-hidden shadow-lg card-hover">
+                <div class="h-56 bg-gray-200 flex items-center justify-center text-gray-400">
+                   <i class="fas fa-cookie fa-3x"></i>
                 </div>
-
-                <div class="stat-card">
-                    <h3>🎓 Education</h3>
-                    <ul>
-                        <li>Guild of BSI (2021-Now)</li>
-                        <li>SMK TI Kartika (2018-2021)</li>
-                    </ul>
-                </div>
-
-                <div class="stat-card">
-                    <h3>🏆 Achievements</h3>
-                    <ul>
-                        <li>LKS Network Champion</li>
-                        <li>1000+ Bugs Vanquished</li>
-                    </ul>
-                </div>
-            </div>
-        </section>
-
-        <!-- Skill Tree Section -->
-        <section id="skills" class="skill-tree mt-5">
-            <div class="skill-node">
-                <h4>Network Mastery</h4>
-                <div class="progress mt-2" style="height: 5px;">
-                    <div class="progress-bar bg-danger" style="width: 90%"></div>
-                </div>
-                <p class="mt-2">Mikrotik • TCP/IP • VLAN</p>
-            </div>
-
-            <div class="skill-node">
-                <h4>System Craft</h4>
-                <div class="progress mt-2" style="height: 5px;">
-                    <div class="progress-bar bg-warning" style="width: 85%"></div>
-                </div>
-                <p class="mt-2">Windows • Linux • Hardware</p>
-            </div>
-
-            <div class="skill-node">
-                <h4>Code Magic</h4>
-                <div class="progress mt-2" style="height: 5px;">
-                    <div class="progress-bar bg-info" style="width: 80%"></div>
-                </div>
-                <p class="mt-2">HTML/CSS • Python • JavaScript</p>
-            </div>
-        </section>
-
-        <!-- Quest Log Section -->
-        <section id="quests" class="quest-log mt-5">
-            <h2 class="text-center mb-4">Active Quests</h2>
-            <div class="quest-entry">
-                <h4>🎯 Current Mission: Cloud Migration</h4>
-                <p>Objective: Master AWS/Azure infrastructure</p>
-                <div class="progress">
-                    <div class="progress-bar" style="width: 65%">65%</div>
+                <div class="p-6">
+                    <span class="text-xs font-bold text-yellow-500 uppercase">Premium Quality</span>
+                    <h3 class="text-xl font-bold mt-2">Natar Lumer</h3>
+                    <p class="text-gray-500 text-sm mt-2">Dibuat dengan full wisman dan selai nanas asli buatan sendiri. Lumer di mulut!</p>
+                    <div class="mt-4 flex justify-between items-center">
+                        <span class="text-orange-600 font-bold text-xl">Rp 85.000</span>
+                        <button class="bg-gray-100 p-2 rounded-full hover:bg-orange-100"><i class="fas fa-plus text-orange-600"></i></button>
+                    </div>
                 </div>
             </div>
 
-            <div class="quest-entry">
-                <h4>⚔ Ongoing Battle: Cybersecurity</h4>
-                <p>Defeat 1000+ malware attacks</p>
-                <div class="progress">
-                    <div class="progress-bar bg-danger" style="width: 82%">823/1000</div>
+            <div class="bg-white rounded-2xl overflow-hidden shadow-lg card-hover">
+                <div class="h-56 bg-gray-200 flex items-center justify-center text-gray-400">
+                   <i class="fas fa-pepper-hot fa-3x text-red-400"></i>
+                </div>
+                <div class="p-6">
+                    <span class="text-xs font-bold text-red-500 uppercase">Must Try</span>
+                    <h3 class="text-xl font-bold mt-2">Sambal Kacang</h3>
+                    <p class="text-gray-500 text-sm mt-2">Bumbu pelengkap serbaguna dengan kacang pilihan dan pedas yang pas.</p>
+                    <div class="mt-4 flex justify-between items-center">
+                        <span class="text-orange-600 font-bold text-xl">Rp 25.000</span>
+                        <button class="bg-gray-100 p-2 rounded-full hover:bg-orange-100"><i class="fas fa-plus text-orange-600"></i></button>
+                    </div>
                 </div>
             </div>
-        </section>
-    </main>
+        </div>
+    </section>
 
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <footer class="bg-gray-900 text-white py-12 px-6">
+        <div class="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-10">
+            <div>
+                <h2 class="text-2xl font-bold mb-4 text-orange-500">DAPUR KITA</h2>
+                <p class="text-gray-400">Menerima pesanan untuk acara pesta, arisan, atau sekadar stok cemilan di rumah. Kami menjamin kebersihan dan kualitas rasa.</p>
+                <div class="flex gap-4 mt-6">
+                    <a href="#" class="text-2xl hover:text-orange-500"><i class="fab fa-instagram"></i></a>
+                    <a href="#" class="text-2xl hover:text-orange-500"><i class="fab fa-facebook"></i></a>
+                    <a href="#" class="text-2xl hover:text-orange-500"><i class="fab fa-whatsapp"></i></a>
+                </div>
+            </div>
+            <div class="flex flex-col md:items-end">
+                <h3 class="text-lg font-semibold mb-4">Lokasi Kami</h3>
+                <p class="text-gray-400 text-right">Jl. Kenangan Indah No. 123<br>Yogyakarta, Indonesia</p>
+                <p class="mt-4 text-orange-500">Buka: 08.00 - 20.00 WIB</p>
+            </div>
+        </div>
+        <div class="border-t border-gray-800 mt-10 pt-6 text-center text-gray-500 text-sm">
+            &copy; 2026 Dapur Kita. All Rights Reserved.
+        </div>
+    </footer>
+
 </body>
 </html>

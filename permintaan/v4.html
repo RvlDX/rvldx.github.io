@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WagerNet - Pro</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Inter', 'sans-serif'], mono: ['Space Mono', 'monospace'], },
+                    colors: { bg: '#0B1120', card: '#151F32', accent: '#10B981', danger: '#EF4444', muted: '#64748B' }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { background-color: #0B1120; color: #E2E8F0; }
+        .input-dark { background: #0F172A; border: 1px solid #334155; color: #E2E8F0; }
+        .input-dark:focus { border-color: #10B981; outline: none; }
+        .fade-in { animation: fadeIn 0.3s ease-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+        
+        .tab-btn.active { border-bottom: 2px solid #10B981; color: #10B981; }
+        .tab-btn { color: #64748B; transition: all 0.2s; }
+
+        /* Custom SweetAlert Style Override agar 100% match tema */
+        div:where(.swal2-container) div:where(.swal2-popup) {
+            background: #151F32 !important;
+            border: 1px solid #334155;
+            color: #E2E8F0;
+            border-radius: 1rem; /* Rounded-XL */
+        }
+        div:where(.swal2-icon).swal2-warning {
+            border-color: #F59E0B;
+            color: #F59E0B;
+        }
+    </style>
+</head>
+
+<body class="min-h-screen pb-20 relative overflow-x-hidden font-sans">
+
+    <div id="authOverlay" class="fixed inset-0 z-[100] bg-[#0B1120] flex flex-col items-center justify-center p-6 hidden">
+        <div class="text-center mb-10">
+            <div class="w-20 h-20 bg-accent/10 rounded-full flex items-center justify-center mx-auto mb-4 border border-accent/50 shadow-[0_0_20px_rgba(16,185,129,0.3)]">
+                <i class="fas fa-network-wired text-3xl text-accent"></i>
+            </div>
+            <h1 class="text-3xl font-bold tracking-tight text-white">WAGER<span class="text-accent">NET</span></h1>
+            <p class="text-muted text-sm font-mono mt-2">Social Contract Protocol</p>
+        </div>
+        <button onclick="loginWithGoogle()" class="flex items-center gap-3 bg-white text-black px-6 py-3 rounded-xl font-bold hover:bg-gray-200 transition-all">
+            <img src="https://www.svgrepo.com/show/475656/google-color.svg" class="w-6 h-6" alt="Google">
+            Sign in with Google
+        </button>
+    </div>
+
+    <div id="usernameModal" class="fixed inset-0 z-[90] bg-[#0B1120]/95 backdrop-blur flex items-center justify-center p-6 hidden">
+        <div class="bg-card p-6 rounded-xl border border-accent w-full max-w-md shadow-2xl">
+            <h2 class="text-xl font-bold text-white mb-2">Identify Yourself</h2>
+            <p class="text-sm text-muted mb-4">Create a unique handle for the network.</p>
+            <input type="text" id="newUsernameInput" placeholder="username (no spaces)" class="w-full input-dark rounded px-4 py-3 font-mono mb-4 lowercase">
+            <button onclick="saveUsername()" class="w-full bg-accent text-bg font-bold py-3 rounded">INITIALIZE IDENTITY</button>
+        </div>
+    </div>
+
+    <nav class="border-b border-slate-800 bg-bg/90 backdrop-blur-md sticky top-0 z-40">
+        <div class="max-w-2xl mx-auto px-4 h-16 flex items-center justify-between">
+            <div class="flex items-center gap-2">
+                <div class="w-2 h-2 rounded-full bg-accent animate-pulse"></div>
+                <h1 class="font-bold text-sm tracking-widest hidden sm:block">WAGER<span class="text-accent">NET</span></h1>
+            </div>
+            <div class="flex items-center gap-3" id="navProfile"></div>
+        </div>
+    </nav>
+
+    <div class="max-w-2xl mx-auto px-4 mt-4">
+        <div class="flex border-b border-slate-800">
+            <button onclick="switchTab('home')" id="tab-home" class="tab-btn active flex-1 py-3 text-sm font-bold tracking-wide flex justify-center items-center gap-2">
+                <i class="fas fa-home"></i> DASHBOARD
+            </button>
+            <button onclick="switchTab('network')" id="tab-network" class="tab-btn flex-1 py-3 text-sm font-bold tracking-wide flex justify-center items-center gap-2 relative">
+                <i class="fas fa-users"></i> NETWORK
+                <span id="reqBadge" class="hidden w-2 h-2 bg-red-500 rounded-full absolute top-3 right-[30%] animate-ping"></span>
+            </button>
+        </div>
+    </div>
+
+    <div class="max-w-2xl mx-auto px-4 mt-6">
+
+        <div id="view-home" class="fade-in">
+            <div class="bg-card rounded-xl border border-slate-700 shadow-xl overflow-hidden mb-8">
+                <div class="p-3 border-b border-slate-800 bg-slate-900/50 flex justify-between items-center">
+                    <h2 class="font-mono text-xs text-accent">NEW CONTRACT</h2>
+                    <div class="flex bg-slate-900 rounded p-1 border border-slate-800">
+                        <button id="btnDirect" class="px-3 py-1 text-[10px] font-bold rounded bg-slate-700 text-white" onclick="toggleType('direct')">DIRECT</button>
+                        <button id="btnChoice" class="px-3 py-1 text-[10px] font-bold rounded text-muted" onclick="toggleType('choice')">CHOICE</button>
+                    </div>
+                </div>
+
+                <form id="wagerForm" onsubmit="submitWager(event)" class="p-5">
+                    <div class="mb-4">
+                        <label class="text-[10px] text-muted font-mono block mb-1">OPPONENT</label>
+                        <select id="targetUserSelect" class="w-full input-dark rounded-lg px-4 py-3 text-sm font-bold bg-slate-900" required>
+                            <option value="" disabled selected>Select friend...</option>
+                        </select>
+                    </div>
+                    <div class="mb-4">
+                        <input type="text" id="title" placeholder="Context (e.g. FIFA Match)" class="w-full input-dark rounded-lg px-4 py-3 text-sm font-bold" required>
+                    </div>
+                    <div id="inputDirect" class="mb-4">
+                        <textarea id="directRequest" rows="2" placeholder="Input Demand..." class="w-full input-dark rounded-lg px-4 py-3 text-sm font-mono"></textarea>
+                    </div>
+                    <div id="inputChoice" class="mb-4 hidden">
+                        <textarea id="choiceOptions" rows="2" placeholder="Option A, Option B, Option C" class="w-full input-dark rounded-lg px-4 py-3 text-sm font-mono"></textarea>
+                    </div>
+                    <button type="submit" class="w-full bg-accent hover:bg-emerald-400 text-bg font-bold py-3 rounded-lg text-sm uppercase tracking-widest shadow-[0_0_15px_rgba(16,185,129,0.4)] transition-all">
+                        Initiate Protocol
+                    </button>
+                </form>
+            </div>
+
+            <h3 class="text-xs font-mono text-muted mb-4 px-1">ACTIVE CONTRACTS</h3>
+            <div id="wagerList" class="space-y-4"></div>
+        </div>
+
+        <div id="view-network" class="hidden fade-in">
+            <div id="pendingSection" class="mb-6 hidden">
+                <h3 class="text-xs font-mono text-accent mb-3 uppercase tracking-wider">⚡ Pending Requests</h3>
+                <div id="requestListDisplay" class="space-y-2"></div>
+            </div>
+
+            <div class="bg-card p-4 rounded-xl border border-slate-700 mb-8">
+                <div class="text-[10px] text-muted font-mono uppercase mb-2">Add New Connection</div>
+                <div class="flex gap-2">
+                    <input type="text" id="friendInput" placeholder="Enter username..." class="flex-1 input-dark rounded px-3 py-2 text-sm font-mono lowercase">
+                    <button onclick="sendFriendRequest()" class="bg-slate-700 hover:bg-accent hover:text-bg text-white px-4 rounded text-xs font-bold transition-colors">
+                        ADD
+                    </button>
+                </div>
+            </div>
+
+            <h3 class="text-xs font-mono text-muted mb-3 px-1">ESTABLISHED CONNECTIONS</h3>
+            <div id="myFriendList" class="space-y-2"></div>
+        </div>
+
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+        import { getFirestore, collection, addDoc, onSnapshot, query, where, orderBy, updateDoc, doc, deleteDoc, getDocs, setDoc, getDoc, arrayUnion, writeBatch, arrayRemove } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+        // CONFIG
+        const firebaseConfig = {
+            apiKey: "AIzaSyDTLkvNNwh4LoJuLW1JhsF1S_ZOY1k-PAM",
+            authDomain: "webchoice-9b2c0.firebaseapp.com",
+            projectId: "webchoice-9b2c0",
+            storageBucket: "webchoice-9b2c0.firebasestorage.app",
+            messagingSenderId: "754013239435",
+            appId: "1:754013239435:web:496f9a5851d0586ee43c8e"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+        const provider = new GoogleAuthProvider();
+
+        const usersRef = collection(db, "users");
+        const wagersRef = collection(db, "wagers");
+        const requestsRef = collection(db, "friend_requests");
+
+        let currentUser = null;
+        let userProfile = null;
+        let currentType = 'direct';
+
+        // --- CUSTOM ALERT HELPERS (THEMING) ---
+        
+        // 1. Toast (Pojok Kanan Atas, Auto Close)
+        const Toast = Swal.mixin({
+            toast: true,
+            position: 'top-end',
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+            background: '#151F32',
+            color: '#fff',
+            iconColor: '#10B981',
+            didOpen: (toast) => {
+                toast.addEventListener('mouseenter', Swal.stopTimer)
+                toast.addEventListener('mouseleave', Swal.resumeTimer)
+            }
+        });
+
+        // 2. Modal (Tengah, Blocking)
+        const ConfirmModal = Swal.mixin({
+            background: '#151F32',
+            color: '#E2E8F0',
+            confirmButtonColor: '#10B981',
+            cancelButtonColor: '#334155',
+            iconColor: '#10B981',
+            buttonsStyling: true,
+            customClass: {
+                confirmButton: 'bg-accent text-bg font-bold px-4 py-2 rounded-lg ml-2',
+                cancelButton: 'bg-slate-700 text-white font-bold px-4 py-2 rounded-lg'
+            }
+        });
+
+        function showError(msg) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: msg,
+                background: '#151F32',
+                color: '#fff',
+                confirmButtonColor: '#EF4444'
+            });
+        }
+
+        // --- AUTH & SETUP ---
+        window.loginWithGoogle = () => signInWithPopup(auth, provider).catch(e => showError(e.message));
+        window.logout = () => signOut(auth).then(() => location.reload());
+
+        onAuthStateChanged(auth, async (user) => {
+            if (user) {
+                currentUser = user;
+                document.getElementById('authOverlay').classList.add('hidden');
+                
+                onSnapshot(doc(db, "users", user.uid), (docSnap) => {
+                    if (docSnap.exists()) {
+                        userProfile = docSnap.data();
+                        renderNavbar();
+                        renderFriendList(); 
+                        loadFriendsDropdown();
+                    } else {
+                        document.getElementById('usernameModal').classList.remove('hidden');
+                    }
+                });
+
+                listenToWagers();
+                listenToFriendRequests();
+            } else {
+                document.getElementById('authOverlay').classList.remove('hidden');
+            }
+        });
+
+        window.switchTab = (tabName) => {
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active', 'text-accent'));
+            document.getElementById(`tab-${tabName}`).classList.add('active');
+            if(tabName === 'home') {
+                document.getElementById('view-home').classList.remove('hidden');
+                document.getElementById('view-network').classList.add('hidden');
+            } else {
+                document.getElementById('view-home').classList.add('hidden');
+                document.getElementById('view-network').classList.remove('hidden');
+            }
+        }
+
+        window.saveUsername = async () => {
+            const username = document.getElementById('newUsernameInput').value.trim().toLowerCase();
+            if(username.length < 3) return showError("Username minimum 3 characters");
+            
+            const q = query(usersRef, where("username", "==", username));
+            if (!(await getDocs(q)).empty) return showError("Username already taken!");
+
+            await setDoc(doc(db, "users", currentUser.uid), {
+                uid: currentUser.uid,
+                email: currentUser.email,
+                photoURL: currentUser.photoURL,
+                username: username,
+                friends: [],
+                createdAt: new Date()
+            });
+            document.getElementById('usernameModal').classList.add('hidden');
+            Toast.fire({ icon: 'success', title: 'Identity Initialized' });
+        };
+
+        function renderNavbar() {
+            document.getElementById('navProfile').innerHTML = `
+                <div class="text-right hidden sm:block">
+                    <div class="text-xs font-bold text-white">@${userProfile.username}</div>
+                </div>
+                <img src="${userProfile.photoURL}" class="w-8 h-8 rounded-full border border-slate-600">
+                <button onclick="logout()" class="text-slate-400 hover:text-white ml-2"><i class="fas fa-sign-out-alt"></i></button>
+            `;
+        }
+
+        // --- FRIENDSHIP LOGIC ---
+        window.sendFriendRequest = async () => {
+            const targetName = document.getElementById('friendInput').value.trim().toLowerCase();
+            if(!targetName || targetName === userProfile.username) return showError("Invalid username.");
+
+            const qUser = query(usersRef, where("username", "==", targetName));
+            const userSnap = await getDocs(qUser);
+            if(userSnap.empty) return showError("User not found!");
+            
+            const targetData = userSnap.docs[0].data();
+            const alreadyFriend = userProfile.friends?.some(f => f.uid === targetData.uid);
+            if(alreadyFriend) return showError("Already connected!");
+
+            const qReq = query(requestsRef, where("fromUid", "==", currentUser.uid), where("toUid", "==", targetData.uid));
+            if(!(await getDocs(qReq)).empty) return showError("Request already pending.");
+
+            await addDoc(requestsRef, {
+                fromUid: currentUser.uid,
+                fromUsername: userProfile.username,
+                fromPhoto: userProfile.photoURL,
+                toUid: targetData.uid,
+                status: 'pending',
+                timestamp: new Date()
+            });
+            
+            document.getElementById('friendInput').value = '';
+            Toast.fire({ icon: 'success', title: `Request sent to @${targetName}` });
+        };
+
+        function listenToFriendRequests() {
+            const q = query(requestsRef, where("toUid", "==", currentUser.uid), where("status", "==", "pending"));
+            onSnapshot(q, (snapshot) => {
+                const list = document.getElementById('requestListDisplay');
+                const badge = document.getElementById('reqBadge');
+                const section = document.getElementById('pendingSection');
+                
+                list.innerHTML = "";
+                
+                if(snapshot.empty) {
+                    badge.classList.add('hidden');
+                    section.classList.add('hidden');
+                } else {
+                    badge.classList.remove('hidden');
+                    section.classList.remove('hidden');
+                    
+                    snapshot.forEach(docSnap => {
+                        const req = docSnap.data();
+                        list.innerHTML += `
+                            <div class="flex justify-between items-center bg-slate-800 p-3 rounded-lg border border-slate-700">
+                                <div class="flex items-center gap-3">
+                                    <img src="${req.fromPhoto}" class="w-8 h-8 rounded-full">
+                                    <div>
+                                        <div class="text-[10px] text-muted">Incoming Request</div>
+                                        <div class="text-sm font-bold text-white">@${req.fromUsername}</div>
+                                    </div>
+                                </div>
+                                <div class="flex gap-2">
+                                    <button onclick="acceptFriend('${docSnap.id}', '${req.fromUid}', '${req.fromUsername}', '${req.fromPhoto}')" class="bg-accent text-bg px-3 py-1.5 rounded text-xs font-bold hover:bg-emerald-400">ACCEPT</button>
+                                    <button onclick="rejectFriend('${docSnap.id}')" class="bg-slate-700 text-white px-3 py-1.5 rounded text-xs hover:bg-red-500">REJECT</button>
+                                </div>
+                            </div>
+                        `;
+                    });
+                }
+            });
+        }
+
+        window.acceptFriend = async (reqId, senderUid, senderName, senderPhoto) => {
+            const batch = writeBatch(db);
+            batch.update(doc(db, "users", currentUser.uid), { friends: arrayUnion({ uid: senderUid, username: senderName, photoURL: senderPhoto }) });
+            batch.update(doc(db, "users", senderUid), { friends: arrayUnion({ uid: currentUser.uid, username: userProfile.username, photoURL: userProfile.photoURL }) });
+            batch.delete(doc(db, "friend_requests", reqId));
+            await batch.commit();
+            Toast.fire({ icon: 'success', title: 'Connection Established' });
+        };
+
+        window.rejectFriend = async (reqId) => {
+            await deleteDoc(doc(db, "friend_requests", reqId));
+        };
+
+        window.unfriend = async (friendUid) => {
+            ConfirmModal.fire({
+                title: 'Terminate Connection?',
+                text: "This action will remove the user from your network.",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Yes, remove',
+                cancelButtonText: 'Cancel'
+            }).then(async (result) => {
+                if (result.isConfirmed) {
+                    const myNewFriends = userProfile.friends.filter(f => f.uid !== friendUid);
+                    const batch = writeBatch(db);
+                    batch.update(doc(db, "users", currentUser.uid), { friends: myNewFriends });
+                    
+                    const friendSnap = await getDoc(doc(db, "users", friendUid));
+                    if(friendSnap.exists()){
+                        const friendData = friendSnap.data();
+                        const friendNewFriends = friendData.friends.filter(f => f.uid !== currentUser.uid);
+                        batch.update(doc(db, "users", friendUid), { friends: friendNewFriends });
+                    }
+                    await batch.commit();
+                    Toast.fire({ icon: 'success', title: 'Connection Removed' });
+                }
+            });
+        };
+
+        function renderFriendList() {
+            const list = document.getElementById('myFriendList');
+            list.innerHTML = "";
+            if(!userProfile.friends || userProfile.friends.length === 0) {
+                list.innerHTML = `<div class="text-center py-8 text-muted text-sm border border-dashed border-slate-800 rounded-lg">No connections established yet.</div>`;
+                return;
+            }
+            userProfile.friends.forEach(f => {
+                list.innerHTML += `
+                    <div class="flex justify-between items-center bg-card p-3 rounded-lg border border-slate-700 group hover:border-slate-600 transition-colors">
+                        <div class="flex items-center gap-3">
+                            <img src="${f.photoURL}" class="w-8 h-8 rounded-full">
+                            <span class="text-sm font-bold text-white">@${f.username}</span>
+                        </div>
+                        <button onclick="unfriend('${f.uid}')" class="text-slate-600 hover:text-danger px-3 py-1 transition-colors" title="Remove Connection">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                `;
+            });
+        }
+
+        // --- DASHBOARD LOGIC ---
+        function loadFriendsDropdown() {
+            const select = document.getElementById('targetUserSelect');
+            select.innerHTML = '<option value="" disabled selected>Select friend...</option>';
+            userProfile.friends?.forEach(f => {
+                select.innerHTML += `<option value="${f.uid}">@${f.username}</option>`;
+            });
+        }
+
+        window.toggleType = (type) => {
+            currentType = type;
+            document.getElementById('btnDirect').className = type === 'direct' ? "px-3 py-1 text-[10px] font-bold rounded bg-slate-700 text-white" : "px-3 py-1 text-[10px] font-bold rounded text-muted";
+            document.getElementById('btnChoice').className = type === 'choice' ? "px-3 py-1 text-[10px] font-bold rounded bg-slate-700 text-white" : "px-3 py-1 text-[10px] font-bold rounded text-muted";
+            document.getElementById(type === 'direct' ? 'inputDirect' : 'inputChoice').classList.remove('hidden');
+            document.getElementById(type === 'direct' ? 'inputChoice' : 'inputDirect').classList.add('hidden');
+        }
+
+        window.submitWager = async (e) => {
+            e.preventDefault();
+            const targetUid = document.getElementById('targetUserSelect').value;
+            if(!targetUid) return showError("Please select a friend!");
+            
+            const friendObj = userProfile.friends.find(f => f.uid === targetUid);
+            const title = document.getElementById('title').value;
+            
+            let data = {
+                title: title,
+                type: currentType,
+                creatorUid: currentUser.uid,
+                creatorUsername: userProfile.username,
+                targetUid: targetUid,
+                targetUsername: friendObj.username,
+                timestamp: new Date(),
+                status: 'pending'
+            };
+
+            if (currentType === 'direct') {
+                data.content = document.getElementById('directRequest').value;
+                if (!data.content) return showError("Demand cannot be empty.");
+            } else {
+                const opts = document.getElementById('choiceOptions').value;
+                if (!opts) return showError("Options required.");
+                data.options = opts.split(',').map(o => o.trim()).filter(Boolean);
+                data.selectedOption = null;
+            }
+
+            await addDoc(wagersRef, data);
+            document.getElementById('wagerForm').reset();
+            Toast.fire({ icon: 'success', title: 'Contract Deployed Successfully' });
+        }
+
+        function listenToWagers() {
+            const q = query(wagersRef, orderBy("timestamp", "desc"));
+            onSnapshot(q, (snapshot) => {
+                const list = document.getElementById('wagerList');
+                list.innerHTML = "";
+                let hasData = false;
+
+                snapshot.forEach((docSnap) => {
+                    const w = docSnap.data();
+                    const id = docSnap.id;
+                    const isCreator = w.creatorUid === currentUser.uid;
+                    const isTarget = w.targetUid === currentUser.uid;
+
+                    if (!isCreator && !isTarget) return;
+                    hasData = true;
+
+                    let content = w.type === 'direct' 
+                        ? `<div class="text-lg font-bold text-white mt-2">"${w.content}"</div>` 
+                        : (w.selectedOption 
+                            ? `<div class="mt-3 p-3 bg-slate-900 border border-accent/50 rounded text-center"><div class="text-[10px] text-muted font-mono">AGREED</div><div class="text-xl font-bold text-accent">${w.selectedOption}</div></div>`
+                            : `<div class="mt-3">${isTarget ? '<div class="text-[10px] text-accent mb-2 animate-pulse">ACTION: CHOOSE ONE</div>' : '<div class="text-[10px] text-yellow-500 mb-2">WAITING PARTNER...</div>'}${w.options.map(o => `<button ${isTarget ? `onclick="selectOption('${id}', '${o}')"` : 'disabled'} class="w-full text-left px-4 py-3 text-sm rounded border mb-2 font-mono ${isTarget ? 'bg-slate-800 hover:border-accent' : 'bg-slate-900 text-slate-500'}">[ ] ${o}</button>`).join('')}</div>`);
+
+                    let footer = w.status === 'pending' 
+                        ? (isCreator ? `<div class="text-[10px] text-muted">To: @${w.targetUsername}</div><button onclick="markComplete('${id}')" class="text-xs bg-slate-700 text-white hover:bg-accent hover:text-bg font-bold px-3 py-1.5 rounded">COMPLETE <i class="fas fa-check"></i></button>` : `<div class="text-[10px] text-muted">From: @${w.creatorUsername}</div><span class="text-[10px] text-yellow-500 font-mono bg-yellow-500/10 px-2 py-1 rounded border border-yellow-500/20">PENDING</span>`)
+                        : `<div class="text-[10px] text-muted">Done</div><span class="text-xs text-accent font-bold flex items-center gap-1"><i class="fas fa-check-double"></i> CLOSED</span>`;
+
+                    list.innerHTML += `
+                        <div class="bg-card p-5 rounded-xl border ${isTarget && w.status === 'pending' ? 'border-accent shadow-[0_0_10px_rgba(16,185,129,0.2)]' : 'border-slate-700'} fade-in relative group">
+                            <div class="flex justify-between items-start mb-2">
+                                <div><span class="text-[10px] font-mono uppercase tracking-wider ${w.type === 'direct' ? 'text-blue-400' : 'text-purple-400'}">${w.type === 'direct' ? 'MARKET' : 'LIMIT'}</span><h4 class="font-bold text-white text-lg">${w.title}</h4></div>
+                                ${isCreator ? `<button onclick="deleteWager('${id}')" class="text-slate-600 hover:text-danger px-2"><i class="fas fa-times"></i></button>` : ''}
+                            </div>
+                            ${content}
+                            <div class="flex justify-between items-center mt-4 pt-4 border-t border-slate-800/50">${footer}</div>
+                        </div>`;
+                });
+                if(!hasData) list.innerHTML = `<div class="text-center py-10 text-muted text-sm font-mono border border-dashed border-slate-800 rounded-lg">NO CONTRACTS</div>`;
+            });
+        }
+
+        // --- GLOBAL ACTIONS (Wrapped in SweetAlert) ---
+        window.markComplete = async (id) => {
+            ConfirmModal.fire({
+                title: 'Confirm Completion?',
+                text: "Has the agreement been fulfilled?",
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonText: 'Yes, Complete',
+                cancelButtonText: 'Wait'
+            }).then((result) => {
+                if(result.isConfirmed) {
+                    updateDoc(doc(db, "wagers", id), { status: 'completed' });
+                    Toast.fire({ icon: 'success', title: 'Contract Closed' });
+                }
+            });
+        }
+
+        window.selectOption = async (id, opt) => {
+            ConfirmModal.fire({
+                title: 'Confirm Selection',
+                text: `Lock in option: "${opt}"?`,
+                icon: 'info',
+                showCancelButton: true,
+                confirmButtonText: 'Confirm',
+                cancelButtonText: 'Cancel'
+            }).then((result) => {
+                if(result.isConfirmed) {
+                    updateDoc(doc(db, "wagers", id), { selectedOption: opt });
+                    Toast.fire({ icon: 'success', title: 'Option Locked' });
+                }
+            });
+        }
+
+        window.deleteWager = async (id) => {
+            ConfirmModal.fire({
+                title: 'Delete Contract?',
+                text: "This cannot be undone.",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Delete',
+                cancelButtonText: 'Keep'
+            }).then((result) => {
+                if(result.isConfirmed) deleteDoc(doc(db, "wagers", id));
+            });
+        }
+
+        window.acceptFriend = acceptFriend;
+        window.rejectFriend = rejectFriend;
+        window.selectOption = selectOption;
+        window.unfriend = unfriend;
+    </script>
+</body>
+</html>

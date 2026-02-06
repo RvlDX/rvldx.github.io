@@ -827,14 +827,27 @@
         function switchCoin(key, force = false) {
             if (!force && appData.activeCoin === key) return;
 
-            // Reset data tampilan agar tidak "nyangkut" dari koin sebelumnya
+            // Pastikan data koin ada
+            if (!appData.coins[key]) return;
+
+            // Reset UI agar tidak "nyangkut"
             el('price-display').textContent = '--';
             el('change-display').innerHTML = '--';
-            el('pnl-display').innerHTML = '0'; // Mereset PnL saat pindah tab
+            el('pnl-display').innerHTML = '0';
             currentLivePrice = 0;
 
             appData.activeCoin = key;
-            document.querySelectorAll('.tab').forEach(t => t.classList.toggle('active', t.textContent === key));
+
+            // --- TAMBAHKAN BARIS INI ---
+            saveToFirestore();
+            // ---------------------------
+
+            // Update Tab Active State
+            const tabs = document.querySelectorAll('.tab');
+            tabs.forEach(t => {
+                if (t.textContent === key) t.classList.add('active');
+                else t.classList.remove('active');
+            });
 
             if (updateInterval) clearInterval(updateInterval);
             loadTvWidget();
@@ -955,16 +968,16 @@
             Swal.fire({ title: 'Hapus?', icon: 'warning', showCancelButton: true }).then(r => {
                 if (r.isConfirmed) {
                     const toDelete = appData.activeCoin;
-                    
+
                     // Hapus dari data
                     delete appData.coins[toDelete];
-                    
+
                     // Hapus dari antrean urutan
                     appData.coinOrder = appData.coinOrder.filter(item => item !== toDelete);
 
                     // Pindah ke koin urutan pertama
                     appData.activeCoin = appData.coinOrder[0];
-                    
+
                     saveToFirestore();
                     initApp();
                     el('modal').classList.remove('active');

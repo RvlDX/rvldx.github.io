@@ -783,8 +783,20 @@
         }
 
         function initApp() {
-            renderTabs(); switchCoin(appData.activeCoin, true);
-            fetchFearAndGreed(); setTimeout(updateTotalAssets, 1000);
+            // SISTEM PENYELAMAT: Jika data order kosong (kasus data lama), buatkan otomatis
+            if (!appData.coinOrder || appData.coinOrder.length === 0) {
+                appData.coinOrder = Object.keys(appData.coins);
+            }
+
+            // Pastikan koin aktif ada dalam daftar
+            if (!appData.coinOrder.includes(appData.activeCoin)) {
+                appData.activeCoin = appData.coinOrder[0] || 'XRP';
+            }
+
+            renderTabs();
+            switchCoin(appData.activeCoin, true);
+            fetchFearAndGreed();
+            setTimeout(updateTotalAssets, 1000);
         }
 
         // --- UI LOGIC ---
@@ -951,8 +963,26 @@
         }
 
         function loadTvWidget() {
-            el('chart-wrap').innerHTML = '';
-            new TradingView.widget({ "autosize": true, "symbol": appData.coins[appData.activeCoin].tvSymbol, "interval": "30", "theme": "dark", "container_id": "chart-wrap" });
+            const container = el('chart-wrap');
+            if (!container) return;
+            container.innerHTML = '';
+
+            const currentCoin = appData.coins[appData.activeCoin];
+            if (!currentCoin) return;
+
+            new TradingView.widget({
+                "autosize": true,
+                "symbol": currentCoin.tvSymbol,
+                "interval": "30",
+                "theme": "dark",
+                "style": "1",
+                "locale": "id",
+                "toolbar_bg": "#f1f3f6",
+                "enable_publishing": false,
+                "hide_top_toolbar": false,
+                "save_image": false,
+                "container_id": "chart-wrap"
+            });
         }
 
         async function fetchNews() {

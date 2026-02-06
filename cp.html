@@ -731,7 +731,7 @@
         // Ganti baris let appData ini
         let appData = {
             activeCoin: 'XRP',
-            coinOrder: ['XRP'], // Menjaga urutan tetap
+            coinOrder: ['XRP'], // PENTING: Ini buat nyimpen urutan
             coins: {
                 XRP: { symbol: 'XRP', currency: 'IDR', tvSymbol: 'BINANCE:XRPIDR', buy: 0, amount: 0, target: 0 }
             }
@@ -783,13 +783,15 @@
         }
 
         function initApp() {
-            // SISTEM PENYELAMAT: Jika data order kosong (kasus data lama), buatkan otomatis
-            if (!appData.coinOrder || appData.coinOrder.length === 0) {
+            // PERBAIKAN: Kalau data lama belum punya urutan, kita buatkan sekarang
+            if (!appData.coinOrder || !Array.isArray(appData.coinOrder)) {
                 appData.coinOrder = Object.keys(appData.coins);
+                // Simpan perbaikan ini biar permanen
+                saveToFirestore();
             }
 
-            // Pastikan koin aktif ada dalam daftar
-            if (!appData.coinOrder.includes(appData.activeCoin)) {
+            // Pastikan koin aktif valid
+            if (!appData.coins[appData.activeCoin]) {
                 appData.activeCoin = appData.coinOrder[0] || 'XRP';
             }
 
@@ -804,9 +806,9 @@
             const container = el('tab-container');
             container.innerHTML = '';
 
-            // Gunakan coinOrder agar urutan tidak pernah berubah-ubah
+            // LOOPING SESUAI URUTAN YANG DISIMPAN
             appData.coinOrder.forEach(key => {
-                if (appData.coins[key]) { // Pastikan datanya ada
+                if (appData.coins[key]) {
                     const div = document.createElement('div');
                     div.className = `tab ${key === appData.activeCoin ? 'active' : ''}`;
                     div.textContent = key;
@@ -929,32 +931,40 @@
                 return;
             }
 
-            // Tambah ke data objek
+            // 1. Simpan Data Koin
             appData.coins[s] = { symbol: s, currency: el('add-currency').value, tvSymbol: t, buy: 0, amount: 0, target: 0 };
 
-            // Tambah ke urutan (Array) di paling akhir
-            if (!appData.coinOrder) appData.coinOrder = Object.keys(appData.coins); // Fallback jika data lama belum ada order
-            if (!appData.coinOrder.includes(s)) appData.coinOrder.push(s);
+            // 2. Masukkan ke Antrean Paling Belakang
+            if (!appData.coinOrder.includes(s)) {
+                appData.coinOrder.push(s);
+            }
 
             saveToFirestore();
             el('modal-add').classList.remove('active');
+
+            // Reset input
+            el('add-symbol').value = '';
+            el('add-tv-symbol').value = '';
+
             renderTabs();
             switchCoin(s);
         }
 
         function deleteCurrentCoin() {
-            if (Object.keys(appData.coins).length <= 1) return;
+            if (appData.coinOrder.length <= 1) return;
             Swal.fire({ title: 'Hapus?', icon: 'warning', showCancelButton: true }).then(r => {
                 if (r.isConfirmed) {
                     const toDelete = appData.activeCoin;
-
-                    // Hapus dari Objek
+                    
+                    // Hapus dari data
                     delete appData.coins[toDelete];
-
-                    // Hapus dari Array Urutan
+                    
+                    // Hapus dari antrean urutan
                     appData.coinOrder = appData.coinOrder.filter(item => item !== toDelete);
 
+                    // Pindah ke koin urutan pertama
                     appData.activeCoin = appData.coinOrder[0];
+                    
                     saveToFirestore();
                     initApp();
                     el('modal').classList.remove('active');

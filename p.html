@@ -3,113 +3,97 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dapur Tradisional - Rasa Autentik</title>
+    <title>Cita Rasa Premium | Katalog Digital</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" rel="stylesheet">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Playfair+Display:wght@700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Marcellus&family=Inter:wght@300;400;600&display=swap');
         
-        body { font-family: 'Poppins', sans-serif; }
-        .hero-font { font-family: 'Playfair Display', serif; }
-        .glass { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); }
-        .card-hover:hover { transform: translateY(-10px); transition: all 0.3s ease; }
+        body { font-family: 'Inter', sans-serif; background-color: #0f172a; color: #f8fafc; }
+        .heading-font { font-family: 'Marcellus', serif; }
+        .gold-gradient { background: linear-gradient(135deg, #fbbf24 0%, #b45309 100%); }
+        .product-card { background: #1e293b; border: 1px solid #334155; transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        .product-card:hover { border-color: #fbbf24; transform: scale(1.03); }
     </style>
 </head>
-<body class="bg-orange-50 text-gray-800">
+<body>
 
-    <nav class="fixed w-full z-50 glass shadow-sm py-4 px-6 flex justify-between items-center">
-        <div class="text-2xl font-bold text-orange-600">DAPUR<span class="text-yellow-600">KITA</span></div>
-        <div class="space-x-6 hidden md:block">
-            <a href="#home" class="hover:text-orange-600 transition">Beranda</a>
-            <a href="#produk" class="hover:text-orange-600 transition">Produk</a>
-            <a href="#tentang" class="hover:text-orange-600 transition">Tentang Kami</a>
-        </div>
-        <a href="https://wa.me/628123456789" class="bg-green-500 text-white px-5 py-2 rounded-full font-semibold hover:bg-green-600 transition shadow-lg">
-            <i class="fab fa-whatsapp mr-2"></i>Pesan Sekarang
-        </a>
+    <nav class="p-6 flex justify-between items-center border-b border-gray-800 sticky top-0 bg-[#0f172a]/80 backdrop-blur-md z-50">
+        <div class="text-xl font-semibold tracking-widest heading-font text-amber-500 uppercase">Local Delight</div>
+        <a href="#katalog" class="text-sm border border-amber-500/50 px-4 py-2 rounded-full hover:bg-amber-500 hover:text-black transition uppercase tracking-tighter">Katalog</a>
     </nav>
 
-    <header id="home" class="pt-32 pb-20 px-6 text-center bg-gradient-to-b from-orange-100 to-orange-50">
-        <h1 class="hero-font text-5xl md:text-7xl text-gray-900 mb-4">Cita Rasa <span class="text-orange-600">Nusantara</span></h1>
-        <p class="text-lg text-gray-600 max-w-2xl mx-auto mb-8">Menghadirkan kudapan tradisional dengan bahan premium dan resep warisan keluarga yang dijamin bikin ketagihan.</p>
-        <div class="flex justify-center gap-4">
-            <a href="#produk" class="bg-orange-600 text-white px-8 py-3 rounded-lg shadow-xl hover:bg-orange-700 transition">Lihat Menu</a>
-        </div>
-    </header>
-
-    <section id="produk" class="py-20 px-6 max-w-6xl mx-auto">
-        <div class="text-center mb-16">
-            <h2 class="text-3xl font-bold mb-2">Produk Unggulan</h2>
-            <div class="w-20 h-1 bg-orange-500 mx-auto"></div>
-        </div>
-
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div class="bg-white rounded-2xl overflow-hidden shadow-lg card-hover">
-                <div class="h-56 bg-gray-200 flex items-center justify-center text-gray-400">
-                   <i class="fas fa-utensils fa-3x"></i>
-                </div>
-                <div class="p-6">
-                    <span class="text-xs font-bold text-orange-500 uppercase">Best Seller</span>
-                    <h3 class="text-xl font-bold mt-2">Geblek Gurih</h3>
-                    <p class="text-gray-500 text-sm mt-2">Khas Kulon Progo, kenyal di dalam renyah di luar. Cocok untuk teman ngeteh.</p>
-                    <div class="mt-4 flex justify-between items-center">
-                        <span class="text-orange-600 font-bold text-xl">Rp 15.000</span>
-                        <button class="bg-gray-100 p-2 rounded-full hover:bg-orange-100"><i class="fas fa-plus text-orange-600"></i></button>
-                    </div>
-                </div>
-            </div>
-
-            <div class="bg-white rounded-2xl overflow-hidden shadow-lg card-hover">
-                <div class="h-56 bg-gray-200 flex items-center justify-center text-gray-400">
-                   <i class="fas fa-cookie fa-3x"></i>
-                </div>
-                <div class="p-6">
-                    <span class="text-xs font-bold text-yellow-500 uppercase">Premium Quality</span>
-                    <h3 class="text-xl font-bold mt-2">Natar Lumer</h3>
-                    <p class="text-gray-500 text-sm mt-2">Dibuat dengan full wisman dan selai nanas asli buatan sendiri. Lumer di mulut!</p>
-                    <div class="mt-4 flex justify-between items-center">
-                        <span class="text-orange-600 font-bold text-xl">Rp 85.000</span>
-                        <button class="bg-gray-100 p-2 rounded-full hover:bg-orange-100"><i class="fas fa-plus text-orange-600"></i></button>
-                    </div>
-                </div>
-            </div>
-
-            <div class="bg-white rounded-2xl overflow-hidden shadow-lg card-hover">
-                <div class="h-56 bg-gray-200 flex items-center justify-center text-gray-400">
-                   <i class="fas fa-pepper-hot fa-3x text-red-400"></i>
-                </div>
-                <div class="p-6">
-                    <span class="text-xs font-bold text-red-500 uppercase">Must Try</span>
-                    <h3 class="text-xl font-bold mt-2">Sambal Kacang</h3>
-                    <p class="text-gray-500 text-sm mt-2">Bumbu pelengkap serbaguna dengan kacang pilihan dan pedas yang pas.</p>
-                    <div class="mt-4 flex justify-between items-center">
-                        <span class="text-orange-600 font-bold text-xl">Rp 25.000</span>
-                        <button class="bg-gray-100 p-2 rounded-full hover:bg-orange-100"><i class="fas fa-plus text-orange-600"></i></button>
-                    </div>
-                </div>
-            </div>
-        </div>
+    <section class="py-20 px-6 text-center animate__animated animate__fadeIn">
+        <span class="text-amber-500 tracking-[0.3em] text-xs uppercase mb-4 block">Handcrafted with Love</span>
+        <h1 class="heading-font text-4xl md:text-6xl mb-6">Kudapan Tradisional<br><span class="text-amber-500">Kualitas Mewah</span></h1>
+        <p class="text-gray-400 max-w-xl mx-auto font-light leading-relaxed">Dari dapur kecil kami, menyajikan Geblek, Nastar, hingga Sambal Kacang dengan rasa yang tidak akan kamu temukan di tempat lain.</p>
     </section>
 
-    <footer class="bg-gray-900 text-white py-12 px-6">
-        <div class="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-10">
-            <div>
-                <h2 class="text-2xl font-bold mb-4 text-orange-500">DAPUR KITA</h2>
-                <p class="text-gray-400">Menerima pesanan untuk acara pesta, arisan, atau sekadar stok cemilan di rumah. Kami menjamin kebersihan dan kualitas rasa.</p>
-                <div class="flex gap-4 mt-6">
-                    <a href="#" class="text-2xl hover:text-orange-500"><i class="fab fa-instagram"></i></a>
-                    <a href="#" class="text-2xl hover:text-orange-500"><i class="fab fa-facebook"></i></a>
-                    <a href="#" class="text-2xl hover:text-orange-500"><i class="fab fa-whatsapp"></i></a>
+    <main id="katalog" class="max-w-6xl mx-auto px-6 pb-24">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            
+            <div class="product-card rounded-3xl overflow-hidden p-4">
+                <div class="h-64 bg-slate-800 rounded-2xl mb-6 flex items-center justify-center overflow-hidden">
+                    <span class="text-slate-700 italic">Photo Geblek</span>
+                </div>
+                <div class="px-2">
+                    <h3 class="heading-font text-2xl mb-1 text-amber-50">Geblek Signature</h3>
+                    <p class="text-sm text-gray-400 mb-6">Original khas Kulon Progo dengan tekstur yang pas dan bumbu rahasia.</p>
+                    <div class="flex justify-between items-center">
+                        <span class="text-xl font-light tracking-wider">Rp 20.000</span>
+                        <a href="#" class="gold-gradient p-3 rounded-xl text-black shadow-lg shadow-amber-500/20">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+                            </svg>
+                        </a>
+                    </div>
                 </div>
             </div>
-            <div class="flex flex-col md:items-end">
-                <h3 class="text-lg font-semibold mb-4">Lokasi Kami</h3>
-                <p class="text-gray-400 text-right">Jl. Kenangan Indah No. 123<br>Yogyakarta, Indonesia</p>
-                <p class="mt-4 text-orange-500">Buka: 08.00 - 20.00 WIB</p>
+
+            <div class="product-card rounded-3xl overflow-hidden p-4">
+                <div class="h-64 bg-slate-800 rounded-2xl mb-6 flex items-center justify-center">
+                    <span class="text-slate-700 italic">Photo Nastar</span>
+                </div>
+                <div class="px-2">
+                    <h3 class="heading-font text-2xl mb-1 text-amber-50">Nastar Gold</h3>
+                    <p class="text-sm text-gray-400 mb-6">Dibuat dengan mentega premium dan selai nanas madu yang manis alami.</p>
+                    <div class="flex justify-between items-center">
+                        <span class="text-xl font-light tracking-wider">Rp 95.000</span>
+                        <a href="#" class="gold-gradient p-3 rounded-xl text-black">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+                            </svg>
+                        </a>
+                    </div>
+                </div>
             </div>
+
+            <div class="product-card rounded-3xl overflow-hidden p-4">
+                <div class="h-64 bg-slate-800 rounded-2xl mb-6 flex items-center justify-center">
+                    <span class="text-slate-700 italic">Photo Sambal</span>
+                </div>
+                <div class="px-2">
+                    <h3 class="heading-font text-2xl mb-1 text-amber-50">Sambal Kacang</h3>
+                    <p class="text-sm text-gray-400 mb-6">Tekstur kental, pedas, dan gurih. Tanpa bahan pengawet buatan.</p>
+                    <div class="flex justify-between items-center">
+                        <span class="text-xl font-light tracking-wider">Rp 30.000</span>
+                        <a href="#" class="gold-gradient p-3 rounded-xl text-black">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
         </div>
-        <div class="border-t border-gray-800 mt-10 pt-6 text-center text-gray-500 text-sm">
-            &copy; 2026 Dapur Kita. All Rights Reserved.
+    </main>
+
+    <footer class="border-t border-gray-800 py-12 px-6 text-center">
+        <p class="text-gray-500 text-sm mb-4">Ingin pesan dalam jumlah banyak?</p>
+        <a href="https://wa.me/628123456789" class="text-amber-500 font-semibold border-b border-amber-500 pb-1">Hubungi WhatsApp Kami</a>
+        <div class="mt-12 text-gray-600 text-xs tracking-widest">
+            EST. 2026 - KUALITAS ADALAH PRIORITAS
         </div>
     </footer>
 

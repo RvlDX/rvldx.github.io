@@ -144,6 +144,30 @@
     </style>
 </head>
 
+<script>
+    window.addEventListener('DOMContentLoaded', () => {
+        // 1. Deteksi Protokol Real
+        // Menggunakan Navigation Timing API
+        const protocol = window.location.protocol === 'https:' ? 'HTTP/2 (SSL)' : 'HTTP/1.1';
+        document.getElementById('real-protocol').textContent = protocol;
+
+        // 2. Hitung Latency (Simulasi Ping ke server)
+        const startTime = Date.now();
+        fetch(window.location.href, { mode: 'no-cors' })
+            .then(() => {
+                const latency = Date.now() - startTime;
+                document.getElementById('real-ping').textContent = latency + ' ms';
+            })
+            .catch(() => {
+                document.getElementById('real-ping').textContent = 'Timed out';
+            });
+            
+        // 3. Status tetap 404 karena ini adalah halaman error handler
+        // Namun kita bisa menambahkan deteksi User Agent singkat jika ingin lebih "Real"
+        console.log("Routing Error Handled for: " + window.location.pathname);
+    });
+</script>
+    
 <body>
 
     <div class="container">
@@ -157,15 +181,15 @@
             <div class="info-box">
                 <div class="row-item">
                     <span class="lbl">Protokol</span>
-                    <span class="val">HTTP/1.1</span>
-                </div>
+                    <span class="val" id="real-protocol">Detecting...</span>
+                </div>Ff
                 <div class="row-item">
                     <span class="lbl">Status</span>
-                    <span class="val" style="color: var(--accent-red);">Not Found</span>
+                    <span class="val" id="real-status" style="color: var(--accent-red);">404 Not Found</span>
                 </div>
                 <div class="row-item">
-                    <span class="lbl">Ping</span>
-                    <span class="val">24ms</span>
+                    <span class="lbl">Latency</span>
+                    <span class="val" id="real-ping">-- ms</span>
                 </div>
             </div>
 

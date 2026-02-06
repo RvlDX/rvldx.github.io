@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WagerNet - Social Protocol</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Space+Mono:wght@400;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Inter', 'sans-serif'], mono: ['Space Mono', 'monospace'], },
+                    colors: { bg: '#0B1120', card: '#151F32', accent: '#10B981', danger: '#EF4444', muted: '#64748B' }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { background-color: #0B1120; color: #E2E8F0; }
+        .input-dark { background: #0F172A; border: 1px solid #334155; color: #E2E8F0; }
+        .input-dark:focus { border-color: #10B981; outline: none; }
+        .fade-in { animation: fadeIn 0.5s ease-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        /* Scrollbar hide */
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    </style>
+</head>
+
+<body class="min-h-screen pb-10 relative overflow-x-hidden">
+
+    <div id="authOverlay" class="fixed inset-0 z-[100] bg-[#0B1120] flex flex-col items-center justify-center p-6 hidden">
+        <div class="text-center mb-10">
+            <div class="w-20 h-20 bg-accent/10 rounded-full flex items-center justify-center mx-auto mb-4 border border-accent/50 shadow-[0_0_20px_rgba(16,185,129,0.3)]">
+                <i class="fas fa-network-wired text-3xl text-accent"></i>
+            </div>
+            <h1 class="text-3xl font-bold tracking-tight text-white">WAGER<span class="text-accent">NET</span></h1>
+            <p class="text-muted text-sm font-mono mt-2">Secure Social Contract Protocol</p>
+        </div>
+        <button onclick="loginWithGoogle()" class="flex items-center gap-3 bg-white text-black px-6 py-3 rounded-xl font-bold hover:bg-gray-200 transition-all">
+            <img src="https://www.svgrepo.com/show/475656/google-color.svg" class="w-6 h-6" alt="Google">
+            Sign in with Google
+        </button>
+    </div>
+
+    <div id="usernameModal" class="fixed inset-0 z-[90] bg-[#0B1120]/95 backdrop-blur flex items-center justify-center p-6 hidden">
+        <div class="bg-card p-6 rounded-xl border border-accent w-full max-w-md shadow-2xl">
+            <h2 class="text-xl font-bold text-white mb-2">Identify Yourself</h2>
+            <p class="text-sm text-muted mb-4">Create a unique handle for the network.</p>
+            <input type="text" id="newUsernameInput" placeholder="username (no spaces)" class="w-full input-dark rounded px-4 py-3 font-mono mb-4 lowercase">
+            <button onclick="saveUsername()" class="w-full bg-accent text-bg font-bold py-3 rounded">INITIALIZE IDENTITY</button>
+        </div>
+    </div>
+
+    <nav class="border-b border-slate-800 bg-bg/90 backdrop-blur-md sticky top-0 z-40">
+        <div class="max-w-2xl mx-auto px-4 h-16 flex items-center justify-between">
+            <div class="flex items-center gap-2">
+                <div class="w-2 h-2 rounded-full bg-accent animate-pulse"></div>
+                <h1 class="font-bold text-sm tracking-widest hidden sm:block">WAGER<span class="text-accent">NET</span></h1>
+            </div>
+            
+            <div class="flex items-center gap-3" id="navProfile">
+                </div>
+        </div>
+    </nav>
+
+    <div class="max-w-2xl mx-auto px-4 mt-6">
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+            <div class="bg-card p-4 rounded-xl border border-slate-700 md:col-span-1">
+                <div class="text-[10px] text-muted font-mono uppercase">My Status</div>
+                <div id="profileStats" class="mt-2">
+                    <div class="h-4 w-20 bg-slate-800 rounded animate-pulse"></div>
+                </div>
+            </div>
+
+            <div class="bg-card p-4 rounded-xl border border-slate-700 md:col-span-2">
+                <div class="text-[10px] text-muted font-mono uppercase mb-2">Establish Connection (Add Friend)</div>
+                <div class="flex gap-2">
+                    <input type="text" id="friendInput" placeholder="Enter username..." class="flex-1 input-dark rounded px-3 py-2 text-sm font-mono lowercase">
+                    <button onclick="addFriend()" class="bg-slate-700 hover:bg-accent hover:text-bg text-white px-4 rounded text-xs font-bold transition-colors">
+                        <i class="fas fa-plus"></i> ADD
+                    </button>
+                </div>
+                <div id="friendListDisplay" class="flex gap-2 mt-3 overflow-x-auto no-scrollbar">
+                    </div>
+            </div>
+        </div>
+
+        <div class="bg-card rounded-xl border border-slate-700 shadow-xl overflow-hidden mb-8">
+            <div class="p-3 border-b border-slate-800 bg-slate-900/50 flex justify-between items-center">
+                <h2 class="font-mono text-xs text-accent">NEW CONTRACT</h2>
+                <div class="flex bg-slate-900 rounded p-1 border border-slate-800">
+                    <button id="btnDirect" class="px-3 py-1 text-[10px] font-bold rounded bg-slate-700 text-white" onclick="toggleType('direct')">DIRECT</button>
+                    <button id="btnChoice" class="px-3 py-1 text-[10px] font-bold rounded text-muted" onclick="toggleType('choice')">CHOICE</button>
+                </div>
+            </div>
+
+            <form id="wagerForm" onsubmit="submitWager(event)" class="p-5">
+                <div class="mb-4">
+                    <label class="text-[10px] text-muted font-mono block mb-1">OPPONENT (FRIEND)</label>
+                    <select id="targetUserSelect" class="w-full input-dark rounded-lg px-4 py-3 text-sm font-bold bg-slate-900" required>
+                        <option value="" disabled selected>Select a friend...</option>
+                        </select>
+                </div>
+
+                <div class="mb-4">
+                    <input type="text" id="title" placeholder="Context (e.g. FIFA Match)" class="w-full input-dark rounded-lg px-4 py-3 text-sm font-bold" required>
+                </div>
+
+                <div id="inputDirect" class="mb-4">
+                    <textarea id="directRequest" rows="2" placeholder="Input Demand..." class="w-full input-dark rounded-lg px-4 py-3 text-sm font-mono"></textarea>
+                </div>
+
+                <div id="inputChoice" class="mb-4 hidden">
+                    <textarea id="choiceOptions" rows="2" placeholder="Option A, Option B, Option C" class="w-full input-dark rounded-lg px-4 py-3 text-sm font-mono"></textarea>
+                </div>
+
+                <button type="submit" class="w-full bg-accent hover:bg-emerald-400 text-bg font-bold py-3 rounded-lg text-sm uppercase tracking-widest shadow-[0_0_15px_rgba(16,185,129,0.4)] transition-all">
+                    Initiate Protocol
+                </button>
+            </form>
+        </div>
+
+        <h3 class="text-xs font-mono text-muted mb-4 px-1">ACTIVE CONTRACTS</h3>
+        <div id="wagerList" class="space-y-4 pb-20">
+            </div>
+
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+        import { getFirestore, collection, addDoc, onSnapshot, query, where, orderBy, updateDoc, doc, deleteDoc, getDocs, setDoc, getDoc, arrayUnion } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+        // --- KONFIGURASI FIREBASE ---
+        const firebaseConfig = {
+            apiKey: "AIzaSyDTLkvNNwh4LoJuLW1JhsF1S_ZOY1k-PAM",
+            authDomain: "webchoice-9b2c0.firebaseapp.com",
+            projectId: "webchoice-9b2c0",
+            storageBucket: "webchoice-9b2c0.firebasestorage.app",
+            messagingSenderId: "754013239435",
+            appId: "1:754013239435:web:496f9a5851d0586ee43c8e"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+        const provider = new GoogleAuthProvider();
+
+        // Refs
+        const usersRef = collection(db, "users");
+        const wagersRef = collection(db, "wagers");
+
+        let currentUser = null; // Object Auth Firebase
+        let userProfile = null; // Data dari Firestore (username, friends, dll)
+        let currentType = 'direct';
+
+        // --- 1. AUTH LOGIC ---
+        window.loginWithGoogle = () => {
+            signInWithPopup(auth, provider).catch(error => {
+                console.error("Login Failed:", error);
+                alert("Login Error: " + error.message);
+            });
+        };
+
+        window.logout = () => {
+            signOut(auth).then(() => location.reload());
+        };
+
+        onAuthStateChanged(auth, async (user) => {
+            if (user) {
+                // User login, cek apakah sudah punya profil di Firestore
+                currentUser = user;
+                document.getElementById('authOverlay').classList.add('hidden');
+                
+                const userDocRef = doc(db, "users", user.uid);
+                const userSnap = await getDoc(userDocRef);
+
+                if (userSnap.exists()) {
+                    // User lama
+                    userProfile = userSnap.data();
+                    loadDashboard();
+                } else {
+                    // User baru, tampilkan modal buat username
+                    document.getElementById('usernameModal').classList.remove('hidden');
+                }
+            } else {
+                // Tidak login
+                document.getElementById('authOverlay').classList.remove('hidden');
+            }
+        });
+
+        // --- 2. PROFILE & USERNAME LOGIC ---
+        window.saveUsername = async () => {
+            const usernameInput = document.getElementById('newUsernameInput').value.trim().toLowerCase();
+            if(!usernameInput || usernameInput.length < 3) return alert("Username min 3 chars");
+
+            // Cek username unik (Simple check)
+            const q = query(usersRef, where("username", "==", usernameInput));
+            const querySnapshot = await getDocs(q);
+
+            if (!querySnapshot.empty) {
+                alert("Username already taken!");
+                return;
+            }
+
+            // Simpan profil baru
+            try {
+                await setDoc(doc(db, "users", currentUser.uid), {
+                    uid: currentUser.uid,
+                    displayName: currentUser.displayName,
+                    email: currentUser.email,
+                    photoURL: currentUser.photoURL,
+                    username: usernameInput,
+                    friends: [], // Array of UIDs
+                    createdAt: new Date()
+                });
+                
+                userProfile = { username: usernameInput, friends: [], photoURL: currentUser.photoURL };
+                document.getElementById('usernameModal').classList.add('hidden');
+                loadDashboard();
+            } catch (e) {
+                console.error(e);
+                alert("Error creating profile");
+            }
+        };
+
+        function loadDashboard() {
+            // Render Navbar Profile
+            document.getElementById('navProfile').innerHTML = `
+                <div class="text-right hidden sm:block">
+                    <div class="text-xs font-bold text-white">@${userProfile.username}</div>
+                    <div class="text-[10px] text-muted">${currentUser.email}</div>
+                </div>
+                <img src="${userProfile.photoURL}" class="w-8 h-8 rounded-full border border-slate-600">
+                <button onclick="logout()" class="text-slate-400 hover:text-white ml-2"><i class="fas fa-sign-out-alt"></i></button>
+            `;
+
+            // Render Stats
+            document.getElementById('profileStats').innerHTML = `
+                <div class="text-xl font-bold text-white">@${userProfile.username}</div>
+                <div class="text-xs text-accent mt-1">${userProfile.friends ? userProfile.friends.length : 0} Friends Linked</div>
+            `;
+
+            loadFriends();
+            listenToWagers();
+        }
+
+        // --- 3. FRIEND LOGIC ---
+        window.addFriend = async () => {
+            const inputName = document.getElementById('friendInput').value.trim().toLowerCase();
+            if(inputName === userProfile.username) return alert("Cannot add yourself");
+
+            // 1. Cari user berdasarkan username
+            const q = query(usersRef, where("username", "==", inputName));
+            const snapshot = await getDocs(q);
+
+            if(snapshot.empty) return alert("User not found!");
+
+            let friendData = null;
+            snapshot.forEach(doc => friendData = doc.data());
+
+            // 2. Add ke array friends di firestore saya
+            const myRef = doc(db, "users", currentUser.uid);
+            
+            // Simpan objek kecil agar tidak perlu fetch ulang nama nanti
+            const friendObj = {
+                uid: friendData.uid,
+                username: friendData.username,
+                photoURL: friendData.photoURL
+            };
+
+            await updateDoc(myRef, {
+                friends: arrayUnion(friendObj)
+            });
+
+            // Update lokal dan UI
+            if(!userProfile.friends) userProfile.friends = [];
+            userProfile.friends.push(friendObj);
+            
+            document.getElementById('friendInput').value = "";
+            loadFriends();
+            alert(`Connected with @${friendData.username}`);
+        };
+
+        function loadFriends() {
+            const list = document.getElementById('friendListDisplay');
+            const select = document.getElementById('targetUserSelect');
+            
+            list.innerHTML = "";
+            select.innerHTML = '<option value="" disabled selected>Select a friend...</option>';
+
+            if(!userProfile.friends || userProfile.friends.length === 0) {
+                list.innerHTML = `<span class="text-[10px] text-slate-500 italic">No connections yet.</span>`;
+                return;
+            }
+
+            userProfile.friends.forEach(f => {
+                // UI List Kecil
+                list.innerHTML += `
+                    <div class="flex items-center gap-2 bg-slate-800 px-2 py-1 rounded border border-slate-700 min-w-max">
+                        <img src="${f.photoURL}" class="w-4 h-4 rounded-full">
+                        <span class="text-xs text-white font-mono">@${f.username}</span>
+                    </div>
+                `;
+
+                // UI Dropdown Select
+                select.innerHTML += `<option value="${f.uid}">@${f.username}</option>`;
+            });
+        }
+
+
+        // --- 4. WAGER UI LOGIC ---
+        window.toggleType = (type) => {
+            currentType = type;
+            document.getElementById('btnDirect').className = type === 'direct' ? "px-3 py-1 text-[10px] font-bold rounded bg-slate-700 text-white" : "px-3 py-1 text-[10px] font-bold rounded text-muted";
+            document.getElementById('btnChoice').className = type === 'choice' ? "px-3 py-1 text-[10px] font-bold rounded bg-slate-700 text-white" : "px-3 py-1 text-[10px] font-bold rounded text-muted";
+
+            if (type === 'direct') {
+                document.getElementById('inputDirect').classList.remove('hidden');
+                document.getElementById('inputChoice').classList.add('hidden');
+            } else {
+                document.getElementById('inputDirect').classList.add('hidden');
+                document.getElementById('inputChoice').classList.remove('hidden');
+            }
+        }
+
+        // --- 5. WAGER SUBMIT LOGIC ---
+        window.submitWager = async (e) => {
+            e.preventDefault();
+            const title = document.getElementById('title').value;
+            const targetUid = document.getElementById('targetUserSelect').value;
+
+            if(!targetUid) return alert("Please select a friend/opponent!");
+
+            // Cari username teman untuk display
+            const friendObj = userProfile.friends.find(f => f.uid === targetUid);
+            const targetUsername = friendObj ? friendObj.username : "Unknown";
+
+            let data = {
+                title: title,
+                type: currentType,
+                
+                // Auth Data
+                creatorUid: currentUser.uid,
+                creatorUsername: userProfile.username,
+                
+                // Target Data
+                targetUid: targetUid,
+                targetUsername: targetUsername,
+
+                timestamp: new Date(),
+                status: 'pending'
+            };
+
+            if (currentType === 'direct') {
+                data.content = document.getElementById('directRequest').value;
+                if (!data.content) return alert("Empty demand.");
+            } else {
+                const rawOptions = document.getElementById('choiceOptions').value;
+                if (!rawOptions) return alert("Options required.");
+                data.options = rawOptions.split(',').map(opt => opt.trim()).filter(opt => opt !== "");
+                data.selectedOption = null;
+            }
+
+            try {
+                await addDoc(wagersRef, data);
+                document.getElementById('wagerForm').reset();
+                alert("Contract Deployed.");
+            } catch (error) {
+                console.error("Error", error);
+                alert("Failed to create contract.");
+            }
+        }
+
+        // --- 6. RENDER LIST (Complex Filter Client Side) ---
+        function listenToWagers() {
+            // Catatan: Firestore sulit melakukan query "OR" (creatorUid == me OR targetUid == me) tanpa index khusus.
+            // Untuk simplifikasi single file, kita ambil 50 wager terakhir, lalu filter di JS.
+            const q = query(wagersRef, orderBy("timestamp", "desc"));
+
+            onSnapshot(q, (snapshot) => {
+                const listContainer = document.getElementById('wagerList');
+                listContainer.innerHTML = "";
+
+                let hasData = false;
+
+                snapshot.forEach((docSnap) => {
+                    const wager = docSnap.data();
+                    const id = docSnap.id;
+
+                    // --- FILTERING LOGIC ---
+                    // Tampilkan HANYA jika saya Pembuat ATAU saya Target
+                    const isCreator = wager.creatorUid === currentUser.uid;
+                    const isTarget = wager.targetUid === currentUser.uid;
+
+                    if (!isCreator && !isTarget) return; // Skip jika tidak relevan
+
+                    hasData = true;
+
+                    // UI Components
+                    let contentHtml = "";
+                    let footerHtml = "";
+                    const deleteBtn = isCreator ? `<button onclick="deleteWager('${id}')" class="text-slate-600 hover:text-danger px-2"><i class="fas fa-times"></i></button>` : '';
+
+                    // Content Logic
+                    if (wager.type === 'direct') {
+                        contentHtml = `<div class="text-lg font-bold text-white mt-2">"${wager.content}"</div>`;
+                    } else {
+                        if (wager.selectedOption) {
+                            contentHtml = `
+                                <div class="mt-3 p-3 bg-slate-900 border border-accent/50 rounded-lg text-center">
+                                    <div class="text-[10px] text-muted font-mono mb-1">AGREED UPON</div>
+                                    <div class="text-xl font-bold text-accent">${wager.selectedOption}</div>
+                                </div>`;
+                        } else {
+                            // Logic tombol pilihan
+                            // Target yang harus milih (isTarget), Creator cuma nunggu (isCreator)
+                            const canChoose = isTarget; 
+                            const statusText = canChoose ? 
+                                `<div class="text-[10px] text-accent mb-2 font-mono animate-pulse"><i class="fas fa-exclamation-circle"></i> YOU MUST CHOOSE:</div>` : 
+                                `<div class="text-[10px] text-yellow-500 mb-2 font-mono"><i class="fas fa-clock"></i> WAITING FOR @${wager.targetUsername} TO CHOOSE...</div>`;
+                            
+                            const btns = wager.options.map(opt => 
+                                `<button ${canChoose ? `onclick="selectOption('${id}', '${opt}')"` : 'disabled'} 
+                                    class="w-full text-left px-4 py-3 text-sm rounded border mb-2 font-mono transition-all
+                                    ${canChoose ? 'border-slate-600 bg-slate-800 hover:border-accent hover:bg-slate-700 text-white cursor-pointer' : 'border-slate-800 bg-slate-900 text-slate-500 cursor-not-allowed'}">
+                                    [ ] ${opt}
+                                 </button>`
+                            ).join('');
+                            contentHtml = `<div class="mt-3">${statusText}${btns}</div>`;
+                        }
+                    }
+
+                    // Footer / Action Logic
+                    if (wager.status === 'pending') {
+                         if (isCreator) {
+                            // Creator bisa menyelesaikan jika sudah deal
+                            footerHtml = `
+                                <div class="text-[10px] text-muted">To: @${wager.targetUsername}</div>
+                                <button onclick="markComplete('${id}')" class="text-xs bg-slate-700 text-white hover:bg-accent hover:text-bg font-bold px-3 py-1.5 rounded transition-colors">
+                                    COMPLETE <i class="fas fa-check ml-1"></i>
+                                </button>
+                            `;
+                        } else {
+                            footerHtml = `
+                                <div class="text-[10px] text-muted">From: @${wager.creatorUsername}</div>
+                                <span class="text-[10px] text-yellow-500 font-mono bg-yellow-500/10 px-2 py-1 rounded border border-yellow-500/20">PENDING</span>
+                            `;
+                        }
+                    } else {
+                         footerHtml = `
+                            <div class="text-[10px] text-muted flex gap-2">
+                                <span>${isCreator ? 'You' : '@'+wager.creatorUsername}</span>
+                                <i class="fas fa-arrow-right text-slate-600"></i>
+                                <span>${isTarget ? 'You' : '@'+wager.targetUsername}</span>
+                            </div>
+                            <span class="text-xs text-accent font-bold flex items-center gap-1"><i class="fas fa-check-double"></i> DONE</span>
+                        `;
+                    }
+
+                    // Render Card
+                    const cardHtml = `
+                        <div class="bg-card p-5 rounded-xl border ${isTarget && wager.status === 'pending' ? 'border-accent shadow-[0_0_10px_rgba(16,185,129,0.2)]' : 'border-slate-700'} fade-in relative group">
+                            <div class="flex justify-between items-start mb-2">
+                                <div>
+                                    <span class="text-[10px] font-mono uppercase tracking-wider ${wager.type === 'direct' ? 'text-blue-400' : 'text-purple-400'}">
+                                        ${wager.type === 'direct' ? 'MARKET ORDER' : 'LIMIT ORDER'}
+                                    </span>
+                                    <h4 class="font-bold text-white text-lg">${wager.title}</h4>
+                                </div>
+                                ${deleteBtn}
+                            </div>
+                            ${contentHtml}
+                            <div class="flex justify-between items-center mt-4 pt-4 border-t border-slate-800/50">
+                                ${footerHtml}
+                            </div>
+                        </div>
+                    `;
+                    listContainer.innerHTML += cardHtml;
+                });
+
+                if(!hasData) {
+                    listContainer.innerHTML = `<div class="text-center py-10 text-muted text-sm font-mono border border-dashed border-slate-800 rounded-lg">NO CONTRACTS FOUND</div>`;
+                }
+            });
+        }
+
+        // --- GLOBAL ACTIONS ---
+        window.markComplete = async (id) => {
+            if (confirm("Confirm contract completion?")) {
+                await updateDoc(doc(db, "wagers", id), { status: 'completed' });
+            }
+        }
+
+        window.selectOption = async (id, option) => {
+            if (confirm(`Lock in option: "${option}"?`)) {
+                await updateDoc(doc(db, "wagers", id), { selectedOption: option });
+            }
+        }
+
+        window.deleteWager = async (id) => {
+            if (confirm("Terminate this contract?")) {
+                await deleteDoc(doc(db, "wagers", id));
+            }
+        }
+
+    </script>
+</body>
+
+</html>

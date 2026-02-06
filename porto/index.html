@@ -782,23 +782,43 @@
 
         // --- UI LOGIC ---
         function renderTabs() {
-            const container = el('tab-container'); container.innerHTML = '';
-            Object.keys(appData.coins).forEach(key => {
-                const div = document.createElement('div'); div.className = `tab ${key === appData.activeCoin ? 'active' : ''}`;
-                div.textContent = key; div.onclick = () => switchCoin(key);
+            const container = el('tab-container'); 
+            container.innerHTML = '';
+            
+            // Mendapatkan list koin. Jika ingin selalu urut abjad, tambahkan .sort()
+            const coinKeys = Object.keys(appData.coins); 
+            
+            coinKeys.forEach(key => {
+                const div = document.createElement('div'); 
+                div.className = `tab ${key === appData.activeCoin ? 'active' : ''}`;
+                div.textContent = key; 
+                div.onclick = () => switchCoin(key);
                 container.appendChild(div);
             });
-            const btnAdd = document.createElement('div'); btnAdd.className = 'tab tab-add'; btnAdd.innerHTML = '+';
+            
+            const btnAdd = document.createElement('div'); 
+            btnAdd.className = 'tab tab-add'; 
+            btnAdd.innerHTML = '+';
             btnAdd.onclick = () => el('modal-add').classList.add('active');
             container.appendChild(btnAdd);
         }
 
         function switchCoin(key, force = false) {
             if (!force && appData.activeCoin === key) return;
+            
+            // Reset data tampilan agar tidak "nyangkut" dari koin sebelumnya
+            el('price-display').textContent = '--';
+            el('change-display').innerHTML = '--';
+            el('pnl-display').innerHTML = '0'; // Mereset PnL saat pindah tab
+            currentLivePrice = 0; 
+        
             appData.activeCoin = key;
             document.querySelectorAll('.tab').forEach(t => t.classList.toggle('active', t.textContent === key));
+            
             if (updateInterval) clearInterval(updateInterval);
-            loadTvWidget(); fetchMarketData(); fetchNews();
+            loadTvWidget(); 
+            fetchMarketData(); 
+            fetchNews();
             updateInterval = setInterval(fetchMarketData, 5000);
         }
 
@@ -884,8 +904,18 @@
             const s = el('add-symbol').value.trim().toUpperCase();
             const t = el('add-tv-symbol').value.trim();
             if (!s || !t) return;
+            
+            // Pastikan koin belum ada
+            if (appData.coins[s]) {
+                showToast("Koin sudah ada!");
+                return;
+            }
+        
             appData.coins[s] = { symbol: s, currency: el('add-currency').value, tvSymbol: t, buy: 0, amount: 0, target: 0 };
-            saveToFirestore(); el('modal-add').classList.remove('active'); renderTabs(); switchCoin(s);
+            saveToFirestore(); 
+            el('modal-add').classList.remove('active'); 
+            renderTabs(); 
+            switchCoin(s);
         }
 
         function deleteCurrentCoin() {

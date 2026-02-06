@@ -1,248 +1,185 @@
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>404 - RevolverDX</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>404 - Not Found</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
     <style>
         :root {
-            --network-blue: #00a8ff;
-            --node-color: #2ecc71;
-            --packet-color: #e74c3c;
-            --bg-color: #0a1929;
+            --bg-body: #000000;
+            --bg-card: #121212;
+            --text-primary: #e0e0e0;
+            --text-secondary: #757575;
+            --accent-green: #0ecb81;
+            --accent-red: #f6465d;
+            --border-color: #2a2a2a;
+            --radius-card: 16px;
         }
 
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Arial', sans-serif;
+            -webkit-tap-highlight-color: transparent;
         }
 
         body {
-            background: var(--bg-color);
-            color: white;
-            min-height: 100vh;
-            position: relative;
-            overflow-x: hidden;
-        }
-
-        .navbar {
-            background: rgba(0, 0, 0, 0.4) !important;
-            backdrop-filter: blur(10px);
-            border-bottom: 2px solid var(--network-blue);
-            z-index: 1000;
-        }
-
-        .navbar-brand {
-            color: white !important;
-            padding-left: 15px;
-            text-shadow: 0 0 15px rgba(0, 168, 255, 0.4);
-            font-weight: 700 !important;
-        }
-
-        .network-node {
-            position: fixed;
-            width: 15px;
-            height: 15px;
-            background: var(--node-color);
-            border-radius: 50%;
-            animation: node-pulse 2s infinite;
-        }
-
-        .data-packet {
-            position: fixed;
-            width: 8px;
-            height: 8px;
-            background: var(--packet-color);
-            border-radius: 2px;
-            animation: move-packets 8s linear infinite;
-        }
-
-        @keyframes node-pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.2); }
-            100% { transform: scale(1); }
-        }
-
-        @keyframes move-packets {
-            0% { transform: translateY(0); opacity: 0; }
-            10% { opacity: 1; }
-            90% { opacity: 1; }
-            100% { transform: translateY(-100vh); opacity: 0; }
-        }
-
-        .error-container {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg-body);
+            color: var(--text-primary);
             display: flex;
-            flex-direction: column;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
-            padding: 2rem;
+            padding: 20px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 450px;
             text-align: center;
+        }
+
+        /* CARD STYLE (Sama dengan Crypto/Porto) */
+        .card {
+            background: var(--bg-card);
+            border-radius: var(--radius-card);
+            padding: 30px 20px;
+            border: 1px solid var(--border-color);
             position: relative;
-            z-index: 2;
+            overflow: hidden;
         }
 
         .error-code {
-            font-size: 15rem;
-            font-weight: 900;
-            text-shadow: 0 0 30px rgba(0, 168, 255, 0.4);
-            line-height: 1;
-            margin-bottom: 2rem;
-            position: relative;
+            font-family: 'Roboto Mono', monospace;
+            font-size: 80px;
+            font-weight: 700;
+            color: var(--accent-red);
+            margin-bottom: 10px;
+            letter-spacing: -2px;
         }
 
-        .error-code::after {
-            content: "ROUTING ERROR";
-            font-size: 1.5rem;
-            position: absolute;
-            bottom: -1.5rem;
-            left: 50%;
-            transform: translateX(-50%);
-            color: var(--network-blue);
-            letter-spacing: 2px;
+        .status-badge {
+            display: inline-block;
+            font-size: 11px;
+            padding: 4px 12px;
+            border-radius: 20px;
+            background: rgba(246, 70, 93, 0.15);
+            color: var(--accent-red);
+            font-weight: 600;
+            margin-bottom: 20px;
+            border: 1px solid rgba(246, 70, 93, 0.3);
         }
 
-        .error-message {
-            max-width: 600px;
-            margin: 0 auto;
+        h2 {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 12px;
+            color: #fff;
         }
 
-        .error-details {
-            letter-spacing: 0.5px;
-            line-height: 1.7;
-            opacity: 0.9;
-            margin: 1.5rem 0;
+        p {
+            font-size: 14px;
+            color: var(--text-secondary);
+            line-height: 1.6;
+            margin-bottom: 25px;
         }
 
-        .network-status {
-            background: rgba(0, 0, 0, 0.3);
-            border: 1px solid var(--network-blue);
-            border-radius: 8px;
-            padding: 1rem;
-            margin: 1.5rem 0;
+        /* ROW STYLE (Sama dengan Portfolio) */
+        .info-box {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 25px;
+            border: 1px solid var(--border-color);
         }
 
-        .protocol-code {
-            font-family: 'Courier New', monospace;
-            color: var(--node-color);
-            background: rgba(0, 0, 0, 0.2);
-            padding: 2px 5px;
-            border-radius: 3px;
+        .row-item {
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            padding: 8px 0;
+            border-bottom: 1px solid #222;
         }
 
-        .btn-primary {
-            background: var(--network-blue) !important;
+        .row-item:last-child {
             border: none;
-            padding: 12px 25px;
-            font-size: 1.1rem;
-            transition: all 0.3s ease;
-            border-radius: 8px;
         }
 
-        .btn-primary:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 5px 15px rgba(0, 168, 255, 0.4);
+        .lbl { color: var(--text-secondary); }
+        .val { color: var(--text-primary); font-family: 'Roboto Mono', monospace; }
+
+        /* BUTTON STYLE (Sama dengan Crypto Login) */
+        .btn-home {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            width: 100%;
+            background: var(--accent-green);
+            color: #000;
+            text-decoration: none;
+            padding: 14px;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 600;
+            transition: 0.2s;
+        }
+
+        .btn-home:hover {
+            opacity: 0.9;
+            transform: translateY(-2px);
         }
 
         footer {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background: rgba(0,0,0,0.5);
-            border-top: 1px solid var(--network-blue);
-            padding: 15px 0;
-            z-index: 1000;
-        }
-
-        .traffic-stats {
-            color: #7f8c8d;
-            font-size: 0.9rem;
-            margin: 0;
-        }
-
-        @media (max-width: 768px) {
-            .error-code {
-                font-size: 8rem;
-            }
-            
-            .error-code::after {
-                font-size: 1rem;
-                bottom: -1rem;
-            }
-            
-            .error-details {
-                font-size: 0.95rem;
-            }
-            
-            .btn-primary {
-                width: 100%;
-            }
+            margin-top: 30px;
+            font-size: 11px;
+            color: #444;
+            letter-spacing: 1px;
         }
     </style>
 </head>
+
 <body>
-    <!-- Network Elements -->
-    <div class="network-node" style="top: 25%; left: 15%"></div>
-    <div class="network-node" style="top: 65%; right: 20%"></div>
-    <div class="data-packet" style="left: 18%; animation-delay: 0.8s"></div>
-    <div class="data-packet" style="left: 40%; animation-delay: 2.5s"></div>
 
-    <nav class="navbar fixed-top navbar-expand-lg navbar-dark">
-        <div class="container">
-            <a class="navbar-brand fs-4" href="https://rvldx.github.io/">RDX
-            </a>
-        </div>
-    </nav>
-
-    <div class="error-container">
-        <div class="error-code">404</div>
-        <div class="error-message">
-            <i class="fas fa-exclamation-triangle fa-beat text-warning mb-4" style="font-size: 3.5rem;"></i>
-            <h2 class="mb-3">Gangguan Routing Terdeteksi</h2>
+    <div class="container">
+        <div class="card">
+            <div class="status-badge">ERR_CONNECTION_LOST</div>
+            <div class="error-code">404</div>
             
-            <div class="error-details">
-                <p class="mb-3">
-                    <span class="protocol-code">[HTTP/1.1 404 Not Found]</span><br>
-                    Target resource tidak ditemukan dalam jaringan.<br>
-                    Sistem mendeteksi kemungkinan kesalahan dalam packet routing.
-                </p>
-                
-                <div class="network-status">
-                    <div class="row g-3">
-                        <div class="col-md-6">
-                            <i class="fas fa-server me-2"></i>Status Server: 
-                            <span class="text-success">Online</span>
-                        </div>
-                        <div class="col-md-6">
-                            <i class="fas fa-shield-alt me-2"></i>Firewall: 
-                            <span class="text-success">Aktif</span>
-                        </div>
-                    </div>
+            <h2>Halaman Tidak Ditemukan</h2>
+            <p>Sepertinya rute yang Anda tuju telah dipindahkan atau tidak pernah ada dalam sistem.</p>
+
+            <div class="info-box">
+                <div class="row-item">
+                    <span class="lbl">Protokol</span>
+                    <span class="val">HTTP/1.1</span>
+                </div>
+                <div class="row-item">
+                    <span class="lbl">Status</span>
+                    <span class="val" style="color: var(--accent-red);">Not Found</span>
+                </div>
+                <div class="row-item">
+                    <span class="lbl">Ping</span>
+                    <span class="val">24ms</span>
                 </div>
             </div>
 
-            <a href="https://rvldx.my.id/" class="btn btn-lg btn-primary">
-                <i class="fas fa-redo-alt me-2"></i>Inisialisasi Ulang Koneksi
+            <a href="https://rvldx.github.io/" class="btn-home">
+                <i class="fas fa-home"></i>
+                Kembali ke Dashboard
             </a>
         </div>
+
+        <footer>
+            REVOLVERDX &bull; SYSTEM V2.3.5
+        </footer>
     </div>
 
-    <footer class="d-flex align-items-center justify-content-center text-center">
-        <div class="traffic-stats">
-            <i class="fas fa-network-wired me-2"></i>
-            RDX v2.3.5 | 
-            <i class="fas fa-clock me-2"></i>
-            Ping: 32ms | 
-            <i class="fas fa-database me-2"></i>
-            Uptime: 99.92%
-        </div>
-    </footer>
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
+
 </html>

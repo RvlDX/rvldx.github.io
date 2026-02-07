@@ -334,7 +334,7 @@
             await addDoc(collection(db, "chats", chatId, "messages"), { text: txt, senderId: currentUser.uid, timestamp: serverTimestamp() });
         };
 
-        // --- WAGER LOGIC (RESTORED) ---
+        // --- WAGER LOGIC ---
         window.submitWager = async (e) => {
             e.preventDefault();
             const targetUid = document.getElementById('targetUserSelect').value;
@@ -377,7 +377,6 @@
                     if (!isCreator && !isTarget) return;
                     hasData = true;
 
-                    // RESTORED: Logic Tampilan Pilihan (Options) yang hilang
                     let content = "";
                     if (w.type === 'direct') {
                         content = `<div class="text-lg font-bold text-white mt-2">"${w.content}"</div>`;
@@ -386,7 +385,6 @@
                             content = `<div class="mt-3 p-3 bg-slate-900 border border-accent/50 rounded text-center"><div class="text-[10px] text-muted font-mono">AGREED</div><div class="text-xl font-bold text-accent">${w.selectedOption}</div></div>`;
                         } else {
                             const instruction = isTarget ? '<div class="text-[10px] text-accent mb-2 animate-pulse">ACTION: CHOOSE ONE</div>' : '<div class="text-[10px] text-yellow-500 mb-2">WAITING PARTNER...</div>';
-                            // Logic Render Tombol Pilihan
                             const btns = w.options.map(o => 
                                 `<button ${isTarget ? `onclick="selectOption('${id}', '${o}')"` : 'disabled'} 
                                 class="w-full text-left px-4 py-3 text-sm rounded border mb-2 font-mono transition-all
@@ -397,7 +395,6 @@
                         }
                     }
 
-                    // RESTORED: Footer Logic
                     let footer = "";
                     if (w.status === 'pending') {
                         if (isCreator) footer = `<div class="text-[10px] text-muted">To: @${w.targetUsername}</div><button onclick="markComplete('${id}')" class="text-xs bg-slate-700 text-white hover:bg-accent hover:text-bg font-bold px-3 py-1.5 rounded">COMPLETE <i class="fas fa-check"></i></button>`;
@@ -420,7 +417,7 @@
             });
         }
 
-        // --- GLOBAL ACTIONS (SweetAlert Restored) ---
+        // --- GLOBAL ACTIONS ---
         window.markComplete = (id) => ConfirmModal.fire({title: 'Complete Contract?', icon:'question'}).then(r => { if(r.isConfirmed) updateDoc(doc(db, "wagers", id), {status:'completed'}).then(()=>Toast.fire('Success', 'Contract Closed', 'success')); });
         window.selectOption = (id, opt) => ConfirmModal.fire({title: `Pick "${opt}"?`, icon:'info'}).then(r => { if(r.isConfirmed) updateDoc(doc(db, "wagers", id), {selectedOption:opt}).then(()=>Toast.fire('Success', 'Option Locked', 'success')); });
         window.deleteWager = (id) => ConfirmModal.fire({title: 'Delete?', icon:'warning'}).then(r => { if(r.isConfirmed) deleteDoc(doc(db, "wagers", id)); });
@@ -461,10 +458,43 @@
         };
         window.rejectFriend = (id) => deleteDoc(doc(db, "friend_requests", id));
 
+        // --- UNFOLLOW FEATURE ---
+        window.unfollowFriend = async (friendUid) => {
+            ConfirmModal.fire({title: 'Unfollow?', text: 'Chat & Wager access will be revoked.', icon: 'warning'}).then(async (r) => {
+                if(r.isConfirmed) {
+                    const b = writeBatch(db);
+                    // Filter array lokal untuk remove
+                    const myNewFriends = userProfile.friends.filter(f => f.uid !== friendUid);
+                    b.update(doc(db, "users", currentUser.uid), { friends: myNewFriends });
+                    
+                    // Kita harus ambil data teman untuk remove diri kita dari list dia
+                    const friendSnap = await getDoc(doc(db, "users", friendUid));
+                    if(friendSnap.exists()) {
+                        const friendData = friendSnap.data();
+                        const friendNewFriends = friendData.friends.filter(f => f.uid !== currentUser.uid);
+                        b.update(doc(db, "users", friendUid), { friends: friendNewFriends });
+                    }
+                    await b.commit();
+                    Toast.fire({icon: 'success', title: 'User Unfollowed'});
+                }
+            });
+        };
+
         function renderFriendListNetwork() {
             const l = document.getElementById('myFriendList');
             l.innerHTML = "";
-            userProfile.friends?.forEach(f => l.innerHTML += `<div class="flex justify-between items-center bg-card p-3 rounded-lg border border-slate-700"><div class="flex items-center gap-3"><img src="${f.photoURL}" class="w-8 h-8 rounded-full"><span class="font-bold text-white">@${f.username}</span></div></div>`);
+            userProfile.friends?.forEach(f => {
+                l.innerHTML += `
+                    <div class="flex justify-between items-center bg-card p-3 rounded-lg border border-slate-700">
+                        <div class="flex items-center gap-3">
+                            <img src="${f.photoURL}" class="w-8 h-8 rounded-full">
+                            <span class="font-bold text-white">@${f.username}</span>
+                        </div>
+                        <button onclick="unfollowFriend('${f.uid}')" class="text-slate-600 hover:text-danger px-2 transition-colors">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>`;
+            });
         }
 
         // UTILS
@@ -503,6 +533,7 @@
         window.selectOption = selectOption;
         window.markComplete = markComplete;
         window.deleteWager = deleteWager;
+        window.unfollowFriend = unfollowFriend;
     </script>
 </body>
 </html>

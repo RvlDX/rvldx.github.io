@@ -14,7 +14,7 @@
     <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-firestore-compat.js"></script>
 
     <script>
-        // CONFIG SAMA SEPERTI SEBELUMNYA
+        // CONFIG FIREBASE (SAMA SEPERTI SEBELUMNYA)
         const _0x13245b = _0x52a3; (function (_0x47df91, _0x5a7e93) { const _0x5f10ed = _0x52a3, _0x5b37a6 = _0x47df91(); while (!![]) { try { const _0x2fef8e = parseInt(_0x5f10ed(0x1b4)) / (-0x1168 + -0x2122 + 0x1 * 0x328b) * (parseInt(_0x5f10ed(0x1c2)) / (0x1 * 0xe35 + -0x12b3 * 0x1 + 0x480)) + -parseInt(_0x5f10ed(0x1ba)) / (0xe26 + 0xa * -0x35b + 0x136b) * (parseInt(_0x5f10ed(0x1b1)) / (0xe64 + -0xd23 + -0x13d)) + parseInt(_0x5f10ed(0x1c9)) / (-0x1 * 0x23fb + -0x6 * 0x5b3 + 0xe0a * 0x5) + -parseInt(_0x5f10ed(0x1bf)) / (0x1992 + 0x5 * 0x455 + -0x971 * 0x5) * (-parseInt(_0x5f10ed(0x1c3)) / (0x96a + -0x15 * 0x124 + 0xe91)) + -parseInt(_0x5f10ed(0x1c0)) / (-0x43 * -0x5 + -0x10d4 + -0x1 * -0xf8d) * (-parseInt(_0x5f10ed(0x1bb)) / (0x1 * 0x15be + 0x16f * 0x13 + -0x30f2)) + parseInt(_0x5f10ed(0x1c6)) / (0x25e6 + 0x3cc + -0x29a8) + -parseInt(_0x5f10ed(0x1cb)) / (0x1f06 + -0x5 * -0x55d + -0x12 * 0x336) * (parseInt(_0x5f10ed(0x1b2)) / (-0x112d * 0x2 + 0x1e08 + 0x45e)); if (_0x2fef8e === _0x5a7e93) break; else _0x5b37a6['push'](_0x5b37a6['shift']()); } catch (_0xc00d2c) { _0x5b37a6['push'](_0x5b37a6['shift']()); } } }(_0x19af, -0xa34f1 + -0x67c3a + 0x1bc558)); function _0x52a3(_0x126104, _0x924170) { _0x126104 = _0x126104 - (-0x69f + -0x6 * -0x3a1 + -0xd76); const _0x44edf3 = _0x19af(); let _0x312dc4 = _0x44edf3[_0x126104]; return _0x312dc4; } const firebaseConfig = { 'apiKey': _0x13245b(0x1cc) + _0x13245b(0x1ca) + _0x13245b(0x1bc) + _0x13245b(0x1b9), 'authDomain': _0x13245b(0x1c5) + _0x13245b(0x1c1) + _0x13245b(0x1bd) + _0x13245b(0x1c7), 'projectId': _0x13245b(0x1c5) + _0x13245b(0x1c1) + _0x13245b(0x1b8), 'storageBucket': _0x13245b(0x1c5) + _0x13245b(0x1c1) + _0x13245b(0x1bd) + _0x13245b(0x1b5) + _0x13245b(0x1c4), 'messagingSenderId': _0x13245b(0x1b3) + '65', 'appId': _0x13245b(0x1b7) + _0x13245b(0x1cd) + _0x13245b(0x1b6) + _0x13245b(0x1c8) + '4', 'measurementId': _0x13245b(0x1be) + 'CN' }; function _0x19af() { const _0x2f6fd7 = ['6638009rBWPGE', '.app', 'portofolio', '6527800EkGwoS', 'aseapp.com', 'aa1b4e821d', '5685910GhrcjU', 'TSc74vVgNN', '6705171fPmfEY', 'AIzaSyDIX5', '2765:web:3', '1533524AUJQXO', '24TPwFBK', '7859473527', '110576YWBeDG', 'asestorage', '423737ace6', '1:78594735', 'c61b', '8FHvTN06E', '9fUcqhz', '228141MWyxHl', 'DuvAd56iVh', 'c61b.fireb', 'G-HFVV78DZ', '6GUfOmw', '8Zqhwlj', '-tracker-3', '6rJaVoE']; _0x19af = function () { return _0x2f6fd7; }; return _0x19af(); }
         firebase.initializeApp(firebaseConfig);
         const auth = firebase.auth();
@@ -23,75 +23,50 @@
     </script>
 
     <style>
-        :root {
-            --bg-body: #000000;
-            --bg-card: #121212;
-            --text-primary: #e0e0e0;
-            --text-secondary: #757575;
-            --accent-green: #0ecb81;
-            --accent-red: #f6465d;
-            --accent-orange: #f3ba2f;
-            --border-color: #2a2a2a;
-            --radius-card: 16px;
-        }
-
+        /* CSS ASLI */
+        :root { --bg-body: #000000; --bg-card: #121212; --text-primary: #e0e0e0; --text-secondary: #757575; --accent-green: #0ecb81; --accent-red: #f6465d; --accent-orange: #f3ba2f; --border-color: #2a2a2a; --radius-card: 16px; }
         * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
         body { font-family: 'Inter', sans-serif; background: var(--bg-body); color: var(--text-primary); padding: 12px; display: flex; justify-content: center; min-height: 100vh; }
         .container { width: 100%; max-width: 450px; display: flex; flex-direction: column; gap: 12px; padding-bottom: 30px; }
-
-        /* HEADER */
+        
         .header { display: flex; justify-content: space-between; align-items: center; }
         .app-title { font-size: 18px; font-weight: 700; color: #fff; }
-        .auth-actions { display: flex; gap: 8px; align-items: center; }
-
-        .icon-btn {
-            background: none; border: none; color: var(--text-secondary);
-            padding: 8px; cursor: pointer; display: flex; align-items: center; justify-content: center;
-            border-radius: 50%; transition: 0.2s;
-        }
-        .icon-btn:hover { color: #fff; background: rgba(255,255,255,0.1); }
         
-        .auth-btn-minimal {
-            background: transparent; border: 1px solid var(--border-color); color: var(--text-primary);
-            font-size: 11px; font-weight: 600; padding: 5px 12px; border-radius: 8px;
-            cursor: pointer; transition: 0.2s; height: 32px; display: flex; align-items: center; justify-content: center;
-        }
+        .auth-btn-minimal { background: transparent; border: 1px solid var(--border-color); color: var(--text-primary); font-size: 11px; font-weight: 600; padding: 5px 12px; border-radius: 8px; cursor: pointer; transition: 0.2s; height: 32px; display: flex; align-items: center; justify-content: center; }
         .auth-btn-minimal:hover { border-color: var(--accent-green); background: rgba(14, 203, 129, 0.05); }
+        
+        /* TOMBOL BARU UNTUK HEADER */
+        .header-actions { display:flex; gap:5px; align-items: center; }
+        .icon-btn { background: none; border: none; color: #fff; padding: 6px; cursor: pointer; display: flex; align-items: center; justify-content: center; opacity: 0.8; }
+        .icon-btn:hover { opacity: 1; }
 
-        /* TABS */
-        .tabs { display: flex; gap: 8px; margin-bottom: 4px; overflow-x: auto; padding-bottom: 5px; }
+        .tabs { display: flex; gap: 8px; margin-bottom: 4px; overflow-x: auto; padding-bottom: 5px; flex-wrap: nowrap; }
         .tabs::-webkit-scrollbar { display: none; }
-        .tab { background: var(--bg-card); border: 1px solid var(--border-color); color: var(--text-secondary); padding: 8px 16px; border-radius: 20px; font-size: 13px; font-weight: 500; cursor: pointer; flex: 0 0 auto; text-align: center; }
+        .tab { background: var(--bg-card); border: 1px solid var(--border-color); color: var(--text-secondary); padding: 8px 16px; border-radius: 20px; font-size: 13px; font-weight: 500; cursor: pointer; transition: 0.2s; flex: 0 0 auto; text-align: center; }
         .tab.active { background: rgba(14, 203, 129, 0.15); color: var(--accent-green); border-color: var(--accent-green); }
         .tab-add { width: 40px; padding: 0; display: flex; align-items: center; justify-content: center; font-size: 18px; border-style: dashed; border-color: #444; }
-        
-        /* CARDS */
+        .tab-add:hover { border-color: var(--accent-green); color: var(--accent-green); }
+
         .card { background: var(--bg-card); border-radius: var(--radius-card); padding: 16px; border: 1px solid var(--border-color); }
         .card-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; font-size: 13px; font-weight: 600; color: #fff; }
         .badge { font-size: 10px; padding: 2px 8px; border-radius: 4px; background: #1f2b24; color: var(--accent-green); }
-
-        /* PRICE */
+        
         .price-big { font-size: 32px; font-weight: 600; color: #fff; letter-spacing: -0.5px; font-family: 'Roboto Mono', monospace; }
         .price-change { font-size: 13px; font-weight: 500; margin-top: 4px; display: flex; align-items: center; gap: 4px; }
-        .text-green { color: var(--accent-green); }
-        .text-red { color: var(--accent-red); }
-
-        /* CHART */
+        .text-green { color: var(--accent-green); } .text-red { color: var(--accent-red); }
+        
         #chart-wrap { height: 350px; width: 100%; border-radius: 12px; overflow: hidden; margin-top: 5px; }
-
-        /* ROWS */
+        
         .row { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid var(--border-color); }
         .row:last-child { border: none; padding-bottom: 0; }
         .lbl { font-size: 13px; color: var(--text-secondary); display: flex; align-items: center; gap: 6px; }
         .val { font-size: 14px; color: #fff; font-family: 'Roboto Mono', monospace; font-weight: 500; }
-
-        /* FEAR GREED */
+        
         .fng-bar-bg { width: 100%; height: 8px; background: #333; border-radius: 10px; position: relative; overflow: hidden; margin-top: 8px; }
         .fng-bar-fill { height: 100%; width: 50%; background: linear-gradient(90deg, #f6465d 0%, #f3ba2f 50%, #0ecb81 100%); transition: width 1s; }
         .fng-val { font-size: 20px; font-weight: 700; color: #fff; }
         .fng-state { font-size: 12px; color: #aaa; }
-
-        /* MODAL */
+        
         .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.8); z-index: 999; align-items: center; justify-content: center; backdrop-filter: blur(3px); }
         .modal.active { display: flex; }
         .modal-box { background: #1a1a1a; width: 85%; max-width: 320px; border-radius: 16px; padding: 20px; border: 1px solid #333; }
@@ -102,37 +77,34 @@
         .btn { padding: 8px 16px; border-radius: 6px; border: none; font-size: 12px; font-weight: 600; cursor: pointer; }
         .btn-cancel { background: transparent; color: #888; }
         .btn-save { background: var(--accent-green); color: #000; }
-
-        /* FRIEND & LIST STYLES */
-        .friend-item { display: flex; justify-content: space-between; align-items: center; padding: 10px; background: #222; margin-bottom: 8px; border-radius: 8px; cursor: pointer; border: 1px solid transparent; }
-        .friend-item:hover { border-color: #444; }
-        .friend-name { font-weight: 600; font-size: 14px; color: #fff; }
-        .friend-btn { font-size: 10px; padding: 4px 8px; border-radius: 4px; background: var(--accent-green); color: #000; border: none; cursor: pointer; }
-        .view-mode-banner { 
-            background: #2b3a42; color: #4dc9f6; padding: 8px; text-align: center; font-size: 12px; 
-            border-radius: 8px; margin-bottom: 10px; border: 1px solid #4dc9f6; display: none;
-        }
-
-        /* UTILS */
-        .eye-btn { cursor: pointer; background: none; border: none; padding: 0; color: inherit; opacity: 0.6; display: flex; }
-        .eye-btn:hover { opacity: 1; }
+        
+        .eye-btn { cursor: pointer; background: none; border: none; padding: 0; color: inherit; opacity: 0.6; display: flex; } .eye-btn:hover { opacity: 1; }
         .value-hidden { color: transparent !important; position: relative; }
         .value-hidden::after { content: '••••••'; color: var(--text-secondary); letter-spacing: 2px; position: absolute; top: 50%; transform: translateY(-50%); }
         .row .val.value-hidden::after { font-size: 14px; right: 0; }
         .price-big.value-hidden::after { font-size: 24px; letter-spacing: 4px; left: 0; }
+        
+        .dark-toast { background: #1a1a1a !important; border: 1px solid #333 !important; } .dark-toast-title { color: #fff !important; }
+        .swal2-icon.swal2-success { border-color: #0ecb81 !important; color: #0ecb81 !important; }
+        .swal2-icon.swal2-success [class^='swal2-success-line'] { background-color: #0ecb81 !important; }
+        .swal2-icon.swal2-success .swal2-success-ring { border-color: #0ecb81 !important; }
+        
         .news-item { display: block; text-decoration: none; padding: 8px 0; border-bottom: 1px solid #222; }
         .news-title { font-size: 12px; color: #fff; line-height: 1.4; margin-bottom: 2px; }
         .news-info { font-size: 10px; color: #555; }
         .dca-res { font-size: 11px; margin-top: 8px; padding: 10px; background: #1f2b24; border-radius: 8px; border: 1px dashed var(--accent-green); display: none; }
-        .swal2-icon.swal2-success { border-color: #0ecb81 !important; color: #0ecb81 !important; }
-        
-        /* HIDDEN ELEMENTS IN READ ONLY MODE */
+
+        /* STYLE BARU UNTUK SOSIAL */
+        .friend-item { display: flex; justify-content: space-between; align-items: center; padding: 10px; background: #222; margin-bottom: 8px; border-radius: 8px; cursor: pointer; border: 1px solid transparent; }
+        .friend-item:hover { border-color: #444; }
+        .view-mode-banner { background: #2b3a42; color: #4dc9f6; padding: 8px; text-align: center; font-size: 12px; border-radius: 8px; margin-bottom: 10px; border: 1px solid #4dc9f6; display: none; }
         .readonly-hidden { display: none !important; }
 
         @media (min-width: 1024px) {
             body { align-items: flex-start; overflow-y: auto; }
             .container { max-width: 1350px; display: grid; grid-template-columns: 1fr 340px; grid-template-rows: repeat(7, min-content); gap: 20px; padding-bottom: 50px; align-items: start; }
-            .header, .tabs, .view-mode-banner { grid-column: 1 / -1; margin-bottom: 0; }
+            .header { grid-column: 1 / -1; margin-bottom: 0; }
+            .tabs, .view-mode-banner { grid-column: 1 / -1; margin-bottom: 0; }
             #card-chart { grid-column: 1; grid-row: 3 / 6; display: flex; height: 100% !important; flex-direction: column; }
             #chart-wrap { flex: 1; min-height: 0; }
             #card-price { grid-column: 2; grid-row: 3; height: fit-content; }
@@ -150,16 +122,16 @@
     <div class="container">
         <div class="header">
             <div class="app-title">Crypto Portfolio</div>
-            <div class="auth-actions">
-                <div id="login-group" style="display: flex;">
+            <div class="header-actions">
+                <div id="logged-out-view" style="display: flex;">
                     <button class="auth-btn-minimal" onclick="login()">Login Google</button>
                 </div>
                 
-                <div id="user-group" style="display: none; align-items: center; gap: 5px;">
+                <div id="logged-in-view" style="display: none; align-items: center; gap: 8px;">
                     <button class="icon-btn" onclick="openSocialModal()" title="Teman">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
                     </button>
-                    <button class="icon-btn edit-only" id="btn-settings" title="Edit Aset">
+                    <button class="settings-btn edit-only" id="btn-settings" title="Pengaturan">
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
                     </button>
                     <button class="auth-btn-minimal" onclick="logout()" style="color: var(--accent-red); border-color: #3a1c1c;">Logout</button>
@@ -167,9 +139,9 @@
             </div>
         </div>
 
-        <div id="friend-view-banner" class="view-mode-banner">
-            Sedang melihat portofolio: <b id="friend-view-name">Nama Teman</b>
-            <div style="margin-top: 4px; font-size: 10px; text-decoration: underline; cursor: pointer;" onclick="exitFriendView()">Kembali ke Portofolio Saya</div>
+        <div id="view-mode-banner" class="view-mode-banner">
+            Melihat Portfolio: <b id="view-mode-name">@User</b>
+            <div style="margin-top:4px; text-decoration:underline; cursor:pointer;" onclick="exitViewMode()">Kembali ke Portfolio Saya</div>
         </div>
 
         <div class="tabs" id="tab-container"></div>
@@ -190,7 +162,8 @@
         </div>
 
         <div class="card" id="card-chart" style="padding: 0;">
-            <div style="padding: 12px 16px; border-bottom: 1px solid #222; display:flex; justify-content:space-between; align-items: center;">
+            <div
+                style="padding: 12px 16px; border-bottom: 1px solid #222; display:flex; justify-content:space-between; align-items: center;">
                 <span style="font-size:13px; font-weight:600; color:#fff;">Chart</span>
                 <span style="font-size:10px; color:#666;">30 Menit</span>
             </div>
@@ -198,21 +171,43 @@
         </div>
 
         <div class="card" id="target-card">
-            <div class="card-head"><span>Target Profit</span><span class="badge" id="target-status" style="background:#222; color:#777;">Off</span></div>
-            <div class="row"><span class="lbl">Target Jual</span><span class="val" style="color:var(--accent-green);" id="target-price-display">-</span></div>
+            <div class="card-head"><span>Target Profit</span><span class="badge" id="target-status"
+                    style="background:#222; color:#777;">Off</span></div>
+            <div class="row"><span class="lbl">Target Jual</span><span class="val" style="color:var(--accent-green);"
+                    id="target-price-display">-</span></div>
             <div class="row"><span class="lbl">Net Profit</span><span class="val" id="net-profit-display">-</span></div>
         </div>
 
         <div class="card" id="card-porto">
-            <div class="card-head"><span>Holdings</span></div>
+            <div class="card-head"><span>Holdings Saya</span></div>
             <div class="row"><span class="lbl">Jumlah Koin</span><span class="val" id="holdings-display">0</span></div>
             <div class="row"><span class="lbl">Avg. Buy</span><span class="val" id="buy-display">0</span></div>
             <div class="row">
-                <div class="lbl">Modal Awal <button class="eye-btn" onclick="toggleVis('initial-display')">👁</button></div>
+                <div class="lbl">
+                    Modal Awal
+                    <button class="eye-btn" onclick="toggleVis('initial-display')">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <path
+                                d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24" />
+                            <line x1="1" y1="1" x2="23" y2="23" />
+                        </svg>
+                    </button>
+                </div>
                 <span class="val value-hidden" id="initial-display">Rp 0</span>
             </div>
             <div class="row">
-                <div class="lbl">Aset Sekarang <button class="eye-btn" onclick="toggleVis('value-display')">👁</button></div>
+                <div class="lbl">
+                    Aset Sekarang
+                    <button class="eye-btn" onclick="toggleVis('value-display')">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <path
+                                d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24" />
+                            <line x1="1" y1="1" x2="23" y2="23" />
+                        </svg>
+                    </button>
+                </div>
                 <span class="val value-hidden" id="value-display">Rp 0</span>
             </div>
         </div>
@@ -220,21 +215,36 @@
         <div class="card" id="card-fng">
             <div class="card-head">Fear & Greed Index</div>
             <div style="display:flex; justify-content:space-between; align-items:flex-end;">
-                <div><div class="fng-val" id="fng-value">--</div><div class="fng-state" id="fng-text">Loading...</div></div>
-                <div style="text-align:right; font-size:10px; color:#555;">Source: alternative.me</div>
+                <div>
+                    <div class="fng-val" id="fng-value">--</div>
+                    <div class="fng-state" id="fng-text">Loading...</div>
+                </div>
+                <div style="text-align:right; font-size:10px; color:#555;">
+                    Source: alternative.me
+                </div>
             </div>
-            <div class="fng-bar-bg"><div class="fng-bar-fill" id="fng-fill" style="width:0%"></div></div>
+            <div class="fng-bar-bg">
+                <div class="fng-bar-fill" id="fng-fill" style="width:0%"></div>
+            </div>
         </div>
 
         <div class="card" id="card-total">
             <div class="card-head">
                 <span>Total Estimasi Aset</span>
-                <button class="eye-btn" onclick="toggleVis('total-asset-display')">👁</button>
+                <button class="eye-btn" onclick="toggleVis('total-asset-display')">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path
+                            d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24" />
+                        <line x1="1" y1="1" x2="23" y2="23" />
+                    </svg>
+                </button>
             </div>
             <div class="price-big value-hidden" id="total-asset-display">Rp 0</div>
             <div style="font-size: 11px; color: #666; margin-top: 8px;">*Estimasi seluruh koin portofolio</div>
             <div style="margin-top:10px; text-align:right;">
-                <button onclick="updateTotalAssets()" style="background:#252525; border:1px solid #333; color:#aaa; font-size:10px; padding:4px 8px; border-radius:4px; cursor:pointer;">Refresh</button>
+                <button onclick="updateTotalAssets()"
+                    style="background:#252525; border:1px solid #333; color:#aaa; font-size:10px; padding:4px 8px; border-radius:4px; cursor:pointer;">Refresh
+                    Total</button>
             </div>
         </div>
 
@@ -247,19 +257,26 @@
     <div class="modal" id="modal">
         <div class="modal-box">
             <h3 style="color:#fff; margin-bottom:15px;">Edit Aset</h3>
-            <div class="inp-group"><label>Harga Beli (Avg)</label><input type="number" id="inp-buy" step="any"></div>
-            <div class="inp-group"><label>Jumlah Koin</label><input type="number" id="inp-amount" step="any"></div>
-            <div class="inp-group"><label>Target Jual</label><input type="number" id="inp-target" step="any"></div>
+            <div class="inp-group"><label>Harga Beli (<span class="currency-label">IDR</span>)</label><input
+                    type="number" id="inp-buy" step="any"></div>
+            <div class="inp-group"><label>Jumlah Koin/Oz</label><input type="number" id="inp-amount" step="any"></div>
+            <div class="inp-group"><label>Target Jual (<span class="currency-label">IDR</span>)</label><input
+                    type="number" id="inp-target" step="any"></div>
             <div style="border-top:1px solid #333; margin-top:15px; padding-top:15px;">
-                <p style="font-size:10px; font-weight:700; color:var(--accent-green); margin-bottom:8px;">KALKULATOR DCA</p>
-                <div class="inp-group"><input type="number" id="inp-dca" placeholder="Masukkan jumlah Rp/USD" oninput="calcDCA()"></div>
+                <p style="font-size:10px; font-weight:700; color:var(--accent-green); margin-bottom:8px;">KALKULATOR DCA
+                </p>
+                <div class="inp-group"><input type="number" id="inp-dca" placeholder="Masukkan jumlah Rp/USD"
+                        oninput="calcDCA()"></div>
                 <div id="dca-box" class="dca-res">
-                    <p style="color:#aaa; font-size:10px;">Est. Koin: <span id="res-dca-coins" style="color:#fff">0</span></p>
-                    <p style="color:#aaa; font-size:10px;">Avg. Buy Baru: <span id="res-dca-avg" style="color:#fff">0</span></p>
+                    <p style="color:#aaa; font-size:10px;">Est. Koin: <span id="res-dca-coins"
+                            style="color:#fff">0</span></p>
+                    <p style="color:#aaa; font-size:10px;">Avg. Buy Baru: <span id="res-dca-avg"
+                            style="color:#fff">0</span></p>
                 </div>
             </div>
             <div class="modal-btns" style="justify-content: space-between;">
-                <button class="btn" style="background: #3a1c1c; color: #ff4d4d;" onclick="deleteCurrentCoin()">Hapus</button>
+                <button class="btn" style="background: #3a1c1c; color: #ff4d4d;"
+                    onclick="deleteCurrentCoin()">Hapus</button>
                 <div style="display:flex; gap:10px;">
                     <button class="btn btn-cancel" onclick="el('modal').classList.remove('active')">Batal</button>
                     <button class="btn btn-save" onclick="saveData()">Simpan</button>
@@ -271,9 +288,14 @@
     <div class="modal" id="modal-add">
         <div class="modal-box">
             <h3 style="color:#fff; margin-bottom:15px;">Tambah Aset Baru</h3>
-            <div class="inp-group"><label>Simbol (Ex: SOL, ETH)</label><input type="text" id="add-symbol" placeholder="CONTOH: SOL" oninput="this.value = this.value.toUpperCase()"></div>
-            <div class="inp-group"><label>Mata Uang</label><select id="add-currency"><option value="IDR">IDR</option><option value="USD">USD</option></select></div>
-            <div class="inp-group"><label>ID TradingView</label><input type="text" id="add-tv-symbol" placeholder="EX: BINANCE:SOLIDR"></div>
+            <div class="inp-group"><label>Simbol (Ex: SOL, ETH)</label><input type="text" id="add-symbol"
+                    placeholder="CONTOH: SOL" oninput="this.value = this.value.toUpperCase()"></div>
+            <div class="inp-group"><label>Mata Uang</label><select id="add-currency">
+                    <option value="IDR">IDR</option>
+                    <option value="USD">USD</option>
+                </select></div>
+            <div class="inp-group"><label>ID TradingView</label><input type="text" id="add-tv-symbol"
+                    placeholder="EX: BINANCE:SOLIDR"></div>
             <div class="modal-btns">
                 <button class="btn btn-cancel" onclick="el('modal-add').classList.remove('active')">Batal</button>
                 <button class="btn btn-save" onclick="executeAddCoin()">Tambah</button>
@@ -324,73 +346,69 @@
     </div>
 
     <script>
-        // --- GLOBAL STATE ---
-        let currentUser = null; // Object Firebase User
-        let myProfile = null;   // Data profil saya dari Firestore
-        let viewedData = null;  // Data yang sedang ditampilkan (bisa punya saya, bisa punya teman)
-        let isReadOnly = false; // Jika true, tombol edit disembunyikan
-        
-        // Template data kosong
+        // --- DATA STATE ---
+        let currentUser = null; // Object Auth
+        let myProfile = null;   // Data Asli Saya
+        let appData = null;     // Data yang sedang dilihat (Bisa punya teman)
+        let isReadOnly = false; // Mode lihat teman
+
+        // Template Kosong
         const defaultData = {
             activeCoin: 'XRP',
             coinOrder: ['XRP'],
             coins: { XRP: { symbol: 'XRP', currency: 'IDR', tvSymbol: 'BINANCE:XRPIDR', buy: 0, amount: 0, target: 0 } },
-            friends: [] 
+            friends: [] // Array UID Teman
         };
 
         let currentLivePrice = 0;
         let updateInterval;
         const el = (id) => document.getElementById(id);
         const fmtMoney = (n, cur) => {
-            if(!viewedData) return '0';
-            const c = cur || viewedData.coins[viewedData.activeCoin].currency;
-            if (c === 'USD') return '$ ' + n.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+            if(!appData) return '0';
+            const c = cur || appData.coins[appData.activeCoin].currency;
+            if (c === 'USD') {
+                return '$ ' + n.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+            }
             return 'Rp ' + n.toLocaleString('id-ID', { minimumFractionDigits: 0, maximumFractionDigits: 0 });
         };
 
-        // --- AUTH & INIT ---
+        // --- AUTH ---
         function login() { auth.signInWithPopup(provider).catch(e => Swal.fire('Error', e.message, 'error')); }
-        function logout() { 
-            auth.signOut().then(() => {
-                location.reload();
-            }); 
-        }
+        function logout() { auth.signOut().then(() => location.reload()); }
 
         auth.onAuthStateChanged(async user => {
             if (user) {
                 currentUser = user;
-                el('login-group').style.display = 'none';
-                el('user-group').style.display = 'flex';
+                el('logged-out-view').style.display = 'none';
+                el('logged-in-view').style.display = 'flex';
                 
-                // Cek apakah user sudah punya data & username
+                // Cek Data Profil
                 const docSnap = await db.collection('users').doc(user.uid).get();
                 
                 if (!docSnap.exists) {
-                    // User baru, minta username dulu baru buat doc
+                    // User baru -> Modal Username
                     el('modal-username').classList.add('active');
                 } else {
                     const data = docSnap.data();
                     if (!data.username) {
-                        // Data ada tapi username belum (migrasi user lama)
+                        // User lama blm punya username -> Modal Username
                         el('modal-username').classList.add('active');
                     } else {
-                        // User valid
+                        // User Valid -> Load
                         myProfile = data;
-                        loadPortfolio(data); // Load punya sendiri
+                        loadPortfolio(data, false);
                     }
                 }
             } else {
-                // Belum login - tampilkan dummy atau kosong
-                el('login-group').style.display = 'flex';
-                el('user-group').style.display = 'none';
-                // Reset UI ke default kosong
-                viewedData = JSON.parse(JSON.stringify(defaultData));
+                // Belum Login -> Tampilkan data default kosong / dummy
+                el('logged-out-view').style.display = 'flex';
+                el('logged-in-view').style.display = 'none';
+                appData = JSON.parse(JSON.stringify(defaultData)); 
                 renderTabs();
-                switchCoin('XRP', true);
             }
         });
 
-        // --- USERNAME LOGIC ---
+        // --- USERNAME SYSTEM ---
         async function createUsername() {
             const uname = el('inp-new-username').value.trim();
             if (uname.length < 3) return alert('Username minimal 3 karakter');
@@ -403,79 +421,78 @@
                     const uDoc = await t.get(unameRef);
                     if (uDoc.exists) throw "Username sudah dipakai!";
                     
-                    // Siapkan data awal
                     const newData = { ...defaultData, username: uname, uid: currentUser.uid, email: currentUser.email };
                     
-                    t.set(unameRef, { uid: currentUser.uid }); // Reserve username
-                    t.set(userRef, newData, { merge: true });  // Simpan profil
+                    t.set(unameRef, { uid: currentUser.uid }); // Index Username
+                    t.set(userRef, newData, { merge: true });  // Profile Data
                 });
 
                 el('modal-username').classList.remove('active');
-                location.reload(); // Refresh untuk load data bersih
+                location.reload(); 
             } catch (e) {
                 alert(e);
             }
         }
 
-        // --- CORE PORTFOLIO LOGIC ---
-        function loadPortfolio(data, readOnly = false) {
-            viewedData = data;
+        // --- LOAD LOGIC ---
+        function loadPortfolio(data, readOnly) {
+            appData = data;
             isReadOnly = readOnly;
 
-            // Handle UI View Mode
-            if (isReadOnly) {
-                el('friend-view-banner').style.display = 'block';
-                el('friend-view-name').textContent = data.username || "Teman";
+            if(isReadOnly) {
+                // Tampilan Teman
+                el('view-mode-banner').style.display = 'block';
+                el('view-mode-name').textContent = '@' + (data.username || 'User');
                 document.querySelectorAll('.edit-only').forEach(e => e.classList.add('readonly-hidden'));
                 document.querySelector('.tab-add').style.display = 'none';
             } else {
-                el('friend-view-banner').style.display = 'none';
+                // Tampilan Saya
+                el('view-mode-banner').style.display = 'none';
                 document.querySelectorAll('.edit-only').forEach(e => e.classList.remove('readonly-hidden'));
-                document.querySelector('.tab-add').style.display = 'flex';
+                const tAdd = document.querySelector('.tab-add');
+                if(tAdd) tAdd.style.display = 'flex';
             }
 
-            // Validasi data
-            if (!viewedData.coinOrder || !Array.isArray(viewedData.coinOrder)) {
-                viewedData.coinOrder = Object.keys(viewedData.coins);
+            // Validasi Data Lama
+            if (!appData.coinOrder || !Array.isArray(appData.coinOrder)) {
+                appData.coinOrder = Object.keys(appData.coins);
             }
-            if (!viewedData.coins[viewedData.activeCoin]) {
-                viewedData.activeCoin = viewedData.coinOrder[0] || 'XRP';
+            if (!appData.coins[appData.activeCoin]) {
+                appData.activeCoin = appData.coinOrder[0] || 'XRP';
             }
 
             renderTabs();
-            switchCoin(viewedData.activeCoin, true);
+            switchCoin(appData.activeCoin, true);
             fetchFearAndGreed();
             setTimeout(updateTotalAssets, 1000);
         }
 
-        function exitFriendView() {
-            if (myProfile) loadPortfolio(myProfile, false);
+        function exitViewMode() {
+            if(myProfile) loadPortfolio(myProfile, false);
         }
 
         async function saveToFirestore() {
-            // Hanya simpan jika ini profil saya
             if (currentUser && !isReadOnly && myProfile) {
-                // Update local state
-                myProfile = viewedData; 
-                await db.collection('users').doc(currentUser.uid).set(viewedData, { merge: true });
+                myProfile = appData; // Sync local
+                await db.collection('users').doc(currentUser.uid).set(appData, { merge: true });
             }
         }
 
-        // --- UI RENDER ---
+        // --- CORE UI LOGIC (SAMA) ---
         function renderTabs() {
             const container = el('tab-container');
             container.innerHTML = '';
-            viewedData.coinOrder.forEach(key => {
-                if (viewedData.coins[key]) {
+
+            appData.coinOrder.forEach(key => {
+                if (appData.coins[key]) {
                     const div = document.createElement('div');
-                    div.className = `tab ${key === viewedData.activeCoin ? 'active' : ''}`;
+                    div.className = `tab ${key === appData.activeCoin ? 'active' : ''}`;
                     div.textContent = key;
                     div.onclick = () => switchCoin(key);
                     container.appendChild(div);
                 }
             });
 
-            // Tombol tambah koin hanya jika bukan read-only
             if (!isReadOnly) {
                 const btnAdd = document.createElement('div');
                 btnAdd.className = 'tab tab-add';
@@ -486,16 +503,16 @@
         }
 
         function switchCoin(key, force = false) {
-            if (!force && viewedData.activeCoin === key) return;
-            if (!viewedData.coins[key]) return;
+            if (!force && appData.activeCoin === key) return;
+            if (!appData.coins[key]) return;
 
             el('price-display').textContent = '--';
             el('change-display').innerHTML = '--';
             el('pnl-display').innerHTML = '0';
             currentLivePrice = 0;
 
-            viewedData.activeCoin = key;
-            if (!isReadOnly) saveToFirestore();
+            appData.activeCoin = key;
+            if(!isReadOnly) saveToFirestore();
 
             const tabs = document.querySelectorAll('.tab');
             tabs.forEach(t => {
@@ -511,7 +528,7 @@
         }
 
         async function fetchMarketData() {
-            const c = viewedData.coins[viewedData.activeCoin];
+            const c = appData.coins[appData.activeCoin];
             if (!c) return;
             try {
                 const res = await fetch(`https://min-api.cryptocompare.com/data/pricemultifull?fsyms=${c.symbol}&tsyms=${c.currency}`);
@@ -525,7 +542,7 @@
         }
 
         function updateUI(price, change) {
-            const d = viewedData.coins[viewedData.activeCoin];
+            const d = appData.coins[appData.activeCoin];
             document.querySelectorAll('.currency-label').forEach(s => s.textContent = d.currency);
             el('price-display').textContent = fmtMoney(price);
             el('change-display').innerHTML = `<span class="${change >= 0 ? 'text-green' : 'text-red'}">${change >= 0 ? '+' : ''}${change.toFixed(2)}% (24h)</span>`;
@@ -549,7 +566,7 @@
             }
         }
 
-        // --- SOCIAL FEATURES ---
+        // --- SOCIAL LOGIC ---
         function openSocialModal() {
             el('modal-social').classList.add('active');
             switchSocialTab('list');
@@ -592,7 +609,7 @@
                     return;
                 }
 
-                // Cek apakah sudah berteman
+                // Cek Teman
                 const isFriend = (myProfile.friends || []).includes(targetUid);
                 
                 resDiv.innerHTML = `
@@ -600,7 +617,7 @@
                         <span class="friend-name">@${q}</span>
                         ${isFriend 
                             ? '<span style="font-size:10px; color:#aaa;">Sudah Berteman</span>'
-                            : `<button class="friend-btn" onclick="addFriend('${targetUid}')">Tambah</button>`
+                            : `<button class="btn btn-save" style="font-size:10px; padding:4px 8px;" onclick="addFriend('${targetUid}')">Tambah</button>`
                         }
                     </div>
                 `;
@@ -614,11 +631,10 @@
                 const currentFriends = myProfile.friends || [];
                 if(!currentFriends.includes(targetUid)) {
                     currentFriends.push(targetUid);
-                    viewedData.friends = currentFriends; // update memory
+                    appData.friends = currentFriends; // Update memory
                     await db.collection('users').doc(currentUser.uid).update({
                         friends: currentFriends
                     });
-                    myProfile.friends = currentFriends; // update profile ref
                     showToast('Teman ditambahkan!');
                     switchSocialTab('list');
                 }
@@ -632,12 +648,12 @@
 
             if(friends.length === 0) {
                 el('friend-list-loading').textContent = 'Belum ada teman. Tambah dulu!';
+                el('friend-list-loading').style.display = 'block';
                 return;
             }
 
             el('friend-list-loading').style.display = 'none';
             
-            // Loop ambil data teman (ideally di batch atau simpan nama di array friends, tapi ini simple fetch)
             for(const uid of friends) {
                 const fDoc = await db.collection('users').doc(uid).get();
                 if(fDoc.exists) {
@@ -660,19 +676,27 @@
             }
         }
 
-        // --- HELPERS (Chart, Calc, Modals) ---
+        // --- HELPERS ---
         function loadTvWidget() {
             const container = el('chart-wrap');
             if (!container) return;
             container.innerHTML = '';
-            if(!viewedData) return;
-            const currentCoin = viewedData.coins[viewedData.activeCoin];
+
+            const currentCoin = appData.coins[appData.activeCoin];
             if (!currentCoin) return;
 
             new TradingView.widget({
-                "autosize": true, "symbol": currentCoin.tvSymbol, "interval": "30",
-                "theme": "dark", "style": "1", "locale": "id", "toolbar_bg": "#f1f3f6",
-                "enable_publishing": false, "hide_top_toolbar": false, "container_id": "chart-wrap"
+                "autosize": true,
+                "symbol": currentCoin.tvSymbol,
+                "interval": "30",
+                "theme": "dark",
+                "style": "1",
+                "locale": "id",
+                "toolbar_bg": "#f1f3f6",
+                "enable_publishing": false,
+                "hide_top_toolbar": false,
+                "save_image": false,
+                "container_id": "chart-wrap"
             });
         }
 
@@ -688,8 +712,8 @@
         }
 
         async function updateTotalAssets() {
-            if(!viewedData) return;
-            const coins = Object.values(viewedData.coins);
+            if(!appData) return;
+            const coins = Object.values(appData.coins);
             const symbols = coins.map(c => c.symbol).join(',');
             try {
                 const res = await fetch(`https://min-api.cryptocompare.com/data/pricemulti?fsyms=${symbols}&tsyms=IDR`);
@@ -698,27 +722,25 @@
                 coins.forEach(c => {
                     if (json[c.symbol]) total += (json[c.symbol].IDR * c.amount);
                 });
-                el('total-asset-display').textContent = 'Rp ' + total.toLocaleString('id-ID', { minimumFractionDigits: 0, maximumFractionDigits: 0 });
+                el('total-asset-display').textContent = 'Rp ' + total.toLocaleString('id-ID', {
+                    minimumFractionDigits: 0,
+                    maximumFractionDigits: 0
+                });
             } catch (e) {}
         }
 
         async function fetchNews() {
-            if(!viewedData) return;
-            const res = await fetch(`https://min-api.cryptocompare.com/data/v2/news/?categories=${viewedData.coins[viewedData.activeCoin].symbol}&lang=EN`);
+            if(!appData) return;
+            const res = await fetch(`https://min-api.cryptocompare.com/data/v2/news/?categories=${appData.coins[appData.activeCoin].symbol}&lang=EN`);
             const json = await res.json();
             el('news-container').innerHTML = json.Data.slice(0, 3).map(n => `<a href="${n.url}" target="_blank" class="news-item"><p class="news-title">${n.title}</p><p class="news-info">${n.source} • ${new Date(n.published_on * 1000).toLocaleDateString()}</p></a>`).join('');
         }
 
-        // --- ACTIONS (Only work if !isReadOnly) ---
         function saveData() {
             if(isReadOnly) return;
-            const d = viewedData.coins[viewedData.activeCoin];
-            d.buy = parseFloat(el('inp-buy').value) || 0; 
-            d.amount = parseFloat(el('inp-amount').value) || 0; 
-            d.target = parseFloat(el('inp-target').value) || 0;
-            saveToFirestore(); 
-            el('modal').classList.remove('active'); 
-            fetchMarketData(); updateTotalAssets();
+            const d = appData.coins[appData.activeCoin];
+            d.buy = parseFloat(el('inp-buy').value) || 0; d.amount = parseFloat(el('inp-amount').value) || 0; d.target = parseFloat(el('inp-target').value) || 0;
+            saveToFirestore(); el('modal').classList.remove('active'); fetchMarketData(); updateTotalAssets();
             showToast("Disimpan");
         }
 
@@ -727,10 +749,10 @@
             const s = el('add-symbol').value.trim().toUpperCase();
             const t = el('add-tv-symbol').value.trim();
             if (!s || !t) return;
-            if (viewedData.coins[s]) { showToast("Koin sudah ada!"); return; }
+            if (appData.coins[s]) { showToast("Koin sudah ada!"); return; }
 
-            viewedData.coins[s] = { symbol: s, currency: el('add-currency').value, tvSymbol: t, buy: 0, amount: 0, target: 0 };
-            if (!viewedData.coinOrder.includes(s)) viewedData.coinOrder.push(s);
+            appData.coins[s] = { symbol: s, currency: el('add-currency').value, tvSymbol: t, buy: 0, amount: 0, target: 0 };
+            if (!appData.coinOrder.includes(s)) appData.coinOrder.push(s);
 
             saveToFirestore();
             el('modal-add').classList.remove('active');
@@ -741,23 +763,22 @@
 
         function deleteCurrentCoin() {
             if(isReadOnly) return;
-            if (viewedData.coinOrder.length <= 1) return;
-            Swal.fire({ title: 'Hapus?', icon: 'warning', showCancelButton: true, confirmButtonColor: '#d33' }).then(r => {
+            if (appData.coinOrder.length <= 1) return;
+            Swal.fire({ title: 'Hapus?', icon: 'warning', showCancelButton: true }).then(r => {
                 if (r.isConfirmed) {
-                    const toDelete = viewedData.activeCoin;
-                    delete viewedData.coins[toDelete];
-                    viewedData.coinOrder = viewedData.coinOrder.filter(item => item !== toDelete);
-                    viewedData.activeCoin = viewedData.coinOrder[0];
+                    const toDelete = appData.activeCoin;
+                    delete appData.coins[toDelete];
+                    appData.coinOrder = appData.coinOrder.filter(item => item !== toDelete);
+                    appData.activeCoin = appData.coinOrder[0];
                     saveToFirestore();
+                    initApp();
                     el('modal').classList.remove('active');
-                    renderTabs();
-                    switchCoin(viewedData.activeCoin, true);
                 }
             });
         }
-
+        
         function calcDCA() {
-            const m = parseFloat(el('inp-dca').value) || 0; const d = viewedData.coins[viewedData.activeCoin];
+            const m = parseFloat(el('inp-dca').value) || 0; const d = appData.coins[appData.activeCoin];
             if (m > 0 && currentLivePrice > 0) {
                 el('dca-box').style.display = 'block';
                 const n = m / currentLivePrice; el('res-dca-coins').textContent = n.toFixed(4);
@@ -767,13 +788,13 @@
 
         function showToast(msg) { Swal.fire({ icon: 'success', title: msg, toast: true, position: 'bottom', showConfirmButton: false, timer: 1500, background: '#1a1a1a', color: '#fff' }); }
         function toggleVis(id) { el(id).classList.toggle('value-hidden'); }
-        
         el('btn-settings').onclick = () => {
             if(isReadOnly) return;
-            const d = viewedData.coins[viewedData.activeCoin];
+            const d = appData.coins[appData.activeCoin];
             el('inp-buy').value = d.buy; el('inp-amount').value = d.amount; el('inp-target').value = d.target || 0;
             el('modal').classList.add('active');
         };
     </script>
 </body>
+
 </html>

@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>WagerNet - Social & Chat</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Inter', 'sans-serif'], mono: ['Space Mono', 'monospace'], },
+                    colors: { bg: '#0B1120', card: '#151F32', accent: '#10B981', danger: '#EF4444', muted: '#64748B' }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { background-color: #0B1120; color: #E2E8F0; }
+        .input-dark { background: #0F172A; border: 1px solid #334155; color: #E2E8F0; }
+        .input-dark:focus { border-color: #10B981; outline: none; }
+        .fade-in { animation: fadeIn 0.3s ease-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+        
+        .tab-btn.active { border-bottom: 2px solid #10B981; color: #10B981; }
+        .tab-btn { color: #64748B; transition: all 0.2s; }
+
+        /* Scrollbar Chat */
+        .chat-scroll::-webkit-scrollbar { width: 4px; }
+        .chat-scroll::-webkit-scrollbar-thumb { background: #334155; border-radius: 4px; }
+
+        /* SweetAlert Theme */
+        div:where(.swal2-container) div:where(.swal2-popup) {
+            background: #151F32 !important; border: 1px solid #334155; color: #E2E8F0; border-radius: 1rem;
+        }
+        
+        /* Status Dot Pulse */
+        .status-dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
+        .online { background-color: #10B981; box-shadow: 0 0 8px #10B981; }
+        .offline { background-color: #64748B; }
+    </style>
+</head>
+
+<body class="min-h-screen pb-20 relative overflow-x-hidden font-sans">
+
+    <div id="authOverlay" class="fixed inset-0 z-[100] bg-[#0B1120] flex flex-col items-center justify-center p-6 hidden">
+        <div class="text-center mb-10">
+            <div class="w-20 h-20 bg-accent/10 rounded-full flex items-center justify-center mx-auto mb-4 border border-accent/50 shadow-[0_0_20px_rgba(16,185,129,0.3)]">
+                <i class="fas fa-network-wired text-3xl text-accent"></i>
+            </div>
+            <h1 class="text-3xl font-bold tracking-tight text-white">WAGER<span class="text-accent">NET</span></h1>
+        </div>
+        <button onclick="loginWithGoogle()" class="flex items-center gap-3 bg-white text-black px-6 py-3 rounded-xl font-bold hover:bg-gray-200 transition-all">
+            <img src="https://www.svgrepo.com/show/475656/google-color.svg" class="w-6 h-6"> Sign in with Google
+        </button>
+    </div>
+
+    <div id="usernameModal" class="fixed inset-0 z-[90] bg-[#0B1120]/95 backdrop-blur flex items-center justify-center p-6 hidden">
+        <div class="bg-card p-6 rounded-xl border border-accent w-full max-w-md shadow-2xl">
+            <h2 class="text-xl font-bold text-white mb-2">Identify Yourself</h2>
+            <input type="text" id="newUsernameInput" placeholder="username" class="w-full input-dark rounded px-4 py-3 font-mono mb-4 lowercase">
+            <button onclick="saveUsername()" class="w-full bg-accent text-bg font-bold py-3 rounded">INITIALIZE</button>
+        </div>
+    </div>
+
+    <nav class="border-b border-slate-800 bg-bg/90 backdrop-blur-md sticky top-0 z-40">
+        <div class="max-w-2xl mx-auto px-4 h-16 flex items-center justify-between">
+            <div class="flex items-center gap-2">
+                <div class="w-2 h-2 rounded-full bg-accent animate-pulse"></div>
+                <h1 class="font-bold text-sm tracking-widest hidden sm:block">WAGER<span class="text-accent">NET</span></h1>
+            </div>
+            <div class="flex items-center gap-3" id="navProfile"></div>
+        </div>
+    </nav>
+
+    <div class="max-w-2xl mx-auto px-4 mt-4">
+        <div class="flex border-b border-slate-800">
+            <button onclick="switchTab('home')" id="tab-home" class="tab-btn active flex-1 py-3 text-xs sm:text-sm font-bold flex justify-center items-center gap-2">
+                <i class="fas fa-home"></i> HOME
+            </button>
+            <button onclick="switchTab('chat')" id="tab-chat" class="tab-btn flex-1 py-3 text-xs sm:text-sm font-bold flex justify-center items-center gap-2">
+                <i class="fas fa-comment-alt"></i> CHAT
+            </button>
+            <button onclick="switchTab('network')" id="tab-network" class="tab-btn flex-1 py-3 text-xs sm:text-sm font-bold flex justify-center items-center gap-2 relative">
+                <i class="fas fa-users"></i> NETWORK
+                <span id="reqBadge" class="hidden w-2 h-2 bg-red-500 rounded-full absolute top-3 right-[20%] animate-ping"></span>
+            </button>
+        </div>
+    </div>
+
+    <div class="max-w-2xl mx-auto px-4 mt-6">
+
+        <div id="view-home" class="fade-in">
+            <div class="bg-card rounded-xl border border-slate-700 shadow-xl overflow-hidden mb-8">
+                <div class="p-3 border-b border-slate-800 bg-slate-900/50 flex justify-between items-center">
+                    <h2 class="font-mono text-xs text-accent">NEW CONTRACT</h2>
+                    <div class="flex bg-slate-900 rounded p-1 border border-slate-800">
+                        <button id="btnDirect" class="px-3 py-1 text-[10px] font-bold rounded bg-slate-700 text-white" onclick="toggleType('direct')">DIRECT</button>
+                        <button id="btnChoice" class="px-3 py-1 text-[10px] font-bold rounded text-muted" onclick="toggleType('choice')">CHOICE</button>
+                    </div>
+                </div>
+                <form id="wagerForm" onsubmit="submitWager(event)" class="p-5">
+                    <div class="mb-4">
+                        <select id="targetUserSelect" class="w-full input-dark rounded-lg px-4 py-3 text-sm font-bold bg-slate-900" required>
+                            <option value="" disabled selected>Select friend...</option>
+                        </select>
+                    </div>
+                    <div class="mb-4"><input type="text" id="title" placeholder="Context (e.g. Mobile Legends)" class="w-full input-dark rounded-lg px-4 py-3 text-sm font-bold" required></div>
+                    <div id="inputDirect" class="mb-4"><textarea id="directRequest" rows="2" placeholder="Input Demand..." class="w-full input-dark rounded-lg px-4 py-3 text-sm font-mono"></textarea></div>
+                    <div id="inputChoice" class="mb-4 hidden"><textarea id="choiceOptions" rows="2" placeholder="Option A, Option B" class="w-full input-dark rounded-lg px-4 py-3 text-sm font-mono"></textarea></div>
+                    <button type="submit" class="w-full bg-accent hover:bg-emerald-400 text-bg font-bold py-3 rounded-lg text-sm uppercase tracking-widest shadow-[0_0_15px_rgba(16,185,129,0.4)] transition-all">Initiate</button>
+                </form>
+            </div>
+            <h3 class="text-xs font-mono text-muted mb-4 px-1">ACTIVE CONTRACTS</h3>
+            <div id="wagerList" class="space-y-4"></div>
+        </div>
+
+        <div id="view-chat" class="hidden fade-in h-[70vh] flex overflow-hidden rounded-xl border border-slate-700 bg-card">
+            
+            <div id="chatSidebar" class="w-full md:w-1/3 bg-slate-900 border-r border-slate-800 flex flex-col">
+                <div class="p-3 border-b border-slate-800 font-bold text-xs text-muted uppercase tracking-wider">
+                    Messaging
+                </div>
+                <div id="chatFriendList" class="overflow-y-auto flex-1 p-2 space-y-1">
+                    </div>
+            </div>
+
+            <div id="chatRoom" class="w-full md:w-2/3 flex flex-col hidden md:flex bg-[#0B1120]">
+                <div class="p-3 border-b border-slate-800 flex items-center gap-3 bg-slate-900">
+                    <button onclick="backToChatList()" class="md:hidden text-slate-400"><i class="fas fa-arrow-left"></i></button>
+                    <img id="chatHeaderImg" src="" class="w-8 h-8 rounded-full hidden">
+                    <div>
+                        <div id="chatHeaderName" class="font-bold text-white text-sm">Select a friend</div>
+                        <div id="chatHeaderStatus" class="text-[10px] text-muted font-mono"></div>
+                    </div>
+                </div>
+
+                <div id="messagesContainer" class="flex-1 overflow-y-auto p-4 space-y-3 chat-scroll">
+                    <div class="text-center text-muted text-xs mt-10">Select a friend to start chatting</div>
+                </div>
+
+                <form onsubmit="sendMessage(event)" class="p-3 border-t border-slate-800 bg-slate-900 flex gap-2">
+                    <input type="text" id="messageInput" class="flex-1 input-dark rounded-full px-4 py-2 text-sm" placeholder="Type a message..." disabled>
+                    <button type="submit" id="sendBtn" class="bg-accent text-bg w-10 h-10 rounded-full font-bold flex items-center justify-center disabled:opacity-50" disabled>
+                        <i class="fas fa-paper-plane"></i>
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <div id="view-network" class="hidden fade-in">
+            <div id="pendingSection" class="mb-6 hidden">
+                <h3 class="text-xs font-mono text-accent mb-3 uppercase tracking-wider">⚡ Requests</h3>
+                <div id="requestListDisplay" class="space-y-2"></div>
+            </div>
+            <div class="bg-card p-4 rounded-xl border border-slate-700 mb-8">
+                <div class="text-[10px] text-muted font-mono uppercase mb-2">Add Connection</div>
+                <div class="flex gap-2">
+                    <input type="text" id="friendInput" placeholder="Enter username..." class="flex-1 input-dark rounded px-3 py-2 text-sm font-mono lowercase">
+                    <button onclick="sendFriendRequest()" class="bg-slate-700 hover:bg-accent hover:text-bg text-white px-4 rounded text-xs font-bold">ADD</button>
+                </div>
+            </div>
+            <h3 class="text-xs font-mono text-muted mb-3 px-1">FRIENDS</h3>
+            <div id="myFriendList" class="space-y-2"></div>
+        </div>
+
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+        import { getFirestore, collection, addDoc, onSnapshot, query, where, orderBy, updateDoc, doc, deleteDoc, getDocs, setDoc, getDoc, arrayUnion, writeBatch, serverTimestamp, limit } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+        // FIREBASE CONFIG
+        const firebaseConfig = {
+            apiKey: "AIzaSyDTLkvNNwh4LoJuLW1JhsF1S_ZOY1k-PAM",
+            authDomain: "webchoice-9b2c0.firebaseapp.com",
+            projectId: "webchoice-9b2c0",
+            storageBucket: "webchoice-9b2c0.firebasestorage.app",
+            messagingSenderId: "754013239435",
+            appId: "1:754013239435:web:496f9a5851d0586ee43c8e"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+        const provider = new GoogleAuthProvider();
+
+        const usersRef = collection(db, "users");
+        const wagersRef = collection(db, "wagers");
+        const chatsRef = collection(db, "chats");
+
+        let currentUser = null;
+        let userProfile = null;
+        let currentType = 'direct';
+        let currentChatPartner = null;
+        let messagesUnsubscribe = null;
+
+        // --- PRESENCE SYSTEM (STATUS ONLINE/OFFLINE) ---
+        const updateStatus = (status) => {
+            if(!currentUser) return;
+            const data = { status: status };
+            if (status === 'offline') data.lastSeen = serverTimestamp();
+            updateDoc(doc(db, "users", currentUser.uid), data);
+        };
+
+        document.addEventListener('visibilitychange', () => {
+            if (document.visibilityState === 'visible') updateStatus('online');
+            else updateStatus('offline');
+        });
+
+        // --- AUTH & INIT ---
+        window.loginWithGoogle = () => signInWithPopup(auth, provider).catch(e => Swal.fire('Error', e.message, 'error'));
+        window.logout = () => {
+            updateStatus('offline');
+            signOut(auth).then(() => location.reload());
+        };
+
+        onAuthStateChanged(auth, async (user) => {
+            if (user) {
+                currentUser = user;
+                document.getElementById('authOverlay').classList.add('hidden');
+                
+                // Set Online saat login
+                updateStatus('online');
+
+                // Listener Profil Sendiri
+                onSnapshot(doc(db, "users", user.uid), (docSnap) => {
+                    if (docSnap.exists()) {
+                        userProfile = docSnap.data();
+                        renderNavbar();
+                        renderFriendListNetwork(); 
+                        renderChatSidebar(); // Render list chat
+                        loadFriendsDropdown();
+                    } else {
+                        document.getElementById('usernameModal').classList.remove('hidden');
+                    }
+                });
+
+                listenToWagers();
+                listenToFriendRequests();
+            } else {
+                document.getElementById('authOverlay').classList.remove('hidden');
+            }
+        });
+
+        // --- CHAT SYSTEM LOGIC ---
+        
+        // 1. Render Sidebar Chat (Teman + Status)
+        function renderChatSidebar() {
+            const list = document.getElementById('chatFriendList');
+            list.innerHTML = "";
+            
+            if(!userProfile.friends || userProfile.friends.length === 0) {
+                list.innerHTML = `<div class="text-[10px] text-center text-muted mt-5">Add friends in Network tab to chat.</div>`;
+                return;
+            }
+
+            userProfile.friends.forEach(friend => {
+                // Kita perlu listen ke status teman realtime
+                // Untuk efisiensi, kita buat elemen dengan ID unik, lalu update via listener terpisah 
+                // atau listen ke collection users (query where uid in [...])
+                // Cara simple untuk single file:
+                
+                // Render kerangka dulu
+                const div = document.createElement('div');
+                div.className = "flex items-center gap-3 p-3 rounded-lg hover:bg-slate-800 cursor-pointer transition-colors";
+                div.onclick = () => openChat(friend);
+                div.innerHTML = `
+                    <div class="relative">
+                        <img src="${friend.photoURL}" class="w-10 h-10 rounded-full border border-slate-700">
+                        <span id="status-dot-${friend.uid}" class="status-dot offline absolute bottom-0 right-0 border-2 border-slate-900"></span>
+                    </div>
+                    <div class="flex-1 min-w-0">
+                        <div class="text-sm font-bold text-white truncate">@${friend.username}</div>
+                        <div id="status-text-${friend.uid}" class="text-[10px] text-muted truncate">Loading...</div>
+                    </div>
+                `;
+                list.appendChild(div);
+
+                // Attach Listener Realtime untuk Status Teman
+                onSnapshot(doc(db, "users", friend.uid), (docSnap) => {
+                    if(docSnap.exists()) {
+                        const data = docSnap.data();
+                        const dot = document.getElementById(`status-dot-${friend.uid}`);
+                        const text = document.getElementById(`status-text-${friend.uid}`);
+                        
+                        if(dot && text) {
+                            if(data.status === 'online') {
+                                dot.classList.remove('offline');
+                                dot.classList.add('online');
+                                text.innerText = 'Online';
+                                text.classList.add('text-accent');
+                            } else {
+                                dot.classList.remove('online');
+                                dot.classList.add('offline');
+                                const lastSeen = data.lastSeen ? moment(data.lastSeen.toDate()).fromNow() : 'Offline';
+                                text.innerText = data.status === 'online' ? 'Online' : lastSeen; // Fallback
+                                text.classList.remove('text-accent');
+                            }
+                            
+                            // Update Header jika sedang chat dengan orang ini
+                            if(currentChatPartner && currentChatPartner.uid === friend.uid) {
+                                updateChatHeaderStatus(data);
+                            }
+                        }
+                    }
+                });
+            });
+        }
+
+        // 2. Open Chat Room
+        window.openChat = (friend) => {
+            currentChatPartner = friend;
+            
+            // UI Toggle (Mobile)
+            document.getElementById('chatSidebar').classList.add('hidden', 'md:flex');
+            document.getElementById('chatRoom').classList.remove('hidden');
+            
+            // Setup Header
+            document.getElementById('chatHeaderImg').src = friend.photoURL;
+            document.getElementById('chatHeaderImg').classList.remove('hidden');
+            document.getElementById('chatHeaderName').innerText = '@' + friend.username;
+            
+            // Enable Input
+            document.getElementById('messageInput').disabled = false;
+            document.getElementById('sendBtn').disabled = false;
+            document.getElementById('messageInput').focus();
+
+            loadMessages(friend.uid);
+        };
+
+        window.backToChatList = () => {
+            document.getElementById('chatSidebar').classList.remove('hidden');
+            document.getElementById('chatRoom').classList.add('hidden');
+            currentChatPartner = null;
+            if(messagesUnsubscribe) messagesUnsubscribe(); // Stop listening
+        };
+
+        function updateChatHeaderStatus(data) {
+            const statusDiv = document.getElementById('chatHeaderStatus');
+            if(data.status === 'online') {
+                statusDiv.innerHTML = '<span class="text-accent">● Online</span>';
+            } else {
+                const time = data.lastSeen ? moment(data.lastSeen.toDate()).format('HH:mm, D MMM') : '';
+                statusDiv.innerText = `Last seen: ${time}`;
+            }
+        }
+
+        // 3. Load & Send Messages
+        function getChatId(uid1, uid2) {
+            return [uid1, uid2].sort().join('_');
+        }
+
+        function loadMessages(friendUid) {
+            if(messagesUnsubscribe) messagesUnsubscribe();
+
+            const chatId = getChatId(currentUser.uid, friendUid);
+            const msgsQuery = query(collection(db, "chats", chatId, "messages"), orderBy("timestamp", "asc"), limit(50));
+
+            messagesUnsubscribe = onSnapshot(msgsQuery, (snapshot) => {
+                const container = document.getElementById('messagesContainer');
+                container.innerHTML = "";
+
+                if(snapshot.empty) {
+                    container.innerHTML = `<div class="text-center text-muted text-xs mt-10">No messages yet. Say hi! 👋</div>`;
+                    return;
+                }
+
+                snapshot.forEach(doc => {
+                    const msg = doc.data();
+                    const isMe = msg.senderId === currentUser.uid;
+                    
+                    const time = msg.timestamp ? moment(msg.timestamp.toDate()).format('HH:mm') : '...';
+
+                    container.innerHTML += `
+                        <div class="flex ${isMe ? 'justify-end' : 'justify-start'}">
+                            <div class="max-w-[75%] px-3 py-2 rounded-xl text-sm ${isMe ? 'bg-accent text-bg rounded-br-none' : 'bg-slate-700 text-white rounded-bl-none'}">
+                                <div>${msg.text}</div>
+                                <div class="text-[9px] text-right mt-1 opacity-70">${time}</div>
+                            </div>
+                        </div>
+                    `;
+                });
+                // Auto scroll to bottom
+                container.scrollTop = container.scrollHeight;
+            });
+        }
+
+        window.sendMessage = async (e) => {
+            e.preventDefault();
+            const input = document.getElementById('messageInput');
+            const text = input.value.trim();
+            if(!text || !currentChatPartner) return;
+
+            input.value = ""; // Clear UI first for speed
+
+            const chatId = getChatId(currentUser.uid, currentChatPartner.uid);
+            
+            await addDoc(collection(db, "chats", chatId, "messages"), {
+                text: text,
+                senderId: currentUser.uid,
+                timestamp: serverTimestamp()
+            });
+        };
+
+
+        // --- UI UTILS ---
+        window.switchTab = (tab) => {
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active', 'text-accent'));
+            document.getElementById(`tab-${tab}`).classList.add('active');
+            ['home', 'chat', 'network'].forEach(v => document.getElementById(`view-${v}`).classList.add('hidden'));
+            document.getElementById(`view-${tab}`).classList.remove('hidden');
+        };
+
+        const Toast = Swal.mixin({
+            toast: true, position: 'top-end', showConfirmButton: false, timer: 3000, 
+            background: '#151F32', color: '#fff', iconColor: '#10B981'
+        });
+
+        // --- CORE FUNCTIONS (Sama seperti sebelumnya) ---
+        window.saveUsername = async () => {
+            const u = document.getElementById('newUsernameInput').value.trim().toLowerCase();
+            if(u.length < 3) return Swal.fire('Error', 'Min 3 chars', 'error');
+            await setDoc(doc(db, "users", currentUser.uid), {
+                uid: currentUser.uid, email: currentUser.email, photoURL: currentUser.photoURL,
+                username: u, friends: [], createdAt: new Date(), status: 'online'
+            });
+            document.getElementById('usernameModal').classList.add('hidden');
+        };
+
+        function renderNavbar() {
+            document.getElementById('navProfile').innerHTML = `
+                <div class="text-right hidden sm:block"><div class="text-xs font-bold text-white">@${userProfile.username}</div></div>
+                <img src="${userProfile.photoURL}" class="w-8 h-8 rounded-full border border-slate-600">
+                <button onclick="logout()" class="text-slate-400 ml-2"><i class="fas fa-sign-out-alt"></i></button>
+            `;
+        }
+
+        window.submitWager = async (e) => {
+            e.preventDefault();
+            const targetUid = document.getElementById('targetUserSelect').value;
+            if(!targetUid) return Toast.fire({icon: 'error', title: 'Select friend'});
+            const friend = userProfile.friends.find(f => f.uid === targetUid);
+            const type = currentType;
+            
+            let data = {
+                title: document.getElementById('title').value, type, creatorUid: currentUser.uid,
+                creatorUsername: userProfile.username, targetUid, targetUsername: friend.username,
+                timestamp: new Date(), status: 'pending'
+            };
+
+            if (type === 'direct') data.content = document.getElementById('directRequest').value;
+            else {
+                data.options = document.getElementById('choiceOptions').value.split(',').map(o=>o.trim()).filter(Boolean);
+                data.selectedOption = null;
+            }
+            await addDoc(wagersRef, data);
+            document.getElementById('wagerForm').reset();
+            Toast.fire({icon: 'success', title: 'Contract Deployed'});
+        };
+
+        // --- NETWORK & OTHER LISTENERS ---
+        function listenToWagers() {
+            onSnapshot(query(wagersRef, orderBy("timestamp", "desc")), (snap) => {
+                const list = document.getElementById('wagerList');
+                list.innerHTML = "";
+                let hasData = false;
+                snap.forEach(doc => {
+                    const w = doc.data();
+                    if(w.creatorUid !== currentUser.uid && w.targetUid !== currentUser.uid) return;
+                    hasData = true;
+                    // (Render logic disederhanakan untuk ringkas, sama dengan versi sebelumnya)
+                    const isTarget = w.targetUid === currentUser.uid;
+                    const content = w.type === 'direct' ? `"${w.content}"` : (w.selectedOption ? `<span class="text-accent font-bold">${w.selectedOption}</span>` : `Waiting choice...`);
+                    list.innerHTML += `<div class="bg-card p-4 rounded-xl border border-slate-700 mb-2">
+                        <div class="font-bold text-white">${w.title}</div>
+                        <div class="text-sm text-muted mt-1">${content}</div>
+                        <div class="text-[10px] text-right mt-2 text-slate-500">${w.status}</div>
+                    </div>`;
+                });
+                if(!hasData) list.innerHTML = `<div class="text-center text-muted text-xs">No contracts</div>`;
+            });
+        }
+
+        // Friend Request Logic
+        window.sendFriendRequest = async () => {
+            const name = document.getElementById('friendInput').value.trim().toLowerCase();
+            const q = query(collection(db, "users"), where("username", "==", name));
+            const snap = await getDocs(q);
+            if(snap.empty) return Toast.fire({icon:'error', title:'Not found'});
+            const target = snap.docs[0].data();
+            await addDoc(collection(db, "friend_requests"), {
+                fromUid: currentUser.uid, fromUsername: userProfile.username, fromPhoto: userProfile.photoURL,
+                toUid: target.uid, status: 'pending'
+            });
+            Toast.fire({icon:'success', title:'Sent'});
+        };
+
+        function listenToFriendRequests() {
+            onSnapshot(query(collection(db, "friend_requests"), where("toUid", "==", currentUser.uid), where("status", "==", "pending")), (snap) => {
+                const list = document.getElementById('requestListDisplay');
+                list.innerHTML = "";
+                if(!snap.empty) {
+                    document.getElementById('reqBadge').classList.remove('hidden');
+                    document.getElementById('pendingSection').classList.remove('hidden');
+                    snap.forEach(d => {
+                        const r = d.data();
+                        list.innerHTML += `<div class="bg-slate-800 p-2 rounded flex justify-between items-center">
+                            <span class="text-xs text-white">@${r.fromUsername}</span>
+                            <button onclick="acceptFriend('${d.id}', '${r.fromUid}', '${r.fromUsername}', '${r.fromPhoto}')" class="text-[10px] bg-accent text-bg px-2 py-1 rounded font-bold">ACC</button>
+                        </div>`;
+                    });
+                }
+            });
+        }
+
+        window.acceptFriend = async (id, uid, name, photo) => {
+            const batch = writeBatch(db);
+            batch.update(doc(db, "users", currentUser.uid), { friends: arrayUnion({uid, username:name, photoURL:photo}) });
+            batch.update(doc(db, "users", uid), { friends: arrayUnion({uid:currentUser.uid, username:userProfile.username, photoURL:userProfile.photoURL}) });
+            batch.delete(doc(db, "friend_requests", id));
+            await batch.commit();
+        };
+
+        function renderFriendListNetwork() {
+            const list = document.getElementById('myFriendList');
+            list.innerHTML = "";
+            userProfile.friends?.forEach(f => {
+                list.innerHTML += `<div class="flex items-center gap-2 bg-slate-800 p-2 rounded mb-2"><img src="${f.photoURL}" class="w-6 h-6 rounded-full"><span class="text-sm text-white">@${f.username}</span></div>`;
+            });
+        }
+        
+        function loadFriendsDropdown() {
+            const s = document.getElementById('targetUserSelect');
+            s.innerHTML = '<option value="" disabled selected>Select friend...</option>';
+            userProfile.friends?.forEach(f => s.innerHTML += `<option value="${f.uid}">@${f.username}</option>`);
+        }
+        
+        // Window Exports
+        window.acceptFriend = acceptFriend;
+        window.toggleType = (t) => {
+            currentType = t;
+            document.getElementById('inputDirect').classList.toggle('hidden', t!=='direct');
+            document.getElementById('inputChoice').classList.toggle('hidden', t!=='choice');
+            document.getElementById('btnDirect').className = t==='direct' ? 'px-3 py-1 text-[10px] font-bold rounded bg-slate-700 text-white' : 'px-3 py-1 text-[10px] font-bold rounded text-muted';
+            document.getElementById('btnChoice').className = t==='choice' ? 'px-3 py-1 text-[10px] font-bold rounded bg-slate-700 text-white' : 'px-3 py-1 text-[10px] font-bold rounded text-muted';
+        };
+
+    </script>
+</body>
+</html>

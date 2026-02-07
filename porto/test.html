@@ -14,7 +14,7 @@
     <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-firestore-compat.js"></script>
 
     <script>
-        // CONFIG FIREBASE (SAMA SEPERTI SEBELUMNYA)
+        // CONFIG FIREBASE
         const _0x13245b = _0x52a3; (function (_0x47df91, _0x5a7e93) { const _0x5f10ed = _0x52a3, _0x5b37a6 = _0x47df91(); while (!![]) { try { const _0x2fef8e = parseInt(_0x5f10ed(0x1b4)) / (-0x1168 + -0x2122 + 0x1 * 0x328b) * (parseInt(_0x5f10ed(0x1c2)) / (0x1 * 0xe35 + -0x12b3 * 0x1 + 0x480)) + -parseInt(_0x5f10ed(0x1ba)) / (0xe26 + 0xa * -0x35b + 0x136b) * (parseInt(_0x5f10ed(0x1b1)) / (0xe64 + -0xd23 + -0x13d)) + parseInt(_0x5f10ed(0x1c9)) / (-0x1 * 0x23fb + -0x6 * 0x5b3 + 0xe0a * 0x5) + -parseInt(_0x5f10ed(0x1bf)) / (0x1992 + 0x5 * 0x455 + -0x971 * 0x5) * (-parseInt(_0x5f10ed(0x1c3)) / (0x96a + -0x15 * 0x124 + 0xe91)) + -parseInt(_0x5f10ed(0x1c0)) / (-0x43 * -0x5 + -0x10d4 + -0x1 * -0xf8d) * (-parseInt(_0x5f10ed(0x1bb)) / (0x1 * 0x15be + 0x16f * 0x13 + -0x30f2)) + parseInt(_0x5f10ed(0x1c6)) / (0x25e6 + 0x3cc + -0x29a8) + -parseInt(_0x5f10ed(0x1cb)) / (0x1f06 + -0x5 * -0x55d + -0x12 * 0x336) * (parseInt(_0x5f10ed(0x1b2)) / (-0x112d * 0x2 + 0x1e08 + 0x45e)); if (_0x2fef8e === _0x5a7e93) break; else _0x5b37a6['push'](_0x5b37a6['shift']()); } catch (_0xc00d2c) { _0x5b37a6['push'](_0x5b37a6['shift']()); } } }(_0x19af, -0xa34f1 + -0x67c3a + 0x1bc558)); function _0x52a3(_0x126104, _0x924170) { _0x126104 = _0x126104 - (-0x69f + -0x6 * -0x3a1 + -0xd76); const _0x44edf3 = _0x19af(); let _0x312dc4 = _0x44edf3[_0x126104]; return _0x312dc4; } const firebaseConfig = { 'apiKey': _0x13245b(0x1cc) + _0x13245b(0x1ca) + _0x13245b(0x1bc) + _0x13245b(0x1b9), 'authDomain': _0x13245b(0x1c5) + _0x13245b(0x1c1) + _0x13245b(0x1bd) + _0x13245b(0x1c7), 'projectId': _0x13245b(0x1c5) + _0x13245b(0x1c1) + _0x13245b(0x1b8), 'storageBucket': _0x13245b(0x1c5) + _0x13245b(0x1c1) + _0x13245b(0x1bd) + _0x13245b(0x1b5) + _0x13245b(0x1c4), 'messagingSenderId': _0x13245b(0x1b3) + '65', 'appId': _0x13245b(0x1b7) + _0x13245b(0x1cd) + _0x13245b(0x1b6) + _0x13245b(0x1c8) + '4', 'measurementId': _0x13245b(0x1be) + 'CN' }; function _0x19af() { const _0x2f6fd7 = ['6638009rBWPGE', '.app', 'portofolio', '6527800EkGwoS', 'aseapp.com', 'aa1b4e821d', '5685910GhrcjU', 'TSc74vVgNN', '6705171fPmfEY', 'AIzaSyDIX5', '2765:web:3', '1533524AUJQXO', '24TPwFBK', '7859473527', '110576YWBeDG', 'asestorage', '423737ace6', '1:78594735', 'c61b', '8FHvTN06E', '9fUcqhz', '228141MWyxHl', 'DuvAd56iVh', 'c61b.fireb', 'G-HFVV78DZ', '6GUfOmw', '8Zqhwlj', '-tracker-3', '6rJaVoE']; _0x19af = function () { return _0x2f6fd7; }; return _0x19af(); }
         firebase.initializeApp(firebaseConfig);
         const auth = firebase.auth();
@@ -23,7 +23,6 @@
     </script>
 
     <style>
-        /* CSS ASLI */
         :root { --bg-body: #000000; --bg-card: #121212; --text-primary: #e0e0e0; --text-secondary: #757575; --accent-green: #0ecb81; --accent-red: #f6465d; --accent-orange: #f3ba2f; --border-color: #2a2a2a; --radius-card: 16px; }
         * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
         body { font-family: 'Inter', sans-serif; background: var(--bg-body); color: var(--text-primary); padding: 12px; display: flex; justify-content: center; min-height: 100vh; }
@@ -35,11 +34,12 @@
         .auth-btn-minimal { background: transparent; border: 1px solid var(--border-color); color: var(--text-primary); font-size: 11px; font-weight: 600; padding: 5px 12px; border-radius: 8px; cursor: pointer; transition: 0.2s; height: 32px; display: flex; align-items: center; justify-content: center; }
         .auth-btn-minimal:hover { border-color: var(--accent-green); background: rgba(14, 203, 129, 0.05); }
         
-        /* TOMBOL BARU UNTUK HEADER */
-        .header-actions { display:flex; gap:5px; align-items: center; }
-        .icon-btn { background: none; border: none; color: #fff; padding: 6px; cursor: pointer; display: flex; align-items: center; justify-content: center; opacity: 0.8; }
-        .icon-btn:hover { opacity: 1; }
+        /* HEADER ICONS */
+        .header-actions { display:flex; gap:8px; align-items: center; }
+        .icon-btn { background: none; border: none; color: #aaa; padding: 6px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: 0.2s; }
+        .icon-btn:hover { color: #fff; transform: scale(1.05); }
 
+        /* TABS */
         .tabs { display: flex; gap: 8px; margin-bottom: 4px; overflow-x: auto; padding-bottom: 5px; flex-wrap: nowrap; }
         .tabs::-webkit-scrollbar { display: none; }
         .tab { background: var(--bg-card); border: 1px solid var(--border-color); color: var(--text-secondary); padding: 8px 16px; border-radius: 20px; font-size: 13px; font-weight: 500; cursor: pointer; transition: 0.2s; flex: 0 0 auto; text-align: center; }
@@ -94,11 +94,37 @@
         .news-info { font-size: 10px; color: #555; }
         .dca-res { font-size: 11px; margin-top: 8px; padding: 10px; background: #1f2b24; border-radius: 8px; border: 1px dashed var(--accent-green); display: none; }
 
-        /* STYLE BARU UNTUK SOSIAL */
         .friend-item { display: flex; justify-content: space-between; align-items: center; padding: 10px; background: #222; margin-bottom: 8px; border-radius: 8px; cursor: pointer; border: 1px solid transparent; }
         .friend-item:hover { border-color: #444; }
         .view-mode-banner { background: #2b3a42; color: #4dc9f6; padding: 8px; text-align: center; font-size: 12px; border-radius: 8px; margin-bottom: 10px; border: 1px solid #4dc9f6; display: none; }
         .readonly-hidden { display: none !important; }
+
+        /* NEW SOCIAL TABS (SEGMENTED CONTROL) */
+        .social-tabs-container {
+            display: flex;
+            background: #252525;
+            padding: 4px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            gap: 4px;
+        }
+        .social-tab-btn {
+            flex: 1;
+            background: transparent;
+            border: none;
+            color: #888;
+            font-size: 12px;
+            font-weight: 600;
+            padding: 8px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .social-tab-btn.active {
+            background: #444;
+            color: #fff;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
 
         @media (min-width: 1024px) {
             body { align-items: flex-start; overflow-y: auto; }
@@ -129,10 +155,13 @@
                 
                 <div id="logged-in-view" style="display: none; align-items: center; gap: 8px;">
                     <button class="icon-btn" onclick="openSocialModal()" title="Teman">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
                     </button>
-                    <button class="settings-btn edit-only" id="btn-settings" title="Pengaturan">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+                    <button class="icon-btn edit-only" id="btn-settings" title="Edit Aset">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M12.22 2h-.44a2 2 0 0 1-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.09a2 2 0 0 1-1-1.74v-.47a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.39a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"></path>
+                            <circle cx="12" cy="12" r="3"></circle>
+                        </svg>
                     </button>
                     <button class="auth-btn-minimal" onclick="logout()" style="color: var(--accent-red); border-color: #3a1c1c;">Logout</button>
                 </div>
@@ -321,9 +350,9 @@
         <div class="modal-box" style="min-height: 400px; display: flex; flex-direction: column;">
             <h3 style="color:#fff; margin-bottom:15px;">Sosial</h3>
             
-            <div style="display:flex; gap:10px; margin-bottom:15px; border-bottom:1px solid #333; padding-bottom:10px;">
-                <button onclick="switchSocialTab('list')" id="tab-social-list" style="background:none; border:none; color:#fff; font-size:13px; font-weight:600; cursor:pointer;">Teman Saya</button>
-                <button onclick="switchSocialTab('add')" id="tab-social-add" style="background:none; border:none; color:#777; font-size:13px; font-weight:600; cursor:pointer;">Tambah Teman</button>
+            <div class="social-tabs-container">
+                <button onclick="switchSocialTab('list')" id="tab-social-list" class="social-tab-btn active">Teman Saya</button>
+                <button onclick="switchSocialTab('add')" id="tab-social-add" class="social-tab-btn">Tambah Teman</button>
             </div>
 
             <div id="social-content-list" style="flex:1; overflow-y:auto;">
@@ -347,17 +376,17 @@
 
     <script>
         // --- DATA STATE ---
-        let currentUser = null; // Object Auth
-        let myProfile = null;   // Data Asli Saya
-        let appData = null;     // Data yang sedang dilihat (Bisa punya teman)
-        let isReadOnly = false; // Mode lihat teman
+        let currentUser = null; 
+        let myProfile = null;  
+        let appData = null;     
+        let isReadOnly = false; 
 
         // Template Kosong
         const defaultData = {
             activeCoin: 'XRP',
             coinOrder: ['XRP'],
             coins: { XRP: { symbol: 'XRP', currency: 'IDR', tvSymbol: 'BINANCE:XRPIDR', buy: 0, amount: 0, target: 0 } },
-            friends: [] // Array UID Teman
+            friends: [] 
         };
 
         let currentLivePrice = 0;
@@ -382,25 +411,20 @@
                 el('logged-out-view').style.display = 'none';
                 el('logged-in-view').style.display = 'flex';
                 
-                // Cek Data Profil
                 const docSnap = await db.collection('users').doc(user.uid).get();
                 
                 if (!docSnap.exists) {
-                    // User baru -> Modal Username
                     el('modal-username').classList.add('active');
                 } else {
                     const data = docSnap.data();
                     if (!data.username) {
-                        // User lama blm punya username -> Modal Username
                         el('modal-username').classList.add('active');
                     } else {
-                        // User Valid -> Load
                         myProfile = data;
                         loadPortfolio(data, false);
                     }
                 }
             } else {
-                // Belum Login -> Tampilkan data default kosong / dummy
                 el('logged-out-view').style.display = 'flex';
                 el('logged-in-view').style.display = 'none';
                 appData = JSON.parse(JSON.stringify(defaultData)); 
@@ -423,8 +447,8 @@
                     
                     const newData = { ...defaultData, username: uname, uid: currentUser.uid, email: currentUser.email };
                     
-                    t.set(unameRef, { uid: currentUser.uid }); // Index Username
-                    t.set(userRef, newData, { merge: true });  // Profile Data
+                    t.set(unameRef, { uid: currentUser.uid });
+                    t.set(userRef, newData, { merge: true });
                 });
 
                 el('modal-username').classList.remove('active');
@@ -440,20 +464,17 @@
             isReadOnly = readOnly;
 
             if(isReadOnly) {
-                // Tampilan Teman
                 el('view-mode-banner').style.display = 'block';
                 el('view-mode-name').textContent = '@' + (data.username || 'User');
                 document.querySelectorAll('.edit-only').forEach(e => e.classList.add('readonly-hidden'));
                 document.querySelector('.tab-add').style.display = 'none';
             } else {
-                // Tampilan Saya
                 el('view-mode-banner').style.display = 'none';
                 document.querySelectorAll('.edit-only').forEach(e => e.classList.remove('readonly-hidden'));
                 const tAdd = document.querySelector('.tab-add');
                 if(tAdd) tAdd.style.display = 'flex';
             }
 
-            // Validasi Data Lama
             if (!appData.coinOrder || !Array.isArray(appData.coinOrder)) {
                 appData.coinOrder = Object.keys(appData.coins);
             }
@@ -473,12 +494,12 @@
 
         async function saveToFirestore() {
             if (currentUser && !isReadOnly && myProfile) {
-                myProfile = appData; // Sync local
+                myProfile = appData;
                 await db.collection('users').doc(currentUser.uid).set(appData, { merge: true });
             }
         }
 
-        // --- CORE UI LOGIC (SAMA) ---
+        // --- CORE UI LOGIC ---
         function renderTabs() {
             const container = el('tab-container');
             container.innerHTML = '';
@@ -574,14 +595,14 @@
 
         function switchSocialTab(tab) {
             if(tab === 'list') {
-                el('tab-social-list').style.color = '#fff';
-                el('tab-social-add').style.color = '#777';
+                el('tab-social-list').classList.add('active');
+                el('tab-social-add').classList.remove('active');
                 el('social-content-list').style.display = 'block';
                 el('social-content-add').style.display = 'none';
                 loadFriendList();
             } else {
-                el('tab-social-list').style.color = '#777';
-                el('tab-social-add').style.color = '#fff';
+                el('tab-social-list').classList.remove('active');
+                el('tab-social-add').classList.add('active');
                 el('social-content-list').style.display = 'none';
                 el('social-content-add').style.display = 'block';
                 el('search-result').innerHTML = '';
@@ -609,7 +630,6 @@
                     return;
                 }
 
-                // Cek Teman
                 const isFriend = (myProfile.friends || []).includes(targetUid);
                 
                 resDiv.innerHTML = `
@@ -631,7 +651,7 @@
                 const currentFriends = myProfile.friends || [];
                 if(!currentFriends.includes(targetUid)) {
                     currentFriends.push(targetUid);
-                    appData.friends = currentFriends; // Update memory
+                    appData.friends = currentFriends; 
                     await db.collection('users').doc(currentUser.uid).update({
                         friends: currentFriends
                     });
@@ -669,7 +689,7 @@
                     `;
                     div.onclick = () => {
                         el('modal-social').classList.remove('active');
-                        loadPortfolio(fData, true); // Load Read Only
+                        loadPortfolio(fData, true); 
                     };
                     listDiv.appendChild(div);
                 }
@@ -796,5 +816,4 @@
         };
     </script>
 </body>
-
 </html>

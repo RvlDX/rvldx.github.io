@@ -4,10 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Crypto Portofolio</title>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Roboto+Mono:wght@400;500&display=swap"
-        rel="stylesheet">
+    <title>Crypto Portfolio Social</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
     <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
@@ -16,6 +14,7 @@
     <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-firestore-compat.js"></script>
 
     <script>
+        // CONFIG FIREBASE
         const _0x13245b = _0x52a3; (function (_0x47df91, _0x5a7e93) { const _0x5f10ed = _0x52a3, _0x5b37a6 = _0x47df91(); while (!![]) { try { const _0x2fef8e = parseInt(_0x5f10ed(0x1b4)) / (-0x1168 + -0x2122 + 0x1 * 0x328b) * (parseInt(_0x5f10ed(0x1c2)) / (0x1 * 0xe35 + -0x12b3 * 0x1 + 0x480)) + -parseInt(_0x5f10ed(0x1ba)) / (0xe26 + 0xa * -0x35b + 0x136b) * (parseInt(_0x5f10ed(0x1b1)) / (0xe64 + -0xd23 + -0x13d)) + parseInt(_0x5f10ed(0x1c9)) / (-0x1 * 0x23fb + -0x6 * 0x5b3 + 0xe0a * 0x5) + -parseInt(_0x5f10ed(0x1bf)) / (0x1992 + 0x5 * 0x455 + -0x971 * 0x5) * (-parseInt(_0x5f10ed(0x1c3)) / (0x96a + -0x15 * 0x124 + 0xe91)) + -parseInt(_0x5f10ed(0x1c0)) / (-0x43 * -0x5 + -0x10d4 + -0x1 * -0xf8d) * (-parseInt(_0x5f10ed(0x1bb)) / (0x1 * 0x15be + 0x16f * 0x13 + -0x30f2)) + parseInt(_0x5f10ed(0x1c6)) / (0x25e6 + 0x3cc + -0x29a8) + -parseInt(_0x5f10ed(0x1cb)) / (0x1f06 + -0x5 * -0x55d + -0x12 * 0x336) * (parseInt(_0x5f10ed(0x1b2)) / (-0x112d * 0x2 + 0x1e08 + 0x45e)); if (_0x2fef8e === _0x5a7e93) break; else _0x5b37a6['push'](_0x5b37a6['shift']()); } catch (_0xc00d2c) { _0x5b37a6['push'](_0x5b37a6['shift']()); } } }(_0x19af, -0xa34f1 + -0x67c3a + 0x1bc558)); function _0x52a3(_0x126104, _0x924170) { _0x126104 = _0x126104 - (-0x69f + -0x6 * -0x3a1 + -0xd76); const _0x44edf3 = _0x19af(); let _0x312dc4 = _0x44edf3[_0x126104]; return _0x312dc4; } const firebaseConfig = { 'apiKey': _0x13245b(0x1cc) + _0x13245b(0x1ca) + _0x13245b(0x1bc) + _0x13245b(0x1b9), 'authDomain': _0x13245b(0x1c5) + _0x13245b(0x1c1) + _0x13245b(0x1bd) + _0x13245b(0x1c7), 'projectId': _0x13245b(0x1c5) + _0x13245b(0x1c1) + _0x13245b(0x1b8), 'storageBucket': _0x13245b(0x1c5) + _0x13245b(0x1c1) + _0x13245b(0x1bd) + _0x13245b(0x1b5) + _0x13245b(0x1c4), 'messagingSenderId': _0x13245b(0x1b3) + '65', 'appId': _0x13245b(0x1b7) + _0x13245b(0x1cd) + _0x13245b(0x1b6) + _0x13245b(0x1c8) + '4', 'measurementId': _0x13245b(0x1be) + 'CN' }; function _0x19af() { const _0x2f6fd7 = ['6638009rBWPGE', '.app', 'portofolio', '6527800EkGwoS', 'aseapp.com', 'aa1b4e821d', '5685910GhrcjU', 'TSc74vVgNN', '6705171fPmfEY', 'AIzaSyDIX5', '2765:web:3', '1533524AUJQXO', '24TPwFBK', '7859473527', '110576YWBeDG', 'asestorage', '423737ace6', '1:78594735', 'c61b', '8FHvTN06E', '9fUcqhz', '228141MWyxHl', 'DuvAd56iVh', 'c61b.fireb', 'G-HFVV78DZ', '6GUfOmw', '8Zqhwlj', '-tracker-3', '6rJaVoE']; _0x19af = function () { return _0x2f6fd7; }; return _0x19af(); }
         firebase.initializeApp(firebaseConfig);
         const auth = firebase.auth();
@@ -24,523 +23,119 @@
     </script>
 
     <style>
-        :root {
-            --bg-body: #000000;
-            --bg-card: #121212;
-            --text-primary: #e0e0e0;
-            --text-secondary: #757575;
-            --accent-green: #0ecb81;
-            --accent-red: #f6465d;
-            --accent-orange: #f3ba2f;
-            --border-color: #2a2a2a;
-            --radius-card: 16px;
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            -webkit-tap-highlight-color: transparent;
-        }
-
-        body {
-            font-family: 'Inter', sans-serif;
-            background: var(--bg-body);
-            color: var(--text-primary);
-            padding: 12px;
-            display: flex;
-            justify-content: center;
-            min-height: 100vh;
-        }
-
-        .container {
-            width: 100%;
-            max-width: 450px;
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-            padding-bottom: 30px;
-        }
-
+        :root { --bg-body: #000000; --bg-card: #121212; --text-primary: #e0e0e0; --text-secondary: #757575; --accent-green: #0ecb81; --accent-red: #f6465d; --accent-orange: #f3ba2f; --border-color: #2a2a2a; --radius-card: 16px; }
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        body { font-family: 'Inter', sans-serif; background: var(--bg-body); color: var(--text-primary); padding: 12px; display: flex; justify-content: center; min-height: 100vh; }
+        .container { width: 100%; max-width: 450px; display: flex; flex-direction: column; gap: 12px; padding-bottom: 30px; }
+        
         /* HEADER */
-        .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .app-title {
-            font-size: 18px;
-            font-weight: 700;
-            color: #fff;
-        }
-
-        .settings-btn {
-            background: none;
-            border: none;
-            color: #fff;
-            cursor: pointer;
-            padding: 8px;
-        }
-
-        .auth-btn-minimal {
-            background: transparent;
-            border: 1px solid var(--border-color);
-            color: var(--text-primary);
-            font-size: 11px;
-            font-weight: 600;
-            padding: 5px 12px;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: 0.2s;
-            height: 32px;
-            /* Menyamakan tinggi dengan tombol ikon */
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .auth-btn-minimal:hover {
-            border-color: var(--accent-green);
-            background: rgba(14, 203, 129, 0.05);
-        }
-
-        .settings-btn {
-            background: none;
-            border: none;
-            color: var(--text-secondary);
-            cursor: pointer;
-            padding: 6px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: 0.2s;
-        }
-
-        .settings-btn:hover {
-            color: var(--text-primary);
-        }
+        .header { display: flex; justify-content: space-between; align-items: center; }
+        .app-title { font-size: 18px; font-weight: 700; color: #fff; }
+        .header-actions { display:flex; gap:8px; align-items: center; }
+        .icon-btn { background: none; border: none; color: #aaa; padding: 6px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: 0.2s; position: relative; }
+        .icon-btn:hover { color: #fff; transform: scale(1.05); }
+        .notif-badge { position: absolute; top: 4px; right: 4px; width: 8px; height: 8px; background: var(--accent-red); border-radius: 50%; display: none; }
+        
+        .auth-btn-minimal { background: transparent; border: 1px solid var(--border-color); color: var(--text-primary); font-size: 11px; font-weight: 600; padding: 5px 12px; border-radius: 8px; cursor: pointer; transition: 0.2s; height: 32px; display: flex; align-items: center; justify-content: center; }
+        .auth-btn-minimal:hover { border-color: var(--accent-green); background: rgba(14, 203, 129, 0.05); }
 
         /* TABS */
-        .tabs {
-            display: flex;
-            gap: 8px;
-            margin-bottom: 4px;
-            overflow-x: auto;
-            padding-bottom: 5px;
-            flex-wrap: nowrap;
-        }
+        .tabs { display: flex; gap: 8px; margin-bottom: 4px; overflow-x: auto; padding-bottom: 5px; flex-wrap: nowrap; }
+        .tabs::-webkit-scrollbar { display: none; }
+        .tab { background: var(--bg-card); border: 1px solid var(--border-color); color: var(--text-secondary); padding: 8px 16px; border-radius: 20px; font-size: 13px; font-weight: 500; cursor: pointer; transition: 0.2s; flex: 0 0 auto; text-align: center; }
+        .tab.active { background: rgba(14, 203, 129, 0.15); color: var(--accent-green); border-color: var(--accent-green); }
+        .tab-add { width: 40px; padding: 0; display: flex; align-items: center; justify-content: center; font-size: 18px; border-style: dashed; border-color: #444; }
+        .tab-add:hover { border-color: var(--accent-green); color: var(--accent-green); }
 
-        .tabs::-webkit-scrollbar {
-            display: none;
-        }
-
-        .tab {
-            background: var(--bg-card);
-            border: 1px solid var(--border-color);
-            color: var(--text-secondary);
-            padding: 8px 16px;
-            border-radius: 20px;
-            font-size: 13px;
-            font-weight: 500;
-            cursor: pointer;
-            transition: 0.2s;
-            flex: 0 0 auto;
-            text-align: center;
-        }
-
-        .tab.active {
-            background: rgba(14, 203, 129, 0.15);
-            color: var(--accent-green);
-            border-color: var(--accent-green);
-        }
-
-        .tab-add {
-            width: 40px;
-            padding: 0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 18px;
-            border-style: dashed;
-            border-color: #444;
-        }
-
-        .tab-add:hover {
-            border-color: var(--accent-green);
-            color: var(--accent-green);
-        }
-
-        /* CARDS */
-        .card {
-            background: var(--bg-card);
-            border-radius: var(--radius-card);
-            padding: 16px;
-            border: 1px solid var(--border-color);
-        }
-
-        .card-head {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 12px;
-            font-size: 13px;
-            font-weight: 600;
-            color: #fff;
-        }
-
-        .badge {
-            font-size: 10px;
-            padding: 2px 8px;
-            border-radius: 4px;
-            background: #1f2b24;
-            color: var(--accent-green);
-        }
-
-        /* PRICE SECTION */
-        .price-big {
-            font-size: 32px;
-            font-weight: 600;
-            color: #fff;
-            letter-spacing: -0.5px;
-            font-family: 'Roboto Mono', monospace;
-        }
-
-        .price-change {
-            font-size: 13px;
-            font-weight: 500;
-            margin-top: 4px;
-            display: flex;
-            align-items: center;
-            gap: 4px;
-        }
-
-        .text-green {
-            color: var(--accent-green);
-        }
-
-        .text-red {
-            color: var(--accent-red);
-        }
-
-        /* CHART */
-        #chart-wrap {
-            height: 350px;
-            width: 100%;
-            border-radius: 12px;
-            overflow: hidden;
-            margin-top: 5px;
-        }
-
-        /* ROWS */
-        .row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 12px 0;
-            border-bottom: 1px solid var(--border-color);
-        }
-
-        .row:last-child {
-            border: none;
-            padding-bottom: 0;
-        }
-
-        .lbl {
-            font-size: 13px;
-            color: var(--text-secondary);
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-
-        .val {
-            font-size: 14px;
-            color: #fff;
-            font-family: 'Roboto Mono', monospace;
-            font-weight: 500;
-        }
-
-        /* FEAR & GREED STYLE */
-        .fng-bar-bg {
-            width: 100%;
-            height: 8px;
-            background: #333;
-            border-radius: 10px;
-            position: relative;
-            overflow: hidden;
-            margin-top: 8px;
-        }
-
-        .fng-bar-fill {
-            height: 100%;
-            width: 50%;
-            background: linear-gradient(90deg, #f6465d 0%, #f3ba2f 50%, #0ecb81 100%);
-            transition: width 1s;
-        }
-
-        .fng-val {
-            font-size: 20px;
-            font-weight: 700;
-            color: #fff;
-        }
-
-        .fng-state {
-            font-size: 12px;
-            color: #aaa;
-        }
-
+        /* CARDS & UI */
+        .card { background: var(--bg-card); border-radius: var(--radius-card); padding: 16px; border: 1px solid var(--border-color); }
+        .card-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; font-size: 13px; font-weight: 600; color: #fff; }
+        .badge { font-size: 10px; padding: 2px 8px; border-radius: 4px; background: #1f2b24; color: var(--accent-green); }
+        
+        .price-big { font-size: 32px; font-weight: 600; color: #fff; letter-spacing: -0.5px; font-family: 'Roboto Mono', monospace; }
+        .price-change { font-size: 13px; font-weight: 500; margin-top: 4px; display: flex; align-items: center; gap: 4px; }
+        .text-green { color: var(--accent-green); } .text-red { color: var(--accent-red); }
+        
+        #chart-wrap { height: 350px; width: 100%; border-radius: 12px; overflow: hidden; margin-top: 5px; }
+        
+        .row { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid var(--border-color); }
+        .row:last-child { border: none; padding-bottom: 0; }
+        .lbl { font-size: 13px; color: var(--text-secondary); display: flex; align-items: center; gap: 6px; }
+        .val { font-size: 14px; color: #fff; font-family: 'Roboto Mono', monospace; font-weight: 500; }
+        
+        .fng-bar-bg { width: 100%; height: 8px; background: #333; border-radius: 10px; position: relative; overflow: hidden; margin-top: 8px; }
+        .fng-bar-fill { height: 100%; width: 50%; background: linear-gradient(90deg, #f6465d 0%, #f3ba2f 50%, #0ecb81 100%); transition: width 1s; }
+        .fng-val { font-size: 20px; font-weight: 700; color: #fff; }
+        .fng-state { font-size: 12px; color: #aaa; }
+        
         /* MODAL */
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.8);
-            z-index: 999;
-            align-items: center;
-            justify-content: center;
-            backdrop-filter: blur(3px);
-        }
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.8); z-index: 999; align-items: center; justify-content: center; backdrop-filter: blur(3px); }
+        .modal.active { display: flex; }
+        .modal-box { background: #1a1a1a; width: 85%; max-width: 320px; border-radius: 16px; padding: 20px; border: 1px solid #333; }
+        .inp-group { margin-bottom: 15px; }
+        .inp-group label { display: block; font-size: 11px; color: #888; margin-bottom: 5px; }
+        .inp-group input, .inp-group select { width: 100%; background: #252525; border: 1px solid #333; color: #fff; padding: 10px; border-radius: 8px; font-size: 14px; outline: none; }
+        .modal-btns { display: flex; justify-content: flex-end; gap: 10px; margin-top: 20px; }
+        .btn { padding: 8px 16px; border-radius: 6px; border: none; font-size: 12px; font-weight: 600; cursor: pointer; }
+        .btn-cancel { background: transparent; color: #888; }
+        .btn-save { background: var(--accent-green); color: #000; }
+        .btn-danger { background: var(--accent-red); color: #fff; }
+        .btn-outline { background: transparent; border: 1px solid #444; color: #aaa; }
+        
+        .eye-btn { cursor: pointer; background: none; border: none; padding: 0; color: inherit; opacity: 0.6; display: flex; } .eye-btn:hover { opacity: 1; }
+        .value-hidden { color: transparent !important; position: relative; }
+        .value-hidden::after { content: '••••••'; color: var(--text-secondary); letter-spacing: 2px; position: absolute; top: 50%; transform: translateY(-50%); }
+        .row .val.value-hidden::after { font-size: 14px; right: 0; }
+        .price-big.value-hidden::after { font-size: 24px; letter-spacing: 4px; left: 0; }
+        
+        .dark-toast { background: #1a1a1a !important; border: 1px solid #333 !important; } .dark-toast-title { color: #fff !important; }
+        .swal2-icon.swal2-success { border-color: #0ecb81 !important; color: #0ecb81 !important; }
+        .swal2-icon.swal2-success [class^='swal2-success-line'] { background-color: #0ecb81 !important; }
+        .swal2-icon.swal2-success .swal2-success-ring { border-color: #0ecb81 !important; }
+        
+        .news-item { display: block; text-decoration: none; padding: 8px 0; border-bottom: 1px solid #222; }
+        .news-title { font-size: 12px; color: #fff; line-height: 1.4; margin-bottom: 2px; }
+        .news-info { font-size: 10px; color: #555; }
+        .dca-res { font-size: 11px; margin-top: 8px; padding: 10px; background: #1f2b24; border-radius: 8px; border: 1px dashed var(--accent-green); display: none; }
 
-        .modal.active {
-            display: flex;
-        }
+        /* SOCIAL STYLES */
+        .friend-item { display: flex; justify-content: space-between; align-items: center; padding: 12px; background: #222; margin-bottom: 8px; border-radius: 12px; cursor: pointer; border: 1px solid transparent; transition:0.2s; }
+        .friend-item:hover { border-color: #444; background:#2a2a2a; }
+        .friend-actions { display: flex; gap: 6px; }
+        .btn-xs { font-size: 10px; padding: 5px 10px; border-radius: 6px; border:none; cursor:pointer; font-weight:600; }
+        
+        .readonly-hidden { display: none !important; }
 
-        .modal-box {
-            background: #1a1a1a;
-            width: 85%;
-            max-width: 320px;
-            border-radius: 16px;
-            padding: 20px;
-            border: 1px solid #333;
+        /* EXIT VIEW MODE FLOATING BUTTON */
+        .floating-exit-btn {
+            position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
+            background: #2b3a42; color: #4dc9f6; border: 1px solid #4dc9f6;
+            padding: 10px 20px; border-radius: 30px; font-size: 13px; font-weight: 600;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5); z-index: 100;
+            display: flex; align-items: center; gap: 8px; cursor: pointer;
+            transition: 0.2s;
         }
+        .floating-exit-btn:hover { background: #4dc9f6; color: #000; }
+        .floating-exit-btn svg { width: 16px; height: 16px; }
 
-        .inp-group {
-            margin-bottom: 15px;
-        }
+        /* SEGMENTED CONTROL TABS */
+        .social-tabs-container { display: flex; background: #252525; padding: 4px; border-radius: 10px; margin-bottom: 15px; gap: 4px; }
+        .social-tab-btn { flex: 1; background: transparent; border: none; color: #888; font-size: 12px; font-weight: 600; padding: 8px; border-radius: 8px; cursor: pointer; transition: all 0.2s; }
+        .social-tab-btn.active { background: #444; color: #fff; box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
 
-        .inp-group label {
-            display: block;
-            font-size: 11px;
-            color: #888;
-            margin-bottom: 5px;
-        }
-
-        .inp-group input,
-        .inp-group select {
-            width: 100%;
-            background: #252525;
-            border: 1px solid #333;
-            color: #fff;
-            padding: 10px;
-            border-radius: 8px;
-            font-size: 14px;
-            outline: none;
-        }
-
-        .modal-btns {
-            display: flex;
-            justify-content: flex-end;
-            gap: 10px;
-            margin-top: 20px;
-        }
-
-        .btn {
-            padding: 8px 16px;
-            border-radius: 6px;
-            border: none;
-            font-size: 12px;
-            font-weight: 600;
-            cursor: pointer;
-        }
-
-        .btn-cancel {
-            background: transparent;
-            color: #888;
-        }
-
-        .btn-save {
-            background: var(--accent-green);
-            color: #000;
-        }
-
-        /* UTILS */
-        .eye-btn {
-            cursor: pointer;
-            background: none;
-            border: none;
-            padding: 0;
-            color: inherit;
-            opacity: 0.6;
-            display: flex;
-        }
-
-        .eye-btn:hover {
-            opacity: 1;
-        }
-
-        .value-hidden {
-            color: transparent !important;
-            position: relative;
-        }
-
-        .value-hidden::after {
-            content: '••••••';
-            color: var(--text-secondary);
-            letter-spacing: 2px;
-            position: absolute;
-            top: 50%;
-            transform: translateY(-50%);
-        }
-
-        .row .val.value-hidden::after {
-            font-size: 14px;
-            right: 0;
-        }
-
-        .price-big.value-hidden::after {
-            font-size: 24px;
-            letter-spacing: 4px;
-            left: 0;
-        }
-
-        /* SWEETALERT DARK THEME */
-        .dark-toast {
-            background: #1a1a1a !important;
-            border: 1px solid #333 !important;
-        }
-
-        .dark-toast-title {
-            color: #fff !important;
-        }
-
-        .swal2-icon.swal2-success {
-            border-color: #0ecb81 !important;
-            color: #0ecb81 !important;
-        }
-
-        .swal2-icon.swal2-success [class^='swal2-success-line'] {
-            background-color: #0ecb81 !important;
-        }
-
-        .swal2-icon.swal2-success .swal2-success-ring {
-            border-color: #0ecb81 !important;
-        }
-
-        .news-item {
-            display: block;
-            text-decoration: none;
-            padding: 8px 0;
-            border-bottom: 1px solid #222;
-        }
-
-        .news-title {
-            font-size: 12px;
-            color: #fff;
-            line-height: 1.4;
-            margin-bottom: 2px;
-        }
-
-        .news-info {
-            font-size: 10px;
-            color: #555;
-        }
-
-        .dca-res {
-            font-size: 11px;
-            margin-top: 8px;
-            padding: 10px;
-            background: #1f2b24;
-            border-radius: 8px;
-            border: 1px dashed var(--accent-green);
-            display: none;
-        }
-
-        /* --- DESKTOP GRID LAYOUT FIX (FINAL) --- */
         @media (min-width: 1024px) {
-            body {
-                align-items: flex-start;
-                overflow-y: auto;
-            }
-
-            .container {
-                max-width: 1350px;
-                display: grid;
-                grid-template-columns: 1fr 340px;
-                grid-template-rows: repeat(7, min-content);
-                gap: 20px;
-                padding-bottom: 50px;
-                align-items: start;
-            }
-
-            .header {
-                grid-column: 1 / -1;
-                margin-bottom: 0;
-            }
-
-            .tabs {
-                grid-column: 1 / -1;
-                margin-bottom: 0;
-            }
-
-            #card-chart {
-                grid-column: 1;
-                grid-row: 3 / 6;
-                display: flex;
-                height: 100% !important;
-                flex-direction: column;
-            }
-
-            #chart-wrap {
-                flex: 1;
-                min-height: 0;
-            }
-
-            #card-price {
-                grid-column: 2;
-                grid-row: 3;
-                height: fit-content;
-            }
-
-            #target-card {
-                grid-column: 2;
-                grid-row: 4;
-                margin: 0;
-                height: fit-content;
-            }
-
-            #card-porto {
-                grid-column: 2;
-                grid-row: 5;
-                margin: 0;
-                height: fit-content;
-            }
-
-            #card-fng {
-                grid-column: 1;
-                grid-row: 6;
-                height: 100%;
-                display: flex;
-                flex-direction: column;
-                justify-content: center;
-            }
-
-            #card-total {
-                grid-column: 2;
-                grid-row: 6;
-                height: 100%;
-                display: flex;
-                flex-direction: column;
-                justify-content: center;
-            }
-
-            #card-news {
-                grid-column: 1 / -1;
-                grid-row: 7;
-            }
+            body { align-items: flex-start; overflow-y: auto; }
+            .container { max-width: 1350px; display: grid; grid-template-columns: 1fr 340px; grid-template-rows: repeat(7, min-content); gap: 20px; padding-bottom: 50px; align-items: start; }
+            .header { grid-column: 1 / -1; margin-bottom: 0; }
+            .tabs { grid-column: 1 / -1; margin-bottom: 0; }
+            #card-chart { grid-column: 1; grid-row: 3 / 6; display: flex; height: 100% !important; flex-direction: column; }
+            #chart-wrap { flex: 1; min-height: 0; }
+            #card-price { grid-column: 2; grid-row: 3; height: fit-content; }
+            #target-card { grid-column: 2; grid-row: 4; margin: 0; height: fit-content; }
+            #card-porto { grid-column: 2; grid-row: 5; margin: 0; height: fit-content; }
+            #card-fng { grid-column: 1; grid-row: 6; height: 100%; display: flex; flex-direction: column; justify-content: center; }
+            #card-total { grid-column: 2; grid-row: 6; height: 100%; display: flex; flex-direction: column; justify-content: center; }
+            #card-news { grid-column: 1 / -1; grid-row: 7; }
         }
     </style>
 </head>
@@ -550,22 +145,31 @@
     <div class="container">
         <div class="header">
             <div class="app-title">Crypto Portfolio</div>
-            <div style="display:flex; gap:8px; align-items: center;">
-                <button class="auth-btn-minimal" id="btn-login" onclick="login()">Login</button>
-                <button class="auth-btn-minimal" id="btn-logout" onclick="logout()"
-                    style="display:none; color: var(--accent-red);">Logout</button>
-
-                <button class="settings-btn" id="btn-settings" title="Pengaturan">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                        stroke-linecap="round" stroke-linejoin="round">
-                        <circle cx="12" cy="12" r="3"></circle>
-                        <path
-                            d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z">
-                        </path>
-                    </svg>
-                </button>
+            <div class="header-actions">
+                <div id="logged-out-view" style="display: flex;">
+                    <button class="auth-btn-minimal" onclick="login()">Login Google</button>
+                </div>
+                
+                <div id="logged-in-view" style="display: none; align-items: center; gap: 8px;">
+                    <button class="icon-btn" onclick="openSocialModal()" title="Teman">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                        <div class="notif-badge" id="social-badge"></div>
+                    </button>
+                    <button class="icon-btn edit-only" id="btn-settings" title="Edit Aset">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M12.22 2h-.44a2 2 0 0 1-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.09a2 2 0 0 1-1-1.74v-.47a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.39a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"></path>
+                            <circle cx="12" cy="12" r="3"></circle>
+                        </svg>
+                    </button>
+                    <button class="auth-btn-minimal" onclick="logout()" style="color: var(--accent-red); border-color: #3a1c1c;">Logout</button>
+                </div>
             </div>
         </div>
+
+        <button id="exit-view-btn" class="floating-exit-btn" style="display:none;" onclick="exitViewMode()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+            Kembali ke Portofolio Saya
+        </button>
 
         <div class="tabs" id="tab-container"></div>
 
@@ -585,8 +189,7 @@
         </div>
 
         <div class="card" id="card-chart" style="padding: 0;">
-            <div
-                style="padding: 12px 16px; border-bottom: 1px solid #222; display:flex; justify-content:space-between; align-items: center;">
+            <div style="padding: 12px 16px; border-bottom: 1px solid #222; display:flex; justify-content:space-between; align-items: center;">
                 <span style="font-size:13px; font-weight:600; color:#fff;">Chart</span>
                 <span style="font-size:10px; color:#666;">30 Menit</span>
             </div>
@@ -594,10 +197,8 @@
         </div>
 
         <div class="card" id="target-card">
-            <div class="card-head"><span>Target Profit</span><span class="badge" id="target-status"
-                    style="background:#222; color:#777;">Off</span></div>
-            <div class="row"><span class="lbl">Target Jual</span><span class="val" style="color:var(--accent-green);"
-                    id="target-price-display">-</span></div>
+            <div class="card-head"><span>Target Profit</span><span class="badge" id="target-status" style="background:#222; color:#777;">Off</span></div>
+            <div class="row"><span class="lbl">Target Jual</span><span class="val" style="color:var(--accent-green);" id="target-price-display">-</span></div>
             <div class="row"><span class="lbl">Net Profit</span><span class="val" id="net-profit-display">-</span></div>
         </div>
 
@@ -606,31 +207,11 @@
             <div class="row"><span class="lbl">Jumlah Koin</span><span class="val" id="holdings-display">0</span></div>
             <div class="row"><span class="lbl">Avg. Buy</span><span class="val" id="buy-display">0</span></div>
             <div class="row">
-                <div class="lbl">
-                    Modal Awal
-                    <button class="eye-btn" onclick="toggleVis('initial-display')">
-                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                            stroke-width="2">
-                            <path
-                                d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24" />
-                            <line x1="1" y1="1" x2="23" y2="23" />
-                        </svg>
-                    </button>
-                </div>
+                <div class="lbl">Modal Awal <button class="eye-btn" onclick="toggleVis('initial-display')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg></button></div>
                 <span class="val value-hidden" id="initial-display">Rp 0</span>
             </div>
             <div class="row">
-                <div class="lbl">
-                    Aset Sekarang
-                    <button class="eye-btn" onclick="toggleVis('value-display')">
-                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                            stroke-width="2">
-                            <path
-                                d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24" />
-                            <line x1="1" y1="1" x2="23" y2="23" />
-                        </svg>
-                    </button>
-                </div>
+                <div class="lbl">Aset Sekarang <button class="eye-btn" onclick="toggleVis('value-display')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg></button></div>
                 <span class="val value-hidden" id="value-display">Rp 0</span>
             </div>
         </div>
@@ -638,36 +219,18 @@
         <div class="card" id="card-fng">
             <div class="card-head">Fear & Greed Index</div>
             <div style="display:flex; justify-content:space-between; align-items:flex-end;">
-                <div>
-                    <div class="fng-val" id="fng-value">--</div>
-                    <div class="fng-state" id="fng-text">Loading...</div>
-                </div>
-                <div style="text-align:right; font-size:10px; color:#555;">
-                    Source: alternative.me
-                </div>
+                <div><div class="fng-val" id="fng-value">--</div><div class="fng-state" id="fng-text">Loading...</div></div>
+                <div style="text-align:right; font-size:10px; color:#555;">Source: alternative.me</div>
             </div>
-            <div class="fng-bar-bg">
-                <div class="fng-bar-fill" id="fng-fill" style="width:0%"></div>
-            </div>
+            <div class="fng-bar-bg"><div class="fng-bar-fill" id="fng-fill" style="width:0%"></div></div>
         </div>
 
         <div class="card" id="card-total">
-            <div class="card-head">
-                <span>Total Estimasi Aset</span>
-                <button class="eye-btn" onclick="toggleVis('total-asset-display')">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path
-                            d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24" />
-                        <line x1="1" y1="1" x2="23" y2="23" />
-                    </svg>
-                </button>
-            </div>
+            <div class="card-head"><span>Total Estimasi Aset</span><button class="eye-btn" onclick="toggleVis('total-asset-display')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg></button></div>
             <div class="price-big value-hidden" id="total-asset-display">Rp 0</div>
             <div style="font-size: 11px; color: #666; margin-top: 8px;">*Estimasi seluruh koin portofolio</div>
             <div style="margin-top:10px; text-align:right;">
-                <button onclick="updateTotalAssets()"
-                    style="background:#252525; border:1px solid #333; color:#aaa; font-size:10px; padding:4px 8px; border-radius:4px; cursor:pointer;">Refresh
-                    Total</button>
+                <button onclick="updateTotalAssets()" style="background:#252525; border:1px solid #333; color:#aaa; font-size:10px; padding:4px 8px; border-radius:4px; cursor:pointer;">Refresh Total</button>
             </div>
         </div>
 
@@ -680,26 +243,19 @@
     <div class="modal" id="modal">
         <div class="modal-box">
             <h3 style="color:#fff; margin-bottom:15px;">Edit Aset</h3>
-            <div class="inp-group"><label>Harga Beli (<span class="currency-label">IDR</span>)</label><input
-                    type="number" id="inp-buy" step="any"></div>
+            <div class="inp-group"><label>Harga Beli (<span class="currency-label">IDR</span>)</label><input type="number" id="inp-buy" step="any"></div>
             <div class="inp-group"><label>Jumlah Koin/Oz</label><input type="number" id="inp-amount" step="any"></div>
-            <div class="inp-group"><label>Target Jual (<span class="currency-label">IDR</span>)</label><input
-                    type="number" id="inp-target" step="any"></div>
+            <div class="inp-group"><label>Target Jual (<span class="currency-label">IDR</span>)</label><input type="number" id="inp-target" step="any"></div>
             <div style="border-top:1px solid #333; margin-top:15px; padding-top:15px;">
-                <p style="font-size:10px; font-weight:700; color:var(--accent-green); margin-bottom:8px;">KALKULATOR DCA
-                </p>
-                <div class="inp-group"><input type="number" id="inp-dca" placeholder="Masukkan jumlah Rp/USD"
-                        oninput="calcDCA()"></div>
+                <p style="font-size:10px; font-weight:700; color:var(--accent-green); margin-bottom:8px;">KALKULATOR DCA</p>
+                <div class="inp-group"><input type="number" id="inp-dca" placeholder="Masukkan jumlah Rp/USD" oninput="calcDCA()"></div>
                 <div id="dca-box" class="dca-res">
-                    <p style="color:#aaa; font-size:10px;">Est. Koin: <span id="res-dca-coins"
-                            style="color:#fff">0</span></p>
-                    <p style="color:#aaa; font-size:10px;">Avg. Buy Baru: <span id="res-dca-avg"
-                            style="color:#fff">0</span></p>
+                    <p style="color:#aaa; font-size:10px;">Est. Koin: <span id="res-dca-coins" style="color:#fff">0</span></p>
+                    <p style="color:#aaa; font-size:10px;">Avg. Buy Baru: <span id="res-dca-avg" style="color:#fff">0</span></p>
                 </div>
             </div>
             <div class="modal-btns" style="justify-content: space-between;">
-                <button class="btn" style="background: #3a1c1c; color: #ff4d4d;"
-                    onclick="deleteCurrentCoin()">Hapus</button>
+                <button class="btn" style="background: #3a1c1c; color: #ff4d4d;" onclick="deleteCurrentCoin()">Hapus</button>
                 <div style="display:flex; gap:10px;">
                     <button class="btn btn-cancel" onclick="el('modal').classList.remove('active')">Batal</button>
                     <button class="btn btn-save" onclick="saveData()">Simpan</button>
@@ -711,14 +267,9 @@
     <div class="modal" id="modal-add">
         <div class="modal-box">
             <h3 style="color:#fff; margin-bottom:15px;">Tambah Aset Baru</h3>
-            <div class="inp-group"><label>Simbol (Ex: SOL, ETH)</label><input type="text" id="add-symbol"
-                    placeholder="CONTOH: SOL" oninput="this.value = this.value.toUpperCase()"></div>
-            <div class="inp-group"><label>Mata Uang</label><select id="add-currency">
-                    <option value="IDR">IDR</option>
-                    <option value="USD">USD</option>
-                </select></div>
-            <div class="inp-group"><label>ID TradingView</label><input type="text" id="add-tv-symbol"
-                    placeholder="EX: BINANCE:SOLIDR"></div>
+            <div class="inp-group"><label>Simbol (Ex: SOL, ETH)</label><input type="text" id="add-symbol" placeholder="CONTOH: SOL" oninput="this.value = this.value.toUpperCase()"></div>
+            <div class="inp-group"><label>Mata Uang</label><select id="add-currency"><option value="IDR">IDR</option><option value="USD">USD</option></select></div>
+            <div class="inp-group"><label>ID TradingView</label><input type="text" id="add-tv-symbol" placeholder="EX: BINANCE:SOLIDR"></div>
             <div class="modal-btns">
                 <button class="btn btn-cancel" onclick="el('modal-add').classList.remove('active')">Batal</button>
                 <button class="btn btn-save" onclick="executeAddCoin()">Tambah</button>
@@ -726,74 +277,160 @@
         </div>
     </div>
 
+    <div class="modal" id="modal-username" data-bs-backdrop="static" data-bs-keyboard="false">
+        <div class="modal-box">
+            <h3 style="color:#fff; margin-bottom:10px;">Buat Username</h3>
+            <p style="color:#777; font-size:12px; margin-bottom:15px;">Anda harus memiliki username unik agar teman bisa menemukan Anda.</p>
+            <div class="inp-group">
+                <label>Username (Huruf kecil, tanpa spasi)</label>
+                <input type="text" id="inp-new-username" placeholder="contoh: cryptomaster99" oninput="this.value = this.value.toLowerCase().replace(/[^a-z0-9]/g, '')">
+            </div>
+            <div class="modal-btns">
+                <button class="btn btn-save" onclick="createUsername()" style="width:100%">Simpan & Lanjutkan</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="modal-social">
+        <div class="modal-box" style="min-height: 450px; display: flex; flex-direction: column;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
+                <h3 style="color:#fff;">Sosial</h3>
+                <button onclick="el('modal-social').classList.remove('active')" style="background:none; border:none; color:#777; font-size:20px; cursor:pointer;">&times;</button>
+            </div>
+            
+            <div class="social-tabs-container">
+                <button onclick="switchSocialTab('list')" id="tab-social-list" class="social-tab-btn active">Teman</button>
+                <button onclick="switchSocialTab('req')" id="tab-social-req" class="social-tab-btn">Request <span id="req-count" style="display:none; color:var(--accent-orange); font-size:10px;">●</span></button>
+                <button onclick="switchSocialTab('add')" id="tab-social-add" class="social-tab-btn">Cari</button>
+            </div>
+
+            <div id="social-content-list" style="flex:1; overflow-y:auto; display:block;">
+                <p id="friend-list-loading" style="color:#555; font-size:12px;">Memuat teman...</p>
+                <div id="friend-list-container"></div>
+            </div>
+
+            <div id="social-content-req" style="flex:1; overflow-y:auto; display:none;">
+                <p id="req-list-loading" style="color:#555; font-size:12px;">Memuat permintaan...</p>
+                <div id="req-list-container"></div>
+            </div>
+
+            <div id="social-content-add" style="display:none; flex:1;">
+                <div class="inp-group" style="display:flex; gap:8px;">
+                    <input type="text" id="search-username" placeholder="Cari username teman...">
+                    <button class="btn btn-save" onclick="searchUser()">Cari</button>
+                </div>
+                <div id="search-result" style="margin-top:10px;"></div>
+            </div>
+        </div>
+    </div>
+
     <script>
-        // --- STATE ---
-        // Ganti baris let appData ini
-        let appData = {
+        // --- DATA STATE ---
+        let currentUser = null; 
+        let myProfile = null;  
+        let appData = null;     
+        let isReadOnly = false; 
+
+        // Template Kosong
+        const defaultData = {
             activeCoin: 'XRP',
-            coinOrder: ['XRP'], // PENTING: Ini buat nyimpen urutan
-            coins: {
-                XRP: { symbol: 'XRP', currency: 'IDR', tvSymbol: 'BINANCE:XRPIDR', buy: 0, amount: 0, target: 0 }
-            }
+            coinOrder: ['XRP'],
+            coins: { XRP: { symbol: 'XRP', currency: 'IDR', tvSymbol: 'BINANCE:XRPIDR', buy: 0, amount: 0, target: 0 } },
+            friends: [],        // Array UID
+            requestsSent: [],   // Array UID
+            requestsReceived: []// Array UID
         };
+
         let currentLivePrice = 0;
         let updateInterval;
         const el = (id) => document.getElementById(id);
         const fmtMoney = (n, cur) => {
+            if(!appData || !appData.coins || !appData.coins[appData.activeCoin]) return '0';
             const c = cur || appData.coins[appData.activeCoin].currency;
-            if (c === 'USD') {
-                return '$ ' + n.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-            }
-            // Untuk Rupiah (IDR), kita buat bulat tanpa desimal
+            if (c === 'USD') return '$ ' + n.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
             return 'Rp ' + n.toLocaleString('id-ID', { minimumFractionDigits: 0, maximumFractionDigits: 0 });
         };
 
-        // --- FIREBASE SYNC ---
+        // --- AUTH ---
         function login() { auth.signInWithPopup(provider).catch(e => Swal.fire('Error', e.message, 'error')); }
         function logout() { auth.signOut().then(() => location.reload()); }
 
-        auth.onAuthStateChanged(user => {
+        auth.onAuthStateChanged(async user => {
             if (user) {
-                el('btn-login').style.display = 'none';
-                el('btn-logout').style.display = 'flex';
-                // Menampilkan "Logout" dan inisial nama jika Anda mau, atau cukup "Logout" saja
-                el('btn-logout').textContent = 'Logout';
-                loadFromFirestore(user.uid);
+                currentUser = user;
+                el('logged-out-view').style.display = 'none';
+                el('logged-in-view').style.display = 'flex';
+                
+                // Realtime Listener untuk Profil Sendiri (agar notif request update)
+                db.collection('users').doc(user.uid).onSnapshot((doc) => {
+                    if (!doc.exists) {
+                        el('modal-username').classList.add('active');
+                    } else {
+                        const data = doc.data();
+                        if (!data.username) {
+                            el('modal-username').classList.add('active');
+                        } else {
+                            myProfile = data;
+                            updateNotifBadge();
+                            // Jika sedang tidak melihat teman, update tampilan portofolio
+                            if (!isReadOnly) {
+                                loadPortfolio(data, false);
+                            }
+                        }
+                    }
+                });
+
             } else {
-                el('btn-login').style.display = 'flex';
-                el('btn-logout').style.display = 'none';
-                loadLocal();
+                el('logged-out-view').style.display = 'flex';
+                el('logged-in-view').style.display = 'none';
+                appData = JSON.parse(JSON.stringify(defaultData)); 
+                renderTabs();
             }
         });
-        async function saveToFirestore() {
-            if (auth.currentUser) await db.collection('users').doc(auth.currentUser.uid).set(appData);
-            localStorage.setItem('crypto_pro_v2', JSON.stringify(appData));
+
+        // --- USERNAME SYSTEM ---
+        async function createUsername() {
+            const uname = el('inp-new-username').value.trim();
+            if (uname.length < 3) return alert('Username minimal 3 karakter');
+            const unameRef = db.collection('usernames').doc(uname);
+            const userRef = db.collection('users').doc(currentUser.uid);
+            try {
+                await db.runTransaction(async (t) => {
+                    const uDoc = await t.get(unameRef);
+                    if (uDoc.exists) throw "Username sudah dipakai!";
+                    const newData = { ...defaultData, username: uname, uid: currentUser.uid, email: currentUser.email };
+                    t.set(unameRef, { uid: currentUser.uid });
+                    t.set(userRef, newData, { merge: true });
+                });
+                el('modal-username').classList.remove('active');
+            } catch (e) { alert(e); }
         }
 
-        async function loadFromFirestore(uid) {
-            const doc = await db.collection('users').doc(uid).get();
-            if (doc.exists) appData = doc.data();
-            initApp();
-        }
+        // --- CORE UI LOGIC ---
+        function loadPortfolio(data, readOnly) {
+            // Safety check for empty data
+            appData = data || JSON.parse(JSON.stringify(defaultData));
+            isReadOnly = readOnly;
 
-        function loadLocal() {
-            const saved = localStorage.getItem('crypto_pro_v2');
-            if (saved) appData = JSON.parse(saved);
-            initApp();
-        }
-
-        function initApp() {
-            // PERBAIKAN: Kalau data lama belum punya urutan, kita buatkan sekarang
-            if (!appData.coinOrder || !Array.isArray(appData.coinOrder)) {
-                appData.coinOrder = Object.keys(appData.coins);
-                // Simpan perbaikan ini biar permanen
-                saveToFirestore();
+            // Fix View Mode Button & Title
+            if (isReadOnly) {
+                el('exit-view-btn').style.display = 'flex';
+                el('exit-view-btn').innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg> Kembali: @${appData.username || 'Teman'}`;
+                
+                document.querySelectorAll('.edit-only').forEach(e => e.classList.add('readonly-hidden'));
+                const tAdd = document.querySelector('.tab-add');
+                if(tAdd) tAdd.style.display = 'none';
+            } else {
+                el('exit-view-btn').style.display = 'none';
+                document.querySelectorAll('.edit-only').forEach(e => e.classList.remove('readonly-hidden'));
+                const tAdd = document.querySelector('.tab-add');
+                if(tAdd) tAdd.style.display = 'flex';
             }
 
-            // Pastikan koin aktif valid
-            if (!appData.coins[appData.activeCoin]) {
-                appData.activeCoin = appData.coinOrder[0] || 'XRP';
-            }
+            // Validasi Struktur Data
+            if (!appData.coins) appData.coins = { XRP: { symbol: 'XRP', currency: 'IDR', tvSymbol: 'BINANCE:XRPIDR', buy: 0, amount: 0, target: 0 }};
+            if (!appData.coinOrder || !Array.isArray(appData.coinOrder)) appData.coinOrder = Object.keys(appData.coins);
+            if (!appData.coins[appData.activeCoin]) appData.activeCoin = appData.coinOrder[0] || 'XRP';
 
             renderTabs();
             switchCoin(appData.activeCoin, true);
@@ -801,12 +438,25 @@
             setTimeout(updateTotalAssets, 1000);
         }
 
-        // --- UI LOGIC ---
+        function exitViewMode() {
+            if(myProfile) loadPortfolio(myProfile, false);
+        }
+
+        async function saveToFirestore() {
+            if (currentUser && !isReadOnly && myProfile) {
+                // Jangan timpa friends/request saat save porto
+                const toSave = { ...appData };
+                delete toSave.friends;
+                delete toSave.requestsSent;
+                delete toSave.requestsReceived;
+                
+                await db.collection('users').doc(currentUser.uid).set(toSave, { merge: true });
+            }
+        }
+
         function renderTabs() {
             const container = el('tab-container');
             container.innerHTML = '';
-
-            // LOOPING SESUAI URUTAN YANG DISIMPAN
             appData.coinOrder.forEach(key => {
                 if (appData.coins[key]) {
                     const div = document.createElement('div');
@@ -816,33 +466,27 @@
                     container.appendChild(div);
                 }
             });
-
-            const btnAdd = document.createElement('div');
-            btnAdd.className = 'tab tab-add';
-            btnAdd.innerHTML = '+';
-            btnAdd.onclick = () => el('modal-add').classList.add('active');
-            container.appendChild(btnAdd);
+            if (!isReadOnly) {
+                const btnAdd = document.createElement('div');
+                btnAdd.className = 'tab tab-add';
+                btnAdd.innerHTML = '+';
+                btnAdd.onclick = () => el('modal-add').classList.add('active');
+                container.appendChild(btnAdd);
+            }
         }
 
         function switchCoin(key, force = false) {
             if (!force && appData.activeCoin === key) return;
-
-            // Pastikan data koin ada
             if (!appData.coins[key]) return;
 
-            // Reset UI agar tidak "nyangkut"
             el('price-display').textContent = '--';
             el('change-display').innerHTML = '--';
             el('pnl-display').innerHTML = '0';
             currentLivePrice = 0;
 
             appData.activeCoin = key;
+            if(!isReadOnly) saveToFirestore();
 
-            // --- TAMBAHKAN BARIS INI ---
-            saveToFirestore();
-            // ---------------------------
-
-            // Update Tab Active State
             const tabs = document.querySelectorAll('.tab');
             tabs.forEach(t => {
                 if (t.textContent === key) t.classList.add('active');
@@ -895,107 +539,241 @@
             }
         }
 
-        async function fetchFearAndGreed() {
-            try {
-                const res = await fetch('https://api.alternative.me/fng/?limit=1');
-                const json = await res.json();
-                const val = parseInt(json.data[0].value);
-                el('fng-value').textContent = val;
-                el('fng-text').textContent = json.data[0].value_classification;
-                el('fng-fill').style.width = val + '%';
-            } catch (e) { }
-        }
-
-        async function updateTotalAssets() {
-            const coins = Object.values(appData.coins);
-            const symbols = coins.map(c => c.symbol).join(',');
-            try {
-                const res = await fetch(`https://min-api.cryptocompare.com/data/pricemulti?fsyms=${symbols}&tsyms=IDR`);
-                const json = await res.json();
-                let total = 0;
-                coins.forEach(c => {
-                    if (json[c.symbol]) total += (json[c.symbol].IDR * c.amount);
-                });
-
-                // PERBAIKAN DI SINI: Tambahkan maximumFractionDigits: 0
-                el('total-asset-display').textContent = 'Rp ' + total.toLocaleString('id-ID', {
-                    minimumFractionDigits: 0,
-                    maximumFractionDigits: 0
-                });
-            } catch (e) {
-                console.log("Error update total:", e);
+        // --- SOCIAL LOGIC (REQUESTS & FRIENDSHIP) ---
+        function updateNotifBadge() {
+            const reqs = myProfile.requestsReceived || [];
+            const badge = el('social-badge');
+            const tabBadge = el('req-count');
+            if (reqs.length > 0) {
+                badge.style.display = 'block';
+                tabBadge.style.display = 'inline';
+            } else {
+                badge.style.display = 'none';
+                tabBadge.style.display = 'none';
             }
         }
 
-        function saveData() {
-            const d = appData.coins[appData.activeCoin];
-            d.buy = parseFloat(el('inp-buy').value) || 0; d.amount = parseFloat(el('inp-amount').value) || 0; d.target = parseFloat(el('inp-target').value) || 0;
-            saveToFirestore(); el('modal').classList.remove('active'); fetchMarketData(); updateTotalAssets();
-            showToast("Disimpan");
+        function openSocialModal() {
+            el('modal-social').classList.add('active');
+            // Default ke tab Request jika ada, kalau tidak ke Teman
+            if(myProfile.requestsReceived && myProfile.requestsReceived.length > 0) {
+                switchSocialTab('req');
+            } else {
+                switchSocialTab('list');
+            }
         }
 
-        function executeAddCoin() {
-            const s = el('add-symbol').value.trim().toUpperCase();
-            const t = el('add-tv-symbol').value.trim();
-            if (!s || !t) return;
+        function switchSocialTab(tab) {
+            // Reset UI
+            document.querySelectorAll('.social-tab-btn').forEach(b => b.classList.remove('active'));
+            el('social-content-list').style.display = 'none';
+            el('social-content-req').style.display = 'none';
+            el('social-content-add').style.display = 'none';
 
-            if (appData.coins[s]) {
-                showToast("Koin sudah ada!");
+            // Activate
+            el('tab-social-' + tab).classList.add('active');
+            el('social-content-' + tab).style.display = 'block';
+
+            if(tab === 'list') loadFriendList();
+            if(tab === 'req') loadRequestList();
+            if(tab === 'add') {
+                el('search-result').innerHTML = '';
+                el('search-username').value = '';
+            }
+        }
+
+        // --- SEARCH & SEND REQUEST ---
+        async function searchUser() {
+            const q = el('search-username').value.trim().toLowerCase();
+            if(!q) return;
+            const resDiv = el('search-result');
+            resDiv.innerHTML = '<p style="color:#777; font-size:12px">Mencari...</p>';
+
+            try {
+                const uDoc = await db.collection('usernames').doc(q).get();
+                if(!uDoc.exists) {
+                    resDiv.innerHTML = '<p style="color:var(--accent-red); font-size:12px">User tidak ditemukan.</p>';
+                    return;
+                }
+                const targetUid = uDoc.data().uid;
+                if(targetUid === currentUser.uid) {
+                    resDiv.innerHTML = '<p style="color:#777; font-size:12px">Itu Anda sendiri.</p>';
+                    return;
+                }
+
+                // Cek Status Hubungan
+                const friends = myProfile.friends || [];
+                const sent = myProfile.requestsSent || [];
+                const received = myProfile.requestsReceived || [];
+
+                let actionHTML = '';
+                if(friends.includes(targetUid)) {
+                    actionHTML = '<span style="color:#0ecb81; font-size:10px;">Sudah Berteman</span>';
+                } else if (sent.includes(targetUid)) {
+                    actionHTML = '<span style="color:#f3ba2f; font-size:10px;">Menunggu Konfirmasi</span>';
+                } else if (received.includes(targetUid)) {
+                    actionHTML = '<span style="color:#f3ba2f; font-size:10px;">Permintaan Masuk (Cek Tab Request)</span>';
+                } else {
+                    actionHTML = `<button class="btn btn-save" style="font-size:10px; padding:4px 8px;" onclick="sendRequest('${targetUid}')">Tambah Teman</button>`;
+                }
+
+                resDiv.innerHTML = `
+                    <div class="friend-item" style="cursor:default;">
+                        <span style="color:#fff; font-weight:600;">@${q}</span>
+                        ${actionHTML}
+                    </div>
+                `;
+            } catch(e) { resDiv.innerHTML = '<p style="color:red">Error searching</p>'; }
+        }
+
+        async function sendRequest(targetUid) {
+            try {
+                // Gunakan arrayUnion untuk atomic add
+                const myRef = db.collection('users').doc(currentUser.uid);
+                const targetRef = db.collection('users').doc(targetUid);
+                
+                // Batch write karena update 2 dokumen berbeda (Client side)
+                const batch = db.batch();
+                batch.update(myRef, { requestsSent: firebase.firestore.FieldValue.arrayUnion(targetUid) });
+                batch.update(targetRef, { requestsReceived: firebase.firestore.FieldValue.arrayUnion(currentUser.uid) });
+                
+                await batch.commit();
+                showToast('Permintaan dikirim!');
+                switchSocialTab('list'); // Refresh UI
+            } catch(e) { alert('Gagal kirim request: ' + e.message); }
+        }
+
+        // --- LOAD LISTS ---
+        async function loadFriendList() {
+            const listDiv = el('friend-list-container');
+            listDiv.innerHTML = '';
+            const friends = myProfile.friends || [];
+
+            if(friends.length === 0) {
+                el('friend-list-loading').textContent = 'Belum ada teman.';
+                el('friend-list-loading').style.display = 'block';
                 return;
             }
-
-            // 1. Simpan Data Koin
-            appData.coins[s] = { symbol: s, currency: el('add-currency').value, tvSymbol: t, buy: 0, amount: 0, target: 0 };
-
-            // 2. Masukkan ke Antrean Paling Belakang
-            if (!appData.coinOrder.includes(s)) {
-                appData.coinOrder.push(s);
+            el('friend-list-loading').style.display = 'none';
+            
+            for(const uid of friends) {
+                // Fetch basic info
+                const fDoc = await db.collection('users').doc(uid).get();
+                if(fDoc.exists) {
+                    const fData = fDoc.data();
+                    const div = document.createElement('div');
+                    div.className = 'friend-item';
+                    div.innerHTML = `
+                        <div onclick="openFriend('${uid}')" style="flex:1;">
+                            <span style="color:#fff; font-weight:600;">@${fData.username || '...'}</span>
+                        </div>
+                        <div class="friend-actions">
+                            <button class="btn-xs btn-outline" style="color:#f6465d; border-color:#3a1c1c;" onclick="unfollowUser('${uid}', '${fData.username}')" title="Hapus Teman">
+                                Unfollow
+                            </button>
+                        </div>
+                    `;
+                    listDiv.appendChild(div);
+                }
             }
-
-            saveToFirestore();
-            el('modal-add').classList.remove('active');
-
-            // Reset input
-            el('add-symbol').value = '';
-            el('add-tv-symbol').value = '';
-
-            renderTabs();
-            switchCoin(s);
         }
 
-        function deleteCurrentCoin() {
-            if (appData.coinOrder.length <= 1) return;
-            Swal.fire({ title: 'Hapus?', icon: 'warning', showCancelButton: true }).then(r => {
-                if (r.isConfirmed) {
-                    const toDelete = appData.activeCoin;
+        async function openFriend(uid) {
+            el('modal-social').classList.remove('active');
+            const fDoc = await db.collection('users').doc(uid).get();
+            if(fDoc.exists) loadPortfolio(fDoc.data(), true);
+        }
 
-                    // Hapus dari data
-                    delete appData.coins[toDelete];
+        async function loadRequestList() {
+            const listDiv = el('req-list-container');
+            listDiv.innerHTML = '';
+            const reqs = myProfile.requestsReceived || [];
 
-                    // Hapus dari antrean urutan
-                    appData.coinOrder = appData.coinOrder.filter(item => item !== toDelete);
+            if(reqs.length === 0) {
+                el('req-list-loading').textContent = 'Tidak ada permintaan baru.';
+                el('req-list-loading').style.display = 'block';
+                return;
+            }
+            el('req-list-loading').style.display = 'none';
 
-                    // Pindah ke koin urutan pertama
-                    appData.activeCoin = appData.coinOrder[0];
+            for(const uid of reqs) {
+                const fDoc = await db.collection('users').doc(uid).get();
+                if(fDoc.exists) {
+                    const fData = fDoc.data();
+                    const div = document.createElement('div');
+                    div.className = 'friend-item';
+                    div.innerHTML = `
+                        <div>
+                            <span style="color:#fff; font-weight:600;">@${fData.username || '...'}</span>
+                            <div style="font-size:10px; color:#777;">Ingin menambahkan Anda</div>
+                        </div>
+                        <div class="friend-actions">
+                            <button class="btn-xs btn-save" onclick="respondRequest('${uid}', true)">Terima</button>
+                            <button class="btn-xs btn-danger" onclick="respondRequest('${uid}', false)">Tolak</button>
+                        </div>
+                    `;
+                    listDiv.appendChild(div);
+                }
+            }
+        }
 
-                    saveToFirestore();
-                    initApp();
-                    el('modal').classList.remove('active');
+        // --- ACTIONS: ACCEPT/REJECT/UNFOLLOW ---
+        async function respondRequest(targetUid, isAccept) {
+            const myRef = db.collection('users').doc(currentUser.uid);
+            const targetRef = db.collection('users').doc(targetUid);
+            const batch = db.batch();
+
+            // Hapus dari pending list (both)
+            batch.update(myRef, { requestsReceived: firebase.firestore.FieldValue.arrayRemove(targetUid) });
+            batch.update(targetRef, { requestsSent: firebase.firestore.FieldValue.arrayRemove(currentUser.uid) });
+
+            if(isAccept) {
+                // Masukkan ke friend list (both)
+                batch.update(myRef, { friends: firebase.firestore.FieldValue.arrayUnion(targetUid) });
+                batch.update(targetRef, { friends: firebase.firestore.FieldValue.arrayUnion(currentUser.uid) });
+            }
+
+            try {
+                await batch.commit();
+                showToast(isAccept ? 'Teman ditambahkan!' : 'Permintaan ditolak.');
+                // Trigger refresh via Snapshot listener
+            } catch(e) { alert('Error: ' + e.message); }
+        }
+
+        function unfollowUser(targetUid, username) {
+            Swal.fire({
+                title: 'Unfollow?',
+                text: `Hapus @${username} dari teman?`,
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                background: '#1a1a1a', color: '#fff'
+            }).then(async (r) => {
+                if(r.isConfirmed) {
+                    const myRef = db.collection('users').doc(currentUser.uid);
+                    const targetRef = db.collection('users').doc(targetUid);
+                    const batch = db.batch();
+                    
+                    batch.update(myRef, { friends: firebase.firestore.FieldValue.arrayRemove(targetUid) });
+                    batch.update(targetRef, { friends: firebase.firestore.FieldValue.arrayRemove(currentUser.uid) });
+                    
+                    await batch.commit();
+                    showToast('Berhasil unfollow');
+                    loadFriendList(); // Refresh manual list
                 }
             });
         }
 
+        // --- HELPERS ---
         function loadTvWidget() {
             const container = el('chart-wrap');
             if (!container) return;
             container.innerHTML = '';
-
-            const currentCoin = appData.coins[appData.activeCoin];
-            if (!currentCoin) return;
+            if(!appData || !appData.coins[appData.activeCoin]) return;
 
             new TradingView.widget({
                 "autosize": true,
-                "symbol": currentCoin.tvSymbol,
+                "symbol": appData.coins[appData.activeCoin].tvSymbol,
                 "interval": "30",
                 "theme": "dark",
                 "style": "1",
@@ -1008,12 +786,79 @@
             });
         }
 
+        async function fetchFearAndGreed() {
+            try {
+                const res = await fetch('https://api.alternative.me/fng/?limit=1');
+                const json = await res.json();
+                el('fng-value').textContent = parseInt(json.data[0].value);
+                el('fng-text').textContent = json.data[0].value_classification;
+                el('fng-fill').style.width = json.data[0].value + '%';
+            } catch (e) { }
+        }
+
+        async function updateTotalAssets() {
+            if(!appData) return;
+            const coins = Object.values(appData.coins);
+            const symbols = coins.map(c => c.symbol).join(',');
+            try {
+                const res = await fetch(`https://min-api.cryptocompare.com/data/pricemulti?fsyms=${symbols}&tsyms=IDR`);
+                const json = await res.json();
+                let total = 0;
+                coins.forEach(c => {
+                    if (json[c.symbol]) total += (json[c.symbol].IDR * c.amount);
+                });
+                el('total-asset-display').textContent = 'Rp ' + total.toLocaleString('id-ID', { minimumFractionDigits: 0, maximumFractionDigits: 0 });
+            } catch (e) {}
+        }
+
         async function fetchNews() {
+            if(!appData) return;
             const res = await fetch(`https://min-api.cryptocompare.com/data/v2/news/?categories=${appData.coins[appData.activeCoin].symbol}&lang=EN`);
             const json = await res.json();
             el('news-container').innerHTML = json.Data.slice(0, 3).map(n => `<a href="${n.url}" target="_blank" class="news-item"><p class="news-title">${n.title}</p><p class="news-info">${n.source} • ${new Date(n.published_on * 1000).toLocaleDateString()}</p></a>`).join('');
         }
 
+        function saveData() {
+            if(isReadOnly) return;
+            const d = appData.coins[appData.activeCoin];
+            d.buy = parseFloat(el('inp-buy').value) || 0; d.amount = parseFloat(el('inp-amount').value) || 0; d.target = parseFloat(el('inp-target').value) || 0;
+            saveToFirestore(); el('modal').classList.remove('active'); fetchMarketData(); updateTotalAssets();
+            showToast("Disimpan");
+        }
+
+        function executeAddCoin() {
+            if(isReadOnly) return;
+            const s = el('add-symbol').value.trim().toUpperCase();
+            const t = el('add-tv-symbol').value.trim();
+            if (!s || !t) return;
+            if (appData.coins[s]) { showToast("Koin sudah ada!"); return; }
+
+            appData.coins[s] = { symbol: s, currency: el('add-currency').value, tvSymbol: t, buy: 0, amount: 0, target: 0 };
+            if (!appData.coinOrder.includes(s)) appData.coinOrder.push(s);
+
+            saveToFirestore();
+            el('modal-add').classList.remove('active');
+            el('add-symbol').value = ''; el('add-tv-symbol').value = '';
+            renderTabs();
+            switchCoin(s);
+        }
+
+        function deleteCurrentCoin() {
+            if(isReadOnly) return;
+            if (appData.coinOrder.length <= 1) return;
+            Swal.fire({ title: 'Hapus?', icon: 'warning', showCancelButton: true }).then(r => {
+                if (r.isConfirmed) {
+                    const toDelete = appData.activeCoin;
+                    delete appData.coins[toDelete];
+                    appData.coinOrder = appData.coinOrder.filter(item => item !== toDelete);
+                    appData.activeCoin = appData.coinOrder[0];
+                    saveToFirestore();
+                    loadPortfolio(appData, false);
+                    el('modal').classList.remove('active');
+                }
+            });
+        }
+        
         function calcDCA() {
             const m = parseFloat(el('inp-dca').value) || 0; const d = appData.coins[appData.activeCoin];
             if (m > 0 && currentLivePrice > 0) {
@@ -1026,11 +871,11 @@
         function showToast(msg) { Swal.fire({ icon: 'success', title: msg, toast: true, position: 'bottom', showConfirmButton: false, timer: 1500, background: '#1a1a1a', color: '#fff' }); }
         function toggleVis(id) { el(id).classList.toggle('value-hidden'); }
         el('btn-settings').onclick = () => {
+            if(isReadOnly) return;
             const d = appData.coins[appData.activeCoin];
             el('inp-buy').value = d.buy; el('inp-amount').value = d.amount; el('inp-target').value = d.target || 0;
             el('modal').classList.add('active');
         };
     </script>
 </body>
-
 </html>

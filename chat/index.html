@@ -3,141 +3,150 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Rvldx Chat - App</title>
+    <title>VoltChat</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
     <style>
-        body { font-family: 'Inter', sans-serif; }
-        /* Custom Scrollbar agar terlihat elegan */
-        ::-webkit-scrollbar { width: 6px; }
-        ::-webkit-scrollbar-track { background: #111827; }
-        ::-webkit-scrollbar-thumb { background: #374151; border-radius: 3px; }
-        ::-webkit-scrollbar-thumb:hover { background: #4B5563; }
-        
-        .chat-bg {
-            /* Background pattern ala WhatsApp */
-            background-image: url("https://user-images.githubusercontent.com/15075759/28719144-86dc0f70-73b1-11e7-911d-60d70fcded21.png");
-            background-repeat: repeat;
-            opacity: 0.05;
+        body { font-family: 'Poppins', sans-serif; }
+        .animated-bg {
+            background: linear-gradient(-45deg, #0f172a, #1e1b4b, #312e81, #0f172a);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
         }
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .glass-card {
+            background: rgba(30, 41, 59, 0.8);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+        }
+        /* Hide Scrollbar */
+        ::-webkit-scrollbar { width: 0px; background: transparent; }
     </style>
 </head>
-<body class="bg-gray-950 text-gray-100 h-screen overflow-hidden selection:bg-green-500 selection:text-white">
+<body class="animated-bg text-gray-100 h-screen overflow-hidden selection:bg-indigo-500 selection:text-white">
 
-    <div id="login-screen" class="fixed inset-0 z-50 flex flex-col items-center justify-center bg-gray-900 bg-opacity-95 backdrop-blur-sm">
-        <div class="bg-gray-800 p-8 rounded-2xl shadow-2xl text-center w-full max-w-md border border-gray-700 transform transition-all hover:scale-105 duration-300">
-            <div class="text-5xl text-green-500 mb-6 drop-shadow-lg"><i class="fa-brands fa-whatsapp"></i></div>
-            <h1 class="text-3xl font-bold mb-2 text-white">Rvldx Chat</h1>
-            <p class="text-gray-400 mb-8 text-sm">Masuk untuk terhubung dengan teman.</p>
-            
-            <button onclick="loginWithGoogle()" class="w-full bg-white text-gray-900 font-bold py-3 px-6 rounded-xl hover:bg-gray-200 transition flex items-center justify-center gap-3 shadow-lg">
+    <div id="login-screen" class="fixed inset-0 z-50 flex flex-col items-center justify-center p-4">
+        <div class="glass-card p-10 rounded-3xl text-center w-full max-w-md transform transition hover:scale-[1.01] duration-500">
+            <div class="w-20 h-20 bg-gradient-to-tr from-indigo-500 to-cyan-500 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-lg shadow-indigo-500/50">
+                <i class="fa-solid fa-bolt text-4xl text-white"></i>
+            </div>
+            <h1 class="text-4xl font-bold mb-2">Volt<span class="text-indigo-400">Chat</span></h1>
+            <p class="text-gray-400 mb-8">Login untuk mulai chatting.</p>
+            <button onclick="loginWithGoogle()" class="w-full bg-white text-gray-900 font-bold py-4 px-6 rounded-xl hover:bg-gray-200 transition flex items-center justify-center gap-3 shadow-xl">
                 <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" class="w-6 h-6">
                 Masuk dengan Google
             </button>
         </div>
-        <p class="mt-8 text-gray-600 text-xs">Powered by Firebase & Tailwind</p>
     </div>
 
-    <div id="app-container" class="flex h-screen hidden">
+    <div id="username-modal" class="hidden fixed inset-0 z-[60] flex flex-col items-center justify-center bg-black/80 backdrop-blur-md p-4">
+        <div class="glass-card p-8 rounded-2xl w-full max-w-sm text-center border border-indigo-500/30">
+            <h2 class="text-2xl font-bold text-white mb-2">Buat Username</h2>
+            <p class="text-gray-400 text-sm mb-6">Pilih username unik agar teman bisa menambahkanmu.</p>
+            
+            <div class="relative mb-4">
+                <span class="absolute left-4 top-3.5 text-gray-500 font-bold">@</span>
+                <input type="text" id="username-input" placeholder="username_kamu" 
+                    class="w-full bg-gray-900/50 text-white pl-8 pr-4 py-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 border border-gray-700 uppercase-input" 
+                    oninput="this.value = this.value.toLowerCase().replace(/[^a-z0-9_]/g, '')">
+            </div>
+            
+            <p id="username-error" class="text-red-400 text-xs mb-4 hidden"></p>
+
+            <button onclick="saveUsername()" class="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-bold py-3 rounded-xl transition shadow-lg shadow-indigo-500/30">
+                Simpan & Lanjutkan <i class="fa-solid fa-arrow-right ml-2"></i>
+            </button>
+        </div>
+    </div>
+
+    <div id="app-container" class="flex h-screen hidden max-w-[1600px] mx-auto shadow-2xl overflow-hidden">
         
-        <aside class="w-full md:w-1/3 lg:w-1/4 bg-gray-900 border-r border-gray-800 flex flex-col">
-            <div class="p-4 bg-gray-800 border-b border-gray-700 flex justify-between items-center sticky top-0 z-20">
-                <div class="flex items-center gap-3">
-                    <img id="my-avatar" src="" class="w-10 h-10 rounded-full border-2 border-green-600 p-[1px]">
+        <aside class="w-full md:w-[380px] glass-panel border-r-0 border-white/5 flex flex-col relative z-20">
+            <div class="p-6 flex justify-between items-center bg-gradient-to-b from-gray-900/40 to-transparent">
+                <div class="flex items-center gap-4">
+                    <img id="my-avatar" src="" class="w-12 h-12 rounded-2xl object-cover ring-2 ring-indigo-500/50">
                     <div>
-                        <h2 id="my-name" class="font-semibold text-sm text-gray-200">Loading...</h2>
-                        <div class="flex items-center gap-1">
-                            <span class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
-                            <span class="text-xs text-green-400">Online</span>
-                        </div>
+                        <h2 id="my-name" class="font-bold text-lg text-white leading-tight">Loading...</h2>
+                        <p id="my-username" class="text-xs text-indigo-400 font-mono">@...</p>
                     </div>
                 </div>
                 <div class="flex gap-2">
-                    <button onclick="addFriendPrompt()" class="w-8 h-8 rounded-full bg-gray-700 hover:bg-green-600 text-gray-300 hover:text-white transition flex items-center justify-center" title="Tambah Teman">
-                        <i class="fa-solid fa-user-plus text-xs"></i>
+                    <button onclick="addFriendPrompt()" class="w-10 h-10 rounded-xl bg-indigo-500/20 hover:bg-indigo-500/40 text-indigo-300 hover:text-white transition flex items-center justify-center backdrop-blur-md" title="Add Username">
+                        <i class="fa-solid fa-user-plus"></i>
                     </button>
-                    <button onclick="logout()" class="w-8 h-8 rounded-full bg-gray-700 hover:bg-red-500 text-gray-300 hover:text-white transition flex items-center justify-center" title="Keluar">
-                        <i class="fa-solid fa-power-off text-xs"></i>
+                    <button onclick="logout()" class="w-10 h-10 rounded-xl bg-red-500/10 hover:bg-red-500/30 text-red-400 hover:text-white transition flex items-center justify-center backdrop-blur-md">
+                        <i class="fa-solid fa-power-off"></i>
                     </button>
                 </div>
             </div>
 
-            <div class="p-3 border-b border-gray-800">
+            <div class="px-6 pb-2">
                 <div class="relative">
-                    <input type="text" id="search-friend" placeholder="Cari teman..." class="w-full bg-gray-800 text-sm pl-9 pr-4 py-2 rounded-lg focus:outline-none focus:ring-1 focus:ring-green-500 text-gray-300 placeholder-gray-500">
-                    <i class="fa-solid fa-magnifying-glass absolute left-3 top-2.5 text-gray-500 text-xs"></i>
+                    <input type="text" id="search-friend" placeholder="Cari di daftar teman..." class="w-full bg-gray-900/40 text-sm pl-10 pr-4 py-3 rounded-xl focus:outline-none focus:ring-1 focus:ring-indigo-500 text-gray-200 border border-white/5">
+                    <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-3.5 text-gray-500"></i>
                 </div>
             </div>
 
-            <div id="friends-list" class="flex-1 overflow-y-auto p-2 space-y-1 scroll-smooth">
-                <div class="flex flex-col items-center justify-center h-40 text-gray-500 space-y-2">
-                    <i class="fa-solid fa-spinner fa-spin"></i>
-                    <span class="text-xs">Memuat teman...</span>
-                </div>
+            <div class="px-6 mt-4 flex items-center justify-between">
+                <h3 class="text-xs font-bold text-gray-500 uppercase tracking-wider">Teman</h3>
+                <span id="friend-count" class="text-[10px] bg-white/10 px-2 py-0.5 rounded text-gray-400">0</span>
             </div>
+
+            <div id="friends-list" class="flex-1 overflow-y-auto px-4 py-2 space-y-1">
+                </div>
         </aside>
 
-        <main class="hidden md:flex flex-1 flex-col bg-[#0b141a] relative w-full">
-            <div class="absolute inset-0 chat-bg pointer-events-none"></div>
-
-            <div id="empty-chat" class="flex-1 flex flex-col items-center justify-center relative z-10 text-center px-4">
-                <div class="bg-gray-800 p-8 rounded-full mb-6 animate-bounce">
-                    <i class="fa-regular fa-paper-plane text-5xl text-green-500"></i>
+        <main class="hidden md:flex flex-1 flex-col relative bg-gray-900/30 backdrop-blur-sm">
+            <div id="empty-chat" class="flex-1 flex flex-col items-center justify-center text-center p-8">
+                <div class="w-24 h-24 bg-indigo-500/10 rounded-full flex items-center justify-center mb-6 animate-pulse">
+                    <i class="fa-solid fa-comments text-4xl text-indigo-400"></i>
                 </div>
-                <h2 class="text-2xl font-bold text-gray-200 mb-2">Rvldx Chat Web</h2>
-                <p class="text-gray-400 text-sm max-w-md">Kirim dan terima pesan secara real-time. Pilih teman dari sidebar untuk mulai mengobrol.</p>
-                <div class="mt-8 text-xs text-gray-600 flex items-center gap-2">
-                    <i class="fa-solid fa-lock"></i> End-to-end encrypted (simulasi)
-                </div>
+                <h2 class="text-2xl font-bold text-white mb-2">VoltChat</h2>
+                <p class="text-gray-400 text-sm">Pilih teman untuk memulai percakapan.</p>
             </div>
 
-            <div id="chat-interface" class="hidden flex-col h-full relative z-10 w-full">
-                <div class="px-4 py-3 bg-gray-800 border-b border-gray-700 flex items-center gap-3 shadow-md">
-                    <button onclick="backToFriends()" class="md:hidden text-gray-400 hover:text-white mr-1">
-                        <i class="fa-solid fa-arrow-left text-lg"></i>
-                    </button>
-                    
-                    <img id="chat-avatar" src="" class="w-10 h-10 rounded-full bg-gray-600 object-cover">
-                    
-                    <div class="flex-1 min-w-0">
-                        <h2 id="chat-name" class="font-bold text-white text-base truncate">Nama Teman</h2>
-                        <p id="chat-status" class="text-xs text-gray-400 truncate">Offline</p>
+            <div id="chat-interface" class="hidden flex-col h-full">
+                <div class="h-20 px-6 flex items-center justify-between glass-panel border-b border-white/5 z-10 bg-gray-900/20">
+                    <div class="flex items-center gap-4">
+                        <button onclick="backToFriends()" class="md:hidden w-8 h-8 flex items-center justify-center rounded-full hover:bg-white/10">
+                            <i class="fa-solid fa-arrow-left"></i>
+                        </button>
+                        <img id="chat-avatar" src="" class="w-10 h-10 rounded-full object-cover">
+                        <div>
+                            <h2 id="chat-name" class="font-bold text-white text-base">Nama Teman</h2>
+                            <div class="flex items-center gap-2">
+                                <span id="chat-username" class="text-xs text-gray-500 font-mono">@username</span>
+                                <span id="chat-status" class="text-[10px] text-gray-400 bg-gray-800 px-1.5 rounded">Offline</span>
+                            </div>
+                        </div>
                     </div>
-
-                    <button class="text-gray-400 hover:text-white p-2">
-                        <i class="fa-solid fa-ellipsis-vertical"></i>
-                    </button>
                 </div>
 
-                <div id="messages-area" class="flex-1 overflow-y-auto p-4 space-y-1 custom-scrollbar">
+                <div id="messages-area" class="flex-1 overflow-y-auto p-4 space-y-3 custom-scrollbar"></div>
+
+                <div class="p-4 bg-gray-900/40 border-t border-white/5 backdrop-blur-md">
+                     <div id="edit-indicator" class="hidden mb-2 bg-indigo-900/60 px-4 py-2 rounded-lg flex justify-between items-center text-xs border-l-2 border-indigo-400">
+                        <span class="text-indigo-200">Mengedit pesan...</span>
+                        <button onclick="cancelEdit()" class="text-gray-400 hover:text-white"><i class="fa-solid fa-xmark"></i></button>
                     </div>
 
-                <div class="p-3 bg-gray-800 border-t border-gray-700">
-                    <div id="edit-indicator" class="hidden bg-gray-900/50 backdrop-blur px-4 py-2 rounded-t-lg text-xs flex justify-between items-center text-green-400 mb-2 border-l-4 border-green-500 ml-2">
-                        <div>
-                            <span class="font-bold block text-green-500">Edit Pesan</span>
-                            <span class="text-gray-400 italic">Mengubah isi pesan...</span>
-                        </div>
-                        <button onclick="cancelEdit()" class="text-gray-400 hover:text-white bg-gray-700 rounded-full w-6 h-6 flex items-center justify-center">
-                            <i class="fa-solid fa-times"></i>
-                        </button>
-                    </div>
-
-                    <form id="message-form" class="flex items-end gap-2 max-w-4xl mx-auto w-full">
-                        <button type="button" class="text-gray-400 hover:text-gray-200 p-3 rounded-full hover:bg-gray-700 transition">
-                            <i class="fa-regular fa-face-smile text-xl"></i>
-                        </button>
-                        
-                        <div class="flex-1 relative">
-                            <input type="text" id="message-input" placeholder="Ketik pesan..." 
-                                class="w-full bg-gray-700 text-white px-5 py-3 rounded-2xl focus:outline-none focus:ring-2 focus:ring-green-600 focus:bg-gray-600 transition placeholder-gray-400" 
-                                autocomplete="off">
-                        </div>
-                        
-                        <button type="submit" class="bg-green-600 hover:bg-green-500 text-white p-3 rounded-full shadow-lg transition transform active:scale-95 flex items-center justify-center w-12 h-12">
-                            <i class="fa-solid fa-paper-plane text-lg translate-x-[-1px] translate-y-[1px]"></i>
+                    <form id="message-form" class="flex items-center gap-2">
+                        <input type="text" id="message-input" placeholder="Tulis pesan..." 
+                            class="flex-1 bg-gray-800/50 text-white px-5 py-3.5 rounded-2xl focus:outline-none focus:ring-1 focus:ring-indigo-500/50 placeholder-gray-500 transition-all border border-white/5" autocomplete="off">
+                        <button type="submit" class="bg-indigo-600 hover:bg-indigo-500 text-white w-12 h-12 rounded-xl flex items-center justify-center shadow-lg transition transform active:scale-95">
+                            <i class="fa-solid fa-paper-plane text-sm"></i>
                         </button>
                     </form>
                 </div>
@@ -146,15 +155,10 @@
     </div>
 
     <script type="module">
-        // Import Modules dari Firebase versi 10.8.0 (Versi Stabil yang Kompatibel)
-        // Kita gunakan versi 10.x.x agar aman, versi 12 mungkin belum tersedia di CDN umum.
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getAuth, signInWithPopup, GoogleAuthProvider, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
         import { getFirestore, collection, addDoc, query, where, orderBy, onSnapshot, serverTimestamp, doc, setDoc, updateDoc, deleteDoc, getDocs, getDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-        // ==========================================
-        // CONFIG DARI USER (RVLDX CHAT)
-        // ==========================================
         const firebaseConfig = {
             apiKey: "AIzaSyBQzOliNqHDI0ccFc4ha0JrjrZNrh0TPsw",
             authDomain: "rvldx-chat.firebaseapp.com",
@@ -164,175 +168,209 @@
             appId: "1:1019557266823:web:0b36b080f1e735afecbf22"
         };
 
-        // Initialize Firebase
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
         const db = getFirestore(app);
         const provider = new GoogleAuthProvider();
 
-        // --- STATE VARIABLES ---
-        let currentUser = null;
-        let currentChatFriend = null;
-        let currentChatId = null;
-        let messagesUnsubscribe = null;
-        let friendsUnsubscribe = null;
-        let editingMessageId = null;
+        let currentUser, currentChatFriend, currentChatId, messagesUnsubscribe, friendsUnsubscribe, editingMessageId;
 
-        // --- EXPOSE FUNCTIONS TO WINDOW (Agar bisa dipanggil via onclick HTML) ---
-        window.loginWithGoogle = () => signInWithPopup(auth, provider).catch(err => alert("Login Gagal: " + err.message));
-        
-        window.logout = () => {
-            if(currentUser) {
-                updateDoc(doc(db, "users", currentUser.uid), {
-                    isOnline: false,
-                    lastSeen: serverTimestamp()
-                }).then(() => signOut(auth));
-            } else { signOut(auth); }
+        // --- GLOBAL WINDOW FUNCTIONS ---
+        window.loginWithGoogle = () => {
+            if (window.location.protocol === 'file:') return alert("Gunakan Live Server!");
+            signInWithPopup(auth, provider).catch(err => alert(err.message));
         };
 
-        // --- AUTH OBSERVER ---
+        window.logout = () => {
+            if(currentUser) {
+                updateDoc(doc(db, "users", currentUser.uid), { isOnline: false, lastSeen: serverTimestamp() })
+                .then(() => signOut(auth));
+            }
+        };
+
+        // --- AUTH & USERNAME CHECK ---
         onAuthStateChanged(auth, async (user) => {
             const loginScreen = document.getElementById('login-screen');
             const appContainer = document.getElementById('app-container');
+            const usernameModal = document.getElementById('username-modal');
 
             if (user) {
                 currentUser = user;
                 loginScreen.classList.add('hidden');
-                appContainer.classList.remove('hidden');
-                
-                // Set UI User
-                document.getElementById('my-avatar').src = user.photoURL;
-                document.getElementById('my-name').innerText = user.displayName;
 
-                // Simpan Data User ke Firestore
-                await setDoc(doc(db, "users", user.uid), {
-                    uid: user.uid,
-                    displayName: user.displayName,
-                    email: user.email,
-                    photoURL: user.photoURL,
-                    isOnline: true,
-                    lastSeen: serverTimestamp()
-                }, { merge: true });
+                // 1. Cek apakah user sudah punya username di database
+                const userDocRef = doc(db, "users", user.uid);
+                const userSnapshot = await getDoc(userDocRef);
 
-                // Event Listener saat tab ditutup
-                window.addEventListener('beforeunload', () => {
-                     updateDoc(doc(db, "users", user.uid), { isOnline: false, lastSeen: serverTimestamp() });
-                });
-
-                loadFriends();
+                if (userSnapshot.exists() && userSnapshot.data().username) {
+                    // SUDAH PUNYA USERNAME -> Masuk App
+                    usernameModal.classList.add('hidden');
+                    appContainer.classList.remove('hidden');
+                    initApp(userSnapshot.data());
+                } else {
+                    // BELUM PUNYA -> Tampilkan Modal Setup Username
+                    usernameModal.classList.remove('hidden');
+                    appContainer.classList.add('hidden');
+                }
             } else {
                 currentUser = null;
                 loginScreen.classList.remove('hidden');
                 appContainer.classList.add('hidden');
+                usernameModal.classList.add('hidden');
             }
         });
 
-        // --- FITUR TEMAN ---
-        window.addFriendPrompt = async () => {
-            const email = prompt("Masukkan Email Gmail teman kamu:");
-            if (!email) return;
+        // --- SAVE USERNAME LOGIC ---
+        window.saveUsername = async () => {
+            const input = document.getElementById('username-input');
+            const errorText = document.getElementById('username-error');
+            const username = input.value.trim().toLowerCase();
 
-            if (email.toLowerCase() === currentUser.email.toLowerCase()) {
-                alert("Kamu tidak bisa menambahkan dirimu sendiri.");
+            // Validasi sederhana
+            if (username.length < 3) {
+                errorText.innerText = "Username minimal 3 karakter!";
+                errorText.classList.remove('hidden');
                 return;
             }
 
-            // Cari user di database
+            // Cek apakah username sudah dipakai orang lain
+            const q = query(collection(db, "users"), where("username", "==", username));
+            const querySnapshot = await getDocs(q);
+
+            if (!querySnapshot.empty) {
+                errorText.innerText = "Username sudah dipakai, cari yang lain!";
+                errorText.classList.remove('hidden');
+                return;
+            }
+
+            // Simpan ke Firestore
+            try {
+                await setDoc(doc(db, "users", currentUser.uid), {
+                    uid: currentUser.uid,
+                    displayName: currentUser.displayName,
+                    email: currentUser.email,
+                    photoURL: currentUser.photoURL,
+                    username: username, // INI YANG PENTING
+                    isOnline: true,
+                    lastSeen: serverTimestamp()
+                }, { merge: true });
+
+                // Refresh Halaman/State
+                document.getElementById('username-modal').classList.add('hidden');
+                document.getElementById('app-container').classList.remove('hidden');
+                
+                // Init App manual
+                const newData = (await getDoc(doc(db, "users", currentUser.uid))).data();
+                initApp(newData);
+
+            } catch (e) {
+                alert("Error saving: " + e.message);
+            }
+        };
+
+        function initApp(userData) {
+            document.getElementById('my-avatar').src = userData.photoURL;
+            document.getElementById('my-name').innerText = userData.displayName;
+            document.getElementById('my-username').innerText = "@" + userData.username;
+
+            // Update status online
+            updateDoc(doc(db, "users", currentUser.uid), { isOnline: true });
+            window.addEventListener('beforeunload', () => {
+                 updateDoc(doc(db, "users", currentUser.uid), { isOnline: false, lastSeen: serverTimestamp() });
+            });
+
+            loadFriends();
+        }
+
+        // --- FRIEND SYSTEM (BY USERNAME) ---
+        window.addFriendPrompt = async () => {
+            const usernameInput = prompt("Masukkan Username teman (tanpa @):");
+            if (!usernameInput) return;
+            
+            const targetUsername = usernameInput.toLowerCase().trim();
+
+            // 1. Cek apakah itu username sendiri
+            const myDoc = await getDoc(doc(db, "users", currentUser.uid));
+            if (myDoc.data().username === targetUsername) return alert("Gak bisa add diri sendiri, kocak.");
+
+            // 2. Cari UID berdasarkan Username
             const usersRef = collection(db, "users");
-            const q = query(usersRef, where("email", "==", email)); // Pencarian Case Sensitive di Firestore
+            const q = query(usersRef, where("username", "==", targetUsername));
             const querySnapshot = await getDocs(q);
 
             if (querySnapshot.empty) {
-                alert("Pengguna tidak ditemukan! Pastikan temanmu sudah pernah Login ke website ini minimal sekali.");
+                alert(`User @${targetUsername} tidak ditemukan! Pastikan ejaannya benar.`);
                 return;
             }
 
             const friendData = querySnapshot.docs[0].data();
-            
-            // Simpan ke subcollection 'friends' user ini
-            await setDoc(doc(db, "users", currentUser.uid, "friends", friendData.uid), {
-                uid: friendData.uid,
-                addedAt: serverTimestamp()
-            });
 
-            // Simpan ke subcollection 'friends' teman (Agar otomatis saling follow)
-            await setDoc(doc(db, "users", friendData.uid, "friends", currentUser.uid), {
-                uid: currentUser.uid,
-                addedAt: serverTimestamp()
-            });
+            // 3. Simpan relasi teman (2 arah)
+            await setDoc(doc(db, "users", currentUser.uid, "friends", friendData.uid), { uid: friendData.uid, addedAt: serverTimestamp() });
+            await setDoc(doc(db, "users", friendData.uid, "friends", currentUser.uid), { uid: currentUser.uid, addedAt: serverTimestamp() });
 
-            alert(`Berhasil berteman dengan ${friendData.displayName}!`);
+            alert(`Berhasil berteman dengan @${friendData.username}!`);
         };
 
         function loadFriends() {
             if (friendsUnsubscribe) friendsUnsubscribe();
-
             const friendsRef = collection(db, "users", currentUser.uid, "friends");
             const q = query(friendsRef, orderBy("addedAt", "desc"));
 
             friendsUnsubscribe = onSnapshot(q, (snapshot) => {
                 const list = document.getElementById('friends-list');
+                document.getElementById('friend-count').innerText = snapshot.size;
                 list.innerHTML = "";
-                
+
                 if(snapshot.empty) {
-                    list.innerHTML = `
-                        <div class="text-center mt-10 px-4">
-                            <p class="text-gray-500 text-sm">Belum ada teman.</p>
-                            <button onclick="addFriendPrompt()" class="mt-2 text-green-500 text-xs hover:underline">Klik + untuk tambah</button>
-                        </div>`;
+                    list.innerHTML = `<div class="text-center text-gray-500 text-xs mt-10">Belum ada teman.<br>Klik tombol + diatas.</div>`;
                     return;
                 }
 
                 snapshot.forEach(friendDoc => {
-                    const friendId = friendDoc.data().uid;
-                    
-                    // Ambil detail realtime user teman (status online/offline)
-                    onSnapshot(doc(db, "users", friendId), (userSnap) => {
-                        if (!userSnap.exists()) return;
+                    const fid = friendDoc.data().uid;
+                    // Listen realtime status teman
+                    onSnapshot(doc(db, "users", fid), (uSnap) => {
+                        if(!uSnap.exists()) return;
+                        const uData = uSnap.data();
                         
-                        const uData = userSnap.data();
-                        
-                        // Cek apakah elemen list sudah ada, jika ada update, jika tidak buat baru
-                        let li = document.getElementById(`friend-item-${friendId}`);
-                        
+                        let el = document.getElementById(`friend-${fid}`);
                         const isOnline = uData.isOnline;
-                        const statusColor = isOnline ? 'bg-green-500' : 'bg-gray-500';
-                        const statusText = isOnline ? 'Online' : (uData.lastSeen ? 'Seen: ' + new Date(uData.lastSeen.toDate()).toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'}) : 'Offline');
-                        const statusClass = isOnline ? 'text-green-400' : 'text-gray-500';
-
-                        const htmlContent = `
+                        
+                        const html = `
                             <div class="relative">
-                                <img src="${uData.photoURL}" class="w-12 h-12 rounded-full object-cover border border-gray-700">
-                                <span class="absolute bottom-0 right-0 w-3.5 h-3.5 ${statusColor} border-2 border-gray-900 rounded-full"></span>
+                                <img src="${uData.photoURL}" class="w-10 h-10 rounded-full object-cover bg-gray-700">
+                                ${isOnline ? '<div class="absolute bottom-0 right-0 w-2.5 h-2.5 bg-emerald-500 border border-gray-900 rounded-full animate-pulse"></div>' : ''}
                             </div>
-                            <div class="flex-1 min-w-0 text-left">
+                            <div class="flex-1 min-w-0">
                                 <div class="flex justify-between items-baseline">
-                                    <h3 class="font-medium text-gray-200 truncate text-sm">${uData.displayName}</h3>
+                                    <h4 class="text-sm font-medium text-gray-200 truncate">${uData.displayName}</h4>
+                                    ${isOnline ? '<span class="text-[9px] text-emerald-400 font-bold">ON</span>' : ''}
                                 </div>
-                                <p class="text-xs ${statusClass} truncate">${statusText}</p>
+                                <p class="text-xs text-indigo-300/70 truncate">@${uData.username}</p>
                             </div>
                         `;
 
-                        if (!li) {
-                            li = document.createElement('button');
-                            li.id = `friend-item-${friendId}`;
-                            li.className = "w-full flex items-center gap-3 p-3 hover:bg-gray-800 rounded-xl transition group focus:bg-gray-800 focus:outline-none";
-                            li.onclick = () => selectFriend(uData);
-                            li.innerHTML = htmlContent;
-                            list.appendChild(li);
+                        if(!el) {
+                            el = document.createElement('button');
+                            el.id = `friend-${fid}`;
+                            el.className = "w-full flex items-center gap-3 p-3 rounded-xl hover:bg-white/5 transition text-left group";
+                            el.onclick = () => selectFriend(uData);
+                            el.innerHTML = html;
+                            list.appendChild(el);
                         } else {
-                            li.innerHTML = htmlContent;
+                            el.innerHTML = html;
                         }
                     });
                 });
             });
         }
 
-        // --- LOGIC CHAT ---
+        // --- CHAT LOGIC ---
         window.selectFriend = (friend) => {
             currentChatFriend = friend;
             
-            // Responsive UI Toggle
+            // Toggle UI Mobile
             document.querySelector('aside').classList.add('hidden');
             document.querySelector('aside').classList.remove('md:flex');
             document.querySelector('main').classList.remove('hidden');
@@ -345,23 +383,24 @@
             // Set Header
             document.getElementById('chat-avatar').src = friend.photoURL;
             document.getElementById('chat-name').innerText = friend.displayName;
+            document.getElementById('chat-username').innerText = "@" + friend.username;
 
-            // Monitor Status Teman di Header Chat
-            onSnapshot(doc(db, "users", friend.uid), (docSnap) => {
-                const data = docSnap.data();
-                const statusEl = document.getElementById('chat-status');
-                if (data.isOnline) {
-                    statusEl.innerHTML = '<span class="text-green-400 font-bold">Online</span>';
+            // Monitor Status
+            onSnapshot(doc(db, "users", friend.uid), (doc) => {
+                const d = doc.data();
+                const sEl = document.getElementById('chat-status');
+                if(d.isOnline) {
+                    sEl.innerText = "Online";
+                    sEl.className = "text-[10px] text-emerald-400 bg-emerald-900/30 px-2 py-0.5 rounded font-bold tracking-wide";
                 } else {
-                    const date = data.lastSeen ? data.lastSeen.toDate().toLocaleString() : 'Offline';
-                    statusEl.innerText = `Terakhir dilihat: ${date}`;
+                    const t = d.lastSeen ? d.lastSeen.toDate().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'}) : '-';
+                    sEl.innerText = `Last seen: ${t}`;
+                    sEl.className = "text-[10px] text-gray-500";
                 }
             });
 
-            // Buat Chat ID Unik (selalu urut abjad agar 2 user membuka room yang sama)
             const ids = [currentUser.uid, friend.uid].sort();
             currentChatId = ids.join("_");
-
             loadMessages(currentChatId);
         };
 
@@ -370,109 +409,79 @@
             document.querySelector('main').classList.add('hidden');
             document.getElementById('chat-interface').classList.add('hidden');
             document.getElementById('empty-chat').classList.remove('hidden');
-            currentChatFriend = null;
         };
 
         function loadMessages(chatId) {
             if (messagesUnsubscribe) messagesUnsubscribe();
-
-            const messagesRef = collection(db, "chats", chatId, "messages");
-            const q = query(messagesRef, orderBy("createdAt", "asc"));
-            const messagesArea = document.getElementById('messages-area');
-
-            messagesUnsubscribe = onSnapshot(q, (snapshot) => {
-                messagesArea.innerHTML = "";
-                let lastSenderId = null;
-
-                snapshot.forEach(docSnap => {
+            const q = query(collection(db, "chats", chatId, "messages"), orderBy("createdAt", "asc"));
+            
+            messagesUnsubscribe = onSnapshot(q, (snap) => {
+                const area = document.getElementById('messages-area');
+                area.innerHTML = "";
+                
+                snap.forEach(docSnap => {
                     const msg = docSnap.data();
                     const isMe = msg.senderId === currentUser.uid;
-                    const time = msg.createdAt ? msg.createdAt.toDate().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) : '...';
                     
-                    // Bubble Container
                     const div = document.createElement('div');
-                    div.className = `flex w-full mb-1 ${isMe ? 'justify-end' : 'justify-start'}`;
+                    div.className = `flex w-full ${isMe ? 'justify-end' : 'justify-start'}`;
                     
-                    // Styling Bubble
-                    const bubbleClass = isMe 
-                        ? 'bg-[#005c4b] text-white rounded-l-lg rounded-br-lg' 
-                        : 'bg-gray-800 text-gray-100 rounded-r-lg rounded-bl-lg';
+                    const bubble = isMe 
+                        ? 'bg-indigo-600 text-white rounded-2xl rounded-tr-sm' 
+                        : 'bg-gray-800 text-gray-200 rounded-2xl rounded-tl-sm border border-gray-700';
 
-                    // Dropdown Menu HTML
-                    const dropdownMenu = isMe ? `
-                        <div class="absolute top-0 right-0 mt-1 mr-1 opacity-0 group-hover:opacity-100 transition-opacity z-10">
-                            <button onclick="toggleMsgMenu('${docSnap.id}')" class="text-gray-400 hover:text-white bg-black/20 rounded-full w-5 h-5 flex items-center justify-center">
-                                <i class="fa-solid fa-chevron-down text-[10px]"></i>
-                            </button>
-                            <div id="menu-${docSnap.id}" class="hidden absolute right-0 bg-gray-800 shadow-xl rounded-lg border border-gray-700 w-24 z-50 overflow-hidden">
-                                <button onclick="startEdit('${docSnap.id}', '${msg.text.replace(/'/g, "\\'")}')" class="w-full text-left px-3 py-2 text-xs hover:bg-gray-700 text-blue-400 border-b border-gray-700">Edit</button>
-                                <button onclick="deleteMessage('${docSnap.id}')" class="w-full text-left px-3 py-2 text-xs hover:bg-gray-700 text-red-400">Hapus</button>
+                    // Context Menu Logic
+                    const menuHTML = isMe ? `
+                        <div class="group relative ml-2 self-center">
+                             <i class="fa-solid fa-ellipsis-vertical text-gray-500 text-xs cursor-pointer p-2 opacity-0 group-hover:opacity-100 transition"></i>
+                             <div class="hidden group-hover:block absolute right-0 bottom-full bg-gray-900 border border-gray-700 rounded-lg w-20 shadow-xl z-50 overflow-hidden">
+                                <div onclick="startEdit('${docSnap.id}', '${msg.text.replace(/'/g, "\\'")}')" class="px-3 py-2 text-[10px] hover:bg-gray-800 text-indigo-400 cursor-pointer">Edit</div>
+                                <div onclick="deleteMessage('${docSnap.id}')" class="px-3 py-2 text-[10px] hover:bg-gray-800 text-red-400 cursor-pointer">Hapus</div>
                             </div>
                         </div>
                     ` : '';
 
                     div.innerHTML = `
-                        <div class="group relative max-w-[75%] md:max-w-[60%] ${bubbleClass} px-3 py-1 shadow-sm text-sm">
-                            ${dropdownMenu}
-                            <p class="pb-2 pr-2 break-words leading-relaxed">${msg.text}</p>
-                            <div class="flex justify-end items-center gap-1 absolute bottom-1 right-2">
-                                ${msg.isEdited ? '<span class="text-[9px] text-gray-400 italic">diedit</span>' : ''}
-                                <span class="text-[10px] text-gray-300 opacity-70">${time}</span>
-                                ${isMe ? '<i class="fa-solid fa-check text-[10px] text-blue-300"></i>' : ''}
+                        <div class="flex max-w-[75%] ${isMe ? 'flex-row-reverse' : 'flex-row'} group">
+                            <div class="${bubble} px-4 py-2 shadow-md relative min-w-[80px]">
+                                <p class="text-sm leading-relaxed pb-3 break-words">${msg.text}</p>
+                                <div class="absolute bottom-1 right-2 flex items-center gap-1 opacity-60">
+                                    ${msg.isEdited ? '<i class="fa-solid fa-pen text-[8px]"></i>' : ''}
+                                    <span class="text-[9px]">${msg.createdAt ? msg.createdAt.toDate().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'}) : '...'}</span>
+                                    ${isMe ? '<i class="fa-solid fa-check text-[9px]"></i>' : ''}
+                                </div>
                             </div>
+                            ${menuHTML}
                         </div>
                     `;
-                    messagesArea.appendChild(div);
+                    area.appendChild(div);
                 });
-
-                messagesArea.scrollTop = messagesArea.scrollHeight;
+                area.scrollTop = area.scrollHeight;
             });
         }
 
-        // --- ACTION HANDLERS ---
-        // Toggle menu pesan (biar tidak pake hover css saja)
-        window.toggleMsgMenu = (id) => {
-            const menu = document.getElementById(`menu-${id}`);
-            // Tutup menu lain
-            document.querySelectorAll('[id^="menu-"]').forEach(el => {
-                if(el.id !== `menu-${id}`) el.classList.add('hidden');
-            });
-            menu.classList.toggle('hidden');
-        };
-
-        const messageForm = document.getElementById('message-form');
-        messageForm.addEventListener('submit', async (e) => {
+        // --- SEND / EDIT / DELETE ---
+        document.getElementById('message-form').addEventListener('submit', async (e) => {
             e.preventDefault();
             const input = document.getElementById('message-input');
             const text = input.value.trim();
-            if (!text || !currentChatId) return;
+            if(!text || !currentChatId) return;
 
-            if (editingMessageId) {
-                // Edit Pesan
-                await updateDoc(doc(db, "chats", currentChatId, "messages", editingMessageId), {
-                    text: text,
-                    isEdited: true
-                });
+            if(editingMessageId) {
+                await updateDoc(doc(db, "chats", currentChatId, "messages", editingMessageId), { text, isEdited: true });
                 cancelEdit();
             } else {
-                // Kirim Pesan Baru
                 await addDoc(collection(db, "chats", currentChatId, "messages"), {
-                    text: text,
-                    senderId: currentUser.uid,
-                    createdAt: serverTimestamp(),
-                    isEdited: false
+                    text, senderId: currentUser.uid, createdAt: serverTimestamp(), isEdited: false
                 });
             }
             input.value = "";
-            input.focus();
         });
 
-        window.startEdit = (msgId, text) => {
-            editingMessageId = msgId;
-            document.getElementById('message-input').value = text;
+        window.startEdit = (id, txt) => {
+            editingMessageId = id;
+            document.getElementById('message-input').value = txt;
             document.getElementById('edit-indicator').classList.remove('hidden');
-            document.getElementById(`menu-${msgId}`).classList.add('hidden');
-            document.getElementById('message-input').focus();
         };
 
         window.cancelEdit = () => {
@@ -481,18 +490,7 @@
             document.getElementById('edit-indicator').classList.add('hidden');
         };
 
-        window.deleteMessage = async (msgId) => {
-            if(confirm("Hapus pesan ini untuk semua orang?")) {
-                await deleteDoc(doc(db, "chats", currentChatId, "messages", msgId));
-            }
-        };
-
-        // Klik diluar menu untuk menutup dropdown
-        document.addEventListener('click', (e) => {
-            if(!e.target.closest('.group')) {
-                document.querySelectorAll('[id^="menu-"]').forEach(el => el.classList.add('hidden'));
-            }
-        });
+        window.deleteMessage = async (id) => await deleteDoc(doc(db, "chats", currentChatId, "messages", id));
 
     </script>
 </body>

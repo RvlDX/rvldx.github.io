@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Finance Protocol - Clean Dashboard</title>
+    <title>Finance Protocol - Strict Zero</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -102,8 +102,9 @@
         </div>
 
         <div id="mBoard" class="space-y-6"></div>
-        <div id="emptyMsg" class="text-center py-10 hidden">
-            <p class="text-[10px] font-mono text-muted tracking-widest uppercase">No Active Protocols for the next 12 months</p>
+        <div id="emptyMsg" class="text-center py-20 hidden fade-in">
+            <i class="fas fa-ghost text-slate-700 text-3xl mb-4"></i>
+            <p class="text-[10px] font-mono text-muted tracking-widest uppercase">No Active Protocols Detected</p>
         </div>
     </div>
 
@@ -193,7 +194,7 @@
             let renderedCount = 0;
             const now = new Date();
 
-            // Kita cek sampai 12 bulan ke depan
+            // Loop untuk 12 bulan ke depan
             for (let i = 0; i < 12; i++) {
                 const targetDate = new Date(now.getFullYear(), now.getMonth() + i, 1);
                 const curM = targetDate.getMonth();
@@ -202,6 +203,7 @@
                 let billTotal = 0;
                 let listHtml = "";
 
+                // Hitung cicilan untuk bulan ini
                 activeData.forEach(item => {
                     const start = new Date(item.startY, item.startM, 1);
                     const end = new Date(item.startY, item.startM + item.duration, 1);
@@ -222,13 +224,13 @@
                     }
                 });
 
-                // LOGIKA UTAMA: Hanya render jika ada tagihan (billTotal > 0)
+                // LOGIKA SAKTI: Kartu HANYA dirender jika billTotal DI ATAS 0
                 if (billTotal > 0) {
                     const totalOut = billTotal + gSnack;
                     const net = gIncome - totalOut;
                     renderedCount++;
 
-                    board.innerHTML += `
+                    const card = `
                         <div class="bg-card rounded-2xl border border-slate-700 overflow-hidden fade-in shadow-xl">
                             <div class="bg-slate-900/50 px-4 py-3 flex justify-between items-center border-b border-slate-800">
                                 <span class="font-bold text-[10px] tracking-[0.2em] text-white font-mono uppercase">${months[curM]} ${curY}</span>
@@ -253,10 +255,11 @@
                                 </div>
                             </div>
                         </div>`;
+                    board.insertAdjacentHTML('beforeend', card);
                 }
             }
 
-            // Kalau nggak ada card yang dirender sama sekali
+            // Tampilkan pesan "No Active Protocols" hanya jika benar-benar bersih
             if (renderedCount === 0) {
                 emptyMsg.classList.remove('hidden');
             } else {

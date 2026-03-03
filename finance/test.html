@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Finance Protocol - Stable 3.2</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Inter', 'sans-serif'], mono: ['Space Mono', 'monospace'], },
+                    colors: { bg: '#0B1120', card: '#151F32', accent: '#10B981', danger: '#EF4444', muted: '#64748B' }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { background-color: #0B1120; color: #E2E8F0; }
+        .input-dark { background: #0F172A; border: 1px solid #334155; color: #E2E8F0; transition: 0.2s; }
+        .input-dark:focus { border-color: #10B981; outline: none; box-shadow: 0 0 10px rgba(16,185,129,0.1); }
+        .fade-in { animation: fadeIn 0.4s ease-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        input::-webkit-outer-spin-button, input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+    </style>
+</head>
+
+<body class="min-h-screen pb-20">
+
+    <div id="loginOverlay" class="fixed inset-0 z-[100] bg-bg flex flex-col items-center justify-center p-6 transition-all duration-500">
+        <div class="text-center mb-10 fade-in">
+            <div class="w-20 h-20 bg-accent/10 rounded-full flex items-center justify-center mx-auto mb-6 border border-accent/50 shadow-[0_0_30px_rgba(16,185,129,0.2)]">
+                <i class="fas fa-fingerprint text-3xl text-accent"></i>
+            </div>
+            <h2 class="text-2xl font-bold tracking-tighter text-white font-mono uppercase">Finance Protocol</h2>
+            <p class="text-muted text-[10px] font-mono mt-2 tracking-[0.3em] animate-pulse">AWAITING_IDENTIFICATION</p>
+        </div>
+        <button id="googleBtn" class="flex items-center gap-4 bg-white text-bg font-bold px-8 py-4 rounded-xl hover:scale-105 transition-all shadow-xl active:scale-95 group">
+            <svg width="20" height="20" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+                <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/>
+                <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/>
+                <path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/>
+                <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/>
+                <path fill="none" d="M0 0h48v48H0z"/>
+            </svg>
+            <span class="font-mono">SIGN IN WITH GOOGLE</span>
+        </button>
+    </div>
+
+    <nav class="border-b border-slate-800 bg-bg/90 backdrop-blur-md sticky top-0 z-40">
+        <div class="max-w-xl mx-auto px-4 h-16 flex items-center justify-between">
+            <div class="flex items-center gap-2">
+                <div class="w-2 h-2 rounded-full bg-accent animate-pulse"></div>
+                <h1 class="font-bold text-sm tracking-widest font-mono uppercase">WAGER<span class="text-accent">NET</span></h1>
+            </div>
+            <div class="flex items-center gap-3">
+                <img id="uPhoto" class="w-7 h-7 rounded-full border border-slate-700 hidden" alt="User">
+                <button onclick="logout()" class="text-slate-500 hover:text-white transition-colors"><i class="fas fa-power-off"></i></button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="max-w-xl mx-auto px-4 mt-6 space-y-6">
+        
+        <div class="bg-card rounded-2xl border border-slate-700 p-5 shadow-2xl fade-in">
+            <div class="grid grid-cols-2 gap-4">
+                <div class="space-y-1">
+                    <label class="text-[9px] font-mono text-muted uppercase pl-1">Monthly Income</label>
+                    <input type="number" id="mIncome" value="850000" oninput="triggerRecalculate()" class="w-full input-dark rounded-xl px-4 py-3 text-sm font-bold">
+                </div>
+                <div class="space-y-1">
+                    <label class="text-[9px] font-mono text-muted uppercase pl-1">Snack Budget</label>
+                    <input type="number" id="mSnack" value="260000" oninput="triggerRecalculate()" class="w-full input-dark rounded-xl px-4 py-3 text-sm font-bold text-orange-400">
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-card rounded-2xl border border-slate-700 overflow-hidden shadow-2xl fade-in">
+            <div class="p-3 border-b border-slate-800 bg-slate-900/50 flex justify-between items-center">
+                <h2 class="font-mono text-[10px] text-accent tracking-tighter uppercase">Protocol_Injector</h2>
+                <span class="text-[9px] text-muted font-mono uppercase">Next Month Start</span>
+            </div>
+            <form id="fForm" onsubmit="submitFinance(event)" class="p-5 space-y-4">
+                <input type="text" id="fDesc" placeholder="Protocol Name (e.g. WiFi Bill)" class="w-full input-dark rounded-xl px-4 py-3 text-sm font-bold" required>
+                <div class="grid grid-cols-2 gap-4">
+                    <input type="number" id="fAmount" placeholder="Amount (Rp)" class="w-full input-dark rounded-xl px-4 py-3 text-sm font-mono" required>
+                    <select id="fDuration" class="w-full input-dark rounded-xl px-4 py-3 text-xs font-mono">
+                        <option value="1">1 MONTH</option>
+                        <option value="3">3 MONTHS</option>
+                        <option value="6">6 MONTHS</option>
+                        <option value="12">12 MONTHS</option>
+                    </select>
+                </div>
+                <button type="submit" class="w-full bg-accent hover:bg-emerald-400 text-bg font-bold py-4 rounded-xl text-[10px] uppercase tracking-[0.2em] transition-all active:scale-95">
+                    Inject into Database
+                </button>
+            </form>
+        </div>
+
+        <div id="mBoard" class="space-y-6"></div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+        import { getFirestore, collection, addDoc, onSnapshot, query, where, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyDTLkvNNwh4LoJuLW1JhsF1S_ZOY1k-PAM",
+            authDomain: "webchoice-9b2c0.firebaseapp.com",
+            projectId: "webchoice-9b2c0",
+            storageBucket: "webchoice-9b2c0.firebasestorage.app",
+            messagingSenderId: "754013239435",
+            appId: "1:754013239435:web:496f9a5851d0586ee43c8e"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+        const provider = new GoogleAuthProvider();
+        const fRef = collection(db, "finance");
+
+        let userUID = null;
+        let activeData = [];
+        const months = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
+
+        // AUTH HANDLER
+        document.getElementById('googleBtn').onclick = () => signInWithPopup(auth, provider);
+        window.logout = () => signOut(auth).then(() => location.reload());
+
+        onAuthStateChanged(auth, (user) => {
+            const overlay = document.getElementById('loginOverlay');
+            if (user) {
+                userUID = user.uid;
+                overlay.classList.add('opacity-0', 'pointer-events-none');
+                document.getElementById('uPhoto').src = user.photoURL;
+                document.getElementById('uPhoto').classList.remove('hidden');
+                startSync(user.uid);
+            } else {
+                overlay.classList.remove('opacity-0', 'pointer-events-none');
+            }
+        });
+
+        // SUBMIT
+        window.submitFinance = async (e) => {
+            e.preventDefault();
+            const now = new Date();
+            let sM = now.getMonth() + 1;
+            let sY = now.getFullYear();
+            if (sM > 11) { sM = 0; sY++; }
+
+            try {
+                await addDoc(fRef, {
+                    desc: document.getElementById('fDesc').value,
+                    amount: parseInt(document.getElementById('fAmount').value),
+                    duration: parseInt(document.getElementById('fDuration').value),
+                    startM: sM,
+                    startY: sY,
+                    uid: userUID,
+                    createdAt: new Date()
+                });
+                document.getElementById('fForm').reset();
+            } catch (err) {
+                alert("Gagal input: " + err.message);
+            }
+        };
+
+        // FIXED DELETE LOGIC
+        window.deleteEntry = async (id) => {
+            if (confirm("Hapus tagihan ini secara permanen?")) {
+                try {
+                    const docRef = doc(db, "finance", id);
+                    await deleteDoc(docRef);
+                    // Firestore onSnapshot akan otomatis update UI
+                } catch (err) {
+                    console.error(err);
+                    alert("Gagal hapus: Pastikan Rules Firestore sudah benar atau cek koneksi.");
+                }
+            }
+        };
+
+        // REAL-TIME SYNC
+        function startSync(uid) {
+            const q = query(fRef, where("uid", "==", uid));
+            onSnapshot(q, (snap) => {
+                activeData = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+                renderTerminal();
+            });
+        }
+
+        window.triggerRecalculate = () => renderTerminal();
+
+        function renderTerminal() {
+            const board = document.getElementById('mBoard');
+            const gIncome = parseInt(document.getElementById('mIncome').value) || 0;
+            const gSnack = parseInt(document.getElementById('mSnack').value) || 0;
+            board.innerHTML = "";
+            const now = new Date();
+
+            for (let i = 0; i < 6; i++) {
+                const targetDate = new Date(now.getFullYear(), now.getMonth() + i, 1);
+                const curM = targetDate.getMonth();
+                const curY = targetDate.getFullYear();
+
+                let billTotal = 0;
+                let listHtml = "";
+
+                activeData.forEach(item => {
+                    const start = new Date(item.startY, item.startM, 1);
+                    const end = new Date(item.startY, item.startM + item.duration, 1);
+                    const target = new Date(curY, curM, 1);
+
+                    if (target >= start && target < end) {
+                        billTotal += item.amount;
+                        listHtml += `
+                            <div class="flex justify-between items-center text-[11px] font-mono border-b border-slate-800/30 py-3">
+                                <span class="text-slate-400">/ ${item.desc}</span>
+                                <div class="flex items-center gap-3">
+                                    <span class="text-white font-bold">Rp ${item.amount.toLocaleString()}</span>
+                                    <button onclick="deleteEntry('${item.id}')" class="w-8 h-8 flex items-center justify-center bg-danger/10 text-danger rounded-lg hover:bg-danger hover:text-white transition-all">
+                                        <i class="fas fa-trash-alt text-[10px]"></i>
+                                    </button>
+                                </div>
+                            </div>`;
+                    }
+                });
+
+                const totalOut = billTotal + gSnack;
+                const net = gIncome - totalOut;
+
+                board.innerHTML += `
+                    <div class="bg-card rounded-2xl border border-slate-700 overflow-hidden fade-in shadow-xl">
+                        <div class="bg-slate-900/50 px-4 py-3 flex justify-between items-center border-b border-slate-800">
+                            <span class="font-bold text-[10px] tracking-[0.2em] text-white font-mono uppercase">${months[curM]} ${curY}</span>
+                        </div>
+                        <div class="p-5">
+                            <div class="space-y-1 mb-5">
+                                ${listHtml || '<p class="text-[10px] text-muted font-mono italic py-2">DATABASE_EMPTY</p>'}
+                                <div class="flex justify-between items-center text-[11px] font-mono pt-3 text-orange-400">
+                                    <span>/ FIXED_SNACK_BUDGET</span>
+                                    <span>Rp ${gSnack.toLocaleString()}</span>
+                                </div>
+                            </div>
+                            <div class="pt-5 border-t border-slate-800 flex justify-between items-end">
+                                <div>
+                                    <p class="text-[9px] text-muted font-mono uppercase mb-1">Available Net</p>
+                                    <p class="text-2xl font-bold ${net < 0 ? 'text-danger' : 'text-accent'} font-mono leading-none">Rp ${net.toLocaleString()}</p>
+                                </div>
+                                <div class="text-right">
+                                    <span class="text-[9px] font-bold px-3 py-1 rounded border ${net < 0 ? 'bg-danger/10 text-danger border-danger/20' : 'bg-accent/10 text-accent border-accent/20'} tracking-widest">${net < 0 ? 'DEFICIT' : 'STABLE'}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+        }
+    </script>
+</body>
+</html>

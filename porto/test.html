@@ -766,35 +766,35 @@
 
         // --- HELPERS ---
         function loadTvWidget() {
-                const container = el('chart-wrap');
-                if (!container) return;
-                container.innerHTML = '';
+            const container = el('chart-wrap');
+            if (!container) return;
+            container.innerHTML = '';
                 
-                const activeCoinData = appData.coins[appData.activeCoin];
-                if(!activeCoinData) return;
+            const activeCoinData = appData.coins[appData.activeCoin];
+            if(!activeCoinData) return;
             
-                const widgetConfig = {
-                    "autosize": true,
-                    "symbol": activeCoinData.tvSymbol,
-                    "interval": "30",
-                    "timezone": "Etc/UTC",
-                    "theme": "dark",
-                    "style": "1",
-                    "locale": "id",
-                    "enable_publishing": false,
-                    "allow_symbol_change": true,
-                    "calendar": false,
-                    "support_host": "https://www.tradingview.com"
-                };
+            const widgetConfig = {
+                "autosize": true,
+                "symbol": activeCoinData.tvSymbol,
+                "interval": "30",
+                "timezone": "Etc/UTC",
+                "theme": "dark",
+                "style": "1",
+                "locale": "id",
+                "enable_publishing": false,
+                "allow_symbol_change": true,
+                "calendar": false,
+                "support_host": "https://www.tradingview.com"
+            };
             
-                const script = document.createElement('script');
+            const script = document.createElement('script');
                 script.type = 'text/javascript';
                 script.src = 'https://s3.tradingview.com/external-embedding/embed-widget-advanced-chart.js';
                 script.async = true;
                 script.innerHTML = JSON.stringify(widgetConfig);
                 
                 container.appendChild(script);
-            }
+        }
         
         async function fetchFearAndGreed() {
             try {
@@ -822,10 +822,29 @@
         }
 
         async function fetchNews() {
-            if(!appData) return;
-            const res = await fetch(`https://min-api.cryptocompare.com/data/v2/news/?categories=${appData.coins[appData.activeCoin].symbol}&lang=EN`);
-            const json = await res.json();
-            el('news-container').innerHTML = json.Data.slice(0, 3).map(n => `<a href="${n.url}" target="_blank" class="news-item"><p class="news-title">${n.title}</p><p class="news-info">${n.source} • ${new Date(n.published_on * 1000).toLocaleDateString()}</p></a>`).join('');
+            if(!appData || !appData.coins[appData.activeCoin]) return;
+            
+            const coin = appData.coins[appData.activeCoin].symbol;
+            const newsContainer = el('news-container');
+            
+            try {
+                const res = await fetch(`https://min-api.cryptocompare.com/data/v2/news/?categories=${coin}&lang=EN`);
+                const json = await res.json();
+                
+                if (json.Data && json.Data.length > 0) {
+                    newsContainer.innerHTML = json.Data.slice(0, 3).map(n => `
+                        <a href="${n.url}" target="_blank" class="news-item">
+                            <p class="news-title">${n.title}</p>
+                            <p class="news-info">${n.source} • ${new Date(n.published_on * 1000).toLocaleDateString()}</p>
+                        </a>
+                    `).join('');
+                } else {
+                    newsContainer.innerHTML = `<p style="padding:10px; font-size:11px;">Tidak ada berita terbaru untuk ${coin}.</p>`;
+                }
+            } catch (e) {
+                console.error("News Fetch Error:", e);
+                newsContainer.innerHTML = '<p style="color:var(--accent-red); font-size:11px;">Gagal memuat berita.</p>';
+            }
         }
 
         function saveData() {

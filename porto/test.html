@@ -503,21 +503,26 @@
         }
 
         async function fetchMarketData() {
-            const c = appData.coins[appData.activeCoin];
+            const c = appData.coins[appData.activeCoin]; // Pastikan koin ini currency-nya 'IDR'
             if (!c) return;
+            
             try {
-                // Tambahkan API Key di sini juga
+                // Parameter tsyms=${c.currency} bakal jadi tsyms=IDR
                 const url = `https://min-api.cryptocompare.com/data/pricemultifull?fsyms=${c.symbol}&tsyms=${c.currency}&api_key=${CRYPTO_API_KEY}`;
                 const res = await fetch(url);
                 const json = await res.json();
                 
                 if (json.RAW && json.RAW[c.symbol]) {
-                    const raw = json.RAW[c.symbol][c.currency];
+                    // Ambil data dari object IDR
+                    const raw = json.RAW[c.symbol][c.currency]; 
                     currentLivePrice = raw.PRICE;
                     updateUI(raw.PRICE, raw.CHANGEPCT24HOUR);
                 }
-            } catch (e) { }
+            } catch (e) {
+                console.error("Gagal ambil harga:", e);
+            }
         }
+        
         function updateUI(price, change) {
             const d = appData.coins[appData.activeCoin];
             document.querySelectorAll('.currency-label').forEach(s => s.textContent = d.currency);

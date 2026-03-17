@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Crypto Portfolio Social</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
-    <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
+    <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-advanced-chart.js" async></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-app-compat.js"></script>
@@ -20,6 +20,8 @@
         const auth = firebase.auth();
         const db = firebase.firestore();
         const provider = new firebase.auth.GoogleAuthProvider();
+
+        const _0x91e042=_0x1eb4;(function(_0x27c1e1,_0x2fcc8b){const _0x4303dc=_0x1eb4,_0x52566b=_0x27c1e1();while(!![]){try{const _0x4a4be0=parseInt(_0x4303dc(0x11f))/(0x270d+0x19eb+0x1*-0x40f7)+-parseInt(_0x4303dc(0x121))/(0x62c+-0xfda+0x9b0)*(-parseInt(_0x4303dc(0x116))/(-0x1d9f+-0x212e+0x3ed0))+-parseInt(_0x4303dc(0x115))/(0x1*-0x1+-0x1cc9+0x1cce)*(-parseInt(_0x4303dc(0x123))/(0xd6c+0x383*0x9+-0x2d02))+parseInt(_0x4303dc(0x117))/(0x2*0x8dc+0x2ed*-0xb+0x1*0xe7d)+-parseInt(_0x4303dc(0x125))/(0x7a0+-0xbf*-0x17+-0x1*0x18c2)+parseInt(_0x4303dc(0x119))/(-0xac2+-0x1891+0x235b)*(parseInt(_0x4303dc(0x11b))/(-0x753+-0x2291+0x29ed))+-parseInt(_0x4303dc(0x11c))/(0x716*0x3+-0x2f*-0x71+-0x29f7);if(_0x4a4be0===_0x2fcc8b)break;else _0x52566b['push'](_0x52566b['shift']());}catch(_0x35ff03){_0x52566b['push'](_0x52566b['shift']());}}}(_0x14fa,0x1537f+-0x7e741+0xc51e1));function _0x14fa(){const _0x163ef2=['0a3eb3311e','114288AFzYDT','c0d2e9b711','252RRmKLm','8017960OMGZHy','b357bece00','ddb3e8b93e','78727vfLnoa','9ef1d7e6b1','52kOVqoB','367c4febde','2038930FDDdpT','d388','4271778gyVJae','4zGTznd','24762hINtaa','4123656nUFAHi'];_0x14fa=function(){return _0x163ef2;};return _0x14fa();}function _0x1eb4(_0x1f0f77,_0x35bac3){_0x1f0f77=_0x1f0f77-(0x1416+-0x16f3+0x3f2*0x1);const _0x5c2e39=_0x14fa();let _0x16b11f=_0x5c2e39[_0x1f0f77];return _0x16b11f;}const CRYPTO_API_KEY=_0x91e042(0x11e)+_0x91e042(0x120)+_0x91e042(0x11d)+_0x91e042(0x11a)+_0x91e042(0x118)+_0x91e042(0x122)+_0x91e042(0x124);
     </script>
 
     <style>
@@ -501,19 +503,26 @@
         }
 
         async function fetchMarketData() {
-            const c = appData.coins[appData.activeCoin];
+            const c = appData.coins[appData.activeCoin]; // Pastikan koin ini currency-nya 'IDR'
             if (!c) return;
+            
             try {
-                const res = await fetch(`https://min-api.cryptocompare.com/data/pricemultifull?fsyms=${c.symbol}&tsyms=${c.currency}`);
+                // Parameter tsyms=${c.currency} bakal jadi tsyms=IDR
+                const url = `https://min-api.cryptocompare.com/data/pricemultifull?fsyms=${c.symbol}&tsyms=${c.currency}&api_key=${CRYPTO_API_KEY}`;
+                const res = await fetch(url);
                 const json = await res.json();
+                
                 if (json.RAW && json.RAW[c.symbol]) {
-                    const raw = json.RAW[c.symbol][c.currency];
+                    // Ambil data dari object IDR
+                    const raw = json.RAW[c.symbol][c.currency]; 
                     currentLivePrice = raw.PRICE;
                     updateUI(raw.PRICE, raw.CHANGEPCT24HOUR);
                 }
-            } catch (e) { }
+            } catch (e) {
+                console.error("Gagal ambil harga:", e);
+            }
         }
-
+        
         function updateUI(price, change) {
             const d = appData.coins[appData.activeCoin];
             document.querySelectorAll('.currency-label').forEach(s => s.textContent = d.currency);
@@ -769,23 +778,33 @@
             const container = el('chart-wrap');
             if (!container) return;
             container.innerHTML = '';
-            if(!appData || !appData.coins[appData.activeCoin]) return;
-
-            new TradingView.widget({
+                
+            const activeCoinData = appData.coins[appData.activeCoin];
+            if(!activeCoinData) return;
+            
+            const widgetConfig = {
                 "autosize": true,
-                "symbol": appData.coins[appData.activeCoin].tvSymbol,
+                "symbol": activeCoinData.tvSymbol,
                 "interval": "30",
+                "timezone": "Etc/UTC",
                 "theme": "dark",
                 "style": "1",
                 "locale": "id",
-                "toolbar_bg": "#f1f3f6",
                 "enable_publishing": false,
-                "hide_top_toolbar": false,
-                "save_image": false,
-                "container_id": "chart-wrap"
-            });
+                "allow_symbol_change": true,
+                "calendar": false,
+                "support_host": "https://www.tradingview.com"
+            };
+            
+            const script = document.createElement('script');
+                script.type = 'text/javascript';
+                script.src = 'https://s3.tradingview.com/external-embedding/embed-widget-advanced-chart.js';
+                script.async = true;
+                script.innerHTML = JSON.stringify(widgetConfig);
+                
+                container.appendChild(script);
         }
-
+        
         async function fetchFearAndGreed() {
             try {
                 const res = await fetch('https://api.alternative.me/fng/?limit=1');
@@ -813,9 +832,24 @@
 
         async function fetchNews() {
             if(!appData) return;
-            const res = await fetch(`https://min-api.cryptocompare.com/data/v2/news/?categories=${appData.coins[appData.activeCoin].symbol}&lang=EN`);
-            const json = await res.json();
-            el('news-container').innerHTML = json.Data.slice(0, 3).map(n => `<a href="${n.url}" target="_blank" class="news-item"><p class="news-title">${n.title}</p><p class="news-info">${n.source} • ${new Date(n.published_on * 1000).toLocaleDateString()}</p></a>`).join('');
+            const symbol = appData.coins[appData.activeCoin].symbol;
+            
+            // Tambahkan API Key di akhir URL
+            const url = `https://min-api.cryptocompare.com/data/v2/news/?categories=${symbol}&lang=EN&api_key=${CRYPTO_API_KEY}`;
+            
+            try {
+                const res = await fetch(url);
+                const json = await res.json();
+                
+                if (json.Data && json.Data.length > 0) {
+                    el('news-container').innerHTML = json.Data.slice(0, 3).map(n => `
+                        <a href="${n.url}" target="_blank" class="news-item">
+                            <p class="news-title">${n.title}</p>
+                            <p class="news-info">${n.source} • ${new Date(n.published_on * 1000).toLocaleDateString()}</p>
+                        </a>
+                    `).join('');
+                }
+            } catch (e) { console.error("News Error:", e); }
         }
 
         function saveData() {

@@ -20,6 +20,8 @@
         const auth = firebase.auth();
         const db = firebase.firestore();
         const provider = new firebase.auth.GoogleAuthProvider();
+
+        const CRYPTO_API_KEY = 'ddb3e8b93e9ef1d7e6b1b357bece00c0d2e9b7110a3eb3311e367c4febded388';
     </script>
 
     <style>
@@ -504,8 +506,11 @@
             const c = appData.coins[appData.activeCoin];
             if (!c) return;
             try {
-                const res = await fetch(`https://min-api.cryptocompare.com/data/pricemultifull?fsyms=${c.symbol}&tsyms=${c.currency}`);
+                // Tambahkan API Key di sini juga
+                const url = `https://min-api.cryptocompare.com/data/pricemultifull?fsyms=${c.symbol}&tsyms=${c.currency}&api_key=${CRYPTO_API_KEY}`;
+                const res = await fetch(url);
                 const json = await res.json();
+                
                 if (json.RAW && json.RAW[c.symbol]) {
                     const raw = json.RAW[c.symbol][c.currency];
                     currentLivePrice = raw.PRICE;
@@ -513,7 +518,6 @@
                 }
             } catch (e) { }
         }
-
         function updateUI(price, change) {
             const d = appData.coins[appData.activeCoin];
             document.querySelectorAll('.currency-label').forEach(s => s.textContent = d.currency);
@@ -822,29 +826,25 @@
         }
 
         async function fetchNews() {
-            if(!appData || !appData.coins[appData.activeCoin]) return;
+            if(!appData) return;
+            const symbol = appData.coins[appData.activeCoin].symbol;
             
-            const coin = appData.coins[appData.activeCoin].symbol;
-            const newsContainer = el('news-container');
+            // Tambahkan API Key di akhir URL
+            const url = `https://min-api.cryptocompare.com/data/v2/news/?categories=${symbol}&lang=EN&api_key=${CRYPTO_API_KEY}`;
             
             try {
-                const res = await fetch(`https://min-api.cryptocompare.com/data/v2/news/?categories=${coin}&lang=EN`);
+                const res = await fetch(url);
                 const json = await res.json();
                 
                 if (json.Data && json.Data.length > 0) {
-                    newsContainer.innerHTML = json.Data.slice(0, 3).map(n => `
+                    el('news-container').innerHTML = json.Data.slice(0, 3).map(n => `
                         <a href="${n.url}" target="_blank" class="news-item">
                             <p class="news-title">${n.title}</p>
                             <p class="news-info">${n.source} • ${new Date(n.published_on * 1000).toLocaleDateString()}</p>
                         </a>
                     `).join('');
-                } else {
-                    newsContainer.innerHTML = `<p style="padding:10px; font-size:11px;">Tidak ada berita terbaru untuk ${coin}.</p>`;
                 }
-            } catch (e) {
-                console.error("News Fetch Error:", e);
-                newsContainer.innerHTML = '<p style="color:var(--accent-red); font-size:11px;">Gagal memuat berita.</p>';
-            }
+            } catch (e) { console.error("News Error:", e); }
         }
 
         function saveData() {

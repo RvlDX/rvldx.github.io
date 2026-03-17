@@ -766,25 +766,31 @@
 
         // --- HELPERS ---
         function loadTvWidget() {
-            const container = el('chart-wrap');
-            if (!container) return;
-            container.innerHTML = '';
-            if(!appData || !appData.coins[appData.activeCoin]) return;
-
-            new TradingView.widget({
-                "autosize": true,
-                "symbol": appData.coins[appData.activeCoin].tvSymbol,
-                "interval": "30",
-                "theme": "dark",
-                "style": "1",
-                "locale": "id",
-                "toolbar_bg": "#f1f3f6",
-                "enable_publishing": false,
-                "hide_top_toolbar": false,
-                "save_image": false,
-                "container_id": "chart-wrap"
-            });
-        }
+        const container = el('chart-wrap');
+        if (!container) return;
+        container.innerHTML = '';
+        
+        const activeCoinData = appData.coins[appData.activeCoin];
+        if(!activeCoinData) return;
+    
+        // Pastikan library tv.js sudah terload sempurna
+        new TradingView.widget({
+            "autosize": true,
+            "symbol": activeCoinData.tvSymbol, // Contoh: "BINANCE:XRPIDR"
+            "interval": "30",
+            "timezone": "Etc/UTC",
+            "theme": "dark",
+            "style": "1",
+            "locale": "id",
+            "toolbar_bg": "#f1f3f6",
+            "enable_publishing": false,
+            "hide_top_toolbar": false, // Coba set true jika masih 403
+            "save_image": false,
+            "container_id": "chart-wrap",
+            "allow_symbol_change": true,
+            "referral_id": "YOUR_REFERRAL_ID" // Opsional
+        });
+    }
 
         async function fetchFearAndGreed() {
             try {

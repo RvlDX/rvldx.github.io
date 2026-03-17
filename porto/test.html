@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Crypto Portfolio Social</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
-    <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
+    <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-advanced-chart.js" async></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-app-compat.js"></script>
@@ -766,32 +766,36 @@
 
         // --- HELPERS ---
         function loadTvWidget() {
-        const container = el('chart-wrap');
-        if (!container) return;
-        container.innerHTML = '';
+                const container = el('chart-wrap');
+                if (!container) return;
+                container.innerHTML = '';
+                
+                const activeCoinData = appData.coins[appData.activeCoin];
+                if(!activeCoinData) return;
+            
+                const widgetConfig = {
+                    "autosize": true,
+                    "symbol": activeCoinData.tvSymbol,
+                    "interval": "30",
+                    "timezone": "Etc/UTC",
+                    "theme": "dark",
+                    "style": "1",
+                    "locale": "id",
+                    "enable_publishing": false,
+                    "allow_symbol_change": true,
+                    "calendar": false,
+                    "support_host": "https://www.tradingview.com"
+                };
+            
+                const script = document.createElement('script');
+                script.type = 'text/javascript';
+                script.src = 'https://s3.tradingview.com/external-embedding/embed-widget-advanced-chart.js';
+                script.async = true;
+                script.innerHTML = JSON.stringify(widgetConfig);
+                
+                container.appendChild(script);
+            }
         
-        const activeCoinData = appData.coins[appData.activeCoin];
-        if(!activeCoinData) return;
-    
-        // Pastikan library tv.js sudah terload sempurna
-        new TradingView.widget({
-            "autosize": true,
-            "symbol": activeCoinData.tvSymbol, // Contoh: "BINANCE:XRPIDR"
-            "interval": "30",
-            "timezone": "Etc/UTC",
-            "theme": "dark",
-            "style": "1",
-            "locale": "id",
-            "toolbar_bg": "#f1f3f6",
-            "enable_publishing": false,
-            "hide_top_toolbar": false, // Coba set true jika masih 403
-            "save_image": false,
-            "container_id": "chart-wrap",
-            "allow_symbol_change": true,
-            "referral_id": "YOUR_REFERRAL_ID" // Opsional
-        });
-    }
-
         async function fetchFearAndGreed() {
             try {
                 const res = await fetch('https://api.alternative.me/fng/?limit=1');

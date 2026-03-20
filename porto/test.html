@@ -332,9 +332,8 @@
         let myProfile = null;  
         let appData = null;     
         let isReadOnly = false; 
-        let socket = null; // Tambahan untuk Live Update
+        let socket = null; 
         
-        // Template Kosong
         const defaultData = {
             activeCoin: 'XRP',
             coinOrder: ['XRP'],
@@ -345,6 +344,7 @@
         };
         
         let currentLivePrice = 0;
+        let lastKnownChange = null; // Menyimpan persentase terakhir agar tidak balik ke 0%
         const el = (id) => document.getElementById(id);
         
         const fmtMoney = (n, cur) => {
@@ -363,20 +363,15 @@
                 currentUser = user;
                 el('logged-out-view').style.display = 'none';
                 el('logged-in-view').style.display = 'flex';
-                
                 db.collection('users').doc(user.uid).onSnapshot((doc) => {
-                    if (!doc.exists) {
-                        el('modal-username').classList.add('active');
-                    } else {
+                    if (!doc.exists) { el('modal-username').classList.add('active'); } 
+                    else {
                         const data = doc.data();
-                        if (!data.username) {
-                            el('modal-username').classList.add('active');
-                        } else {
+                        if (!data.username) { el('modal-username').classList.add('active'); } 
+                        else {
                             myProfile = data;
                             updateNotifBadge();
-                            if (!isReadOnly) {
-                                loadPortfolio(data, false);
-                            }
+                            if (!isReadOnly) { loadPortfolio(data, false); }
                         }
                     }
                 });
@@ -409,40 +404,26 @@
         function loadPortfolio(data, readOnly) {
             appData = data || JSON.parse(JSON.stringify(defaultData));
             isReadOnly = readOnly;
-        
             if (isReadOnly) {
                 el('exit-view-btn').style.display = 'flex';
                 el('exit-view-btn').innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg> Kembali: @${appData.username || 'Teman'}`;
                 document.querySelectorAll('.edit-only').forEach(e => e.classList.add('readonly-hidden'));
-                const tAdd = document.querySelector('.tab-add');
-                if(tAdd) tAdd.style.display = 'none';
             } else {
                 el('exit-view-btn').style.display = 'none';
                 document.querySelectorAll('.edit-only').forEach(e => e.classList.remove('readonly-hidden'));
-                const tAdd = document.querySelector('.tab-add');
-                if(tAdd) tAdd.style.display = 'flex';
             }
-        
-            if (!appData.coins) appData.coins = { XRP: { symbol: 'XRP', currency: 'IDR', tvSymbol: 'BINANCE:XRPIDR', buy: 0, amount: 0, target: 0 }};
-            if (!appData.coinOrder || !Array.isArray(appData.coinOrder)) appData.coinOrder = Object.keys(appData.coins);
-            if (!appData.coins[appData.activeCoin]) appData.activeCoin = appData.coinOrder[0] || 'XRP';
-        
             renderTabs();
             switchCoin(appData.activeCoin, true);
             fetchFearAndGreed();
             setTimeout(updateTotalAssets, 1000);
         }
         
-        function exitViewMode() {
-            if(myProfile) loadPortfolio(myProfile, false);
-        }
+        function exitViewMode() { if(myProfile) loadPortfolio(myProfile, false); }
         
         async function saveToFirestore() {
             if (currentUser && !isReadOnly && myProfile) {
                 const toSave = { ...appData };
-                delete toSave.friends;
-                delete toSave.requestsSent;
-                delete toSave.requestsReceived;
+                delete toSave.friends; delete toSave.requestsSent; delete toSave.requestsReceived;
                 await db.collection('users').doc(currentUser.uid).set(toSave, { merge: true });
             }
         }
@@ -461,8 +442,7 @@
             });
             if (!isReadOnly) {
                 const btnAdd = document.createElement('div');
-                btnAdd.className = 'tab tab-add';
-                btnAdd.innerHTML = '+';
+                btnAdd.className = 'tab tab-add'; btnAdd.innerHTML = '+';
                 btnAdd.onclick = () => el('modal-add').classList.add('active');
                 container.appendChild(btnAdd);
             }
@@ -471,95 +451,63 @@
         function switchCoin(key, force = false) {
             if (!force && appData.activeCoin === key) return;
             if (!appData.coins[key]) return;
-        
-            el('price-display').textContent = '--';
-            el('change-display').innerHTML = '--';
-            el('pnl-display').innerHTML = '0';
-            currentLivePrice = 0;
-        
+            el('price-display').textContent = '--'; el('change-display').innerHTML = '--';
+            currentLivePrice = 0; lastKnownChange = null;
             appData.activeCoin = key;
             if(!isReadOnly) saveToFirestore();
-        
-            document.querySelectorAll('.tab').forEach(t => {
-                t.classList.toggle('active', t.textContent === key);
-            });
-        
+            document.querySelectorAll('.tab').forEach(t => { t.classList.toggle('active', t.textContent === key); });
             loadTvWidget();
-            fetchMarketData(); // Ambil snapshot harga awal
-            fetchNews();       // Ambil berita terbaru
-            connectWebSocket(key); // Aktifkan update tiap detik
+            fetchMarketData(); 
+            fetchNews();
+            connectWebSocket(key);
         }
         
-        // --- LIVE WEBSOCKET (HEMAT API) ---
+        // --- LOGIKA WEBSOCKET LOCAL (INDODAX/TOKOCRYPTO) ---
         function connectWebSocket(key) {
-            // Tutup koneksi lama jika masih ada
-            if (socket) {
-                console.log("Menutup koneksi lama...");
-                socket.close();
-            }
-            
+            if (socket) socket.close();
             const coin = appData.coins[key];
-            // Gunakan CCCAGG agar harga lebih liar/aktif dibanding Binance IDR saja
-            const subscription = [`5~CCCAGG~${coin.symbol}~${coin.currency}`];
-        
-            console.log("Mencoba menyambung ke WebSocket untuk:", coin.symbol);
             
+            // Gunakan Indodax untuk IDR agar mirip Ajaib, fallback ke CCCAGG untuk USD
+            const exchange = (coin.currency === 'IDR') ? 'Indodax' : 'CCCAGG';
+            const sub = [`2~${exchange}~${coin.symbol}~${coin.currency}`];
+        
             socket = new WebSocket(`wss://streamer.cryptocompare.com/v2?api_key=${CRYPTO_API_KEY}`);
+            socket.onopen = () => { socket.send(JSON.stringify({"action": "SubAdd", "subs": sub})); };
         
-            socket.onopen = function() {
-                console.log("Koneksi WebSocket Berhasil Terbuka!");
-                const subRequest = {
-                    "action": "SubAdd",
-                    "subs": subscription
-                };
-                socket.send(JSON.stringify(subRequest));
-            };
-        
-            socket.onmessage = function(event) {
+            socket.onmessage = (event) => {
                 const data = JSON.parse(event.data);
-                
-                // Cek jika ada pesan error dari server
-                if (data.MESSAGE === "INVALID_SUB") {
-                    console.error("Error: Simbol tidak didukung atau API Key salah!", data);
-                    return;
-                }
-        
-                // Tipe 5 (Trade) atau Tipe 2 (Ticker)
-                if ((data.TYPE === "5" || data.TYPE === "2") && data.PRICE) {
-                    console.log(`Update Harga Live: ${data.PRICE}`); // Cek di console log
+                // Tipe 2 (Ticker) - Paling stabil untuk Indodax
+                if (data.TYPE === "2") {
+                    if (data.PRICE) currentLivePrice = data.PRICE;
+                    if (data.CHANGEPCT24HOUR !== undefined) lastKnownChange = data.CHANGEPCT24HOUR;
+                    updateUI(currentLivePrice, lastKnownChange);
+                } 
+                // Fallback Tipe 5 (Trade) jika ada volatilitas tinggi
+                else if (data.TYPE === "5" && data.PRICE) {
                     currentLivePrice = data.PRICE;
-                    updateUI(data.PRICE, data.CHANGEPCT24HOUR);
+                    updateUI(currentLivePrice, lastKnownChange);
                 }
             };
-        
-            socket.onerror = function(err) {
-                console.error("WebSocket Error:", err);
-            };
-        
-            socket.onclose = function() {
-                console.log("WebSocket Tertutup. Mengecek status...");
-            };
+            socket.onclose = () => { if(!document.hidden) setTimeout(() => connectWebSocket(key), 3000); };
         }
         
-        // Efisiensi Quota: Tutup koneksi kalau tab tidak dilihat
         document.addEventListener("visibilitychange", () => {
-            if (document.hidden && socket) {
-                socket.close();
-            } else if (!document.hidden && appData) {
-                connectWebSocket(appData.activeCoin);
-            }
+            if (document.hidden && socket) { socket.close(); } 
+            else if (!document.hidden && appData) { connectWebSocket(appData.activeCoin); }
         });
         
         async function fetchMarketData() {
             const c = appData.coins[appData.activeCoin];
             if (!c) return;
+            const exchange = (c.currency === 'IDR') ? 'Indodax' : 'CCCAGG';
             try {
-                const res = await fetch(`https://min-api.cryptocompare.com/data/pricemultifull?fsyms=${c.symbol}&tsyms=${c.currency}&api_key=${CRYPTO_API_KEY}`);
+                const res = await fetch(`https://min-api.cryptocompare.com/data/pricemultifull?fsyms=${c.symbol}&tsyms=${c.currency}&e=${exchange}&api_key=${CRYPTO_API_KEY}`);
                 const json = await res.json();
                 if (json.RAW && json.RAW[c.symbol]) {
                     const raw = json.RAW[c.symbol][c.currency];
                     currentLivePrice = raw.PRICE;
-                    updateUI(raw.PRICE, raw.CHANGEPCT24HOUR);
+                    lastKnownChange = raw.CHANGEPCT24HOUR;
+                    updateUI(currentLivePrice, lastKnownChange);
                 }
             } catch (e) { console.error(e); }
         }
@@ -567,126 +515,101 @@
         function updateUI(price, change) {
             const d = appData.coins[appData.activeCoin];
             if (!d) return;
-        
             document.querySelectorAll('.currency-label').forEach(s => s.textContent = d.currency);
-            
-            // 1. Update Harga (Selalu update jika ada harga baru)
             if (price) {
                 el('price-display').textContent = fmtMoney(price);
                 el('value-display').textContent = fmtMoney(price * d.amount);
+                if (d.amount > 0 && d.buy > 0) {
+                    const pnl = (price - d.buy) * d.amount;
+                    const pct = ((pnl / (d.buy * d.amount)) * 100).toFixed(2);
+                    el('pnl-display').innerHTML = `<span class="${pnl >= 0 ? 'text-green' : 'text-red'}">${fmtMoney(pnl)} (${pct}%)</span>`;
+                }
             }
-        
-            // 2. FIX: Hanya update persentase jika angkanya valid (bukan undefined/null)
-            if (change !== undefined && change !== null) {
+            if (change !== null) {
                 el('change-display').innerHTML = `<span class="${change >= 0 ? 'text-green' : 'text-red'}">${change >= 0 ? '+' : ''}${change.toFixed(2)}% (24h)</span>`;
             }
-        
-            // 3. Update PnL & Target (Logika tetap sama)
-            if (d.amount > 0 && d.buy > 0 && price) {
-                const pnl = (price - d.buy) * d.amount;
-                const pct = ((pnl / (d.buy * d.amount)) * 100).toFixed(2);
-                el('pnl-display').innerHTML = `<span class="${pnl >= 0 ? 'text-green' : 'text-red'}">${fmtMoney(pnl)} (${pct}%)</span>`;
-            }
-            
-            // Tampilkan data holding
             el('holdings-display').textContent = d.amount;
             el('buy-display').textContent = fmtMoney(d.buy);
             el('initial-display').textContent = fmtMoney(d.buy * d.amount);
-        
             if (d.target > 0) {
                 el('target-status').textContent = 'Set'; el('target-status').style.color = '#0ecb81';
                 el('target-price-display').textContent = fmtMoney(d.target);
                 el('net-profit-display').textContent = fmtMoney((d.target - d.buy) * d.amount);
+            } else {
+                el('target-status').textContent = 'Off'; el('target-status').style.color = '#777';
+                el('target-price-display').textContent = '-'; el('net-profit-display').textContent = '-';
             }
         }
         
-        // --- SOCIAL ---
+        // --- SOCIAL, NEWS, & UTILS ---
         function updateNotifBadge() {
             const reqs = myProfile.requestsReceived || [];
             el('social-badge').style.display = reqs.length > 0 ? 'block' : 'none';
             el('req-count').style.display = reqs.length > 0 ? 'inline' : 'none';
         }
-        
         function openSocialModal() {
             el('modal-social').classList.add('active');
             if(myProfile.requestsReceived && myProfile.requestsReceived.length > 0) switchSocialTab('req');
             else switchSocialTab('list');
         }
-        
         function switchSocialTab(tab) {
             document.querySelectorAll('.social-tab-btn').forEach(b => b.classList.remove('active'));
-            el('social-content-list').style.display = 'none';
-            el('social-content-req').style.display = 'none';
-            el('social-content-add').style.display = 'none';
-            el('tab-social-' + tab).classList.add('active');
-            el('social-content-' + tab).style.display = 'block';
+            el('social-content-list').style.display = 'none'; el('social-content-req').style.display = 'none'; el('social-content-add').style.display = 'none';
+            el('tab-social-' + tab).classList.add('active'); el('social-content-' + tab).style.display = 'block';
             if(tab === 'list') loadFriendList();
             if(tab === 'req') loadRequestList();
         }
-        
         async function searchUser() {
             const q = el('search-username').value.trim().toLowerCase();
             if(!q) return;
-            const resDiv = el('search-result');
-            resDiv.innerHTML = '<p style="color:#777; font-size:12px">Mencari...</p>';
+            const resDiv = el('search-result'); resDiv.innerHTML = 'Mencari...';
             try {
                 const uDoc = await db.collection('usernames').doc(q).get();
-                if(!uDoc.exists) { resDiv.innerHTML = '<p style="color:var(--accent-red); font-size:12px">User tidak ditemukan.</p>'; return; }
+                if(!uDoc.exists) { resDiv.innerHTML = 'Tidak ditemukan'; return; }
                 const targetUid = uDoc.data().uid;
-                if(targetUid === currentUser.uid) { resDiv.innerHTML = '<p style="color:#777; font-size:12px">Itu Anda sendiri.</p>'; return; }
-                const actionHTML = (myProfile.friends || []).includes(targetUid) ? '<span style="color:#0ecb81; font-size:10px;">Teman</span>' : `<button class="btn btn-save" style="font-size:10px; padding:4px 8px;" onclick="sendRequest('${targetUid}')">Tambah</button>`;
-                resDiv.innerHTML = `<div class="friend-item"><span>@${q}</span>${actionHTML}</div>`;
-            } catch(e) { resDiv.innerHTML = '<p>Error</p>'; }
+                const actionHTML = (myProfile.friends || []).includes(targetUid) ? 'Teman' : `<button onclick="sendRequest('${targetUid}')">Tambah</button>`;
+                resDiv.innerHTML = `@${q} ${actionHTML}`;
+            } catch(e) { resDiv.innerHTML = 'Error'; }
         }
-        
         async function sendRequest(targetUid) {
             const batch = db.batch();
             batch.update(db.collection('users').doc(currentUser.uid), { requestsSent: firebase.firestore.FieldValue.arrayUnion(targetUid) });
             batch.update(db.collection('users').doc(targetUid), { requestsReceived: firebase.firestore.FieldValue.arrayUnion(currentUser.uid) });
-            await batch.commit();
-            showToast('Sent!');
+            await batch.commit(); showToast('Sent!');
         }
-        
         async function loadFriendList() {
-            const container = el('friend-list-container');
-            container.innerHTML = '';
+            const container = el('friend-list-container'); container.innerHTML = '';
             const friends = myProfile.friends || [];
             el('friend-list-loading').style.display = friends.length ? 'none' : 'block';
             for(const uid of friends) {
                 const fDoc = await db.collection('users').doc(uid).get();
                 if(fDoc.exists) {
                     const fData = fDoc.data();
-                    const div = document.createElement('div');
-                    div.className = 'friend-item';
-                    div.innerHTML = `<div onclick="openFriend('${uid}')" style="flex:1;">@${fData.username}</div><button class="btn-xs btn-outline" onclick="unfollowUser('${uid}', '${fData.username}')">Unfollow</button>`;
+                    const div = document.createElement('div'); div.className = 'friend-item';
+                    div.innerHTML = `<div onclick="openFriend('${uid}')" style="flex:1;">@${fData.username}</div><button onclick="unfollowUser('${uid}', '${fData.username}')">Unfollow</button>`;
                     container.appendChild(div);
                 }
             }
         }
-        
         async function openFriend(uid) {
             el('modal-social').classList.remove('active');
             const fDoc = await db.collection('users').doc(uid).get();
             if(fDoc.exists) loadPortfolio(fDoc.data(), true);
         }
-        
         async function loadRequestList() {
-            const container = el('req-list-container');
-            container.innerHTML = '';
+            const container = el('req-list-container'); container.innerHTML = '';
             const reqs = myProfile.requestsReceived || [];
             el('req-list-loading').style.display = reqs.length ? 'none' : 'block';
             for(const uid of reqs) {
                 const fDoc = await db.collection('users').doc(uid).get();
                 if(fDoc.exists) {
                     const fData = fDoc.data();
-                    const div = document.createElement('div');
-                    div.className = 'friend-item';
-                    div.innerHTML = `<div>@${fData.username}</div><div class="friend-actions"><button class="btn-xs btn-save" onclick="respondRequest('${uid}', true)">Terima</button><button class="btn-xs btn-danger" onclick="respondRequest('${uid}', false)">Tolak</button></div>`;
+                    const div = document.createElement('div'); div.className = 'friend-item';
+                    div.innerHTML = `<div>@${fData.username}</div><button onclick="respondRequest('${uid}', true)">Terima</button>`;
                     container.appendChild(div);
                 }
             }
         }
-        
         async function respondRequest(uid, accept) {
             const batch = db.batch();
             const myRef = db.collection('users').doc(currentUser.uid);
@@ -695,39 +618,30 @@
             batch.update(tarRef, { requestsSent: firebase.firestore.FieldValue.arrayRemove(currentUser.uid) });
             if(accept) {
                 batch.update(myRef, { friends: firebase.firestore.FieldValue.arrayUnion(uid) });
-                batch.update(tarRef, { friends: firebase.firestore.FieldValue.arrayUnion(currentUser.uid) });
+                batch.update(tarRef, { friends: firebase.firestore.FieldValue.arrayUnion(uid) });
             }
-            await batch.commit();
-            showToast(accept ? 'Accepted' : 'Rejected');
+            await batch.commit(); showToast('Done');
         }
-        
         function unfollowUser(uid, name) {
-            Swal.fire({ title: 'Unfollow @' + name + '?', icon: 'warning', showCancelButton: true, background: '#1a1a1a', color: '#fff' }).then(async r => {
+            Swal.fire({ title: 'Unfollow @' + name + '?', icon: 'warning', showCancelButton: true }).then(async r => {
                 if(r.isConfirmed) {
                     const batch = db.batch();
                     batch.update(db.collection('users').doc(currentUser.uid), { friends: firebase.firestore.FieldValue.arrayRemove(uid) });
                     batch.update(db.collection('users').doc(uid), { friends: firebase.firestore.FieldValue.arrayRemove(currentUser.uid) });
-                    await batch.commit();
-                    showToast('Unfollowed');
+                    await batch.commit(); showToast('Unfollowed');
                 }
             });
         }
-        
-        // --- UTILS ---
         function loadTvWidget() {
-            const container = el('chart-wrap');
-            if (!container) return;
+            const container = el('chart-wrap'); if (!container) return;
             container.innerHTML = '';
             const coin = appData.coins[appData.activeCoin];
-            const widgetConfig = { "autosize": true, "symbol": coin.tvSymbol, "interval": "30", "timezone": "Etc/UTC", "theme": "dark", "style": "1", "locale": "id", "enable_publishing": false, "allow_symbol_change": true, "support_host": "https://www.tradingview.com" };
+            const widgetConfig = { "autosize": true, "symbol": coin.tvSymbol, "interval": "30", "theme": "dark", "style": "1", "locale": "id", "container_id": "chart-wrap" };
             const script = document.createElement('script');
-            script.type = 'text/javascript';
-            script.src = 'https://s3.tradingview.com/external-embedding/embed-widget-advanced-chart.js';
-            script.async = true;
-            script.innerHTML = JSON.stringify(widgetConfig);
+            script.type = 'text/javascript'; script.src = 'https://s3.tradingview.com/external-embedding/embed-widget-advanced-chart.js';
+            script.async = true; script.innerHTML = JSON.stringify(widgetConfig);
             container.appendChild(script);
         }
-        
         async function fetchFearAndGreed() {
             try {
                 const res = await fetch('https://api.alternative.me/fng/?limit=1');
@@ -737,7 +651,6 @@
                 el('fng-fill').style.width = json.data[0].value + '%';
             } catch (e) { }
         }
-        
         async function updateTotalAssets() {
             if(!appData) return;
             const coins = Object.values(appData.coins);
@@ -747,10 +660,9 @@
                 const json = await res.json();
                 let total = 0;
                 coins.forEach(c => { if (json[c.symbol]) total += (json[c.symbol].IDR * c.amount); });
-                el('total-asset-display').textContent = 'Rp ' + total.toLocaleString('id-ID', { minimumFractionDigits: 0, maximumFractionDigits: 0 });
+                el('total-asset-display').textContent = 'Rp ' + total.toLocaleString('id-ID');
             } catch (e) {}
         }
-        
         async function fetchNews() {
             if(!appData) return;
             const symbol = appData.coins[appData.activeCoin].symbol;
@@ -758,11 +670,10 @@
                 const res = await fetch(`https://min-api.cryptocompare.com/data/v2/news/?categories=${symbol}&lang=EN&api_key=${CRYPTO_API_KEY}`);
                 const json = await res.json();
                 if (json.Data) {
-                    el('news-container').innerHTML = json.Data.slice(0, 3).map(n => `<a href="${n.url}" target="_blank" class="news-item"><p class="news-title">${n.title}</p><p class="news-info">${n.source} • ${new Date(n.published_on * 1000).toLocaleDateString()}</p></a>`).join('');
+                    el('news-container').innerHTML = json.Data.slice(0, 3).map(n => `<a href="${n.url}" target="_blank" class="news-item"><p class="news-title">${n.title}</p><p class="news-info">${n.source}</p></a>`).join('');
                 }
             } catch (e) { }
         }
-        
         function saveData() {
             if(isReadOnly) return;
             const d = appData.coins[appData.activeCoin];
@@ -770,33 +681,23 @@
             saveToFirestore(); el('modal').classList.remove('active'); fetchMarketData(); connectWebSocket(appData.activeCoin); updateTotalAssets();
             showToast("Disimpan");
         }
-        
         function executeAddCoin() {
             if(isReadOnly) return;
             const s = el('add-symbol').value.trim().toUpperCase();
             const t = el('add-tv-symbol').value.trim();
             if (!s || !t) return;
-            if (appData.coins[s]) { showToast("Koin sudah ada!"); return; }
             appData.coins[s] = { symbol: s, currency: el('add-currency').value, tvSymbol: t, buy: 0, amount: 0, target: 0 };
             if (!appData.coinOrder.includes(s)) appData.coinOrder.push(s);
-            saveToFirestore(); el('modal-add').classList.remove('active');
-            renderTabs(); switchCoin(s);
+            saveToFirestore(); el('modal-add').classList.remove('active'); renderTabs(); switchCoin(s);
         }
-        
         function deleteCurrentCoin() {
             if(isReadOnly || appData.coinOrder.length <= 1) return;
-            Swal.fire({ title: 'Hapus?', icon: 'warning', showCancelButton: true, background: '#1a1a1a', color: '#fff' }).then(r => {
-                if (r.isConfirmed) {
-                    const toDel = appData.activeCoin;
-                    delete appData.coins[toDel];
-                    appData.coinOrder = appData.coinOrder.filter(i => i !== toDel);
-                    appData.activeCoin = appData.coinOrder[0];
-                    saveToFirestore(); loadPortfolio(appData, false);
-                    el('modal').classList.remove('active');
-                }
-            });
+            const toDel = appData.activeCoin;
+            delete appData.coins[toDel];
+            appData.coinOrder = appData.coinOrder.filter(i => i !== toDel);
+            appData.activeCoin = appData.coinOrder[0];
+            saveToFirestore(); loadPortfolio(appData, false); el('modal').classList.remove('active');
         }
-        
         function calcDCA() {
             const m = parseFloat(el('inp-dca').value) || 0; const d = appData.coins[appData.activeCoin];
             if (m > 0 && currentLivePrice > 0) {
@@ -805,10 +706,8 @@
                 el('res-dca-avg').textContent = fmtMoney(((d.buy * d.amount) + m) / (d.amount + n));
             } else el('dca-box').style.display = 'none';
         }
-        
         function showToast(msg) { Swal.fire({ icon: 'success', title: msg, toast: true, position: 'bottom', showConfirmButton: false, timer: 1500, background: '#1a1a1a', color: '#fff' }); }
         function toggleVis(id) { el(id).classList.toggle('value-hidden'); }
-        
         el('btn-settings').onclick = () => {
             if(isReadOnly) return;
             const d = appData.coins[appData.activeCoin];

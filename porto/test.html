@@ -492,30 +492,53 @@
         
         // --- LIVE WEBSOCKET (HEMAT API) ---
         function connectWebSocket(key) {
-            if (socket) socket.close();
+            // Tutup koneksi lama jika masih ada
+            if (socket) {
+                console.log("Menutup koneksi lama...");
+                socket.close();
+            }
             
             const coin = appData.coins[key];
+            // Gunakan CCCAGG agar harga lebih liar/aktif dibanding Binance IDR saja
+            const subscription = [`5~CCCAGG~${coin.symbol}~${coin.currency}`];
+        
+            console.log("Mencoba menyambung ke WebSocket untuk:", coin.symbol);
+            
             socket = new WebSocket(`wss://streamer.cryptocompare.com/v2?api_key=${CRYPTO_API_KEY}`);
         
             socket.onopen = function() {
+                console.log("Koneksi WebSocket Berhasil Terbuka!");
                 const subRequest = {
                     "action": "SubAdd",
-                    "subs": [`2~Binance~${coin.symbol}~${coin.currency}`]
+                    "subs": subscription
                 };
                 socket.send(JSON.stringify(subRequest));
             };
         
             socket.onmessage = function(event) {
-            const data = JSON.parse(event.data);
-            
-            // Tipe 2 = Update Harga (Ticker)
-            if (data.TYPE === "2") {
-                if (data.PRICE) currentLivePrice = data.PRICE;
+                const data = JSON.parse(event.data);
                 
-                // Kirim data.PRICE dan data.CHANGEPCT24HOUR apa adanya (bisa undefined)
-                updateUI(data.PRICE, data.CHANGEPCT24HOUR);
-            }
-        };
+                // Cek jika ada pesan error dari server
+                if (data.MESSAGE === "INVALID_SUB") {
+                    console.error("Error: Simbol tidak didukung atau API Key salah!", data);
+                    return;
+                }
+        
+                // Tipe 5 (Trade) atau Tipe 2 (Ticker)
+                if ((data.TYPE === "5" || data.TYPE === "2") && data.PRICE) {
+                    console.log(`Update Harga Live: ${data.PRICE}`); // Cek di console log
+                    currentLivePrice = data.PRICE;
+                    updateUI(data.PRICE, data.CHANGEPCT24HOUR);
+                }
+            };
+        
+            socket.onerror = function(err) {
+                console.error("WebSocket Error:", err);
+            };
+        
+            socket.onclose = function() {
+                console.log("WebSocket Tertutup. Mengecek status...");
+            };
         }
         
         // Efisiensi Quota: Tutup koneksi kalau tab tidak dilihat

@@ -506,12 +506,16 @@
             };
         
             socket.onmessage = function(event) {
-                const data = JSON.parse(event.data);
-                if (data.TYPE === "2" && data.PRICE) {
-                    currentLivePrice = data.PRICE;
-                    updateUI(data.PRICE, data.CHANGEPCT24HOUR || 0);
-                }
-            };
+            const data = JSON.parse(event.data);
+            
+            // Tipe 2 = Update Harga (Ticker)
+            if (data.TYPE === "2") {
+                if (data.PRICE) currentLivePrice = data.PRICE;
+                
+                // Kirim data.PRICE dan data.CHANGEPCT24HOUR apa adanya (bisa undefined)
+                updateUI(data.PRICE, data.CHANGEPCT24HOUR);
+            }
+        };
         }
         
         // Efisiensi Quota: Tutup koneksi kalau tab tidak dilihat
@@ -539,26 +543,37 @@
         
         function updateUI(price, change) {
             const d = appData.coins[appData.activeCoin];
-            document.querySelectorAll('.currency-label').forEach(s => s.textContent = d.currency);
-            el('price-display').textContent = fmtMoney(price);
-            el('change-display').innerHTML = `<span class="${change >= 0 ? 'text-green' : 'text-red'}">${change >= 0 ? '+' : ''}${change.toFixed(2)}% (24h)</span>`;
-            el('holdings-display').textContent = d.amount;
-            el('buy-display').textContent = fmtMoney(d.buy);
-            el('initial-display').textContent = fmtMoney(d.buy * d.amount);
-            el('value-display').textContent = fmtMoney(price * d.amount);
+            if (!d) return;
         
-            if (d.amount > 0 && d.buy > 0) {
+            document.querySelectorAll('.currency-label').forEach(s => s.textContent = d.currency);
+            
+            // 1. Update Harga (Selalu update jika ada harga baru)
+            if (price) {
+                el('price-display').textContent = fmtMoney(price);
+                el('value-display').textContent = fmtMoney(price * d.amount);
+            }
+        
+            // 2. FIX: Hanya update persentase jika angkanya valid (bukan undefined/null)
+            if (change !== undefined && change !== null) {
+                el('change-display').innerHTML = `<span class="${change >= 0 ? 'text-green' : 'text-red'}">${change >= 0 ? '+' : ''}${change.toFixed(2)}% (24h)</span>`;
+            }
+        
+            // 3. Update PnL & Target (Logika tetap sama)
+            if (d.amount > 0 && d.buy > 0 && price) {
                 const pnl = (price - d.buy) * d.amount;
                 const pct = ((pnl / (d.buy * d.amount)) * 100).toFixed(2);
                 el('pnl-display').innerHTML = `<span class="${pnl >= 0 ? 'text-green' : 'text-red'}">${fmtMoney(pnl)} (${pct}%)</span>`;
             }
+            
+            // Tampilkan data holding
+            el('holdings-display').textContent = d.amount;
+            el('buy-display').textContent = fmtMoney(d.buy);
+            el('initial-display').textContent = fmtMoney(d.buy * d.amount);
+        
             if (d.target > 0) {
                 el('target-status').textContent = 'Set'; el('target-status').style.color = '#0ecb81';
                 el('target-price-display').textContent = fmtMoney(d.target);
                 el('net-profit-display').textContent = fmtMoney((d.target - d.buy) * d.amount);
-            } else {
-                el('target-status').textContent = 'Off'; el('target-status').style.color = '#777';
-                el('target-price-display').textContent = '-'; el('net-profit-display').textContent = '-';
             }
         }
         

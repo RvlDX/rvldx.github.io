@@ -13,7 +13,6 @@
         @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400&family=Inter:wght@400;900&display=swap');
         :root { --gold: #c5a059; --charcoal: #050505; --crimson: #dc2626; }
         
-        /* KUNCI LAYAR BIAR GAK BISA SCROLL SAMA SEKALI */
         body { 
             font-family: 'Inter', sans-serif; 
             background-color: var(--charcoal); 
@@ -23,25 +22,18 @@
         }
         .serif { font-family: 'Playfair Display', serif; }
 
-        /* HEADER 60px */
         header { position: absolute; top: 0; left: 0; width: 100%; height: 60px; background: rgba(0,0,0,0.9); border-bottom: 1px solid rgba(255,255,255,0.05); z-index: 40; }
-        
-        /* FOOTER 80px */
         footer { position: absolute; bottom: 0; left: 0; width: 100%; height: 80px; background: #000; border-top: 1px solid rgba(255,255,255,0.05); z-index: 40; }
 
-        /* AREA PAPAN - JARAK PAS 50px DARI HEADER & FOOTER */
         .board-wrapper {
             position: absolute;
-            top: 110px; /* 60px header + 50px jarak */
-            bottom: 130px; /* 80px footer + 50px jarak */
-            left: 0; right: 0;
+            top: 110px; bottom: 130px; left: 0; right: 0;
             display: flex; justify-content: center; align-items: center;
         }
 
         .board-container {
             display: grid; grid-template-columns: repeat(10, 1fr); gap: 1.5px;
             width: 100%; max-width: 95vw; max-height: 100%; aspect-ratio: 1/1;
-            /* Garis grid dibikin lebih terang (emas) biar papan tegas */
             background: rgba(197, 160, 89, 0.5); 
             padding: 2.5px; border-radius: 6px;
             box-shadow: 0 0 20px rgba(197, 160, 89, 0.15);
@@ -49,7 +41,6 @@
 
         .cell {
             position: relative; display: flex; align-items: center; justify-content: center;
-            /* Angka dibikin lebih putih cerah dan dikasih shadow biar gak nyaru sama SVG */
             font-size: 10px; font-weight: 900; color: #f3f4f6; background: #0a0a0a;
             border-radius: 2px; overflow: hidden;
             text-shadow: 0 0 3px #000, 0 0 5px #000;
@@ -57,7 +48,6 @@
         
         .cell-number { z-index: 10; }
         
-        /* PION ANTI NUMPUK */
         .pion {
             width: 12px; height: 12px; border-radius: 50%; position: absolute;
             transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
@@ -66,7 +56,6 @@
         .pion-cowo { background-color: var(--gold); top: 10%; left: 10%; z-index: 20; }
         .pion-cewe { background-color: var(--crimson); bottom: 10%; right: 10%; z-index: 21; }
         
-        /* CARD FLIP */
         .perspective { perspective: 1000px; }
         .card-inner { width: 100%; height: 100%; transition: transform 0.6s; transform-style: preserve-3d; position: relative; }
         .is-flipped { transform: rotateY(180deg); }
@@ -91,13 +80,17 @@
                 <p class="text-[9px] font-black uppercase">Cewe</p>
             </div>
         </div>
-        
         <button id="start-btn" onclick="startGame()" class="opacity-0 pointer-events-none translate-y-4 transition-all duration-300 bg-[#c5a059] text-black px-12 py-3.5 rounded-full font-black uppercase text-[11px] tracking-widest active:scale-95">Connect</button>
     </div>
 
     <div id="game-screen" class="hidden h-full w-full">
         <header class="flex justify-between items-center px-4">
-            <h1 class="serif text-xl text-[#c5a059]">The Ritual</h1>
+            <div class="flex items-center gap-3">
+                <h1 class="serif text-xl text-[#c5a059]">The Ritual</h1>
+                <button onclick="requestReset()" class="text-[#c5a059] opacity-50 hover:opacity-100 transition-opacity p-2 active:scale-95">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+                </button>
+            </div>
             <div class="flex gap-4">
                 <div id="ui-cowo" class="text-right opacity-30"><p class="text-[8px] font-bold text-gray-500">COWO</p><p class="text-xs font-black text-[#c5a059]">#<span id="pos-1">1</span></p></div>
                 <div id="ui-cewe" class="text-right opacity-30"><p class="text-[8px] font-bold text-gray-500">CEWE</p><p class="text-xs font-black text-red-600">#<span id="pos-2">1</span></p></div>
@@ -120,7 +113,7 @@
     <div id="modal" class="fixed inset-0 bg-black/98 flex items-center justify-center p-8 hidden z-50">
         <div class="perspective w-full max-w-[280px] aspect-[3/4]">
             <div id="card-inner" class="card-inner" onclick="flipCard()">
-                <div class="card-front"><p class="font-black text-black text-[10px] tracking-widest">TAP TO REVEAL</p></div>
+                <div class="card-front"><p class="font-black text-black text-[10px] tracking-widest text-center px-4">TAP TO REVEAL<br><span class="text-[7px] text-gray-800 tracking-normal normal-case">(Klik kartunya)</span></p></div>
                 <div class="card-back flex flex-col justify-between py-8">
                     <span class="text-[#c5a059] text-[9px] tracking-[0.3em] uppercase font-bold">Instruction</span>
                     <p id="modal-desc" class="serif text-[18px] leading-snug text-white px-3 my-auto"></p>
@@ -130,8 +123,15 @@
         </div>
     </div>
 
+    <div id="reset-modal" class="fixed inset-0 bg-black/95 flex items-center justify-center p-8 hidden z-[60]">
+        <div class="border border-[#c5a059] bg-[#0a0a0a] p-8 rounded-2xl text-center w-full max-w-[280px] shadow-[0_0_30px_rgba(197,160,89,0.2)]">
+            <h3 class="serif text-2xl text-[#c5a059] mb-4">Reset Ritual?</h3>
+            <p id="reset-text" class="text-[11px] text-gray-300 mb-8 leading-relaxed">...</p>
+            <div id="reset-actions" class="flex gap-4"></div>
+        </div>
+    </div>
+
     <script>
-        // CONFIG FIREBASE BARU LU
         const firebaseConfig = {
             apiKey: "AIzaSyBQzOliNqHDI0ccFc4ha0JrjrZNrh0TPsw",
             authDomain: "rvldx-chat.firebaseapp.com",
@@ -141,13 +141,12 @@
             appId: "1:1019557266823:web:0b36b080f1e735afecbf22"
         };
 
-        // INISIALISASI
         firebase.initializeApp(firebaseConfig);
         const db = firebase.firestore();
-        // Pakai session ID baru biar fresh
-        const GAME_ID = "ritual_rvldx_session_1";
+        
+        // GANTI ID BIAR BERSIH 100%
+        const GAME_ID = "ritual_chain_reaction_v1";
 
-        // 100 TANTANGAN FULL
         const allChallenges = [
             "START: Siap-siap 'Hajar'", "Tatap matanya 1 mnt", "Kamu maju 2 langkah!", "Pegang bagian tubuh dia favoritmu saat ini", "Dia maju 2 langkah!",
             "Bisikkan kata-kata nakal ke telinganya", "Pelukan 2 mnt", "Kiss pipi dia", "Garuk punggung dia 2 mnt", "Cium titik lemah dia 1 mnt",
@@ -171,14 +170,14 @@
             "Dia maju 2 langkah", "3 mnt gaya favorit kamu", "3 mnt sex mendesah berisik", "3 mnt gaya favorit berdua", "FINISH: SIAP-SIAP RONDE 2"
         ];
 
-        let myRole = ""; let state = { p1: 1, p2: 1, turn: 'cowo', lastChallenge: "" };
+        let myRole = ""; 
+        let state = { p1: 1, p2: 1, turn: 'cowo', lastChallenge: "", lastRoller: "", resetRequest: "" };
 
         function selectRole(r) {
             myRole = r;
             document.querySelectorAll('[id^="btn-"]').forEach(el => el.classList.replace('border-[var(--gold)]', 'border-white/10'));
             document.getElementById(`btn-${r}`).classList.replace('border-white/10', 'border-[var(--gold)]');
             
-            // TAMPILKAN TOMBOL CONNECT DENGAN EFEK FADE & SLIDE UP
             const btn = document.getElementById('start-btn');
             btn.classList.remove('opacity-0', 'pointer-events-none', 'translate-y-4');
         }
@@ -268,10 +267,49 @@
             document.getElementById('ui-cowo').style.opacity = state.turn === 'cowo' ? "1" : "0.2";
             document.getElementById('ui-cewe').style.opacity = state.turn === 'cewe' ? "1" : "0.2";
             
-            if (state.lastChallenge) {
+            if (state.lastChallenge && state.lastChallenge !== "") {
                 document.getElementById('modal-desc').innerText = `"${state.lastChallenge}"`;
                 document.getElementById('modal').style.display = 'flex';
+            } else {
+                document.getElementById('modal').style.display = 'none';
+                document.getElementById('card-inner').classList.remove('is-flipped');
             }
+
+            // RESET LOGIC
+            const resetModal = document.getElementById('reset-modal');
+            const resetText = document.getElementById('reset-text');
+            const resetActions = document.getElementById('reset-actions');
+
+            if (state.resetRequest && state.resetRequest !== "") {
+                resetModal.classList.remove('hidden');
+                if (state.resetRequest === myRole) {
+                    resetText.innerText = "Menunggu persetujuan pasangan...";
+                    resetActions.innerHTML = `<button onclick="cancelReset()" class="w-full py-3 border border-red-500/50 text-red-500 rounded-full font-black uppercase text-[10px] active:scale-95">Batal Request</button>`;
+                } else {
+                    resetText.innerText = "Pasanganmu mengajak untuk mengulang ritual dari awal. Setuju?";
+                    resetActions.innerHTML = `
+                        <button onclick="cancelReset()" class="flex-1 py-3 border border-red-500/50 text-red-500 rounded-full font-black uppercase text-[10px] active:scale-95">Tolak</button>
+                        <button onclick="confirmReset()" class="flex-1 py-3 bg-[#c5a059] text-black rounded-full font-black uppercase text-[10px] active:scale-95">Setuju</button>
+                    `;
+                }
+            } else {
+                resetModal.classList.add('hidden');
+            }
+        }
+
+        function requestReset() {
+            if(state.resetRequest) return; 
+            db.collection("games").doc(GAME_ID).update({ resetRequest: myRole });
+        }
+
+        function confirmReset() {
+            db.collection("games").doc(GAME_ID).update({
+                p1: 1, p2: 1, turn: 'cowo', lastChallenge: "", lastRoller: "", resetRequest: ""
+            });
+        }
+
+        function cancelReset() {
+            db.collection("games").doc(GAME_ID).update({ resetRequest: "" });
         }
 
         function rollDice() {
@@ -289,7 +327,7 @@
                 const task = allChallenges[posisiBaru - 1]; 
 
                 db.collection("games").doc(GAME_ID).update({ 
-                    p1: np1, p2: np2, lastChallenge: task, turn: myRole === 'cowo' ? 'cewe' : 'cowo' 
+                    p1: np1, p2: np2, lastChallenge: task, lastRoller: myRole
                 });
             }, 600);
         }
@@ -300,12 +338,59 @@
         
         function closeModal() {
             document.getElementById('card-inner').classList.remove('is-flipped');
+            
             setTimeout(() => {
                 document.getElementById('modal').style.display = 'none';
-                if (state.turn === myRole) {
-                    db.collection("games").doc(GAME_ID).update({ lastChallenge: "" });
+                
+                // === AUTO-MOVE ENGINE BERUNTUN (CHAIN REACTION) ===
+                if (state.lastRoller === myRole && state.lastChallenge !== "") {
+                    let taskText = state.lastChallenge.toLowerCase();
+                    let np1 = state.p1;
+                    let np2 = state.p2;
+                    let nextTurn = (myRole === 'cowo') ? 'cewe' : 'cowo';
+                    let newTask = ""; 
+                    let moves = 0;
+                    let target = null;
+
+                    // BACA PERINTAH KARTU
+                    if (taskText.includes("dia maju")) {
+                        let match = taskText.match(/dia maju (\d+)/);
+                        if(match) { moves = parseInt(match[1]); target = (myRole === 'cowo' ? 'cewe' : 'cowo'); }
+                    } else if (taskText.includes("dia mundur")) {
+                        let match = taskText.match(/dia mundur (\d+)/);
+                        if(match) { moves = -parseInt(match[1]); target = (myRole === 'cowo' ? 'cewe' : 'cowo'); }
+                    } else if (taskText.includes("maju")) {
+                        let match = taskText.match(/maju (\d+)/);
+                        if(match) { moves = parseInt(match[1]); target = myRole; }
+                    } else if (taskText.includes("mundur")) {
+                        let match = taskText.match(/mundur (\d+)/);
+                        if(match) { moves = -parseInt(match[1]); target = myRole; }
+                    }
+
+                    // TAHAN GILIRAN JIKA BONUS DADU
+                    if (taskText.includes("lempar dadu")) {
+                        nextTurn = myRole; 
+                    }
+
+                    // EKSEKUSI CHAIN REACTION JIKA ADA MAJU/MUNDUR
+                    if (target !== null && moves !== 0) {
+                        if (target === 'cowo') {
+                            np1 = Math.min(Math.max(np1 + moves, 1), 100);
+                            newTask = allChallenges[np1 - 1]; // Tarik kartu dari kotak baru
+                        } else {
+                            np2 = Math.min(Math.max(np2 + moves, 1), 100);
+                            newTask = allChallenges[np2 - 1]; // Tarik kartu dari kotak baru
+                        }
+                        
+                        // KARENA ADA KARTU BARU, TAHAN GILIRAN DI ROLLER BIAR BISA NUTUP KARTU TERSEBUT
+                        nextTurn = myRole;
+                    }
+
+                    db.collection("games").doc(GAME_ID).update({ 
+                        p1: np1, p2: np2, lastChallenge: newTask, turn: nextTurn 
+                    });
                 }
-            }, 400);
+            }, 400); // Tunggu animasi tutup kartu sebelum nembak DB
         }
     </script>
 </body>

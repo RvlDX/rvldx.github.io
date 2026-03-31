@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>The Ritual</title>
+    <title>The Ritual 🔥</title>
     <script src="https://cdn.tailwindcss.com"></script>
     
     <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-app-compat.js"></script>
@@ -113,7 +113,7 @@
     <div id="modal" class="fixed inset-0 bg-black/98 flex items-center justify-center p-8 hidden z-50">
         <div class="perspective w-full max-w-[280px] aspect-[3/4]">
             <div id="card-inner" class="card-inner" onclick="flipCard()">
-                <div class="card-front"><p class="font-black text-black text-[10px] tracking-widest">TAP TO REVEAL</p></div>
+                <div class="card-front"><p class="font-black text-black text-[10px] tracking-widest text-center px-4">TAP TO REVEAL<br><span class="text-[7px] text-gray-800 tracking-normal normal-case">(Klik kartunya)</span></p></div>
                 <div class="card-back flex flex-col justify-between py-8">
                     <span class="text-[#c5a059] text-[9px] tracking-[0.3em] uppercase font-bold">Instruction</span>
                     <p id="modal-desc" class="serif text-[18px] leading-snug text-white px-3 my-auto"></p>
@@ -127,8 +127,7 @@
         <div class="border border-[#c5a059] bg-[#0a0a0a] p-8 rounded-2xl text-center w-full max-w-[280px] shadow-[0_0_30px_rgba(197,160,89,0.2)]">
             <h3 class="serif text-2xl text-[#c5a059] mb-4">Reset Ritual?</h3>
             <p id="reset-text" class="text-[11px] text-gray-300 mb-8 leading-relaxed">...</p>
-            <div id="reset-actions" class="flex gap-4">
-                </div>
+            <div id="reset-actions" class="flex gap-4"></div>
         </div>
     </div>
 
@@ -145,8 +144,8 @@
         firebase.initializeApp(firebaseConfig);
         const db = firebase.firestore();
         
-        // Ganti ID Biar Bersih Dari Cache Sebelumnya
-        const GAME_ID = "ritual_final_v1";
+        // GANTI ID BIAR BERSIH 100%
+        const GAME_ID = "ritual_chain_reaction_v1";
 
         const allChallenges = [
             "START: Siap-siap 'Hajar'", "Tatap matanya 1 mnt", "Kamu maju 2 langkah!", "Pegang bagian tubuh dia favoritmu saat ini", "Dia maju 2 langkah!",
@@ -171,7 +170,6 @@
             "Dia maju 2 langkah", "3 mnt gaya favorit kamu", "3 mnt sex mendesah berisik", "3 mnt gaya favorit berdua", "FINISH: SIAP-SIAP RONDE 2"
         ];
 
-        // TAMBAHAN: resetRequest untuk trigger confirmasi ganda
         let myRole = ""; 
         let state = { p1: 1, p2: 1, turn: 'cowo', lastChallenge: "", lastRoller: "", resetRequest: "" };
 
@@ -277,7 +275,7 @@
                 document.getElementById('card-inner').classList.remove('is-flipped');
             }
 
-            // === LOGIKA TAMPILAN RESET MODAL ===
+            // RESET LOGIC
             const resetModal = document.getElementById('reset-modal');
             const resetText = document.getElementById('reset-text');
             const resetActions = document.getElementById('reset-actions');
@@ -285,12 +283,10 @@
             if (state.resetRequest && state.resetRequest !== "") {
                 resetModal.classList.remove('hidden');
                 if (state.resetRequest === myRole) {
-                    // Jika kita yang request reset
-                    resetText.innerText = "Menunggu persetujuan pasangan untuk reset ritual...";
+                    resetText.innerText = "Menunggu persetujuan pasangan...";
                     resetActions.innerHTML = `<button onclick="cancelReset()" class="w-full py-3 border border-red-500/50 text-red-500 rounded-full font-black uppercase text-[10px] active:scale-95">Batal Request</button>`;
                 } else {
-                    // Jika pasangan yang request reset
-                    resetText.innerText = "Pasanganmu mengajak untuk mengulang ritual dari awal. Apakah kamu setuju?";
+                    resetText.innerText = "Pasanganmu mengajak untuk mengulang ritual dari awal. Setuju?";
                     resetActions.innerHTML = `
                         <button onclick="cancelReset()" class="flex-1 py-3 border border-red-500/50 text-red-500 rounded-full font-black uppercase text-[10px] active:scale-95">Tolak</button>
                         <button onclick="confirmReset()" class="flex-1 py-3 bg-[#c5a059] text-black rounded-full font-black uppercase text-[10px] active:scale-95">Setuju</button>
@@ -301,24 +297,20 @@
             }
         }
 
-        // ================= FUNGI RESET =================
         function requestReset() {
             if(state.resetRequest) return; 
             db.collection("games").doc(GAME_ID).update({ resetRequest: myRole });
         }
 
         function confirmReset() {
-            // Balikin semua ke kondisi awal
             db.collection("games").doc(GAME_ID).update({
                 p1: 1, p2: 1, turn: 'cowo', lastChallenge: "", lastRoller: "", resetRequest: ""
             });
         }
 
         function cancelReset() {
-            // Batalin request reset
             db.collection("games").doc(GAME_ID).update({ resetRequest: "" });
         }
-        // ===============================================
 
         function rollDice() {
             const dice = document.getElementById('dice-box');
@@ -350,6 +342,7 @@
             setTimeout(() => {
                 document.getElementById('modal').style.display = 'none';
                 
+                // === AUTO-MOVE ENGINE BERUNTUN (CHAIN REACTION) ===
                 if (state.lastRoller === myRole && state.lastChallenge !== "") {
                     let taskText = state.lastChallenge.toLowerCase();
                     let np1 = state.p1;
@@ -359,6 +352,7 @@
                     let moves = 0;
                     let target = null;
 
+                    // BACA PERINTAH KARTU
                     if (taskText.includes("dia maju")) {
                         let match = taskText.match(/dia maju (\d+)/);
                         if(match) { moves = parseInt(match[1]); target = (myRole === 'cowo' ? 'cewe' : 'cowo'); }
@@ -373,31 +367,30 @@
                         if(match) { moves = -parseInt(match[1]); target = myRole; }
                     }
 
+                    // TAHAN GILIRAN JIKA BONUS DADU
                     if (taskText.includes("lempar dadu")) {
-                        nextTurn = myRole;
+                        nextTurn = myRole; 
                     }
 
+                    // EKSEKUSI CHAIN REACTION JIKA ADA MAJU/MUNDUR
                     if (target !== null && moves !== 0) {
                         if (target === 'cowo') {
                             np1 = Math.min(Math.max(np1 + moves, 1), 100);
-                            if (target === myRole) { 
-                                newTask = allChallenges[np1 - 1]; 
-                                nextTurn = myRole; 
-                            }
+                            newTask = allChallenges[np1 - 1]; // Tarik kartu dari kotak baru
                         } else {
                             np2 = Math.min(Math.max(np2 + moves, 1), 100);
-                            if (target === myRole) { 
-                                newTask = allChallenges[np2 - 1]; 
-                                nextTurn = myRole; 
-                            }
+                            newTask = allChallenges[np2 - 1]; // Tarik kartu dari kotak baru
                         }
+                        
+                        // KARENA ADA KARTU BARU, TAHAN GILIRAN DI ROLLER BIAR BISA NUTUP KARTU TERSEBUT
+                        nextTurn = myRole;
                     }
 
                     db.collection("games").doc(GAME_ID).update({ 
                         p1: np1, p2: np2, lastChallenge: newTask, turn: nextTurn 
                     });
                 }
-            }, 400);
+            }, 400); // Tunggu animasi tutup kartu sebelum nembak DB
         }
     </script>
 </body>

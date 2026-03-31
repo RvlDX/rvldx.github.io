@@ -144,8 +144,8 @@
         firebase.initializeApp(firebaseConfig);
         const db = firebase.firestore();
         
-        // GANTI ID BIAR BERSIH 100%
-        const GAME_ID = "ritual_chain_reaction_v1";
+        // GANTI ID BIAR BERSIH DARI CACHE
+        const GAME_ID = "ritual_random_start_v1";
 
         const allChallenges = [
             "START: Siap-siap 'Hajar'", "Tatap matanya 1 mnt", "Kamu maju 2 langkah!", "Pegang bagian tubuh dia favoritmu saat ini", "Dia maju 2 langkah!",
@@ -228,6 +228,8 @@
                     state = doc.data(); 
                     syncUI(); 
                 } else { 
+                    // RANDOMIZER GILIRAN AWAL (50/50 Cowo atau Cewe)
+                    state.turn = Math.random() < 0.5 ? 'cowo' : 'cewe';
                     db.collection("games").doc(GAME_ID).set(state); 
                 }
             });
@@ -303,8 +305,11 @@
         }
 
         function confirmReset() {
+            // RANDOMIZER GILIRAN PAS RESET (50/50 Cowo atau Cewe)
+            const randomTurn = Math.random() < 0.5 ? 'cowo' : 'cewe';
+            
             db.collection("games").doc(GAME_ID).update({
-                p1: 1, p2: 1, turn: 'cowo', lastChallenge: "", lastRoller: "", resetRequest: ""
+                p1: 1, p2: 1, turn: randomTurn, lastChallenge: "", lastRoller: "", resetRequest: ""
             });
         }
 
@@ -315,6 +320,7 @@
         function rollDice() {
             const dice = document.getElementById('dice-box');
             dice.classList.add('shake'); dice.innerText = "...";
+            
             setTimeout(() => {
                 const roll = Math.floor(Math.random() * 6) + 1;
                 dice.innerText = roll; dice.classList.remove('shake');
@@ -327,7 +333,10 @@
                 const task = allChallenges[posisiBaru - 1]; 
 
                 db.collection("games").doc(GAME_ID).update({ 
-                    p1: np1, p2: np2, lastChallenge: task, lastRoller: myRole
+                    p1: np1, 
+                    p2: np2, 
+                    lastChallenge: task, 
+                    lastRoller: myRole
                 });
             }, 600);
         }
@@ -382,7 +391,7 @@
                             newTask = allChallenges[np2 - 1]; // Tarik kartu dari kotak baru
                         }
                         
-                        // KARENA ADA KARTU BARU, TAHAN GILIRAN DI ROLLER BIAR BISA NUTUP KARTU TERSEBUT
+                        // TAHAN GILIRAN DI ROLLER BIAR BISA NUTUP KARTU BARU
                         nextTurn = myRole;
                     }
 

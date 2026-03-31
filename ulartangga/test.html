@@ -33,17 +33,17 @@
 
         .board-container {
             position: relative;
-            display: grid; grid-template-columns: repeat(10, 1fr); gap: 1px;
+            display: grid; grid-template-columns: repeat(10, 1fr); gap: 1.5px;
             width: 100%; max-width: 95vw; max-height: 100%; aspect-ratio: 1/1;
             background: rgba(197, 160, 89, 0.4); 
-            padding: 2px; border-radius: 6px;
+            padding: 2.5px; border-radius: 6px;
             box-shadow: 0 0 20px rgba(197, 160, 89, 0.15);
         }
 
         #svg-overlay {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
             pointer-events: none; z-index: 15;
-            filter: drop-shadow(0 0 4px rgba(0,0,0,0.8));
+            filter: drop-shadow(0 3px 3px rgba(0,0,0,0.9));
         }
 
         .cell {
@@ -53,15 +53,15 @@
             text-shadow: 0 0 3px #000, 0 0 5px #000; z-index: 10;
         }
         
-        .cell-number { z-index: 20; position: relative; }
+        .cell-number { z-index: 20; position: relative; opacity: 0.8;}
         
         .pion {
             width: 14px; height: 14px; border-radius: 50%; position: absolute;
             transition: all 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
-            border: 1.5px solid #fff; box-shadow: 0 0 10px rgba(0,0,0,1);
+            border: 1.5px solid #fff; box-shadow: 0 0 12px rgba(0,0,0,1);
         }
-        .pion-cowo { background-color: var(--gold); top: 10%; left: 10%; z-index: 30; }
-        .pion-cewe { background-color: var(--crimson); bottom: 10%; right: 10%; z-index: 31; }
+        .pion-cowo { background-color: var(--gold); top: 8%; left: 8%; z-index: 30; }
+        .pion-cewe { background-color: var(--crimson); bottom: 8%; right: 8%; z-index: 31; }
         
         .perspective { perspective: 1000px; }
         .card-inner { width: 100%; height: 100%; transition: transform 0.6s; transform-style: preserve-3d; position: relative; }
@@ -153,8 +153,8 @@
         firebase.initializeApp(firebaseConfig);
         const db = firebase.firestore();
         
-        // GANTI ID BIAR EFEK DELAYNYA FRESH
-        const GAME_ID = "ritual_animated_chain";
+        // GANTI ID BIAR PAPAN BARU & BERSIH
+        const GAME_ID = "ritual_real_snake_v1";
 
         const allChallenges = [
             "START: Siap-siap 'Hajar'", "Tatap matanya 1 mnt", "Kamu maju 2 langkah!", "Pegang bagian tubuh dia favoritmu saat ini", "Dia maju 2 langkah!",
@@ -179,9 +179,9 @@
             "Dia maju 2 langkah", "3 mnt gaya favorit kamu", "3 mnt sex mendesah berisik", "3 mnt gaya favorit berdua", "FINISH: SIAP-SIAP RONDE 2"
         ];
 
-        // KOORDINAT ULAR & TANGGA
-        const ladders = { 17: 45, 31: 69, 59: 82, 8: 26 };
-        const snakes = { 96: 46, 73: 12, 54: 34, 88: 24 };
+        // KOORDINAT ULAR & TANGGA (Diatur rapi biar nggak numpuk / nyilang sembarangan)
+        const ladders = { 7: 29, 22: 41, 44: 76, 70: 92 }; // Tangga naik
+        const snakes = { 32: 10, 62: 38, 89: 68, 97: 78 };  // Ular turun
 
         let myRole = ""; 
         let state = { p1: 1, p2: 1, turn: 'cowo', lastChallenge: "", lastRoller: "", resetRequest: "" };
@@ -190,7 +190,6 @@
             myRole = r;
             document.querySelectorAll('[id^="btn-"]').forEach(el => el.classList.replace('border-[var(--gold)]', 'border-white/10'));
             document.getElementById(`btn-${r}`).classList.replace('border-white/10', 'border-[var(--gold)]');
-            
             const btn = document.getElementById('start-btn');
             btn.classList.remove('opacity-0', 'pointer-events-none', 'translate-y-4');
         }
@@ -228,13 +227,13 @@
                     let text = allChallenges[num - 1].toLowerCase();
                     
                     if(text.includes('cium') || text.includes('kiss') || text.includes('jilat')) {
-                        content += `<svg class="absolute opacity-30 w-5 h-5 drop-shadow-[0_0_6px_#ff4d4d]" fill="none" stroke="#ff4d4d" viewBox="0 0 24 24"><path stroke-width="2.5" d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>`;
+                        content += `<svg class="absolute opacity-40 w-5 h-5" fill="none" stroke="#ff4d4d" viewBox="0 0 24 24"><path stroke-width="2.5" d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>`;
                     } else if(text.includes('maju') || text.includes('mundur') || text.includes('bonus')) {
-                        content += `<svg class="absolute opacity-30 w-5 h-5 drop-shadow-[0_0_6px_var(--gold)]" fill="none" stroke="var(--gold)" viewBox="0 0 24 24"><path stroke-width="3" d="M13 7l5 5m0 0l-5 5m5-5H6"/></svg>`;
+                        content += `<svg class="absolute opacity-50 w-5 h-5" fill="none" stroke="var(--gold)" viewBox="0 0 24 24"><path stroke-width="3" d="M13 7l5 5m0 0l-5 5m5-5H6"/></svg>`;
                     } else if(text.includes('telanjang') || text.includes('pakaian')) {
-                        content += `<svg class="absolute opacity-30 w-5 h-5 drop-shadow-[0_0_6px_#ffffff]" fill="none" stroke="#ffffff" viewBox="0 0 24 24"><path stroke-width="2" d="M20.38 3.46L16 2a8.96 8.96 0 0 0-8 0l-4.38 1.46A2 2 0 0 0 2.26 5.3l1.4 6.6a2 2 0 0 0 1.96 1.58h1.22v8.5a2 2 0 0 0 2 2h6.32a2 2 0 0 0 2-2v-8.5h1.22a2 2 0 0 0 1.96-1.58l1.4-6.6a2 2 0 0 0-1.36-1.84z"/></svg>`;
+                        content += `<svg class="absolute opacity-40 w-5 h-5" fill="none" stroke="#ffffff" viewBox="0 0 24 24"><path stroke-width="2" d="M20.38 3.46L16 2a8.96 8.96 0 0 0-8 0l-4.38 1.46A2 2 0 0 0 2.26 5.3l1.4 6.6a2 2 0 0 0 1.96 1.58h1.22v8.5a2 2 0 0 0 2 2h6.32a2 2 0 0 0 2-2v-8.5h1.22a2 2 0 0 0 1.96-1.58l1.4-6.6a2 2 0 0 0-1.36-1.84z"/></svg>`;
                     } else if(text.includes('69') || text.includes('sex') || text.includes('gaya')) {
-                        content += `<svg class="absolute opacity-30 w-5 h-5 drop-shadow-[0_0_6px_#ff9f43]" fill="none" stroke="#ff9f43" viewBox="0 0 24 24"><path stroke-width="2" d="M17.5 19c-1.5 1.5-4 1.5-5.5 0-1.5-1.5-1.5-4 0-5.5.5-.5 1.5-1 2.5-1 .5 0 1 .5 1.5 1s.5 1.5 0 2c-.5.5-1.5.5-2 0m4-4c-1.5-1.5-4-1.5-5.5 0-1.5 1.5-1.5 4 0 5.5.5.5 1.5 1 2.5 1 .5 0 1-.5 1.5-1s.5-1.5 0-2c-.5-.5-1.5-.5-2 0"/></svg>`;
+                        content += `<svg class="absolute opacity-50 w-5 h-5" fill="none" stroke="#ff9f43" viewBox="0 0 24 24"><path stroke-width="2" d="M17.5 19c-1.5 1.5-4 1.5-5.5 0-1.5-1.5-1.5-4 0-5.5.5-.5 1.5-1 2.5-1 .5 0 1 .5 1.5 1s.5 1.5 0 2c-.5.5-1.5.5-2 0m4-4c-1.5-1.5-4-1.5-5.5 0-1.5 1.5-1.5 4 0 5.5.5.5 1.5 1 2.5 1 .5 0 1-.5 1.5-1s.5-1.5 0-2c-.5-.5-1.5-.5-2 0"/></svg>`;
                     }
 
                     cell.innerHTML = content;
@@ -243,23 +242,49 @@
             }
 
             let svgHTML = '';
+            
+            // GAMBAR TANGGA KAYU 3D
             Object.keys(ladders).forEach(start => {
                 let s = getCoords(parseInt(start)); let e = getCoords(ladders[start]);
                 let dx = e.x - s.x; let dy = e.y - s.y; let angle = Math.atan2(dy, dx);
-                let ox = Math.cos(angle + Math.PI/2) * 2; let oy = Math.sin(angle + Math.PI/2) * 2;
-                svgHTML += `<line x1="${s.x-ox}" y1="${s.y-oy}" x2="${e.x-ox}" y2="${e.y-oy}" stroke="var(--gold)" stroke-width="1.2" opacity="0.8" />`;
-                svgHTML += `<line x1="${s.x+ox}" y1="${s.y+oy}" x2="${e.x+ox}" y2="${e.y+oy}" stroke="var(--gold)" stroke-width="1.2" opacity="0.8" />`;
-                for(let i=1; i<=7; i++) {
-                    let rx = s.x + dx * (i/8); let ry = s.y + dy * (i/8);
-                    svgHTML += `<line x1="${rx-ox}" y1="${ry-oy}" x2="${rx+ox}" y2="${ry+oy}" stroke="var(--gold)" stroke-width="1" opacity="0.8" />`;
+                let ox = Math.cos(angle + Math.PI/2) * 2.5; let oy = Math.sin(angle + Math.PI/2) * 2.5;
+                
+                svgHTML += `<line x1="${s.x-ox}" y1="${s.y-oy}" x2="${e.x-ox}" y2="${e.y-oy}" stroke="#b45309" stroke-width="2" opacity="0.9" stroke-linecap="round"/>`;
+                svgHTML += `<line x1="${s.x+ox}" y1="${s.y+oy}" x2="${e.x+ox}" y2="${e.y+oy}" stroke="#b45309" stroke-width="2" opacity="0.9" stroke-linecap="round"/>`;
+                
+                let steps = 6;
+                for(let i=1; i<=steps; i++) {
+                    let rx = s.x + dx * (i/(steps+1)); let ry = s.y + dy * (i/(steps+1));
+                    svgHTML += `<line x1="${rx-ox}" y1="${ry-oy}" x2="${rx+ox}" y2="${ry+oy}" stroke="#d97706" stroke-width="1.5" opacity="0.9" stroke-linecap="round"/>`;
                 }
             });
+
+            // GAMBAR ULAR BENERAN (Bentuk S, Kepala, Mata, Lidah)
             Object.keys(snakes).forEach(start => {
-                let s = getCoords(parseInt(start)); let e = getCoords(snakes[start]);
-                let midX = (s.x + e.x) / 2 + (Math.random() * 20 - 10); let midY = (s.y + e.y) / 2;
-                svgHTML += `<path d="M ${s.x} ${s.y} Q ${midX} ${midY} ${e.x} ${e.y}" fill="none" stroke="var(--crimson)" stroke-width="2.5" stroke-linecap="round" opacity="0.85" />`;
-                svgHTML += `<circle cx="${s.x}" cy="${s.y}" r="1.5" fill="black" stroke="var(--gold)" stroke-width="0.5"/>`;
+                let s = getCoords(parseInt(start)); // Kepala
+                let e = getCoords(snakes[start]);   // Ekor
+                
+                let dx = e.x - s.x; let dy = e.y - s.y;
+                let dist = Math.sqrt(dx*dx + dy*dy);
+                let nx = -dy/dist; let ny = dx/dist;
+                
+                let curveStrength = 12; // Kekuatan liukan ular
+                let cp1x = s.x + dx*0.3 + nx*curveStrength;
+                let cp1y = s.y + dy*0.3 + ny*curveStrength;
+                let cp2x = s.x + dx*0.7 - nx*curveStrength;
+                let cp2y = s.y + dy*0.7 - ny*curveStrength;
+
+                // Badan ular & corak
+                svgHTML += `<path d="M ${s.x} ${s.y} C ${cp1x} ${cp1y}, ${cp2x} ${cp2y}, ${e.x} ${e.y}" fill="none" stroke="#dc2626" stroke-width="4.5" stroke-linecap="round" opacity="0.9" />`;
+                svgHTML += `<path d="M ${s.x} ${s.y} C ${cp1x} ${cp1y}, ${cp2x} ${cp2y}, ${e.x} ${e.y}" fill="none" stroke="#7f1d1d" stroke-width="4.5" stroke-dasharray="2 4" stroke-linecap="round" opacity="0.8" />`;
+                
+                // Kepala dan Arah hadap
+                let angle = Math.atan2(cp1y - s.y, cp1x - s.x) * 180 / Math.PI;
+                svgHTML += `<g transform="translate(${s.x}, ${s.y}) rotate(${angle})">
+                    <path d="M -2 0 L -6 -2 M -2 0 L -6 2" stroke="#ff0000" stroke-width="0.8" fill="none" /> <ellipse cx="1" cy="0" rx="3.5" ry="2.5" fill="#dc2626" /> <ellipse cx="1" cy="0" rx="3.5" ry="2.5" fill="none" stroke="#7f1d1d" stroke-width="0.5" />
+                    <circle cx="2" cy="-1.2" r="0.6" fill="#fff" /><circle cx="2" cy="-1.2" r="0.2" fill="#000" /> <circle cx="2" cy="1.2" r="0.6" fill="#fff" /><circle cx="2" cy="1.2" r="0.2" fill="#000" /> </g>`;
             });
+
             svgOverlay.innerHTML = svgHTML;
         }
 
@@ -361,9 +386,7 @@
             }, 600);
         }
 
-        function flipCard() {
-            document.getElementById('card-inner').classList.add('is-flipped');
-        }
+        function flipCard() { document.getElementById('card-inner').classList.add('is-flipped'); }
         
         function closeModal() {
             document.getElementById('card-inner').classList.remove('is-flipped');
@@ -371,7 +394,6 @@
             setTimeout(() => {
                 document.getElementById('modal').style.display = 'none';
                 
-                // LOGIKA CHAIN REACTION (EFEK BERUNTUN)
                 if (state.lastRoller === myRole && state.lastChallenge !== "") {
                     let taskText = state.lastChallenge.toLowerCase();
                     let np1 = state.p1; let np2 = state.p2;
@@ -388,15 +410,12 @@
 
                     let willPullNewCard = false;
 
-                    // 1. Eksekusi Teks Maju/Mundur
                     if (target !== null && moves !== 0) {
                         if (target === 'cowo') np1 = Math.min(Math.max(np1 + moves, 1), 100);
                         else np2 = Math.min(Math.max(np2 + moves, 1), 100);
-                        
                         if (target === myRole) { willPullNewCard = true; nextTurn = myRole; }
                     }
 
-                    // 2. Eksekusi Ular/Tangga
                     let currentPos = (myRole === 'cowo') ? np1 : np2;
                     if (ladders[currentPos]) {
                         if (myRole === 'cowo') np1 = ladders[currentPos]; else np2 = ladders[currentPos];
@@ -409,12 +428,12 @@
                     if (willPullNewCard) {
                         let finalPos = (myRole === 'cowo') ? np1 : np2;
                         
-                        // KOSONGIN KARTU -> UPDATE POSISI PION (Biar kelihatan jalan/loncat)
+                        // HAPUS KARTU LAMA BIAR PION JALAN DULU
                         db.collection("games").doc(GAME_ID).update({ 
                             p1: np1, p2: np2, lastChallenge: "", turn: nextTurn 
                         });
 
-                        // TUNGGU 1 DETIK (Biar pion beres jalan), TERUS KELUARIN KARTU BARU!
+                        // DELAY 1 DETIK, LALU TARIK KARTU BARU (Beruntun)
                         setTimeout(() => {
                             db.collection("games").doc(GAME_ID).update({ 
                                 lastChallenge: allChallenges[finalPos - 1] 
@@ -422,7 +441,6 @@
                         }, 1000);
                         
                     } else {
-                        // Selesai normal tanpa efek beruntun
                         db.collection("games").doc(GAME_ID).update({ 
                             p1: np1, p2: np2, lastChallenge: "", turn: nextTurn 
                         });

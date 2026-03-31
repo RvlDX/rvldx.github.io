@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>The Ritual 🔥</title>
+    <title>The Ritual</title>
     <script src="https://cdn.tailwindcss.com"></script>
     
     <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-app-compat.js"></script>
@@ -13,7 +13,6 @@
         @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400&family=Inter:wght@400;900&display=swap');
         :root { --gold: #c5a059; --charcoal: #050505; --crimson: #dc2626; }
         
-        /* KUNCI LAYAR BIAR GAK BISA SCROLL SAMA SEKALI */
         body { 
             font-family: 'Inter', sans-serif; 
             background-color: var(--charcoal); 
@@ -23,11 +22,9 @@
         }
         .serif { font-family: 'Playfair Display', serif; }
 
-        /* HEADER & FOOTER */
         header { position: absolute; top: 0; left: 0; width: 100%; height: 60px; background: rgba(0,0,0,0.9); border-bottom: 1px solid rgba(255,255,255,0.05); z-index: 40; }
         footer { position: absolute; bottom: 0; left: 0; width: 100%; height: 80px; background: #000; border-top: 1px solid rgba(255,255,255,0.05); z-index: 40; }
 
-        /* AREA PAPAN */
         .board-wrapper {
             position: absolute;
             top: 110px; bottom: 130px; left: 0; right: 0;
@@ -51,7 +48,6 @@
         
         .cell-number { z-index: 10; }
         
-        /* PION ANTI NUMPUK */
         .pion {
             width: 12px; height: 12px; border-radius: 50%; position: absolute;
             transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
@@ -60,7 +56,6 @@
         .pion-cowo { background-color: var(--gold); top: 10%; left: 10%; z-index: 20; }
         .pion-cewe { background-color: var(--crimson); bottom: 10%; right: 10%; z-index: 21; }
         
-        /* CARD FLIP */
         .perspective { perspective: 1000px; }
         .card-inner { width: 100%; height: 100%; transition: transform 0.6s; transform-style: preserve-3d; position: relative; }
         .is-flipped { transform: rotateY(180deg); }
@@ -90,7 +85,12 @@
 
     <div id="game-screen" class="hidden h-full w-full">
         <header class="flex justify-between items-center px-4">
-            <h1 class="serif text-xl text-[#c5a059]">The Ritual</h1>
+            <div class="flex items-center gap-3">
+                <h1 class="serif text-xl text-[#c5a059]">The Ritual</h1>
+                <button onclick="requestReset()" class="text-[#c5a059] opacity-50 hover:opacity-100 transition-opacity p-2 active:scale-95">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+                </button>
+            </div>
             <div class="flex gap-4">
                 <div id="ui-cowo" class="text-right opacity-30"><p class="text-[8px] font-bold text-gray-500">COWO</p><p class="text-xs font-black text-[#c5a059]">#<span id="pos-1">1</span></p></div>
                 <div id="ui-cewe" class="text-right opacity-30"><p class="text-[8px] font-bold text-gray-500">CEWE</p><p class="text-xs font-black text-red-600">#<span id="pos-2">1</span></p></div>
@@ -123,8 +123,16 @@
         </div>
     </div>
 
+    <div id="reset-modal" class="fixed inset-0 bg-black/95 flex items-center justify-center p-8 hidden z-[60]">
+        <div class="border border-[#c5a059] bg-[#0a0a0a] p-8 rounded-2xl text-center w-full max-w-[280px] shadow-[0_0_30px_rgba(197,160,89,0.2)]">
+            <h3 class="serif text-2xl text-[#c5a059] mb-4">Reset Ritual?</h3>
+            <p id="reset-text" class="text-[11px] text-gray-300 mb-8 leading-relaxed">...</p>
+            <div id="reset-actions" class="flex gap-4">
+                </div>
+        </div>
+    </div>
+
     <script>
-        // CONFIG FIREBASE PROJECT LU
         const firebaseConfig = {
             apiKey: "AIzaSyBQzOliNqHDI0ccFc4ha0JrjrZNrh0TPsw",
             authDomain: "rvldx-chat.firebaseapp.com",
@@ -137,10 +145,9 @@
         firebase.initializeApp(firebaseConfig);
         const db = firebase.firestore();
         
-        // Ganti nama game ID biar fresh board pas dites
-        const GAME_ID = "ritual_auto_move_engine";
+        // Ganti ID Biar Bersih Dari Cache Sebelumnya
+        const GAME_ID = "ritual_final_v1";
 
-        // 100 TANTANGAN FULL
         const allChallenges = [
             "START: Siap-siap 'Hajar'", "Tatap matanya 1 mnt", "Kamu maju 2 langkah!", "Pegang bagian tubuh dia favoritmu saat ini", "Dia maju 2 langkah!",
             "Bisikkan kata-kata nakal ke telinganya", "Pelukan 2 mnt", "Kiss pipi dia", "Garuk punggung dia 2 mnt", "Cium titik lemah dia 1 mnt",
@@ -164,8 +171,9 @@
             "Dia maju 2 langkah", "3 mnt gaya favorit kamu", "3 mnt sex mendesah berisik", "3 mnt gaya favorit berdua", "FINISH: SIAP-SIAP RONDE 2"
         ];
 
+        // TAMBAHAN: resetRequest untuk trigger confirmasi ganda
         let myRole = ""; 
-        let state = { p1: 1, p2: 1, turn: 'cowo', lastChallenge: "", lastRoller: "" };
+        let state = { p1: 1, p2: 1, turn: 'cowo', lastChallenge: "", lastRoller: "", resetRequest: "" };
 
         function selectRole(r) {
             myRole = r;
@@ -261,16 +269,60 @@
             document.getElementById('ui-cowo').style.opacity = state.turn === 'cowo' ? "1" : "0.2";
             document.getElementById('ui-cewe').style.opacity = state.turn === 'cewe' ? "1" : "0.2";
             
-            if (state.lastChallenge) {
+            if (state.lastChallenge && state.lastChallenge !== "") {
                 document.getElementById('modal-desc').innerText = `"${state.lastChallenge}"`;
                 document.getElementById('modal').style.display = 'flex';
+            } else {
+                document.getElementById('modal').style.display = 'none';
+                document.getElementById('card-inner').classList.remove('is-flipped');
+            }
+
+            // === LOGIKA TAMPILAN RESET MODAL ===
+            const resetModal = document.getElementById('reset-modal');
+            const resetText = document.getElementById('reset-text');
+            const resetActions = document.getElementById('reset-actions');
+
+            if (state.resetRequest && state.resetRequest !== "") {
+                resetModal.classList.remove('hidden');
+                if (state.resetRequest === myRole) {
+                    // Jika kita yang request reset
+                    resetText.innerText = "Menunggu persetujuan pasangan untuk reset ritual...";
+                    resetActions.innerHTML = `<button onclick="cancelReset()" class="w-full py-3 border border-red-500/50 text-red-500 rounded-full font-black uppercase text-[10px] active:scale-95">Batal Request</button>`;
+                } else {
+                    // Jika pasangan yang request reset
+                    resetText.innerText = "Pasanganmu mengajak untuk mengulang ritual dari awal. Apakah kamu setuju?";
+                    resetActions.innerHTML = `
+                        <button onclick="cancelReset()" class="flex-1 py-3 border border-red-500/50 text-red-500 rounded-full font-black uppercase text-[10px] active:scale-95">Tolak</button>
+                        <button onclick="confirmReset()" class="flex-1 py-3 bg-[#c5a059] text-black rounded-full font-black uppercase text-[10px] active:scale-95">Setuju</button>
+                    `;
+                }
+            } else {
+                resetModal.classList.add('hidden');
             }
         }
+
+        // ================= FUNGI RESET =================
+        function requestReset() {
+            if(state.resetRequest) return; 
+            db.collection("games").doc(GAME_ID).update({ resetRequest: myRole });
+        }
+
+        function confirmReset() {
+            // Balikin semua ke kondisi awal
+            db.collection("games").doc(GAME_ID).update({
+                p1: 1, p2: 1, turn: 'cowo', lastChallenge: "", lastRoller: "", resetRequest: ""
+            });
+        }
+
+        function cancelReset() {
+            // Batalin request reset
+            db.collection("games").doc(GAME_ID).update({ resetRequest: "" });
+        }
+        // ===============================================
 
         function rollDice() {
             const dice = document.getElementById('dice-box');
             dice.classList.add('shake'); dice.innerText = "...";
-            
             setTimeout(() => {
                 const roll = Math.floor(Math.random() * 6) + 1;
                 dice.innerText = roll; dice.classList.remove('shake');
@@ -282,12 +334,8 @@
                 let posisiBaru = (myRole === 'cowo') ? np1 : np2;
                 const task = allChallenges[posisiBaru - 1]; 
 
-                // HANYA UPDATE TASK DI SINI, GILIRAN JANGAN DIGANTI DULU
                 db.collection("games").doc(GAME_ID).update({ 
-                    p1: np1, 
-                    p2: np2, 
-                    lastChallenge: task, 
-                    lastRoller: myRole
+                    p1: np1, p2: np2, lastChallenge: task, lastRoller: myRole
                 });
             }, 600);
         }
@@ -302,21 +350,15 @@
             setTimeout(() => {
                 document.getElementById('modal').style.display = 'none';
                 
-                // === AUTO-MOVE ENGINE (CHAIN REACTION) ===
-                // Hanya dieksekusi oleh HP orang yang barusan nge-roll
                 if (state.lastRoller === myRole && state.lastChallenge !== "") {
                     let taskText = state.lastChallenge.toLowerCase();
                     let np1 = state.p1;
                     let np2 = state.p2;
-                    
-                    // DEFAULT: Jika tantangan biasa, tutup kartu dan pindah giliran
                     let nextTurn = (myRole === 'cowo') ? 'cewe' : 'cowo';
                     let newTask = ""; 
-                    
                     let moves = 0;
                     let target = null;
 
-                    // 1. DETEKSI TEKS MAJU/MUNDUR DARI KARTU
                     if (taskText.includes("dia maju")) {
                         let match = taskText.match(/dia maju (\d+)/);
                         if(match) { moves = parseInt(match[1]); target = (myRole === 'cowo' ? 'cewe' : 'cowo'); }
@@ -331,36 +373,28 @@
                         if(match) { moves = -parseInt(match[1]); target = myRole; }
                     }
 
-                    // 2. DETEKSI BONUS LEMPAR DADU LAGI
                     if (taskText.includes("lempar dadu")) {
-                        nextTurn = myRole; // Balikin giliran ke yang nge-roll tadi
+                        nextTurn = myRole;
                     }
 
-                    // 3. JIKA ADA PERGERAKAN OTOMATIS, PINDAHIN PIONNYA
                     if (target !== null && moves !== 0) {
                         if (target === 'cowo') {
                             np1 = Math.min(Math.max(np1 + moves, 1), 100);
-                            // Jika pion kita yang pindah otomatis, tarik kartu dari kotak baru tsb
                             if (target === myRole) { 
                                 newTask = allChallenges[np1 - 1]; 
-                                nextTurn = myRole; // Tahan giliran biar bisa klik tutup kartu barunya
+                                nextTurn = myRole; 
                             }
                         } else {
                             np2 = Math.min(Math.max(np2 + moves, 1), 100);
-                            // Jika pion kita yang pindah otomatis, tarik kartu dari kotak baru tsb
                             if (target === myRole) { 
                                 newTask = allChallenges[np2 - 1]; 
-                                nextTurn = myRole; // Tahan giliran biar bisa klik tutup kartu barunya
+                                nextTurn = myRole; 
                             }
                         }
                     }
 
-                    // 4. SIMPAN STATE KE FIREBASE
                     db.collection("games").doc(GAME_ID).update({ 
-                        p1: np1, 
-                        p2: np2, 
-                        lastChallenge: newTask, 
-                        turn: nextTurn 
+                        p1: np1, p2: np2, lastChallenge: newTask, turn: nextTurn 
                     });
                 }
             }, 400);

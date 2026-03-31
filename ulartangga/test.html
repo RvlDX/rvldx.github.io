@@ -13,6 +13,7 @@
         @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400&family=Inter:wght@400;900&display=swap');
         :root { --gold: #c5a059; --charcoal: #050505; --crimson: #dc2626; }
         
+        /* KUNCI LAYAR BIAR GAK BISA SCROLL SAMA SEKALI */
         body { 
             font-family: 'Inter', sans-serif; 
             background-color: var(--charcoal); 
@@ -22,9 +23,11 @@
         }
         .serif { font-family: 'Playfair Display', serif; }
 
+        /* HEADER & FOOTER */
         header { position: absolute; top: 0; left: 0; width: 100%; height: 60px; background: rgba(0,0,0,0.9); border-bottom: 1px solid rgba(255,255,255,0.05); z-index: 40; }
         footer { position: absolute; bottom: 0; left: 0; width: 100%; height: 80px; background: #000; border-top: 1px solid rgba(255,255,255,0.05); z-index: 40; }
 
+        /* AREA PAPAN */
         .board-wrapper {
             position: absolute;
             top: 110px; bottom: 130px; left: 0; right: 0;
@@ -48,6 +51,7 @@
         
         .cell-number { z-index: 10; }
         
+        /* PION ANTI NUMPUK */
         .pion {
             width: 12px; height: 12px; border-radius: 50%; position: absolute;
             transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
@@ -56,6 +60,7 @@
         .pion-cowo { background-color: var(--gold); top: 10%; left: 10%; z-index: 20; }
         .pion-cewe { background-color: var(--crimson); bottom: 10%; right: 10%; z-index: 21; }
         
+        /* CARD FLIP */
         .perspective { perspective: 1000px; }
         .card-inner { width: 100%; height: 100%; transition: transform 0.6s; transform-style: preserve-3d; position: relative; }
         .is-flipped { transform: rotateY(180deg); }
@@ -131,8 +136,9 @@
 
         firebase.initializeApp(firebaseConfig);
         const db = firebase.firestore();
-        // Pakai session ID baru biar fresh
-        const GAME_ID = "ritual_rvldx_auto_move";
+        
+        // Ganti nama game ID biar fresh board pas dites
+        const GAME_ID = "ritual_auto_move_engine";
 
         // 100 TANTANGAN FULL
         const allChallenges = [
@@ -158,8 +164,8 @@
             "Dia maju 2 langkah", "3 mnt gaya favorit kamu", "3 mnt sex mendesah berisik", "3 mnt gaya favorit berdua", "FINISH: SIAP-SIAP RONDE 2"
         ];
 
-        // TAMBAHAN: lastRoller biar pas nutup modal ga bentrok
-        let myRole = ""; let state = { p1: 1, p2: 1, turn: 'cowo', lastChallenge: "", lastRoller: "" };
+        let myRole = ""; 
+        let state = { p1: 1, p2: 1, turn: 'cowo', lastChallenge: "", lastRoller: "" };
 
         function selectRole(r) {
             myRole = r;
@@ -264,6 +270,7 @@
         function rollDice() {
             const dice = document.getElementById('dice-box');
             dice.classList.add('shake'); dice.innerText = "...";
+            
             setTimeout(() => {
                 const roll = Math.floor(Math.random() * 6) + 1;
                 dice.innerText = roll; dice.classList.remove('shake');
@@ -275,12 +282,12 @@
                 let posisiBaru = (myRole === 'cowo') ? np1 : np2;
                 const task = allChallenges[posisiBaru - 1]; 
 
-                // Simpan lastRoller biar pas nutup modal, efeknya cuma jalan sekali
+                // HANYA UPDATE TASK DI SINI, GILIRAN JANGAN DIGANTI DULU
                 db.collection("games").doc(GAME_ID).update({ 
-                    p1: np1, p2: np2, 
+                    p1: np1, 
+                    p2: np2, 
                     lastChallenge: task, 
-                    lastRoller: myRole,
-                    turn: myRole === 'cowo' ? 'cewe' : 'cowo' 
+                    lastRoller: myRole
                 });
             }, 600);
         }
@@ -291,20 +298,25 @@
         
         function closeModal() {
             document.getElementById('card-inner').classList.remove('is-flipped');
+            
             setTimeout(() => {
                 document.getElementById('modal').style.display = 'none';
                 
-                // AUTO-MOVE ENGINE: HANYA DIEKSEKUSI OLEH PLAYER YANG BARUSAN NGEROLL
+                // === AUTO-MOVE ENGINE (CHAIN REACTION) ===
+                // Hanya dieksekusi oleh HP orang yang barusan nge-roll
                 if (state.lastRoller === myRole && state.lastChallenge !== "") {
                     let taskText = state.lastChallenge.toLowerCase();
                     let np1 = state.p1;
                     let np2 = state.p2;
-                    let nextTurn = state.turn; // default: giliran pasangan (udah di-set di rollDice)
+                    
+                    // DEFAULT: Jika tantangan biasa, tutup kartu dan pindah giliran
+                    let nextTurn = (myRole === 'cowo') ? 'cewe' : 'cowo';
+                    let newTask = ""; 
                     
                     let moves = 0;
-                    let target = myRole; // Siapa yang bakal gerak otomatis
+                    let target = null;
 
-                    // PARSER TEKS TANTANGAN
+                    // 1. DETEKSI TEKS MAJU/MUNDUR DARI KARTU
                     if (taskText.includes("dia maju")) {
                         let match = taskText.match(/dia maju (\d+)/);
                         if(match) { moves = parseInt(match[1]); target = (myRole === 'cowo' ? 'cewe' : 'cowo'); }
@@ -319,23 +331,35 @@
                         if(match) { moves = -parseInt(match[1]); target = myRole; }
                     }
 
-                    // KALO DAPET BONUS LEMPAR DADU LAGI
+                    // 2. DETEKSI BONUS LEMPAR DADU LAGI
                     if (taskText.includes("lempar dadu")) {
-                        nextTurn = myRole; // Giliran dibalikin lagi ke dia
+                        nextTurn = myRole; // Balikin giliran ke yang nge-roll tadi
                     }
 
-                    // UPDATE POSISI BERDASARKAN TARGET
-                    if (target === 'cowo') {
-                        np1 = Math.min(Math.max(np1 + moves, 1), 100);
-                    } else {
-                        np2 = Math.min(Math.max(np2 + moves, 1), 100);
+                    // 3. JIKA ADA PERGERAKAN OTOMATIS, PINDAHIN PIONNYA
+                    if (target !== null && moves !== 0) {
+                        if (target === 'cowo') {
+                            np1 = Math.min(Math.max(np1 + moves, 1), 100);
+                            // Jika pion kita yang pindah otomatis, tarik kartu dari kotak baru tsb
+                            if (target === myRole) { 
+                                newTask = allChallenges[np1 - 1]; 
+                                nextTurn = myRole; // Tahan giliran biar bisa klik tutup kartu barunya
+                            }
+                        } else {
+                            np2 = Math.min(Math.max(np2 + moves, 1), 100);
+                            // Jika pion kita yang pindah otomatis, tarik kartu dari kotak baru tsb
+                            if (target === myRole) { 
+                                newTask = allChallenges[np2 - 1]; 
+                                nextTurn = myRole; // Tahan giliran biar bisa klik tutup kartu barunya
+                            }
+                        }
                     }
 
-                    // UPDATE KE FIREBASE: Pion gerak otomatis tanpa nampilin modal lagi
+                    // 4. SIMPAN STATE KE FIREBASE
                     db.collection("games").doc(GAME_ID).update({ 
                         p1: np1, 
                         p2: np2, 
-                        lastChallenge: "", // Kosongin biar ga muncul modal terus
+                        lastChallenge: newTask, 
                         turn: nextTurn 
                     });
                 }

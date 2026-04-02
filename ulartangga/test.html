@@ -61,7 +61,6 @@
             display: flex; align-items: center; justify-content: center;
         }
         
-        /* CSS FIX UNTUK SVG BIDAK BIAR PROPORSIONAL */
         .pion svg { width: 70%; height: 70%; display: block; }
         
         .pion-cowo { background-color: var(--gold); top: 2%; left: 2%; z-index: 30; color: #000; }
@@ -89,10 +88,10 @@
         .dice-anim { animation: dicePop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
         
         @keyframes snakeSlither {
-            0% { stroke-dashoffset: 200; }
+            0% { stroke-dashoffset: 1000; }
             100% { stroke-dashoffset: 0; }
         }
-        .path-snake-base { stroke-dasharray: 200; animation: snakeSlither 2s ease-out forwards; }
+        .path-snake-base { stroke-dasharray: 1000; animation: snakeSlither 3s ease-out forwards; }
     </style>
 </head>
 <body>
@@ -192,7 +191,7 @@
                 </div>
                 <div class="card-back flex flex-col justify-between py-10 px-6">
                     <span class="text-[#c5a059] text-[10px] tracking-[0.3em] uppercase font-black">PERINTAH RITUAL</span>
-                    <p id="modal-desc" class="serif text-[20px] leading-relaxed text-white my-auto"></p>
+                    <p id="modal-desc" class="serif text-[22px] leading-relaxed text-white my-auto"></p>
                     <button onclick="closeModal()" class="w-full py-4 bg-white text-black rounded-full font-black uppercase text-[11px] tracking-wider hover:bg-gray-200 active:scale-95 transition-all">Selesai & Lanjut</button>
                 </div>
             </div>
@@ -255,8 +254,9 @@
             "Dia maju 2 langkah", "3 mnt gaya favorit kamu", "3 mnt sex mendesah berisik", "3 mnt gaya favorit berdua", "FINISH: SIAP-SIAP RONDE 2"
         ];
 
-        const ladders = { 4: 25, 13: 46, 33: 49, 50: 69, 42: 63, 62: 81, 74: 92 };
-        const snakes = { 27: 5, 40: 3, 43: 18, 54: 31, 66: 45, 76: 58, 89: 53, 99: 41 };
+        // POSISI ULAR & TANGGA YANG LEBIH RAPI & MENYEBAR
+        const ladders = { 7: 29, 22: 41, 35: 56, 44: 76, 70: 92 };
+        const snakes = { 32: 10, 48: 12, 62: 38, 88: 68, 97: 78 };
 
         let myRole = ""; 
         let myIcon = ""; 
@@ -324,7 +324,8 @@
                     const cell = document.createElement('div');
                     
                     let isDark = (row + col) % 2 === 0;
-                    let bgClass = isDark ? 'bg-[#151515]/90' : 'bg-[#c5a059]/10';
+                    // Tone down the black for better contrast with red lines
+                    let bgClass = isDark ? 'bg-[#111111]/70' : 'bg-[#c5a059]/10';
                     
                     cell.className = `cell ${bgClass}`; cell.id = `c-${num}`; 
                     cell.innerHTML = `<span class="cell-number">${num}</span>`;
@@ -347,22 +348,23 @@
                 }
             });
 
-            // ULAR DENGAN POLA SISIK SEDERHANA
+            // ULAR KEMBALI KE DESAIN CLEAN & ELEGAN (TANPA CORAK ANEH)
             Object.keys(snakes).forEach(start => {
                 let s = getCoords(parseInt(start)); let e = getCoords(snakes[start]);   
-                let midX = (s.x+e.x)/2 + (Math.random() > 0.5 ? 10 : -10);
-                let midY = (s.y+e.y)/2;
+                let dx = e.x - s.x;
+                // Melengkung mulus ke kanan atau kiri tergantung arah
+                let bend = (dx > 0) ? -15 : 15; 
+                let midX = (s.x + e.x) / 2 + bend;
+                let midY = (s.y + e.y) / 2;
                 
                 const pathDef = `M ${s.x} ${s.y} Q ${midX} ${midY} ${e.x} ${e.y}`;
 
-                // Badan ular merah
-                svgHTML += `<path class="path-snake-base" d="${pathDef}" fill="none" stroke="#dc2626" stroke-width="2.5" opacity="0.9" stroke-linecap="round"/>`;
+                // Garis solid merah, lebih tebal sedikit, clean
+                svgHTML += `<path class="path-snake-base" d="${pathDef}" fill="none" stroke="#dc2626" stroke-width="2.5" opacity="0.95" stroke-linecap="round"/>`;
                 
-                // Pola sisik / corak (garis-garis emas)
-                svgHTML += `<path class="path-snake-base" d="${pathDef}" fill="none" stroke="#8a6a2c" stroke-width="1.8" opacity="0.7" stroke-linecap="round" stroke-dasharray="2 4"/>`;
-                
-                // Kepala ular
-                svgHTML += `<circle cx="${s.x}" cy="${s.y}" r="2" fill="#dc2626" opacity="0.9"/>`;
+                // Kepala ular elegan (Titik besar dengan inner dot)
+                svgHTML += `<circle cx="${s.x}" cy="${s.y}" r="2.5" fill="#dc2626" opacity="1"/>`;
+                svgHTML += `<circle cx="${s.x}" cy="${s.y}" r="0.8" fill="#111" opacity="0.8"/>`;
             });
 
             document.getElementById('svg-overlay').innerHTML = svgHTML;

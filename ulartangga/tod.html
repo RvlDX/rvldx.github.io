@@ -365,4 +365,217 @@
                     let angle = Math.atan2(e.y - s.y, e.x - s.x) + Math.PI/2;
                     let rx1 = mx + Math.cos(angle)*1.5; let ry1 = my + Math.sin(angle)*1.5;
                     let rx2 = mx - Math.cos(angle)*1.5; let ry2 = my - Math.sin(angle)*1.5;
-                    svgHTML +=
+                    svgHTML += `<line x1="${rx1}" y1="${ry1}" x2="${rx2}" y2="${ry2}" stroke="#b45309" stroke-width="1" opacity="0.8"/>`;
+                }
+            });
+
+            Object.keys(snakes).forEach(start => {
+                let s = getCoords(parseInt(start)); let e = getCoords(snakes[start]);   
+                let midX = (s.x+e.x)/2 + (Math.random() > 0.5 ? 10 : -10);
+                let midY = (s.y+e.y)/2;
+                svgHTML += `<path class="path-snake" d="M ${s.x} ${s.y} Q ${midX} ${midY} ${e.x} ${e.y}" fill="none" stroke="#dc2626" stroke-width="2" opacity="0.8" stroke-linecap="round"/>`;
+                svgHTML += `<circle cx="${s.x}" cy="${s.y}" r="2" fill="#dc2626" opacity="0.9"/>`;
+            });
+
+            document.getElementById('svg-overlay').innerHTML = svgHTML;
+        }
+
+        let previousTurn = "";
+
+        function listenDB() {
+            db.collection("games").doc(GAME_ID).onSnapshot((doc) => {
+                if (doc.exists) { 
+                    const data = doc.data();
+                    if(previousTurn !== "" && previousTurn !== data.turn && !localPlayerMoving) {
+                        showTurnToast(data.turn);
+                    }
+                    previousTurn = data.turn;
+                    syncUI(data); 
+                } else { 
+                    db.collection("games").doc(GAME_ID).set(state); 
+                }
+            });
+        }
+
+        function showTurnToast(turn) {
+            const toast = document.getElementById('turn-toast');
+            toast.innerText = turn === myRole ? "GILIRAN KAMU SEKARANG" : `GILIRAN DIA (${turn.toUpperCase()})`;
+            toast.style.opacity = "1";
+            toast.style.transform = "translate(-50%, 0)";
+            setTimeout(() => {
+                toast.style.opacity = "0";
+                toast.style.transform = "translate(-50%, -1rem)";
+            }, 3000);
+        }
+
+        function syncUI(newData) {
+            const pos1Changed = state.p1 !== newData.p1;
+            const pos2Changed = state.p2 !== newData.p2;
+            state = newData;
+
+            document.getElementById('pos-1').innerText = state.p1;
+            document.getElementById('pos-2').innerText = state.p2;
+            
+            document.querySelectorAll('.pion').forEach(p => p.remove());
+            const c1 = document.getElementById(`c-${state.p1}`);
+            const c2 = document.getElementById(`c-${state.p2}`);
+            
+            if(c1) { 
+                let p1Div = document.createElement('div'); 
+                p1Div.className = 'pion pion-cowo' + (pos1Changed ? ' is-jumping' : ''); 
+                c1.appendChild(p1Div); 
+            }
+            if(c2) { 
+                let p2Div = document.createElement('div'); 
+                p2Div.className = 'pion pion-cewe' + (pos2Changed ? ' is-jumping' : ''); 
+                c2.appendChild(p2Div); 
+            }
+            
+            const btn = document.getElementById('roll-btn');
+            const info = document.getElementById('turn-info');
+            
+            if (state.turn === myRole) { 
+                btn.disabled = false; 
+                info.innerText = "Giliran Kamu!"; 
+                info.className = "text-[#c5a059] text-[12px] font-black uppercase tracking-widest text-center";
+                document.getElementById(myRole === 'cowo' ? 'ui-cowo' : 'ui-cewe').classList.add('border-[#c5a059]', 'shadow-[0_0_15px_rgba(197,160,89,0.3)]');
+                document.getElementById(myRole === 'cowo' ? 'ui-cewe' : 'ui-cowo').classList.remove('border-[#c5a059]', 'shadow-[0_0_15px_rgba(197,160,89,0.3)]');
+            } else { 
+                btn.disabled = true; 
+                info.innerText = `Giliran ${state.turn.toUpperCase()}`; 
+                info.className = "text-gray-500 text-[12px] font-bold uppercase tracking-widest text-center";
+                document.getElementById(myRole === 'cowo' ? 'ui-cewe' : 'ui-cowo').classList.add('border-[#dc2626]', 'shadow-[0_0_15px_rgba(220,38,38,0.3)]');
+                document.getElementById(myRole === 'cowo' ? 'ui-cowo' : 'ui-cewe').classList.remove('border-[#dc2626]', 'shadow-[0_0_15px_rgba(220,38,38,0.3)]');
+            }
+            
+            if (state.lastChallenge && state.lastChallenge !== "") {
+                document.getElementById('modal-desc').innerText = state.lastChallenge;
+                document.getElementById('modal').classList.remove('hidden');
+            } else {
+                document.getElementById('modal').classList.add('hidden');
+                document.getElementById('card-inner').classList.remove('is-flipped');
+            }
+
+            const resetModal = document.getElementById('reset-modal');
+            if (state.resetRequest && state.resetRequest !== "") {
+                resetModal.classList.remove('hidden');
+                if (state.resetRequest === myRole) {
+                    document.getElementById('reset-text').innerText = "Menunggu persetujuan dia untuk reset...";
+                    document.getElementById('reset-actions').innerHTML = `<button onclick="cancelReset()" class="w-full py-4 border border-red-500/50 text-red-500 rounded-full font-black text-[11px] uppercase tracking-wider">BATAL</button>`;
+                } else {
+                    document.getElementById('reset-text').innerText = "Pasanganmu mengajak mengulang ritual dari awal. Setuju?";
+                    document.getElementById('reset-actions').innerHTML = `
+                        <button onclick="cancelReset()" class="flex-1 py-4 border border-red-500/50 text-red-500 rounded-full font-black text-[11px] uppercase tracking-wider">TOLAK</button>
+                        <button onclick="confirmReset()" class="flex-1 py-4 bg-[#c5a059] text-black rounded-full font-black text-[11px] uppercase tracking-wider">SETUJU</button>`;
+                }
+            } else { resetModal.classList.add('hidden'); }
+        }
+
+        function rollDice() {
+            localPlayerMoving = true;
+            const diceOverlay = document.getElementById('dice-overlay');
+            const bigDice = document.getElementById('big-dice');
+            const rollerName = document.getElementById('roller-name');
+            
+            rollerName.innerText = `Kamu sedang mengocok...`;
+            diceOverlay.classList.remove('hidden');
+            bigDice.classList.remove('dice-anim');
+            
+            let rollInterval = setInterval(() => {
+                bigDice.innerText = Math.floor(Math.random() * 6) + 1;
+            }, 50);
+            
+            setTimeout(() => {
+                clearInterval(rollInterval);
+                const roll = Math.floor(Math.random() * 6) + 1;
+                bigDice.innerText = roll; 
+                bigDice.classList.add('dice-anim');
+                
+                let np1 = state.p1, np2 = state.p2;
+                if (myRole === 'cowo') np1 = Math.min(np1 + roll, 100); 
+                else np2 = Math.min(np2 + roll, 100);
+                
+                let currentPos = (myRole === 'cowo') ? np1 : np2;
+                
+                setTimeout(() => {
+                    diceOverlay.classList.add('hidden');
+                    db.collection("games").doc(GAME_ID).update({ p1: np1, p2: np2, lastChallenge: "", lastRoller: myRole });
+
+                    setTimeout(() => {
+                        let finalPos = currentPos;
+                        if (ladders[currentPos]) finalPos = ladders[currentPos];
+                        else if (snakes[currentPos]) finalPos = snakes[currentPos];
+
+                        if (myRole === 'cowo') np1 = finalPos; else np2 = finalPos;
+                        db.collection("games").doc(GAME_ID).update({ 
+                            p1: np1, 
+                            p2: np2, 
+                            lastChallenge: allChallenges[finalPos - 1] 
+                        });
+                        localPlayerMoving = false;
+                    }, 800);
+                }, 1000);
+
+            }, 800);
+        }
+
+        function flipCard() { 
+            document.getElementById('card-inner').classList.add('is-flipped'); 
+        }
+
+        function closeModal() {
+            document.getElementById('card-inner').classList.remove('is-flipped');
+            
+            setTimeout(() => {
+                if (state.lastRoller === myRole) {
+                    let nextTurn = (myRole === 'cowo') ? 'cewe' : 'cowo';
+                    let text = state.lastChallenge.toUpperCase();
+                    let np1 = state.p1, np2 = state.p2;
+                    let chainMove = 0;
+
+                    if (text.includes("KAMU MAJU 2") || text.includes("MAJU 2 LANGKAH")) chainMove = 2;
+                    else if (text.includes("KAMU MAJU 3") || text.includes("MAJU 3 LANGKAH")) chainMove = 3;
+                    else if (text.includes("KAMU MAJU 1") || text.includes("MAJU 1 LANGKAH")) chainMove = 1;
+                    else if (text.includes("KAMU MUNDUR 1") || text.includes("MUNDUR 1 LANGKAH")) chainMove = -1;
+                    else if (text.includes("KAMU MUNDUR 2") || text.includes("MUNDUR 2 LANGKAH")) chainMove = -2;
+                    else if (text.includes("KAMU MUNDUR 3") || text.includes("MUNDUR 3 LANGKAH")) chainMove = -3;
+                    else if (text.includes("DIA MAJU 1") || text.includes("DIA MAJU 2")) {
+                        let opponentMove = text.includes("DIA MAJU 2") ? 2 : 1;
+                        if(myRole === 'cowo') np2 = Math.min(np2 + opponentMove, 100);
+                        else np1 = Math.min(np1 + opponentMove, 100);
+                    }
+
+                    if (text.includes("BONUS")) nextTurn = myRole;
+                    
+                    if (chainMove !== 0) {
+                        if(myRole === 'cowo') np1 = Math.max(1, Math.min(np1 + chainMove, 100));
+                        else np2 = Math.max(1, Math.min(np2 + chainMove, 100));
+                        
+                        let currentPos = (myRole === 'cowo') ? np1 : np2;
+                        
+                        if (ladders[currentPos]) currentPos = ladders[currentPos];
+                        else if (snakes[currentPos]) currentPos = snakes[currentPos];
+                        
+                        if(myRole === 'cowo') np1 = currentPos; else np2 = currentPos;
+
+                        db.collection("games").doc(GAME_ID).update({ 
+                            p1: np1, p2: np2, 
+                            lastChallenge: allChallenges[currentPos - 1] 
+                        });
+                        return; 
+                    }
+
+                    db.collection("games").doc(GAME_ID).update({ p1: np1, p2: np2, lastChallenge: "", turn: nextTurn });
+                }
+            }, 400);
+        }
+
+        function requestReset() { db.collection("games").doc(GAME_ID).update({ resetRequest: myRole }); }
+        function cancelReset() { db.collection("games").doc(GAME_ID).update({ resetRequest: "" }); }
+        function confirmReset() { 
+            let randomTurn = Math.random() < 0.5 ? 'cowo' : 'cewe'; // FITUR RANDOM TURN SAAT RESET
+            db.collection("games").doc(GAME_ID).set({ p1: 1, p2: 1, turn: randomTurn, lastChallenge: "", lastRoller: "", resetRequest: "" }); 
+        }
+    </script>
+</body>
+</html>

@@ -60,8 +60,10 @@
             border: 2px solid #fff; box-shadow: 0 0 15px rgba(0,0,0,0.8);
             display: flex; align-items: center; justify-content: center;
         }
-        /* Styling Bidak & Warna Isi SVG */
-        .pion svg { width: 65%; height: 65%; }
+        
+        /* CSS FIX UNTUK SVG BIDAK BIAR PROPORSIONAL */
+        .pion svg { width: 70%; height: 70%; display: block; }
+        
         .pion-cowo { background-color: var(--gold); top: 2%; left: 2%; z-index: 30; color: #000; }
         .pion-cewe { background-color: var(--crimson); bottom: 2%; right: 2%; z-index: 31; color: #fff; }
 
@@ -108,12 +110,6 @@
             </div>
         </div>
 
-        <div id="piece-selection" class="opacity-30 pointer-events-none transition-all duration-300 w-full max-w-sm mb-10 flex flex-col items-center">
-            <p class="text-gray-500 text-[10px] uppercase tracking-widest mb-3">Pilih Bentuk Pionmu</p>
-            <div class="flex gap-3 text-white/40" id="piece-buttons">
-                </div>
-        </div>
-
         <button id="start-btn" onclick="startGame()" class="opacity-0 pointer-events-none translate-y-4 transition-all duration-300 bg-gradient-to-r from-[#d4af37] to-[#aa7c11] text-black px-14 py-4 rounded-full font-black uppercase text-[12px] tracking-widest hover:scale-105 active:scale-95 shadow-[0_0_20px_rgba(197,160,89,0.4)]">Mulai Ritual</button>
     </div>
 
@@ -136,13 +132,16 @@
                                 <p class="text-3xl font-black text-[#c5a059]">#<span id="pos-1">1</span></p>
                                 <div id="icon-display-cowo" class="w-6 h-6 text-[#c5a059] opacity-50"></div>
                             </div>
+                            <div id="piece-menu-cowo" class="hidden flex justify-between gap-1 mt-4 pt-3 border-t border-white/10"></div>
                         </div>
+
                         <div id="ui-cewe" class="flex-1 lg:flex-none p-3 lg:p-4 rounded-xl bg-white/5 border border-white/5 transition-all">
                             <p class="text-[9px] font-bold text-gray-500 tracking-wider mb-1">POSISI CEWE</p>
                             <div class="flex items-center gap-3">
                                 <p class="text-3xl font-black text-[#dc2626]">#<span id="pos-2">1</span></p>
                                 <div id="icon-display-cewe" class="w-6 h-6 text-[#dc2626] opacity-50"></div>
                             </div>
+                            <div id="piece-menu-cewe" class="hidden flex justify-between gap-1 mt-4 pt-3 border-t border-white/10"></div>
                         </div>
                     </div>
                 </div>
@@ -224,13 +223,13 @@
         const db = firebase.firestore();
         const GAME_ID = "ritual_ldm_tor_v1";
 
-        // MASTER SVG CHESS PIECES DICTIONARY
+        // MASTER SVG CHESS PIECES (CLEAN VECTOR PATHS)
         const svgPieces = {
-            'king': '<svg viewBox="0 0 24 24" fill="currentColor" class="w-full h-full"><path d="M11 2V1h2v1h2v2h-2v2h-2V4H9V2h2zM5 10l1.5 8h11L19 10l-3.5 4-3.5-6-3.5 6L5 10zM4 20h16v2H4v-2z"/></svg>',
-            'queen': '<svg viewBox="0 0 24 24" fill="currentColor" class="w-full h-full"><path d="M5 18l-2-9 4 3 2.5-6 2.5 6 4-3-2 9H5zM4 20h16v2H4v-2z"/></svg>',
-            'rook': '<svg viewBox="0 0 24 24" fill="currentColor" class="w-full h-full"><path d="M6 8v10h12V8h-2v2h-2V8h-2v2H10V8H6zM5 5h3V3h2v2h4V3h2v2h3v3H5V5zM4 20h16v2H4v-2z"/></svg>',
-            'knight': '<svg viewBox="0 0 24 24" fill="currentColor" class="w-full h-full"><path d="M15 4c-1.5 0-3 1-3 2.5 0 1-.5 2-1 2H9.5L9 7l-2 2 .5 2H6L5 14h2l-1 4h12l1-6v-2h-2l2-4c-.5-1-1.5-2-2.5-2zM4 20h16v2H4v-2zM13 7a1 1 0 110-2 1 1 0 010 2z"/></svg>',
-            'pawn': '<svg viewBox="0 0 24 24" fill="currentColor" class="w-full h-full"><path d="M12 4a3 3 0 100 6 3 3 0 000-6zM10 11h4v7h2l-1 2H9l-1-2h2v-7zM6 20h12v2H6v-2z"/></svg>'
+            'king': '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M19,22H5V20H19V22M17,10C15.28,10 13.88,11.36 13.88,13.06C13.88,13.54 14,13.97 14.22,14.36L12,17.15L9.78,14.36C10,13.97 10.12,13.54 10.12,13.06C10.12,11.36 8.72,10 7,10C5.28,10 3.88,11.36 3.88,13.06C3.88,14.07 4.36,14.96 5.11,15.5L7.76,19H16.24L18.89,15.5C19.64,14.96 20.12,14.07 20.12,13.06C20.12,11.36 18.72,10 17,10M12,4L10,4L10,6L8,6L8,8L10,8L10,10L12,10L12,8L14,8L14,6L12,6L12,4Z"/></svg>',
+            'queen': '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M19,22H5V20H19V22M17.33,10C16.2,10 15.28,10.94 15.28,12.08C15.28,12.55 15.44,12.97 15.71,13.31L12,16.59L8.29,13.31C8.56,12.97 8.72,12.55 8.72,12.08C8.72,10.94 7.8,10 6.67,10C5.54,10 4.62,10.94 4.62,12.08C4.62,12.87 5.07,13.55 5.74,13.91L7.76,19H16.24L18.26,13.91C18.93,13.55 19.38,12.87 19.38,12.08C19.38,10.94 18.46,10 17.33,10M12,4A2,2 0 0,0 10,6A2,2 0 0,0 12,8A2,2 0 0,0 14,6A2,2 0 0,0 12,4Z"/></svg>',
+            'rook': '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M5,20H19V22H5V20M17,2V5H15V2H13V5H11V2H9V5H7V2H5V8H7V18H17V8H19V2H17Z"/></svg>',
+            'knight': '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M19,22H5V20H19V22M15.42,8.96C16.14,10.5 16.29,12.72 15.15,14.65L12.05,12.55L11,14L14.07,16.14C12.07,17.7 9.38,18 7,18V16C9.17,16 11.23,15.11 12.5,13.5C10.74,13.88 8.86,13.2 7.7,11.83L6.15,9.97C5.83,9.59 5.86,9 6.25,8.68L9.04,6.3C10.5,5.1 12.54,4.95 14.15,5.88L15,6.37C15,5.55 14.54,4.8 13.8,4.45L14.66,2.65C16.15,3.36 17.07,4.83 17,6.43V7.27L19.46,9.15L18.25,10.75L15.42,8.96Z"/></svg>',
+            'pawn': '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M19 22H5V20H19V22M15 18H9V16C9 14.34 10.34 13 12 13C13.66 13 15 14.34 15 16V18M12 4C13.66 4 15 5.34 15 7C15 8.66 13.66 10 12 10C10.34 10 9 8.66 9 7C9 5.34 10.34 4 12 4Z"/></svg>'
         };
 
         const allChallenges = [
@@ -340,49 +339,49 @@
         const snakes = { 27: 5, 40: 3, 43: 18, 54: 31, 66: 45, 76: 58, 89: 53, 99: 41 };
 
         let myRole = ""; 
-        let myIcon = ""; 
         let randomTurn = Math.random() < 0.5 ? 'cowo' : 'cewe'; 
         let state = { p1: 1, p2: 1, turn: randomTurn, lastChallenge: "", lastRoller: "", resetRequest: "", icon_cowo: "king", icon_cewe: "queen" };
         let localPlayerMoving = false;
-
-        // Render tombol SVG ke menu utama
-        function renderPieceButtons() {
-            const container = document.getElementById('piece-buttons');
-            container.innerHTML = "";
-            Object.keys(svgPieces).forEach(key => {
-                container.innerHTML += `
-                    <div onclick="selectPiece('${key}')" id="piece-${key}" class="piece-btn w-12 h-12 flex items-center justify-center border border-white/10 rounded-xl cursor-pointer transition-all p-2.5">
-                        ${svgPieces[key]}
-                    </div>
-                `;
-            });
-        }
-        renderPieceButtons();
 
         function selectRole(r) {
             myRole = r;
             document.querySelectorAll('[id^="btn-"]').forEach(el => el.classList.remove('border-[#c5a059]', 'bg-[#c5a059]/20', 'scale-105'));
             document.getElementById(`btn-${r}`).classList.add('border-[#c5a059]', 'bg-[#c5a059]/20', 'scale-105');
-            
-            if(myIcon === "") selectPiece(r === 'cowo' ? 'king' : 'queen');
-            
-            document.getElementById('piece-selection').classList.remove('opacity-30', 'pointer-events-none');
             document.getElementById('start-btn').classList.remove('opacity-0', 'pointer-events-none', 'translate-y-4');
         }
 
-        function selectPiece(iconKey) {
-            myIcon = iconKey;
-            document.querySelectorAll('.piece-btn').forEach(el => el.classList.remove('border-[#c5a059]', 'bg-[#c5a059]/20', 'text-white', 'scale-110'));
-            document.getElementById(`piece-${iconKey}`).classList.add('border-[#c5a059]', 'bg-[#c5a059]/20', 'text-white', 'scale-110');
+        // FUNGSI RENDER MENU UBAH PION (HANYA UNTUK ROLE SENDIRI)
+        function renderPieceMenu() {
+            let menuHTML = "";
+            Object.keys(svgPieces).forEach(key => {
+                menuHTML += `
+                    <div onclick="changePiece('${key}')" id="menu-piece-${myRole}-${key}" class="w-10 h-10 p-2 flex items-center justify-center border border-transparent rounded-lg cursor-pointer transition-all text-white/40 hover:text-white hover:bg-white/10">
+                        ${svgPieces[key]}
+                    </div>
+                `;
+            });
+            
+            // Masukkan ke dalam kotak skor milik user
+            document.getElementById(`piece-menu-${myRole}`).innerHTML = menuHTML;
+            document.getElementById(`piece-menu-${myRole}`).classList.remove('hidden');
+        }
+
+        function changePiece(iconKey) {
+            // Update ke firebase langsung
+            db.collection("games").doc(GAME_ID).update({
+                ['icon_' + myRole]: iconKey
+            });
         }
 
         function startGame() {
             document.getElementById('selection-screen').classList.add('hidden');
             document.getElementById('game-screen').classList.remove('hidden');
             createBoard();
+            renderPieceMenu(); // Panggil menu pion saat game mulai
             
+            // Set default icon jika belum ada
             db.collection("games").doc(GAME_ID).set({
-                ['icon_' + myRole]: myIcon
+                ['icon_' + myRole]: myRole === 'cowo' ? 'king' : 'queen'
             }, { merge: true });
 
             listenDB();
@@ -494,9 +493,21 @@
             document.getElementById('pos-1').innerText = state.p1;
             document.getElementById('pos-2').innerText = state.p2;
             
+            // Render icon ke UI Skor
             document.getElementById('icon-display-cowo').innerHTML = svgPieces[state.icon_cowo] || svgPieces['king'];
             document.getElementById('icon-display-cewe').innerHTML = svgPieces[state.icon_cewe] || svgPieces['queen'];
 
+            // Update UI Menu Pion (Kasih warna ke bidak yg sedang aktif)
+            if (document.getElementById(`piece-menu-${myRole}`)) {
+                let myCurrentIcon = state['icon_' + myRole] || (myRole === 'cowo' ? 'king' : 'queen');
+                document.querySelectorAll(`#piece-menu-${myRole} div`).forEach(el => {
+                    el.classList.remove('border-[#c5a059]', 'bg-[#c5a059]/20', 'text-[#c5a059]');
+                });
+                let activeBtn = document.getElementById(`menu-piece-${myRole}-${myCurrentIcon}`);
+                if(activeBtn) activeBtn.classList.add('border-[#c5a059]', 'bg-[#c5a059]/20', 'text-[#c5a059]');
+            }
+
+            // Render Pion di Papan
             document.querySelectorAll('.pion').forEach(p => p.remove());
             const c1 = document.getElementById(`c-${state.p1}`);
             const c2 = document.getElementById(`c-${state.p2}`);

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>The Ritual 🔥: LDM Edition</title>
+    <title>The Ritual 🔥: Offline Edition</title>
     <script src="https://cdn.tailwindcss.com"></script>
     
     <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-app-compat.js"></script>
@@ -92,21 +92,21 @@
             0% { stroke-dashoffset: 200; }
             100% { stroke-dashoffset: 0; }
         }
-        .path-snake { stroke-dasharray: 200; animation: snakeSlither 2s ease-out forwards; }
+        .path-snake-base { stroke-dasharray: 200; animation: snakeSlither 2s ease-out forwards; }
     </style>
 </head>
 <body>
 
     <div id="selection-screen" class="fixed inset-0 z-50 bg-black flex flex-col items-center justify-center p-6 text-center">
         <h1 class="serif text-5xl text-[#c5a059] mb-4 drop-shadow-[0_0_15px_rgba(197,160,89,0.3)]">The Ritual</h1>
-        <p class="text-gray-500 text-xs uppercase tracking-[0.3em] mb-10">LDM Edition</p>
+        <p class="text-gray-500 text-xs uppercase tracking-[0.3em] mb-10">Offline Edition</p>
         
         <div class="flex gap-6 w-full max-w-sm mb-8">
             <div onclick="selectRole('cowo')" id="btn-cowo" class="flex-1 p-5 border border-white/10 rounded-2xl flex flex-col items-center gap-3 transition-all hover:bg-white/10 cursor-pointer">
-                <p class="text-[11px] font-black uppercase tracking-wider">Pihak Cowo</p>
+                <p class="text-[11px] font-black uppercase tracking-wider">Pihak Suami</p>
             </div>
             <div onclick="selectRole('cewe')" id="btn-cewe" class="flex-1 p-5 border border-white/10 rounded-2xl flex flex-col items-center gap-3 transition-all hover:bg-white/10 cursor-pointer">
-                <p class="text-[11px] font-black uppercase tracking-wider">Pihak Cewe</p>
+                <p class="text-[11px] font-black uppercase tracking-wider">Pihak Istri</p>
             </div>
         </div>
 
@@ -123,11 +123,11 @@
             <div class="lg:w-1/4 p-4 lg:p-6 flex flex-col justify-between border-b lg:border-b-0 lg:border-r border-white/5 bg-black/40 z-40 relative">
                 <div>
                     <h1 class="serif text-2xl text-[#c5a059] mb-1">Truth or Dare</h1>
-                    <p class="text-[9px] uppercase tracking-widest text-gray-500 mb-5 lg:mb-8">LDM Board</p>
+                    <p class="text-[9px] uppercase tracking-widest text-gray-500 mb-5 lg:mb-8">Intimate Board</p>
                     
                     <div class="flex lg:flex-col gap-4 lg:gap-6 justify-between lg:justify-start">
                         <div id="ui-cowo" class="flex-1 lg:flex-none p-3 lg:p-4 rounded-xl bg-white/5 border border-white/5 transition-all">
-                            <p class="text-[9px] font-bold text-gray-500 tracking-wider mb-1">POSISI COWO</p>
+                            <p class="text-[9px] font-bold text-gray-500 tracking-wider mb-1">POSISI SUAMI</p>
                             <div class="flex items-center gap-3">
                                 <p class="text-3xl font-black text-[#c5a059]">#<span id="pos-1">1</span></p>
                                 <div id="icon-display-cowo" class="w-6 h-6 text-[#c5a059] opacity-50"></div>
@@ -136,7 +136,7 @@
                         </div>
 
                         <div id="ui-cewe" class="flex-1 lg:flex-none p-3 lg:p-4 rounded-xl bg-white/5 border border-white/5 transition-all">
-                            <p class="text-[9px] font-bold text-gray-500 tracking-wider mb-1">POSISI CEWE</p>
+                            <p class="text-[9px] font-bold text-gray-500 tracking-wider mb-1">POSISI ISTRI</p>
                             <div class="flex items-center gap-3">
                                 <p class="text-3xl font-black text-[#dc2626]">#<span id="pos-2">1</span></p>
                                 <div id="icon-display-cewe" class="w-6 h-6 text-[#dc2626] opacity-50"></div>
@@ -221,7 +221,7 @@
             firebase.initializeApp(firebaseConfig);
         }
         const db = firebase.firestore();
-        const GAME_ID = "ritual_ldm_tor_v1";
+        const GAME_ID = "ritual_offline_tor_v1";
 
         // MASTER SVG CHESS PIECES (CLEAN VECTOR PATHS)
         const svgPieces = {
@@ -233,112 +233,33 @@
         };
 
         const allChallenges = [
-            "START: Kalian harus janji main jujur dan berani sampai selesai!", 
-            "KAMU: Ceritakan apa kesan pertama kamu pas awal kenal dia?", 
-            "KAMU: Kirim VN desah pelan panggil nama dia 5 detik.", 
-            "KAMU: Sebutkan hal apa dari dia yang paling sering bikin kamu kangen?", 
-            "MAJU 2 LANGKAH!",
-            "KAMU: Kirim PAP area dada kamu (pakai baju/tanpa baju terserah), kasih lihat apa yang bakal dia peluk nanti.", 
-            "KAMU: Jujur, kapan terakhir kali kamu horny gara-gara mikirin dia?", 
-            "KAMU: Kirim video 10 detik mainin jari kamu ke bibir/mulut sendiri, bayangin itu jari dia.", 
-            "MUNDUR 1 LANGKAH", 
-            "KAMU: Bagian tubuh dia yang mana yang paling pengen kamu gigit?",
-            "KAMU: Kirim VN bilang 'I Love You' pake suara paling manja/deep.", 
-            "VIDEO: Rekam 15 detik kamu lagi gigit jari sambil merintih pelan panggil nama dia.", 
-            "DIA MAJU 2 LANGKAH", 
-            "KAMU: Pernah nggak kamu mimpiin dia yang 'aneh-aneh'? Ceritain detailnya!", 
-            "MAJU 1 LANGKAH",
-            "FREE: Kamu boleh minta 1 PAP apa aja ke dia!", 
-            "KAMU: Kirim pap bibir kamu (pose kiss atau gigit bibir sedikit).", 
-            "KAMU: Sebutin 3 hal yang bakal kalian lakuin pertama kali pas ketemu nanti.", 
-            "DIA MAJU 1 LANGKAH", 
-            "KAMU: Ketik 1 paragraf 'dirty talk' apa yang pengen kamu lakuin ke dia saat ini.",
-            "KAMU: Menurutmu, baju apa yang paling cocok dan seksi kalau dia yang pake?", 
-            "KAMU: Kirim VN bilang 'Sayang, cepet pulang... aku udah basah/keras nungguin kamu' pakai nada paling menggoda.", 
-            "KAMU: Rekam video 15 detik tatap kamera tanpa kedip sambil senyum nakal.", 
-            "KAMU: Lepas atasan kamu sekarang, kirim foto setengah badan (boleh disensor dikit biar bikin penasaran).", 
-            "DIA MAJU 2 LANGKAH",
-            "KAMU: Jujur, siapa yang lebih sering sange duluan kalau kalian lagi ngobrol?", 
-            "BONUS: Kamu boleh lempar dadu 1x lagi!", 
-            "DIA MAJU 1 LANGKAH", 
-            "FREE: Kamu bebas kasih perintah apa aja ke dia (dia harus turuti selama 5 menit).", 
-            "KAMU: Rekam video 1 menit nunjukin ekspresi/muka sange kamu ke dia.",
-            "KAMU: Kamu lebih suka dia pake parfum wangi manis atau maskulin?", 
-            "KAMU: Kirim VN suara kamu lagi gigit jari atau nahan desah pelan.", 
-            "KAMU: Apa hal paling nakal yang pernah kamu bayangin lakuin bareng dia?", 
-            "KAMU: Kirim video 15 detik kamu lagi jilat/gigit bibir bawahmu sendiri sambil natap tajam ke kamera.", 
-            "KAMU: Rekam video singkat kamu lagi bisikin hal kotor ke dekat mic.",
-            "KAMU: Kalau kalian cuma punya waktu 1 jam di kamar berdua, mau ngapain aja?", 
-            "KAMU: Rekam video kamu lagi usap-usap pelan area sensitif kamu dari luar baju/celana selama 20 detik.", 
-            "KAMU: Kirim foto pakaian dalam yang mau kamu pakai pas ketemu dia nanti (atau foto pas lagi dipake sekarang!).", 
-            "MUNDUR 2 LANGKAH", 
-            "MAJU 2 LANGKAH",
-            "KAMU: Pernah nggak kamu merasa cemburu buta pas LDR gini? Ceritain!", 
-            "VIDEO: Tunjukin ke kamera aksi kamu lagi meraba bagian tubuhmu yang paling pengen dia sentuh sekarang.", 
-            "VIDEO: Rekam diri kamu lagi mendesah keenakan selama 30 detik, bayangin dia lagi mainin kamu.", 
-            "KAMU: Kirim PAP close-up area paling sensitif kamu (boleh di-tease pakai tangan atau kain supaya nggak full terlihat).", 
-            "KAMU: Apa rahasia tentang tubuh kamu yang mungkin belum dia tau?",
-            "MUNDUR 2 LANGKAH", 
-            "KAMU: Tulis inisial/nama dia di bagian tubuh kamu pake pulpen/spidol, lalu pap!", 
-            "FREE: Kamu berhak minta dia kirim pap bagian tubuh favorit kamu.", 
-            "KAMU: Kamu harus nurutin semua ketikan/omongan dia selama 5 menit ke depan.", 
-            "MUNDUR 3 LANGKAH",
-            "KAMU: Rekam video POV dari bawah (angle mendongak), seolah-olah dia lagi ada di bawah merhatiin kamu.", 
-            "MUNDUR 3 LANGKAH", 
-            "FREE: Minta 1 gaya PAP spesifik dari dia sekarang.", 
-            "VIDEO: Mainkan dada/puting kamu sendiri di depan kamera pelan-pelan selama 30 detik.", 
-            "DIA MAJU 2 LANGKAH",
-            "KAMU: Kalau nanti tidur bareng, posisi pelukan favorit kamu pengennya gimana?", 
-            "KAMU: Kirim VN bilang 'Sayang, aku mau...' (lanjutin kalimatnya sendiri dengan jujur).", 
-            "MAJU 1 LANGKAH", 
-            "KAMU: Lepas celana/bawahan yang kamu pakai sekarang, kirim PAP sisanya!", 
-            "MUNDUR 2 LANGKAH",
-            "KAMU: Apa sifat atau kebiasaan dia yang paling bikin kamu cepat turn-on?", 
-            "BONUS: Lempar dadu 1x lagi!", 
-            "KAMU: Kirim video nakal singkat (minimal 15 detik).", 
-            "VIDEO: Rekam dan tunjukin area tubuh paling sensitif kamu selama 30 detik.", 
-            "MAJU 1 LANGKAH",
-            "KAMU: Jujur, apa godaan terberat kamu selama kalian menjalani LDM/LDR ini?", 
-            "VIDEO CALL: Telepon dia sekarang, kalian harus 'main' bareng lewat kamera (Minimal 30 Menit).", 
-            "KAMU: Kamu harus turuti skenario roleplay apapun dari dia selama 10 menit.", 
-            "FREE: Kamu boleh minta 1 video rekaman nakal khusus dari dia.", 
-            "BONUS: Lempar dadu 1x lagi!",
-            "KAMU: VN dengan suara paling sange: 'Bunda / Tsuma sayang, aku pengen banget dimanjain sama kamu sekarang...'", 
-            "MUNDUR 2 LANGKAH", 
-            "KAMU: Kirim 3 foto selfie berturut-turut dengan ekspresi paling menggoda.", 
-            "VIDEO: Rekam detik-detik kamu ngelepas SEMUA baju depan kamera pelan-pelan.", 
-            "KAMU: Kirim VN rintihan paling seksi yang bisa kamu buat sekarang.",
-            "KAMU: Kapan terakhir kali kamu self-service sambil ngebayangin muka dia?", 
-            "KAMU: Kirim pap sebagian kecil pakaian dalam yang lagi dipake (teasing edge).", 
-            "KAMU: Sebutin satu fantasi liar yang pengen kamu lakuin tapi malu bilang ke dia.", 
-            "DIA MAJU 2 LANGKAH", 
-            "VIDEO: Bikin video 1 menit ngelakuin apa aja yang dia ketik di chat sekarang.",
-            "KAMU: Kamu lebih suka dia main kasar (dominan) atau lembut pelan-pelan?", 
-            "BONUS: Lempar dadu 1x lagi!", 
-            "VIDEO: Rekam kamu lagi memanjakan/menyentuh dirimu sendiri (self-service) pelan-pelan selama 1 menit.", 
-            "KAMU: Kirim VN bisikan kata 'I'm yours' berkali-kali di dekat mic.", 
-            "VIDEO: Rekam dan tunjukin area yang jadi favorit dia di tubuhmu selama 30 detik.",
-            "KAMU: Kirim pap lidah kamu (pose seksi/teasing).", 
-            "KAMU: Kalau rindu ini ada wujudnya, seberapa besar wujudnya sekarang?", 
-            "VIDEO CALL: VC 5 menit, tunjukin langsung gimana cara kamu muasin diri sendiri pakai tangan.", 
-            "MAJU 3 LANGKAH", 
-            "KAMU: Pakai es batu (atau air dingin), usap ke area sensitifmu, dan rekam reaksinya 15 detik!",
-            "MAJU 3 LANGKAH", 
-            "FREE: Minta video dia lagi ngelakuin satu hal spesifik yang kamu mau.", 
-            "VIDEO CALL: Telepon dia 1 jam penuh. Kalian bebas ngapain aja, ini waktu privasi penuh!", 
-            "VIDEO: Saling kirim video 30 detik pamerin area bawah (teasing).", 
-            "DIA MAJU 2 LANGKAH",
-            "KAMU: Apa ketakutan terbesar kamu tentang hubungan LDM ini yang mau kamu lewatin bareng dia?", 
-            "KAMU: Kirim satu video koleksi pribadi paling berani yang pernah kamu simpan buat dia.", 
-            "KAMU: Kirim VN bilang 'Sayang, aku udah nggak tahan pengen kamu sekarang...'", 
-            "FREE: Ini permintaan mutlak! Kamu bebas minta 1 hal terakhir yang HARUS dia turuti.", 
-            "FINISH: VIDEO CALL SEKARANG! Saling tatap, ungkapin janji bakal setia, dan berikan klimaks manis bareng!"
+            "START: Siap-siap 'Hajar'", "Tatap matanya 1 mnt", "Kamu maju 2 langkah!", "Pegang bagian tubuh dia favoritmu saat ini", "Dia maju 2 langkah!",
+            "Bisikkan kata-kata nakal ke telinganya", "Pelukan 2 mnt", "Kiss pipi dia", "Garuk punggung dia 2 mnt", "Cium titik lemah dia 1 mnt",
+            "Tutup mata & biarkan dia menyentuhmu dmn saja", "Kirim foto nakal ke HP nya", "Nose to nose (gesek hidung) 1 mnt", "Pegang bagian tubuh dia favoritmu", "Kamu maju 1 langkah",
+            "Kiss jari tangannya & tatap matanya 1 mnt", "FREE: Kamu boleh minta dioralin dia 2 mnt", "Oralin dia 3 mnt", "Dia maju 1 langkah", "Lepas satu pakaian pasangan",
+            "Kiss area Miss V/Mr P dari luar 2 mnt", "Mainin dada istri 1 mnt", "Oralin dia 3 mnt", "Lakukan striptease sampai sisa CD", "Dia maju 2 langkah",
+            "Remas Mr P / Miss V 1 mnt", "BONUS: Lempar dadu 1x lagi", "Dia maju 1 langkah", "Kamu boleh minta apa aja ke dia 1 mnt", "Saling masturbasi sampai klimaks",
+            "Mainin Miss V pakai tangan 2 mnt", "Tutup mata dia & kiss sekujur tubuh 2 mnt", "Gaya 69 selama 3 mnt", "Dia harus telanjang!", "Masturbasi sendiri 1 mnt",
+            "Gesek kemaluan ke Mr P/Miss V 2 mnt", "Jilat dari paha sampai bawah 2 mnt", "Dia harus telanjang!", "Mainin dada istri 1 mnt", "Gesek Mr P ke Miss V dari luar 2 mnt",
+            "Kamu maju 2 langkah", "Pijat bebas 5 mnt", "Cobain 69 yox 3 mnt!", "Dia harus telanjang!", "Sambil ngulum gesekin Mr P ke Miss V 2 mnt",
+            "Kamu mundur 2 langkah", "Jilat / mainin dada 2 mnt", "Gratis dia sampai puas 2 mnt", "Saling masturbasi sampai klimaks", "Kamu mundur 3 langkah",
+            "Gratis dia sampai puas 2 mnt", "Kamu mundur 3 langkah", "FREE: Kamu boleh minta apa aja 3 mnt", "Ngulum sambil meraba bawah 2 mnt", "Dia maju 2 langkah",
+            "Gaya Misionaris 2 mnt", "Geser Mr.P ke Miss V 2 mnt", "Kamu maju 1 langkah", "Gaya Doggy Style 2 mnt", "Kamu mundur 2 langkah",
+            "2 mnt sex santai pelan", "BONUS: Lempar dadu 1x lagi", "2 mnt sex di kegelapan total", "2 mnt sex gaya faceoff", "Kamu maju 1 langkah",
+            "WOT 2 mnt", "2 mnt sex sambil angkat kaki istri", "Gratis istri sesuai perintah dia 3 mnt", "FREE: Kamu boleh minta apa aja 4 mnt", "BONUS: Lempar dadu 1x lagi",
+            "2 mnt sex sambil ngaca", "Kamu mundur 2 langkah", "2 mnt sex sambil berdiri", "69 lagi yox 3 mnt!!", "2 mnt gaya favorit",
+            "2 mnt gaya favorit dia", "2 mnt Reverse Cowgirl", "3 mnt sex mendesah kencang", "3 mnt gaya favorit kamu", "Dia maju 2 langkah",
+            "2 mnt gaya Doggy", "69 lagi yox 3 mnt!!!", "BONUS: Lempar dadu 1x lagi", "2 mnt gaya favorit dia", "Oralin suami sesuai perintah dia 2 mnt",
+            "Sex sambil gendong istri 2 mnt", "2 mnt sex kasar", "Kamu boleh minta dioralin 4 mnt", "3 mnt sex di blindfold", "Kamu maju 3 langkah",
+            "WOT 2 mnt", "Kamu maju 3 langkah", "FREE: Kamu boleh minta apa aja 4 mnt", "2 mnt sex bebas bunyi", "3 mnt sex dia di blindfold",
+            "Dia maju 2 langkah", "3 mnt gaya favorit kamu", "3 mnt sex mendesah berisik", "3 mnt gaya favorit berdua", "FINISH: SIAP-SIAP RONDE 2"
         ];
 
         const ladders = { 4: 25, 13: 46, 33: 49, 50: 69, 42: 63, 62: 81, 74: 92 };
         const snakes = { 27: 5, 40: 3, 43: 18, 54: 31, 66: 45, 76: 58, 89: 53, 99: 41 };
 
         let myRole = ""; 
+        let myIcon = ""; 
         let randomTurn = Math.random() < 0.5 ? 'cowo' : 'cewe'; 
         let state = { p1: 1, p2: 1, turn: randomTurn, lastChallenge: "", lastRoller: "", resetRequest: "", icon_cowo: "king", icon_cewe: "queen" };
         let localPlayerMoving = false;
@@ -350,7 +271,7 @@
             document.getElementById('start-btn').classList.remove('opacity-0', 'pointer-events-none', 'translate-y-4');
         }
 
-        // FUNGSI RENDER MENU UBAH PION (HANYA UNTUK ROLE SENDIRI)
+        // Render Menu Ubah Pion
         function renderPieceMenu() {
             let menuHTML = "";
             Object.keys(svgPieces).forEach(key => {
@@ -361,13 +282,11 @@
                 `;
             });
             
-            // Masukkan ke dalam kotak skor milik user
             document.getElementById(`piece-menu-${myRole}`).innerHTML = menuHTML;
             document.getElementById(`piece-menu-${myRole}`).classList.remove('hidden');
         }
 
         function changePiece(iconKey) {
-            // Update ke firebase langsung
             db.collection("games").doc(GAME_ID).update({
                 ['icon_' + myRole]: iconKey
             });
@@ -377,9 +296,8 @@
             document.getElementById('selection-screen').classList.add('hidden');
             document.getElementById('game-screen').classList.remove('hidden');
             createBoard();
-            renderPieceMenu(); // Panggil menu pion saat game mulai
+            renderPieceMenu();
             
-            // Set default icon jika belum ada
             db.collection("games").doc(GAME_ID).set({
                 ['icon_' + myRole]: myRole === 'cowo' ? 'king' : 'queen'
             }, { merge: true });
@@ -429,29 +347,22 @@
                 }
             });
 
+            // ULAR DENGAN POLA SISIK SEDERHANA
             Object.keys(snakes).forEach(start => {
                 let s = getCoords(parseInt(start)); let e = getCoords(snakes[start]);   
-                let dx = e.x - s.x;
-                let dy = e.y - s.y;
-                let angle = Math.atan2(dy, dx);
-                let nx = -Math.sin(angle);
-                let ny = Math.cos(angle);
-                let amp = 4; 
+                let midX = (s.x+e.x)/2 + (Math.random() > 0.5 ? 10 : -10);
+                let midY = (s.y+e.y)/2;
                 
-                let cx1 = s.x + dx*0.3 + nx*amp;
-                let cy1 = s.y + dy*0.3 + ny*amp;
-                let cx2 = s.x + dx*0.7 - nx*amp;
-                let cy2 = s.y + dy*0.7 - ny*amp;
+                const pathDef = `M ${s.x} ${s.y} Q ${midX} ${midY} ${e.x} ${e.y}`;
 
-                svgHTML += `<path class="path-snake" d="M ${s.x} ${s.y} C ${cx1} ${cy1}, ${cx2} ${cy2}, ${e.x} ${e.y}" fill="none" stroke="#dc2626" stroke-width="2.5" stroke-linecap="round" opacity="0.9"/>`;
+                // Badan ular merah
+                svgHTML += `<path class="path-snake-base" d="${pathDef}" fill="none" stroke="#dc2626" stroke-width="2.5" opacity="0.9" stroke-linecap="round"/>`;
                 
-                let headAngle = Math.atan2(cy1 - s.y, cx1 - s.x) * 180 / Math.PI;
-                svgHTML += `<g transform="translate(${s.x}, ${s.y}) rotate(${headAngle})">
-                    <path d="M -2.5,0 L -4.5,-1 M -2.5,0 L -4.5,1" stroke="#fca5a5" stroke-width="0.5" fill="none"/>
-                    <ellipse cx="0" cy="0" rx="2.5" ry="1.8" fill="#dc2626" />
-                    <circle cx="-0.8" cy="-1" r="0.4" fill="#000"/>
-                    <circle cx="-0.8" cy="1" r="0.4" fill="#000"/>
-                </g>`;
+                // Pola sisik / corak (garis-garis emas)
+                svgHTML += `<path class="path-snake-base" d="${pathDef}" fill="none" stroke="#8a6a2c" stroke-width="1.8" opacity="0.7" stroke-linecap="round" stroke-dasharray="2 4"/>`;
+                
+                // Kepala ular
+                svgHTML += `<circle cx="${s.x}" cy="${s.y}" r="2" fill="#dc2626" opacity="0.9"/>`;
             });
 
             document.getElementById('svg-overlay').innerHTML = svgHTML;
@@ -476,7 +387,7 @@
 
         function showTurnToast(turn) {
             const toast = document.getElementById('turn-toast');
-            toast.innerText = turn === myRole ? "GILIRAN KAMU SEKARANG" : `GILIRAN DIA (${turn.toUpperCase()})`;
+            toast.innerText = turn === myRole ? "GILIRAN KAMU SEKARANG" : `GILIRAN PASANGAN (${turn.toUpperCase()})`;
             toast.style.opacity = "1";
             toast.style.transform = "translate(-50%, 0)";
             setTimeout(() => {
@@ -493,11 +404,9 @@
             document.getElementById('pos-1').innerText = state.p1;
             document.getElementById('pos-2').innerText = state.p2;
             
-            // Render icon ke UI Skor
             document.getElementById('icon-display-cowo').innerHTML = svgPieces[state.icon_cowo] || svgPieces['king'];
             document.getElementById('icon-display-cewe').innerHTML = svgPieces[state.icon_cewe] || svgPieces['queen'];
 
-            // Update UI Menu Pion (Kasih warna ke bidak yg sedang aktif)
             if (document.getElementById(`piece-menu-${myRole}`)) {
                 let myCurrentIcon = state['icon_' + myRole] || (myRole === 'cowo' ? 'king' : 'queen');
                 document.querySelectorAll(`#piece-menu-${myRole} div`).forEach(el => {
@@ -507,7 +416,6 @@
                 if(activeBtn) activeBtn.classList.add('border-[#c5a059]', 'bg-[#c5a059]/20', 'text-[#c5a059]');
             }
 
-            // Render Pion di Papan
             document.querySelectorAll('.pion').forEach(p => p.remove());
             const c1 = document.getElementById(`c-${state.p1}`);
             const c2 = document.getElementById(`c-${state.p2}`);
@@ -554,7 +462,7 @@
             if (state.resetRequest && state.resetRequest !== "") {
                 resetModal.classList.remove('hidden');
                 if (state.resetRequest === myRole) {
-                    document.getElementById('reset-text').innerText = "Menunggu persetujuan dia untuk reset...";
+                    document.getElementById('reset-text').innerText = "Menunggu persetujuan pasangan untuk reset...";
                     document.getElementById('reset-actions').innerHTML = `<button onclick="cancelReset()" class="w-full py-4 border border-red-500/50 text-red-500 rounded-full font-black text-[11px] uppercase tracking-wider">BATAL</button>`;
                 } else {
                     document.getElementById('reset-text').innerText = "Pasanganmu mengajak mengulang ritual dari awal. Setuju?";

@@ -18,20 +18,18 @@
             background-color: var(--charcoal); 
             color: #e5e7eb; 
             margin: 0; padding: 0;
-            min-height: 100dvh; 
-            overflow-x: hidden; 
+            position: fixed; width: 100vw; height: 100dvh; overflow: hidden; 
             background-image: radial-gradient(circle at center, #1a1a1a 0%, #000 100%);
         }
         .serif { font-family: 'Playfair Display', serif; }
 
         .board-container {
             position: relative;
-            display: grid; grid-template-columns: repeat(10, 1fr); gap: 1px;
-            width: 100%; max-width: 95vw; 
-            aspect-ratio: 1/1;
-            background: rgba(197, 160, 89, 0.4); 
-            padding: 2px; border-radius: 8px;
-            box-shadow: 0 0 40px rgba(197, 160, 89, 0.15);
+            display: grid; grid-template-columns: repeat(10, 1fr); gap: 2px;
+            width: 100%; max-width: 95vw; max-height: 95vw; aspect-ratio: 1/1;
+            background: rgba(197, 160, 89, 0.2); 
+            padding: 3px; border-radius: 8px;
+            box-shadow: 0 0 40px rgba(197, 160, 89, 0.1);
             margin: auto;
         }
 
@@ -42,30 +40,25 @@
         #svg-overlay {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
             pointer-events: none; z-index: 15;
-            filter: drop-shadow(0 4px 5px rgba(0,0,0,0.8));
+            filter: drop-shadow(0 4px 6px rgba(0,0,0,0.9));
         }
 
         .cell {
             position: relative; display: flex; align-items: center; justify-content: center;
-            font-size: 11px; font-weight: 900; color: #f3f4f6; 
-            border-radius: 3px; overflow: hidden; 
+            font-size: 11px; font-weight: 900; color: #f3f4f6; background: rgba(10, 10, 10, 0.9);
+            border-radius: 4px; overflow: hidden; border: 1px solid rgba(255,255,255,0.03);
             text-shadow: 0 0 3px #000, 0 0 5px #000; z-index: 10; text-align: center;
         }
         
         .cell-number { z-index: 20; position: relative; opacity: 0.6; }
         
         .pion {
-            width: 24px; height: 24px; border-radius: 50%; position: absolute;
+            width: 18px; height: 18px; border-radius: 50%; position: absolute;
             transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
             border: 2px solid #fff; box-shadow: 0 0 15px rgba(0,0,0,0.8);
-            display: flex; align-items: center; justify-content: center;
         }
-        
-        /* CSS FIX UNTUK SVG BIDAK BIAR PROPORSIONAL */
-        .pion svg { width: 70%; height: 70%; display: block; }
-        
-        .pion-cowo { background-color: var(--gold); top: 2%; left: 2%; z-index: 30; color: #000; }
-        .pion-cewe { background-color: var(--crimson); bottom: 2%; right: 2%; z-index: 31; color: #fff; }
+        .pion-cowo { background-color: var(--gold); top: 10%; left: 10%; z-index: 30; }
+        .pion-cewe { background-color: var(--crimson); bottom: 10%; right: 10%; z-index: 31; }
 
         @keyframes jump {
             0% { transform: translateY(0) scale(1); }
@@ -89,27 +82,26 @@
         .dice-anim { animation: dicePop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
         
         @keyframes snakeSlither {
-            0% { stroke-dashoffset: 200; }
+            0% { stroke-dashoffset: 1000; }
             100% { stroke-dashoffset: 0; }
         }
-        .path-snake { stroke-dasharray: 200; animation: snakeSlither 2s ease-out forwards; }
+        /* CSS class untuk animasi muncul ular saat load */
+        .path-snake-base { stroke-dasharray: 1000; animation: snakeSlither 3s linear forwards; }
     </style>
 </head>
 <body>
 
     <div id="selection-screen" class="fixed inset-0 z-50 bg-black flex flex-col items-center justify-center p-6 text-center">
         <h1 class="serif text-5xl text-[#c5a059] mb-4 drop-shadow-[0_0_15px_rgba(197,160,89,0.3)]">The Ritual</h1>
-        <p class="text-gray-500 text-xs uppercase tracking-[0.3em] mb-10">Offline Edition</p>
-        
-        <div class="flex gap-6 w-full max-w-sm mb-8">
-            <div onclick="selectRole('cowo')" id="btn-cowo" class="flex-1 p-5 border border-white/10 rounded-2xl flex flex-col items-center gap-3 transition-all hover:bg-white/10 cursor-pointer">
+        <p class="text-gray-500 text-xs uppercase tracking-[0.3em] mb-12">Offline Edition</p>
+        <div class="flex gap-6 w-full max-w-sm mb-10">
+            <div onclick="selectRole('cowo')" id="btn-cowo" class="flex-1 p-6 border border-white/10 rounded-2xl flex flex-col items-center gap-3 transition-all hover:bg-white/10 cursor-pointer">
                 <p class="text-[11px] font-black uppercase tracking-wider">Pihak Suami</p>
             </div>
-            <div onclick="selectRole('cewe')" id="btn-cewe" class="flex-1 p-5 border border-white/10 rounded-2xl flex flex-col items-center gap-3 transition-all hover:bg-white/10 cursor-pointer">
+            <div onclick="selectRole('cewe')" id="btn-cewe" class="flex-1 p-6 border border-white/10 rounded-2xl flex flex-col items-center gap-3 transition-all hover:bg-white/10 cursor-pointer">
                 <p class="text-[11px] font-black uppercase tracking-wider">Pihak Istri</p>
             </div>
         </div>
-
         <button id="start-btn" onclick="startGame()" class="opacity-0 pointer-events-none translate-y-4 transition-all duration-300 bg-gradient-to-r from-[#d4af37] to-[#aa7c11] text-black px-14 py-4 rounded-full font-black uppercase text-[12px] tracking-widest hover:scale-105 active:scale-95 shadow-[0_0_20px_rgba(197,160,89,0.4)]">Mulai Ritual</button>
     </div>
 
@@ -117,57 +109,48 @@
         Giliran Kamu
     </div>
 
-    <div id="game-screen" class="hidden w-full min-h-[100dvh] lg:flex lg:items-center lg:justify-center p-4 lg:p-10 pb-8 lg:pb-10">
-        <div class="flex flex-col lg:flex-row w-full max-w-6xl bg-[#0a0a0a]/80 lg:border lg:border-white/5 lg:rounded-3xl lg:shadow-2xl overflow-hidden relative">
+    <div id="game-screen" class="hidden w-full h-full lg:flex lg:items-center lg:justify-center p-4 lg:p-10">
+        <div class="flex flex-col lg:flex-row w-full max-w-6xl h-full lg:h-[80vh] bg-[#0a0a0a]/80 lg:border lg:border-white/5 lg:rounded-3xl lg:shadow-2xl overflow-hidden relative">
             
-            <div class="lg:w-1/4 p-4 lg:p-6 flex flex-col justify-between border-b lg:border-b-0 lg:border-r border-white/5 bg-black/40 z-40 relative">
+            <div class="lg:w-1/4 p-6 flex flex-col justify-between border-b lg:border-b-0 lg:border-r border-white/5 bg-black/40 z-40 relative">
                 <div>
-                    <h1 class="serif text-2xl text-[#c5a059] mb-1">The Ritual</h1>
-                    <p class="text-[9px] uppercase tracking-widest text-gray-500 mb-5 lg:mb-8">Intimate Board</p>
+                    <h1 class="serif text-2xl text-[#c5a059] mb-1">Truth or Dare</h1>
+                    <p class="text-[9px] uppercase tracking-widest text-gray-500 mb-8">Intimate Board</p>
                     
-                    <div class="flex lg:flex-col gap-4 lg:gap-6 justify-between lg:justify-start">
-                        <div id="ui-cowo" class="flex-1 lg:flex-none p-3 lg:p-4 rounded-xl bg-white/5 border border-white/5 transition-all">
+                    <div class="flex lg:flex-col gap-6 justify-between lg:justify-start">
+                        <div id="ui-cowo" class="flex-1 lg:flex-none p-4 rounded-xl bg-white/5 border border-white/5 transition-all">
                             <p class="text-[9px] font-bold text-gray-500 tracking-wider mb-1">POSISI SUAMI</p>
-                            <div class="flex items-center gap-3">
-                                <p class="text-3xl font-black text-[#c5a059]">#<span id="pos-1">1</span></p>
-                                <div id="icon-display-cowo" class="w-6 h-6 text-[#c5a059] opacity-50"></div>
-                            </div>
-                            <div id="piece-menu-cowo" class="hidden flex justify-between gap-1 mt-4 pt-3 border-t border-white/10"></div>
+                            <p class="text-3xl font-black text-[#c5a059]">#<span id="pos-1">1</span></p>
                         </div>
-
-                        <div id="ui-cewe" class="flex-1 lg:flex-none p-3 lg:p-4 rounded-xl bg-white/5 border border-white/5 transition-all">
+                        <div id="ui-cewe" class="flex-1 lg:flex-none p-4 rounded-xl bg-white/5 border border-white/5 transition-all">
                             <p class="text-[9px] font-bold text-gray-500 tracking-wider mb-1">POSISI ISTRI</p>
-                            <div class="flex items-center gap-3">
-                                <p class="text-3xl font-black text-[#dc2626]">#<span id="pos-2">1</span></p>
-                                <div id="icon-display-cewe" class="w-6 h-6 text-[#dc2626] opacity-50"></div>
-                            </div>
-                            <div id="piece-menu-cewe" class="hidden flex justify-between gap-1 mt-4 pt-3 border-t border-white/10"></div>
+                            <p class="text-3xl font-black text-[#dc2626]">#<span id="pos-2">1</span></p>
                         </div>
                     </div>
                 </div>
                 
-                <button onclick="requestReset()" class="hidden lg:flex items-center gap-2 text-white/30 hover:text-white/80 transition-colors mt-6 lg:mt-auto text-[10px] uppercase font-bold tracking-widest">
+                <button onclick="requestReset()" class="hidden lg:flex items-center gap-2 text-white/30 hover:text-white/80 transition-colors mt-auto text-[10px] uppercase font-bold tracking-widest">
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
                     Reset Board
                 </button>
             </div>
 
-            <div class="flex-1 flex justify-center items-center p-3 lg:p-2 relative min-h-[45vh] lg:min-h-[60vh]">
+            <div class="flex-1 flex justify-center items-center p-2 relative h-[60vh] lg:h-full">
                 <div id="board" class="board-container">
                     <svg id="svg-overlay" viewBox="0 0 100 100" preserveAspectRatio="none"></svg>
                 </div>
             </div>
 
-            <div class="lg:w-1/4 p-4 lg:p-6 flex flex-col justify-center items-center border-t lg:border-t-0 lg:border-l border-white/5 bg-black/40 z-40 relative gap-4 lg:gap-8">
+            <div class="lg:w-1/4 p-6 flex flex-col justify-center items-center border-t lg:border-t-0 lg:border-l border-white/5 bg-black/40 z-40 relative gap-8">
                 <p id="turn-info" class="text-[12px] font-black uppercase tracking-widest text-gray-400 text-center">Syncing...</p>
                 
-                <button id="roll-btn" onclick="rollDice()" class="w-full max-w-[280px] py-4 lg:py-0 lg:h-40 rounded-full lg:rounded-3xl bg-gradient-to-b from-[#222] to-[#111] border-2 border-[#c5a059] flex flex-row lg:flex-col items-center justify-center gap-3 hover:bg-[#c5a059]/10 active:scale-95 transition-all disabled:opacity-30 disabled:pointer-events-none group shadow-[0_0_20px_rgba(197,160,89,0.15)] relative overflow-hidden">
+                <button id="roll-btn" onclick="rollDice()" class="w-full max-w-[200px] aspect-square lg:aspect-auto lg:h-40 rounded-full lg:rounded-3xl bg-gradient-to-b from-[#222] to-[#111] border-2 border-[#c5a059] flex flex-col items-center justify-center gap-3 hover:bg-[#c5a059]/10 active:scale-95 transition-all disabled:opacity-30 disabled:pointer-events-none group shadow-[0_0_30px_rgba(197,160,89,0.15)] relative overflow-hidden">
                     <div class="absolute inset-0 bg-[#c5a059]/20 translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-out"></div>
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#c5a059" stroke-width="2" class="relative z-10 group-hover:rotate-180 transition-transform duration-700 lg:w-10 lg:h-10 lg:stroke-[1.5]"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5" fill="#c5a059"></circle><circle cx="15.5" cy="15.5" r="1.5" fill="#c5a059"></circle><circle cx="15.5" cy="8.5" r="1.5" fill="#c5a059"></circle><circle cx="8.5" cy="15.5" r="1.5" fill="#c5a059"></circle><circle cx="12" cy="12" r="1.5" fill="#c5a059"></circle></svg>
-                    <span class="relative z-10 text-[#c5a059] font-black tracking-[0.2em] text-[12px] uppercase group-hover:text-white transition-colors">Roll Dice</span>
+                    <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#c5a059" stroke-width="1.5" class="relative z-10 group-hover:rotate-180 transition-transform duration-700"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5" fill="#c5a059"></circle><circle cx="15.5" cy="15.5" r="1.5" fill="#c5a059"></circle><circle cx="15.5" cy="8.5" r="1.5" fill="#c5a059"></circle><circle cx="8.5" cy="15.5" r="1.5" fill="#c5a059"></circle><circle cx="12" cy="12" r="1.5" fill="#c5a059"></circle></svg>
+                    <span class="relative z-10 text-[#c5a059] font-black tracking-[0.2em] text-[11px] uppercase group-hover:text-white transition-colors">Roll Dice</span>
                 </button>
 
-                <button onclick="requestReset()" class="lg:hidden text-white/30 text-[10px] uppercase font-bold tracking-widest underline decoration-white/20 mt-2">Reset Game</button>
+                <button onclick="requestReset()" class="lg:hidden text-white/30 text-[10px] uppercase font-bold tracking-widest underline decoration-white/20 mt-4">Reset Game</button>
             </div>
         </div>
     </div>
@@ -192,7 +175,7 @@
                 </div>
                 <div class="card-back flex flex-col justify-between py-10 px-6">
                     <span class="text-[#c5a059] text-[10px] tracking-[0.3em] uppercase font-black">PERINTAH RITUAL</span>
-                    <p id="modal-desc" class="serif text-[20px] leading-relaxed text-white my-auto"></p>
+                    <p id="modal-desc" class="serif text-[22px] leading-relaxed text-white my-auto"></p>
                     <button onclick="closeModal()" class="w-full py-4 bg-white text-black rounded-full font-black uppercase text-[11px] tracking-wider hover:bg-gray-200 active:scale-95 transition-all">Selesai & Lanjut</button>
                 </div>
             </div>
@@ -221,16 +204,8 @@
             firebase.initializeApp(firebaseConfig);
         }
         const db = firebase.firestore();
+        // GAME_ID BEDA DENGAN VERSI LDM
         const GAME_ID = "ritual_offline_tor_v1";
-
-        // MASTER SVG CHESS PIECES (CLEAN VECTOR PATHS)
-        const svgPieces = {
-            'king': '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M19,22H5V20H19V22M17,10C15.28,10 13.88,11.36 13.88,13.06C13.88,13.54 14,13.97 14.22,14.36L12,17.15L9.78,14.36C10,13.97 10.12,13.54 10.12,13.06C10.12,11.36 8.72,10 7,10C5.28,10 3.88,11.36 3.88,13.06C3.88,14.07 4.36,14.96 5.11,15.5L7.76,19H16.24L18.89,15.5C19.64,14.96 20.12,14.07 20.12,13.06C20.12,11.36 18.72,10 17,10M12,4L10,4L10,6L8,6L8,8L10,8L10,10L12,10L12,8L14,8L14,6L12,6L12,4Z"/></svg>',
-            'queen': '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M19,22H5V20H19V22M17.33,10C16.2,10 15.28,10.94 15.28,12.08C15.28,12.55 15.44,12.97 15.71,13.31L12,16.59L8.29,13.31C8.56,12.97 8.72,12.55 8.72,12.08C8.72,10.94 7.8,10 6.67,10C5.54,10 4.62,10.94 4.62,12.08C4.62,12.87 5.07,13.55 5.74,13.91L7.76,19H16.24L18.26,13.91C18.93,13.55 19.38,12.87 19.38,12.08C19.38,10.94 18.46,10 17.33,10M12,4A2,2 0 0,0 10,6A2,2 0 0,0 12,8A2,2 0 0,0 14,6A2,2 0 0,0 12,4Z"/></svg>',
-            'rook': '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M5,20H19V22H5V20M17,2V5H15V2H13V5H11V2H9V5H7V2H5V8H7V18H17V8H19V2H17Z"/></svg>',
-            'knight': '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M19,22H5V20H19V22M15.42,8.96C16.14,10.5 16.29,12.72 15.15,14.65L12.05,12.55L11,14L14.07,16.14C12.07,17.7 9.38,18 7,18V16C9.17,16 11.23,15.11 12.5,13.5C10.74,13.88 8.86,13.2 7.7,11.83L6.15,9.97C5.83,9.59 5.86,9 6.25,8.68L9.04,6.3C10.5,5.1 12.54,4.95 14.15,5.88L15,6.37C15,5.55 14.54,4.8 13.8,4.45L14.66,2.65C16.15,3.36 17.07,4.83 17,6.43V7.27L19.46,9.15L18.25,10.75L15.42,8.96Z"/></svg>',
-            'pawn': '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M19 22H5V20H19V22M15 18H9V16C9 14.34 10.34 13 12 13C13.66 13 15 14.34 15 16V18M12 4C13.66 4 15 5.34 15 7C15 8.66 13.66 10 12 10C10.34 10 9 8.66 9 7C9 5.34 10.34 4 12 4Z"/></svg>'
-        };
 
         const allChallenges = [
             "START: Siap-siap 'Hajar'", "Tatap matanya 1 mnt", "Kamu maju 2 langkah!", "Pegang bagian tubuh dia favoritmu saat ini", "Dia maju 2 langkah!",
@@ -259,52 +234,22 @@
         const snakes = { 27: 5, 40: 3, 43: 18, 54: 31, 66: 45, 76: 58, 89: 53, 99: 41 };
 
         let myRole = ""; 
-        let myIcon = ""; 
-        let randomTurn = Math.random() < 0.5 ? 'cowo' : 'cewe'; 
-        let state = { p1: 1, p2: 1, turn: randomTurn, lastChallenge: "", lastRoller: "", resetRequest: "", icon_cowo: "king", icon_cewe: "queen" };
+        let randomTurn = Math.random() < 0.5 ? 'cowo' : 'cewe'; // FITUR RANDOM TURN AWAL
+        let state = { p1: 1, p2: 1, turn: randomTurn, lastChallenge: "", lastRoller: "", resetRequest: "" };
         let localPlayerMoving = false;
 
         function selectRole(r) {
             myRole = r;
             document.querySelectorAll('[id^="btn-"]').forEach(el => el.classList.remove('border-[#c5a059]', 'bg-[#c5a059]/20', 'scale-105'));
-            document.getElementById(`btn-${r}`).classList.add('border-[#c5a059]', 'bg-[#c5a059]/20', 'scale-105');
+            let activeBtn = document.getElementById(`btn-${r}`);
+            activeBtn.classList.add('border-[#c5a059]', 'bg-[#c5a059]/20', 'scale-105');
             document.getElementById('start-btn').classList.remove('opacity-0', 'pointer-events-none', 'translate-y-4');
-        }
-
-        // FUNGSI RENDER MENU UBAH PION (HANYA UNTUK ROLE SENDIRI)
-        function renderPieceMenu() {
-            let menuHTML = "";
-            Object.keys(svgPieces).forEach(key => {
-                menuHTML += `
-                    <div onclick="changePiece('${key}')" id="menu-piece-${myRole}-${key}" class="w-10 h-10 p-2 flex items-center justify-center border border-transparent rounded-lg cursor-pointer transition-all text-white/40 hover:text-white hover:bg-white/10">
-                        ${svgPieces[key]}
-                    </div>
-                `;
-            });
-            
-            // Masukkan ke dalam kotak skor milik user
-            document.getElementById(`piece-menu-${myRole}`).innerHTML = menuHTML;
-            document.getElementById(`piece-menu-${myRole}`).classList.remove('hidden');
-        }
-
-        function changePiece(iconKey) {
-            // Update ke firebase langsung
-            db.collection("games").doc(GAME_ID).update({
-                ['icon_' + myRole]: iconKey
-            });
         }
 
         function startGame() {
             document.getElementById('selection-screen').classList.add('hidden');
             document.getElementById('game-screen').classList.remove('hidden');
             createBoard();
-            renderPieceMenu(); // Panggil menu pion saat game mulai
-            
-            // Set default icon jika belum ada
-            db.collection("games").doc(GAME_ID).set({
-                ['icon_' + myRole]: myRole === 'cowo' ? 'king' : 'queen'
-            }, { merge: true });
-
             listenDB();
         }
 
@@ -319,60 +264,51 @@
 
         function createBoard() {
             const board = document.getElementById('board');
+            const svgOverlay = document.getElementById('svg-overlay');
             board.innerHTML = '<svg id="svg-overlay" viewBox="0 0 100 100" preserveAspectRatio="none" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 15; pointer-events: none;"></svg>';
 
             for (let row = 9; row >= 0; row--) {
                 for (let col = 0; col < 10; col++) {
                     let num = (row % 2 === 0) ? (row * 10) + (col + 1) : (row * 10) + (10 - col);
                     const cell = document.createElement('div');
-                    
-                    let isDark = (row + col) % 2 === 0;
-                    let bgClass = isDark ? 'bg-[#151515]/90' : 'bg-[#c5a059]/10';
-                    
-                    cell.className = `cell ${bgClass}`; cell.id = `c-${num}`; 
+                    cell.className = 'cell'; cell.id = `c-${num}`; 
                     cell.innerHTML = `<span class="cell-number">${num}</span>`;
                     board.appendChild(cell);
                 }
             }
 
             let svgHTML = '';
-            
             Object.keys(ladders).forEach(start => {
                 let s = getCoords(parseInt(start)); let e = getCoords(ladders[start]);
-                svgHTML += `<line x1="${s.x-1.5}" y1="${s.y}" x2="${e.x-1.5}" y2="${e.y}" stroke="#d97706" stroke-width="1.2" opacity="0.9"/>`;
-                svgHTML += `<line x1="${s.x+1.5}" y1="${s.y}" x2="${e.x+1.5}" y2="${e.y}" stroke="#d97706" stroke-width="1.2" opacity="0.9"/>`;
-                for(let i=1; i<6; i++) {
-                    let mx = s.x + (e.x - s.x) * (i/6); let my = s.y + (e.y - s.y) * (i/6);
+                svgHTML += `<line x1="${s.x-1.5}" y1="${s.y}" x2="${e.x-1.5}" y2="${e.y}" stroke="#b45309" stroke-width="1.2" opacity="0.8"/>`;
+                svgHTML += `<line x1="${s.x+1.5}" y1="${s.y}" x2="${e.x+1.5}" y2="${e.y}" stroke="#b45309" stroke-width="1.2" opacity="0.8"/>`;
+                for(let i=1; i<5; i++) {
+                    let mx = s.x + (e.x - s.x) * (i/5); let my = s.y + (e.y - s.y) * (i/5);
                     let angle = Math.atan2(e.y - s.y, e.x - s.x) + Math.PI/2;
                     let rx1 = mx + Math.cos(angle)*1.5; let ry1 = my + Math.sin(angle)*1.5;
                     let rx2 = mx - Math.cos(angle)*1.5; let ry2 = my - Math.sin(angle)*1.5;
-                    svgHTML += `<line x1="${rx1}" y1="${ry1}" x2="${rx2}" y2="${ry2}" stroke="#d97706" stroke-width="1" opacity="0.9"/>`;
+                    svgHTML += `<line x1="${rx1}" y1="${ry1}" x2="${rx2}" y2="${ry2}" stroke="#b45309" stroke-width="1" opacity="0.8"/>`;
                 }
             });
 
+            // MODIFIKASI GAMBAR ULAR
             Object.keys(snakes).forEach(start => {
                 let s = getCoords(parseInt(start)); let e = getCoords(snakes[start]);   
-                let dx = e.x - s.x;
-                let dy = e.y - s.y;
-                let angle = Math.atan2(dy, dx);
-                let nx = -Math.sin(angle);
-                let ny = Math.cos(angle);
-                let amp = 4; 
+                let midX = (s.x+e.x)/2 + (Math.random() > 0.5 ? 10 : -10);
+                let midY = (s.y+e.y)/2;
                 
-                let cx1 = s.x + dx*0.3 + nx*amp;
-                let cy1 = s.y + dy*0.3 + ny*amp;
-                let cx2 = s.x + dx*0.7 - nx*amp;
-                let cy2 = s.y + dy*0.7 - ny*amp;
+                // Definisi Path Lengkungan Ular
+                const pathDef = `M ${s.x} ${s.y} Q ${midX} ${midY} ${e.x} ${e.y}`;
 
-                svgHTML += `<path class="path-snake" d="M ${s.x} ${s.y} C ${cx1} ${cy1}, ${cx2} ${cy2}, ${e.x} ${e.y}" fill="none" stroke="#dc2626" stroke-width="2.5" stroke-linecap="round" opacity="0.9"/>`;
+                // 1. Layer Dasar Badan Ular (Warna Merah Crimson)
+                svgHTML += `<path class="path-snake-base" d="${pathDef}" fill="none" stroke="#dc2626" stroke-width="2.5" opacity="0.9" stroke-linecap="round"/>`;
                 
-                let headAngle = Math.atan2(cy1 - s.y, cx1 - s.x) * 180 / Math.PI;
-                svgHTML += `<g transform="translate(${s.x}, ${s.y}) rotate(${headAngle})">
-                    <path d="M -2.5,0 L -4.5,-1 M -2.5,0 L -4.5,1" stroke="#fca5a5" stroke-width="0.5" fill="none"/>
-                    <ellipse cx="0" cy="0" rx="2.5" ry="1.8" fill="#dc2626" />
-                    <circle cx="-0.8" cy="-1" r="0.4" fill="#000"/>
-                    <circle cx="-0.8" cy="1" r="0.4" fill="#000"/>
-                </g>`;
+                // 2. Layer Tekstur Garis-Garis Ular (Warna Cokelat Emas / Gold)
+                // Menggunakan stroke-dasharray untuk membuat pola garis silang melintang
+                svgHTML += `<path class="path-snake-base" d="${pathDef}" fill="none" stroke="#8a6a2c" stroke-width="1.8" opacity="0.7" stroke-linecap="round" stroke-dasharray="2 4"/>`;
+                
+                // 3. Kepala Ular (Titik Merah)
+                svgHTML += `<circle cx="${s.x}" cy="${s.y}" r="2" fill="#dc2626" opacity="0.9"/>`;
             });
 
             document.getElementById('svg-overlay').innerHTML = svgHTML;
@@ -414,21 +350,6 @@
             document.getElementById('pos-1').innerText = state.p1;
             document.getElementById('pos-2').innerText = state.p2;
             
-            // Render icon ke UI Skor
-            document.getElementById('icon-display-cowo').innerHTML = svgPieces[state.icon_cowo] || svgPieces['king'];
-            document.getElementById('icon-display-cewe').innerHTML = svgPieces[state.icon_cewe] || svgPieces['queen'];
-
-            // Update UI Menu Pion (Kasih warna ke bidak yg sedang aktif)
-            if (document.getElementById(`piece-menu-${myRole}`)) {
-                let myCurrentIcon = state['icon_' + myRole] || (myRole === 'cowo' ? 'king' : 'queen');
-                document.querySelectorAll(`#piece-menu-${myRole} div`).forEach(el => {
-                    el.classList.remove('border-[#c5a059]', 'bg-[#c5a059]/20', 'text-[#c5a059]');
-                });
-                let activeBtn = document.getElementById(`menu-piece-${myRole}-${myCurrentIcon}`);
-                if(activeBtn) activeBtn.classList.add('border-[#c5a059]', 'bg-[#c5a059]/20', 'text-[#c5a059]');
-            }
-
-            // Render Pion di Papan
             document.querySelectorAll('.pion').forEach(p => p.remove());
             const c1 = document.getElementById(`c-${state.p1}`);
             const c2 = document.getElementById(`c-${state.p2}`);
@@ -436,13 +357,11 @@
             if(c1) { 
                 let p1Div = document.createElement('div'); 
                 p1Div.className = 'pion pion-cowo' + (pos1Changed ? ' is-jumping' : ''); 
-                p1Div.innerHTML = svgPieces[state.icon_cowo] || svgPieces['king'];
                 c1.appendChild(p1Div); 
             }
             if(c2) { 
                 let p2Div = document.createElement('div'); 
                 p2Div.className = 'pion pion-cewe' + (pos2Changed ? ' is-jumping' : ''); 
-                p2Div.innerHTML = svgPieces[state.icon_cewe] || svgPieces['queen'];
                 c2.appendChild(p2Div); 
             }
             
@@ -588,8 +507,8 @@
         function requestReset() { db.collection("games").doc(GAME_ID).update({ resetRequest: myRole }); }
         function cancelReset() { db.collection("games").doc(GAME_ID).update({ resetRequest: "" }); }
         function confirmReset() { 
-            let randomTurn = Math.random() < 0.5 ? 'cowo' : 'cewe'; 
-            db.collection("games").doc(GAME_ID).set({ p1: 1, p2: 1, turn: randomTurn, lastChallenge: "", lastRoller: "", resetRequest: "" }, { merge: true }); 
+            let randomTurn = Math.random() < 0.5 ? 'cowo' : 'cewe'; // FITUR RANDOM TURN SAAT RESET
+            db.collection("games").doc(GAME_ID).set({ p1: 1, p2: 1, turn: randomTurn, lastChallenge: "", lastRoller: "", resetRequest: "" }); 
         }
     </script>
 </body>

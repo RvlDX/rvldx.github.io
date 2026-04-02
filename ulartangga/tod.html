@@ -565,6 +565,9 @@
             } else { resetModal.classList.add('hidden'); }
         }
 
+        // ==========================================
+        // FUNGSI INI SAJA YANG DIUBAH UNTUK LOMPAT 1 PER 1
+        // ==========================================
         function rollDice() {
             localPlayerMoving = true;
             const diceOverlay = document.getElementById('dice-overlay');
@@ -585,29 +588,32 @@
                 bigDice.innerText = roll; 
                 bigDice.classList.add('dice-anim');
                 
-                let np1 = state.p1, np2 = state.p2;
-                if (myRole === 'cowo') np1 = Math.min(np1 + roll, 100); 
-                else np2 = Math.min(np2 + roll, 100);
+                let startPos = (myRole === 'cowo') ? state.p1 : state.p2;
+                let targetPos = Math.min(startPos + roll, 100);
                 
-                let currentPos = (myRole === 'cowo') ? np1 : np2;
-                
-                setTimeout(() => {
+                setTimeout(async () => {
                     diceOverlay.classList.add('hidden');
-                    db.collection("games").doc(GAME_ID).update({ p1: np1, p2: np2, lastChallenge: "", lastRoller: myRole });
+                    db.collection("games").doc(GAME_ID).update({ lastChallenge: "", lastRoller: myRole });
+
+                    // LOOPING UPDATE KE FIREBASE AGAR PION LOMPAT SATU PER SATU
+                    for (let p = startPos + 1; p <= targetPos; p++) {
+                        if (myRole === 'cowo') await db.collection("games").doc(GAME_ID).update({ p1: p });
+                        else await db.collection("games").doc(GAME_ID).update({ p2: p });
+                        await new Promise(r => setTimeout(r, 400)); // Jeda 400ms tiap kotak
+                    }
 
                     setTimeout(() => {
-                        let finalPos = currentPos;
-                        if (ladders[currentPos]) finalPos = ladders[currentPos];
-                        else if (snakes[currentPos]) finalPos = snakes[currentPos];
+                        let finalPos = targetPos;
+                        if (ladders[targetPos]) finalPos = ladders[targetPos];
+                        else if (snakes[targetPos]) finalPos = snakes[targetPos];
 
-                        if (myRole === 'cowo') np1 = finalPos; else np2 = finalPos;
-                        db.collection("games").doc(GAME_ID).update({ 
-                            p1: np1, 
-                            p2: np2, 
-                            lastChallenge: allChallenges[finalPos - 1] 
-                        });
+                        let updateData = { lastChallenge: allChallenges[finalPos - 1] };
+                        if (myRole === 'cowo') updateData.p1 = finalPos;
+                        else updateData.p2 = finalPos;
+
+                        db.collection("games").doc(GAME_ID).update(updateData);
                         localPlayerMoving = false;
-                    }, 800);
+                    }, 400); // Jeda sejenak sebelum ngecek ular/tangga
                 }, 1000);
 
             }, 800);
@@ -617,15 +623,19 @@
             document.getElementById('card-inner').classList.add('is-flipped'); 
         }
 
+        // ==========================================
+        // FUNGSI INI JUGA DIBUAT LOMPAT 1 PER 1 SAAT EFEK KARTU
+        // ==========================================
         function closeModal() {
             document.getElementById('card-inner').classList.remove('is-flipped');
             
-            setTimeout(() => {
+            setTimeout(async () => {
                 if (state.lastRoller === myRole) {
                     let nextTurn = (myRole === 'cowo') ? 'cewe' : 'cowo';
                     let text = state.lastChallenge.toUpperCase();
                     let np1 = state.p1, np2 = state.p2;
                     let chainMove = 0;
+                    let opponentMove = 0;
 
                     if (text.includes("KAMU MAJU 2") || text.includes("MAJU 2 LANGKAH")) chainMove = 2;
                     else if (text.includes("KAMU MAJU 3") || text.includes("MAJU 3 LANGKAH")) chainMove = 3;
@@ -634,29 +644,57 @@
                     else if (text.includes("KAMU MUNDUR 2") || text.includes("MUNDUR 2 LANGKAH")) chainMove = -2;
                     else if (text.includes("KAMU MUNDUR 3") || text.includes("MUNDUR 3 LANGKAH")) chainMove = -3;
                     else if (text.includes("DIA MAJU 1") || text.includes("DIA MAJU 2")) {
-                        let opponentMove = text.includes("DIA MAJU 2") ? 2 : 1;
-                        if(myRole === 'cowo') np2 = Math.min(np2 + opponentMove, 100);
-                        else np1 = Math.min(np1 + opponentMove, 100);
+                        opponentMove = text.includes("DIA MAJU 2") ? 2 : 1;
                     }
 
                     if (text.includes("BONUS")) nextTurn = myRole;
                     
+                    db.collection("games").doc(GAME_ID).update({ lastChallenge: "" });
+
                     if (chainMove !== 0) {
-                        if(myRole === 'cowo') np1 = Math.max(1, Math.min(np1 + chainMove, 100));
-                        else np2 = Math.max(1, Math.min(np2 + chainMove, 100));
+                        let startPos = myRole === 'cowo' ? state.p1 : state.p2;
+                        let targetPos = Math.max(1, Math.min(startPos + chainMove, 100));
+                        let step = chainMove > 0 ? 1 : -1;
+
+                        for (let p = startPos + step; step > 0 ? p <= targetPos : p >= targetPos; p += step) {
+                            if (myRole === 'cowo') await db.collection("games").doc(GAME_ID).update({ p1: p });
+                            else await db.collection("games").doc(GAME_ID).update({ p2: p });
+                            await new Promise(r => setTimeout(r, 400));
+                        }
                         
-                        let currentPos = (myRole === 'cowo') ? np1 : np2;
-                        
+                        let currentPos = targetPos;
                         if (ladders[currentPos]) currentPos = ladders[currentPos];
                         else if (snakes[currentPos]) currentPos = snakes[currentPos];
                         
-                        if(myRole === 'cowo') np1 = currentPos; else np2 = currentPos;
+                        let finalUpdate = { lastChallenge: allChallenges[currentPos - 1] };
+                        if (myRole === 'cowo') finalUpdate.p1 = currentPos;
+                        else finalUpdate.p2 = currentPos;
 
-                        db.collection("games").doc(GAME_ID).update({ 
-                            p1: np1, p2: np2, 
-                            lastChallenge: allChallenges[currentPos - 1] 
-                        });
+                        db.collection("games").doc(GAME_ID).update(finalUpdate);
                         return; 
+                    }
+
+                    if (opponentMove !== 0) {
+                        let oppRole = myRole === 'cowo' ? 'cewe' : 'cowo';
+                        let startPos = oppRole === 'cowo' ? state.p1 : state.p2;
+                        let targetPos = Math.min(startPos + opponentMove, 100);
+
+                        for (let p = startPos + 1; p <= targetPos; p++) {
+                            if (oppRole === 'cowo') await db.collection("games").doc(GAME_ID).update({ p1: p });
+                            else await db.collection("games").doc(GAME_ID).update({ p2: p });
+                            await new Promise(r => setTimeout(r, 400));
+                        }
+
+                        let currentPos = targetPos;
+                        if (ladders[currentPos]) currentPos = ladders[currentPos];
+                        else if (snakes[currentPos]) currentPos = snakes[currentPos];
+
+                        let finalUpdate = { turn: nextTurn };
+                        if (oppRole === 'cowo') finalUpdate.p1 = currentPos;
+                        else finalUpdate.p2 = currentPos;
+
+                        db.collection("games").doc(GAME_ID).update(finalUpdate);
+                        return;
                     }
 
                     db.collection("games").doc(GAME_ID).update({ p1: np1, p2: np2, lastChallenge: "", turn: nextTurn });

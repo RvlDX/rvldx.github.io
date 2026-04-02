@@ -18,7 +18,7 @@
             background-color: var(--charcoal); 
             color: #e5e7eb; 
             margin: 0; padding: 0;
-            min-height: 100dvh; /* Diubah agar bisa scroll jika layar pendek */
+            min-height: 100dvh; 
             overflow-x: hidden; 
             background-image: radial-gradient(circle at center, #1a1a1a 0%, #000 100%);
         }
@@ -26,12 +26,12 @@
 
         .board-container {
             position: relative;
-            display: grid; grid-template-columns: repeat(10, 1fr); gap: 2px;
+            display: grid; grid-template-columns: repeat(10, 1fr); gap: 1px;
             width: 100%; max-width: 95vw; 
             aspect-ratio: 1/1;
-            background: rgba(197, 160, 89, 0.2); 
-            padding: 3px; border-radius: 8px;
-            box-shadow: 0 0 40px rgba(197, 160, 89, 0.1);
+            background: rgba(197, 160, 89, 0.4); 
+            padding: 2px; border-radius: 8px;
+            box-shadow: 0 0 40px rgba(197, 160, 89, 0.15);
             margin: auto;
         }
 
@@ -42,13 +42,13 @@
         #svg-overlay {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
             pointer-events: none; z-index: 15;
-            filter: drop-shadow(0 4px 6px rgba(0,0,0,0.9));
+            filter: drop-shadow(0 4px 5px rgba(0,0,0,0.8));
         }
 
         .cell {
             position: relative; display: flex; align-items: center; justify-content: center;
-            font-size: 11px; font-weight: 900; color: #f3f4f6; background: rgba(10, 10, 10, 0.9);
-            border-radius: 4px; overflow: hidden; border: 1px solid rgba(255,255,255,0.03);
+            font-size: 11px; font-weight: 900; color: #f3f4f6; 
+            border-radius: 3px; overflow: hidden; 
             text-shadow: 0 0 3px #000, 0 0 5px #000; z-index: 10; text-align: center;
         }
         
@@ -84,10 +84,10 @@
         .dice-anim { animation: dicePop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
         
         @keyframes snakeSlither {
-            0% { stroke-dashoffset: 1000; }
+            0% { stroke-dashoffset: 200; }
             100% { stroke-dashoffset: 0; }
         }
-        .path-snake { stroke-dasharray: 1000; animation: snakeSlither 3s linear forwards; }
+        .path-snake { stroke-dasharray: 200; animation: snakeSlither 2s ease-out forwards; }
     </style>
 </head>
 <body>
@@ -310,8 +310,9 @@
             "FINISH: VIDEO CALL SEKARANG! Saling tatap, ungkapin janji bakal setia, dan berikan klimaks manis bareng!"
         ];
 
-        const ladders = { 7: 29, 22: 41, 44: 76, 70: 92 };
-        const snakes = { 32: 10, 62: 38, 89: 68, 97: 78 };
+        // MENGUBAH POSISI & JUMLAH ULAR/TANGGA BIAR LEBIH MENYEBAR
+        const ladders = { 4: 25, 13: 46, 33: 49, 50: 69, 42: 63, 62: 81, 74: 92 };
+        const snakes = { 27: 5, 40: 3, 43: 18, 54: 31, 66: 45, 76: 58, 89: 53, 99: 41 };
 
         let myRole = ""; 
         let randomTurn = Math.random() < 0.5 ? 'cowo' : 'cewe'; 
@@ -350,32 +351,63 @@
                 for (let col = 0; col < 10; col++) {
                     let num = (row % 2 === 0) ? (row * 10) + (col + 1) : (row * 10) + (10 - col);
                     const cell = document.createElement('div');
-                    cell.className = 'cell'; cell.id = `c-${num}`; 
+                    
+                    // MENERAPKAN POLA PAPAN CATUR
+                    let isDark = (row + col) % 2 === 0;
+                    let bgClass = isDark ? 'bg-[#151515]/90' : 'bg-[#c5a059]/10';
+                    
+                    cell.className = `cell ${bgClass}`; cell.id = `c-${num}`; 
                     cell.innerHTML = `<span class="cell-number">${num}</span>`;
                     board.appendChild(cell);
                 }
             }
 
             let svgHTML = '';
+            
+            // GAMBAR TANGGA
             Object.keys(ladders).forEach(start => {
                 let s = getCoords(parseInt(start)); let e = getCoords(ladders[start]);
-                svgHTML += `<line x1="${s.x-1.5}" y1="${s.y}" x2="${e.x-1.5}" y2="${e.y}" stroke="#b45309" stroke-width="1.2" opacity="0.8"/>`;
-                svgHTML += `<line x1="${s.x+1.5}" y1="${s.y}" x2="${e.x+1.5}" y2="${e.y}" stroke="#b45309" stroke-width="1.2" opacity="0.8"/>`;
-                for(let i=1; i<5; i++) {
-                    let mx = s.x + (e.x - s.x) * (i/5); let my = s.y + (e.y - s.y) * (i/5);
+                svgHTML += `<line x1="${s.x-1.5}" y1="${s.y}" x2="${e.x-1.5}" y2="${e.y}" stroke="#d97706" stroke-width="1.2" opacity="0.9"/>`;
+                svgHTML += `<line x1="${s.x+1.5}" y1="${s.y}" x2="${e.x+1.5}" y2="${e.y}" stroke="#d97706" stroke-width="1.2" opacity="0.9"/>`;
+                for(let i=1; i<6; i++) {
+                    let mx = s.x + (e.x - s.x) * (i/6); let my = s.y + (e.y - s.y) * (i/6);
                     let angle = Math.atan2(e.y - s.y, e.x - s.x) + Math.PI/2;
                     let rx1 = mx + Math.cos(angle)*1.5; let ry1 = my + Math.sin(angle)*1.5;
                     let rx2 = mx - Math.cos(angle)*1.5; let ry2 = my - Math.sin(angle)*1.5;
-                    svgHTML += `<line x1="${rx1}" y1="${ry1}" x2="${rx2}" y2="${ry2}" stroke="#b45309" stroke-width="1" opacity="0.8"/>`;
+                    svgHTML += `<line x1="${rx1}" y1="${ry1}" x2="${rx2}" y2="${ry2}" stroke="#d97706" stroke-width="1" opacity="0.9"/>`;
                 }
             });
 
+            // GAMBAR ULAR REALISTIS DENGAN KEPALA & LIDAH
             Object.keys(snakes).forEach(start => {
                 let s = getCoords(parseInt(start)); let e = getCoords(snakes[start]);   
-                let midX = (s.x+e.x)/2 + (Math.random() > 0.5 ? 10 : -10);
-                let midY = (s.y+e.y)/2;
-                svgHTML += `<path class="path-snake" d="M ${s.x} ${s.y} Q ${midX} ${midY} ${e.x} ${e.y}" fill="none" stroke="#dc2626" stroke-width="2" opacity="0.8" stroke-linecap="round"/>`;
-                svgHTML += `<circle cx="${s.x}" cy="${s.y}" r="2" fill="#dc2626" opacity="0.9"/>`;
+                let dx = e.x - s.x;
+                let dy = e.y - s.y;
+                let angle = Math.atan2(dy, dx);
+                
+                // Vektor Normal untuk lekukan
+                let nx = -Math.sin(angle);
+                let ny = Math.cos(angle);
+                
+                let amp = 4; // Tinggi lekukan (amplitudo kurva S)
+                
+                let cx1 = s.x + dx*0.3 + nx*amp;
+                let cy1 = s.y + dy*0.3 + ny*amp;
+                let cx2 = s.x + dx*0.7 - nx*amp;
+                let cy2 = s.y + dy*0.7 - ny*amp;
+
+                // Badan ular (Kurva S)
+                svgHTML += `<path class="path-snake" d="M ${s.x} ${s.y} C ${cx1} ${cy1}, ${cx2} ${cy2}, ${e.x} ${e.y}" fill="none" stroke="#dc2626" stroke-width="2.5" stroke-linecap="round" opacity="0.9"/>`;
+                
+                // Rotasi Kepala Ular menghadap kebalikan arah badannya turun
+                let headAngle = Math.atan2(cy1 - s.y, cx1 - s.x) * 180 / Math.PI;
+                
+                svgHTML += `<g transform="translate(${s.x}, ${s.y}) rotate(${headAngle})">
+                    <path d="M -2.5,0 L -4.5,-1 M -2.5,0 L -4.5,1" stroke="#fca5a5" stroke-width="0.5" fill="none"/>
+                    <ellipse cx="0" cy="0" rx="2.5" ry="1.8" fill="#dc2626" />
+                    <circle cx="-0.8" cy="-1" r="0.4" fill="#000"/>
+                    <circle cx="-0.8" cy="1" r="0.4" fill="#000"/>
+                </g>`;
             });
 
             document.getElementById('svg-overlay').innerHTML = svgHTML;

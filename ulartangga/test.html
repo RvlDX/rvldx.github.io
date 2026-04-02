@@ -48,7 +48,7 @@
         .cell {
             position: relative; display: flex; align-items: center; justify-content: center;
             font-size: 11px; font-weight: 900; color: #f3f4f6; 
-            border-radius: 3px; overflow: hidden; 
+            border-radius: 3px; 
             text-shadow: 0 0 3px #000, 0 0 5px #000; z-index: 10; text-align: center;
         }
         
@@ -56,23 +56,24 @@
         
         .pion {
             width: 24px; height: 24px; border-radius: 50%; position: absolute;
-            transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+            transition: left 0.4s linear, top 0.4s linear; 
             border: 2px solid #fff; box-shadow: 0 0 15px rgba(0,0,0,0.8);
             display: flex; align-items: center; justify-content: center;
+            transform: translate(-50%, -50%);
+            z-index: 40; 
         }
         
-        /* CSS FIX UNTUK SVG BIDAK BIAR PROPORSIONAL */
         .pion svg { width: 70%; height: 70%; display: block; }
         
-        .pion-cowo { background-color: var(--gold); top: 2%; left: 2%; z-index: 30; color: #000; }
-        .pion-cewe { background-color: var(--crimson); bottom: 2%; right: 2%; z-index: 31; color: #fff; }
+        .pion-cowo { background-color: var(--gold); color: #000; }
+        .pion-cewe { background-color: var(--crimson); color: #fff; }
 
         @keyframes jump {
-            0% { transform: translateY(0) scale(1); }
-            50% { transform: translateY(-20px) scale(1.3); }
-            100% { transform: translateY(0) scale(1); }
+            0% { transform: translate(-50%, -50%) scale(1) translateY(0); }
+            50% { transform: translate(-50%, -50%) scale(1.3) translateY(-25px); }
+            100% { transform: translate(-50%, -50%) scale(1) translateY(0); }
         }
-        .is-jumping { animation: jump 0.6s ease-in-out; }
+        .is-jumping { animation: jump 0.4s ease-in-out; }
         
         .perspective { perspective: 1000px; }
         .card-inner { width: 100%; height: 100%; transition: transform 0.6s; transform-style: preserve-3d; position: relative; }
@@ -223,7 +224,6 @@
         const db = firebase.firestore();
         const GAME_ID = "ritual_ldm_tor_v1";
 
-        // MASTER SVG CHESS PIECES (CLEAN VECTOR PATHS)
         const svgPieces = {
             'king': '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M19,22H5V20H19V22M17,10C15.28,10 13.88,11.36 13.88,13.06C13.88,13.54 14,13.97 14.22,14.36L12,17.15L9.78,14.36C10,13.97 10.12,13.54 10.12,13.06C10.12,11.36 8.72,10 7,10C5.28,10 3.88,11.36 3.88,13.06C3.88,14.07 4.36,14.96 5.11,15.5L7.76,19H16.24L18.89,15.5C19.64,14.96 20.12,14.07 20.12,13.06C20.12,11.36 18.72,10 17,10M12,4L10,4L10,6L8,6L8,8L10,8L10,10L12,10L12,8L14,8L14,6L12,6L12,4Z"/></svg>',
             'queen': '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M19,22H5V20H19V22M17.33,10C16.2,10 15.28,10.94 15.28,12.08C15.28,12.55 15.44,12.97 15.71,13.31L12,16.59L8.29,13.31C8.56,12.97 8.72,12.55 8.72,12.08C8.72,10.94 7.8,10 6.67,10C5.54,10 4.62,10.94 4.62,12.08C4.62,12.87 5.07,13.55 5.74,13.91L7.76,19H16.24L18.26,13.91C18.93,13.55 19.38,12.87 19.38,12.08C19.38,10.94 18.46,10 17.33,10M12,4A2,2 0 0,0 10,6A2,2 0 0,0 12,8A2,2 0 0,0 14,6A2,2 0 0,0 12,4Z"/></svg>',
@@ -350,7 +350,6 @@
             document.getElementById('start-btn').classList.remove('opacity-0', 'pointer-events-none', 'translate-y-4');
         }
 
-        // FUNGSI RENDER MENU UBAH PION (HANYA UNTUK ROLE SENDIRI)
         function renderPieceMenu() {
             let menuHTML = "";
             Object.keys(svgPieces).forEach(key => {
@@ -361,13 +360,11 @@
                 `;
             });
             
-            // Masukkan ke dalam kotak skor milik user
             document.getElementById(`piece-menu-${myRole}`).innerHTML = menuHTML;
             document.getElementById(`piece-menu-${myRole}`).classList.remove('hidden');
         }
 
         function changePiece(iconKey) {
-            // Update ke firebase langsung
             db.collection("games").doc(GAME_ID).update({
                 ['icon_' + myRole]: iconKey
             });
@@ -377,9 +374,8 @@
             document.getElementById('selection-screen').classList.add('hidden');
             document.getElementById('game-screen').classList.remove('hidden');
             createBoard();
-            renderPieceMenu(); // Panggil menu pion saat game mulai
+            renderPieceMenu(); 
             
-            // Set default icon jika belum ada
             db.collection("games").doc(GAME_ID).set({
                 ['icon_' + myRole]: myRole === 'cowo' ? 'king' : 'queen'
             }, { merge: true });
@@ -485,6 +481,33 @@
             }, 3000);
         }
 
+        // FUNGSI BARU UNTUK RENDER PION DENGAN KOORDINAT ABSOLUT SEHINGGA TIDAK DIHAPUS-BUAT ULANG
+        function renderPawn(role, pos, isJumping) {
+            let pion = document.getElementById(`pion-${role}`);
+            if (!pion) {
+                pion = document.createElement('div');
+                pion.id = `pion-${role}`;
+                pion.className = `pion pion-${role}`;
+                document.getElementById('board').appendChild(pion);
+            }
+            
+            pion.innerHTML = svgPieces[state['icon_' + role]] || svgPieces[role === 'cowo' ? 'king' : 'queen'];
+            
+            let coords = getCoords(pos);
+            let offsetX = role === 'cowo' ? -6 : 6;
+            let offsetY = role === 'cowo' ? -6 : 6;
+            
+            // Pergerakan akan ditangani oleh CSS Transition (mulus membentuk arc dari asal ke tujuan)
+            pion.style.left = `calc(${coords.x}% + ${offsetX}px)`;
+            pion.style.top = `calc(${coords.y}% + ${offsetY}px)`;
+
+            if (isJumping) {
+                pion.classList.remove('is-jumping');
+                void pion.offsetWidth; // Trigger DOM reflow agar keyframes di-reset ulang
+                pion.classList.add('is-jumping');
+            }
+        }
+
         function syncUI(newData) {
             const pos1Changed = state.p1 !== newData.p1;
             const pos2Changed = state.p2 !== newData.p2;
@@ -493,11 +516,9 @@
             document.getElementById('pos-1').innerText = state.p1;
             document.getElementById('pos-2').innerText = state.p2;
             
-            // Render icon ke UI Skor
             document.getElementById('icon-display-cowo').innerHTML = svgPieces[state.icon_cowo] || svgPieces['king'];
             document.getElementById('icon-display-cewe').innerHTML = svgPieces[state.icon_cewe] || svgPieces['queen'];
 
-            // Update UI Menu Pion (Kasih warna ke bidak yg sedang aktif)
             if (document.getElementById(`piece-menu-${myRole}`)) {
                 let myCurrentIcon = state['icon_' + myRole] || (myRole === 'cowo' ? 'king' : 'queen');
                 document.querySelectorAll(`#piece-menu-${myRole} div`).forEach(el => {
@@ -507,23 +528,9 @@
                 if(activeBtn) activeBtn.classList.add('border-[#c5a059]', 'bg-[#c5a059]/20', 'text-[#c5a059]');
             }
 
-            // Render Pion di Papan
-            document.querySelectorAll('.pion').forEach(p => p.remove());
-            const c1 = document.getElementById(`c-${state.p1}`);
-            const c2 = document.getElementById(`c-${state.p2}`);
-            
-            if(c1) { 
-                let p1Div = document.createElement('div'); 
-                p1Div.className = 'pion pion-cowo' + (pos1Changed ? ' is-jumping' : ''); 
-                p1Div.innerHTML = svgPieces[state.icon_cowo] || svgPieces['king'];
-                c1.appendChild(p1Div); 
-            }
-            if(c2) { 
-                let p2Div = document.createElement('div'); 
-                p2Div.className = 'pion pion-cewe' + (pos2Changed ? ' is-jumping' : ''); 
-                p2Div.innerHTML = svgPieces[state.icon_cewe] || svgPieces['queen'];
-                c2.appendChild(p2Div); 
-            }
+            // Panggil Render Pion
+            renderPawn('cowo', state.p1, pos1Changed);
+            renderPawn('cewe', state.p2, pos2Changed);
             
             const btn = document.getElementById('roll-btn');
             const info = document.getElementById('turn-info');
@@ -565,9 +572,6 @@
             } else { resetModal.classList.add('hidden'); }
         }
 
-        // ==========================================
-        // FUNGSI INI SAJA YANG DIUBAH UNTUK LOMPAT 1 PER 1
-        // ==========================================
         function rollDice() {
             localPlayerMoving = true;
             const diceOverlay = document.getElementById('dice-overlay');
@@ -595,11 +599,10 @@
                     diceOverlay.classList.add('hidden');
                     db.collection("games").doc(GAME_ID).update({ lastChallenge: "", lastRoller: myRole });
 
-                    // LOOPING UPDATE KE FIREBASE AGAR PION LOMPAT SATU PER SATU
                     for (let p = startPos + 1; p <= targetPos; p++) {
                         if (myRole === 'cowo') await db.collection("games").doc(GAME_ID).update({ p1: p });
                         else await db.collection("games").doc(GAME_ID).update({ p2: p });
-                        await new Promise(r => setTimeout(r, 400)); // Jeda 400ms tiap kotak
+                        await new Promise(r => setTimeout(r, 400));
                     }
 
                     setTimeout(() => {
@@ -613,7 +616,7 @@
 
                         db.collection("games").doc(GAME_ID).update(updateData);
                         localPlayerMoving = false;
-                    }, 400); // Jeda sejenak sebelum ngecek ular/tangga
+                    }, 400); 
                 }, 1000);
 
             }, 800);
@@ -623,9 +626,6 @@
             document.getElementById('card-inner').classList.add('is-flipped'); 
         }
 
-        // ==========================================
-        // FUNGSI INI JUGA DIBUAT LOMPAT 1 PER 1 SAAT EFEK KARTU
-        // ==========================================
         function closeModal() {
             document.getElementById('card-inner').classList.remove('is-flipped');
             

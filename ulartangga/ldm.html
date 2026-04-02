@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>The Ritual 🔥: LDM 21+</title>
+    <title>The Ritual 🔥: LDM Edition</title>
     <script src="https://cdn.tailwindcss.com"></script>
     
     <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-app-compat.js"></script>
@@ -18,124 +18,192 @@
             background-color: var(--charcoal); 
             color: #e5e7eb; 
             margin: 0; padding: 0;
-            position: fixed; width: 100vw; height: 100dvh; overflow: hidden; 
+            min-height: 100dvh; 
+            overflow-x: hidden; 
+            background-image: radial-gradient(circle at center, #1a1a1a 0%, #000 100%);
         }
         .serif { font-family: 'Playfair Display', serif; }
 
-        header { position: absolute; top: 0; left: 0; width: 100%; height: 60px; background: rgba(0,0,0,0.9); border-bottom: 1px solid rgba(255,255,255,0.05); z-index: 40; }
-        footer { position: absolute; bottom: 0; left: 0; width: 100%; height: 80px; background: #000; border-top: 1px solid rgba(255,255,255,0.05); z-index: 40; }
-
-        .board-wrapper {
-            position: absolute;
-            top: 110px; bottom: 130px; left: 0; right: 0;
-            display: flex; justify-content: center; align-items: center;
-        }
-
         .board-container {
             position: relative;
-            display: grid; grid-template-columns: repeat(10, 1fr); gap: 1.5px;
-            width: 100%; max-width: 95vw; max-height: 100%; aspect-ratio: 1/1;
+            display: grid; grid-template-columns: repeat(10, 1fr); gap: 1px;
+            width: 100%; max-width: 95vw; 
+            aspect-ratio: 1/1;
             background: rgba(197, 160, 89, 0.4); 
-            padding: 2.5px; border-radius: 6px;
-            box-shadow: 0 0 20px rgba(197, 160, 89, 0.15);
+            padding: 2px; border-radius: 8px;
+            box-shadow: 0 0 40px rgba(197, 160, 89, 0.15);
+            margin: auto;
+        }
+
+        @media (min-width: 1024px) {
+            .board-container { max-width: 65vh; max-height: 65vh; }
         }
 
         #svg-overlay {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
             pointer-events: none; z-index: 15;
-            filter: drop-shadow(0 3px 3px rgba(0,0,0,0.9));
+            filter: drop-shadow(0 4px 5px rgba(0,0,0,0.8));
         }
 
         .cell {
             position: relative; display: flex; align-items: center; justify-content: center;
-            font-size: 10px; font-weight: 900; color: #f3f4f6; background: #0a0a0a;
-            border-radius: 2px; overflow: hidden;
+            font-size: 11px; font-weight: 900; color: #f3f4f6; 
+            border-radius: 3px; 
             text-shadow: 0 0 3px #000, 0 0 5px #000; z-index: 10; text-align: center;
         }
         
-        .cell-number { z-index: 20; position: relative; opacity: 0.8;}
+        .cell-number { z-index: 20; position: relative; opacity: 0.6; }
         
         .pion {
-            width: 14px; height: 14px; border-radius: 50%; position: absolute;
-            transition: all 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
-            border: 1.5px solid #fff; box-shadow: 0 0 12px rgba(0,0,0,1);
+            width: 24px; height: 24px; border-radius: 50%; position: absolute;
+            transition: left 0.4s linear, top 0.4s linear; 
+            border: 2px solid #fff; box-shadow: 0 0 15px rgba(0,0,0,0.8);
+            display: flex; align-items: center; justify-content: center;
+            transform: translate(-50%, -50%);
+            z-index: 40; 
         }
-        .pion-cowo { background-color: var(--gold); top: 8%; left: 8%; z-index: 30; }
-        .pion-cewe { background-color: var(--crimson); bottom: 8%; right: 8%; z-index: 31; }
+        
+        .pion svg { width: 70%; height: 70%; display: block; }
+        
+        .pion-cowo { background-color: var(--gold); color: #000; }
+        .pion-cewe { background-color: var(--crimson); color: #fff; }
+
+        @keyframes jump {
+            0% { transform: translate(-50%, -50%) scale(1) translateY(0); }
+            50% { transform: translate(-50%, -50%) scale(1.3) translateY(-25px); }
+            100% { transform: translate(-50%, -50%) scale(1) translateY(0); }
+        }
+        .is-jumping { animation: jump 0.4s ease-in-out; }
         
         .perspective { perspective: 1000px; }
         .card-inner { width: 100%; height: 100%; transition: transform 0.6s; transform-style: preserve-3d; position: relative; }
         .is-flipped { transform: rotateY(180deg); }
         .card-front, .card-back { position: absolute; width: 100%; height: 100%; backface-visibility: hidden; border-radius: 15px; display: flex; flex-direction: column; align-items: center; justify-content: center; }
-        .card-front { background: var(--gold); cursor: pointer; }
-        .card-back { transform: rotateY(180deg); background: #111; border: 2px solid var(--gold); padding: 15px; text-align: center; }
-        .shake { animation: shake 0.4s infinite; }
-        @keyframes shake { 0% { transform: rotate(0); } 25% { transform: rotate(10deg); } 75% { transform: rotate(-10deg); } }
+        .card-front { background: var(--gold); cursor: pointer; border: 4px solid rgba(0,0,0,0.1); background-image: radial-gradient(circle at top right, rgba(255,255,255,0.2), transparent); }
+        .card-back { transform: rotateY(180deg); background: #111; border: 2px solid var(--gold); padding: 20px; text-align: center; }
+        
+        @keyframes dicePop {
+            0% { transform: scale(0.5) rotate(-15deg); opacity: 0; }
+            50% { transform: scale(1.2) rotate(10deg); opacity: 1; }
+            100% { transform: scale(1) rotate(0deg); opacity: 1; }
+        }
+        .dice-anim { animation: dicePop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
+        
+        @keyframes snakeSlither {
+            0% { stroke-dashoffset: 200; }
+            100% { stroke-dashoffset: 0; }
+        }
+        .path-snake { stroke-dasharray: 200; animation: snakeSlither 2s ease-out forwards; }
     </style>
 </head>
 <body>
 
-    <div id="selection-screen" class="fixed inset-0 z-50 bg-black flex flex-col items-center justify-center p-6 text-center transition-all duration-500">
-        <h1 class="serif text-4xl text-[#c5a059] mb-10">Identity</h1>
-        <div class="flex gap-4 w-full max-w-xs mb-8">
-            <div onclick="selectRole('cowo')" id="btn-cowo" class="flex-1 p-5 border border-white/10 rounded-xl flex flex-col items-center gap-3 transition-all bg-white/5 cursor-pointer">
-                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0"/><path d="M10 16.5l2 -3l2 3"/></svg>
-                <p class="text-[9px] font-black uppercase">Cowo</p>
+    <div id="selection-screen" class="fixed inset-0 z-50 bg-black flex flex-col items-center justify-center p-6 text-center">
+        <h1 class="serif text-5xl text-[#c5a059] mb-4 drop-shadow-[0_0_15px_rgba(197,160,89,0.3)]">The Ritual</h1>
+        <p class="text-gray-500 text-xs uppercase tracking-[0.3em] mb-10">LDM Edition</p>
+        
+        <div class="flex gap-6 w-full max-w-sm mb-8">
+            <div onclick="selectRole('cowo')" id="btn-cowo" class="flex-1 p-5 border border-white/10 rounded-2xl flex flex-col items-center gap-3 transition-all hover:bg-white/10 cursor-pointer">
+                <p class="text-[11px] font-black uppercase tracking-wider">Pihak Cowo</p>
             </div>
-            <div onclick="selectRole('cewe')" id="btn-cewe" class="flex-1 p-5 border border-white/10 rounded-xl flex flex-col items-center gap-3 transition-all bg-white/5 cursor-pointer">
-                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0"/><path d="M12 12v.01"/></svg>
-                <p class="text-[9px] font-black uppercase">Cewe</p>
+            <div onclick="selectRole('cewe')" id="btn-cewe" class="flex-1 p-5 border border-white/10 rounded-2xl flex flex-col items-center gap-3 transition-all hover:bg-white/10 cursor-pointer">
+                <p class="text-[11px] font-black uppercase tracking-wider">Pihak Cewe</p>
             </div>
         </div>
-        <button id="start-btn" onclick="startGame()" class="opacity-0 pointer-events-none translate-y-4 transition-all duration-300 bg-[#c5a059] text-black px-12 py-3.5 rounded-full font-black uppercase text-[11px] tracking-widest active:scale-95">Connect</button>
+
+        <button id="start-btn" onclick="startGame()" class="opacity-0 pointer-events-none translate-y-4 transition-all duration-300 bg-gradient-to-r from-[#d4af37] to-[#aa7c11] text-black px-14 py-4 rounded-full font-black uppercase text-[12px] tracking-widest hover:scale-105 active:scale-95 shadow-[0_0_20px_rgba(197,160,89,0.4)]">Mulai Ritual</button>
     </div>
 
-    <div id="game-screen" class="hidden h-full w-full">
-        <header class="flex justify-between items-center px-4">
-            <div class="flex items-center gap-3">
-                <h1 class="serif text-xl text-[#c5a059]">The Ritual (LDM)</h1>
-                <button onclick="requestReset()" class="text-[#c5a059] opacity-50 hover:opacity-100 transition-opacity p-2 active:scale-95">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+    <div id="turn-toast" class="fixed top-10 left-1/2 -translate-x-1/2 z-[60] bg-[#c5a059] text-black px-8 py-3 rounded-full font-black uppercase text-[10px] tracking-widest opacity-0 pointer-events-none transition-all duration-500 transform -translate-y-4 shadow-[0_5px_15px_rgba(0,0,0,0.5)]">
+        Giliran Kamu
+    </div>
+
+    <div id="game-screen" class="hidden w-full min-h-[100dvh] lg:flex lg:items-center lg:justify-center p-4 lg:p-10 pb-8 lg:pb-10">
+        <div class="flex flex-col lg:flex-row w-full max-w-6xl bg-[#0a0a0a]/80 lg:border lg:border-white/5 lg:rounded-3xl lg:shadow-2xl overflow-hidden relative">
+            
+            <div class="lg:w-1/4 p-4 lg:p-6 flex flex-col justify-between border-b lg:border-b-0 lg:border-r border-white/5 bg-black/40 z-40 relative">
+                <div>
+                    <h1 class="serif text-2xl text-[#c5a059] mb-1">Truth or Dare</h1>
+                    <p class="text-[9px] uppercase tracking-widest text-gray-500 mb-5 lg:mb-8">LDM Board</p>
+                    
+                    <div class="flex lg:flex-col gap-4 lg:gap-6 justify-between lg:justify-start">
+                        <div id="ui-cowo" class="flex-1 lg:flex-none p-3 lg:p-4 rounded-xl bg-white/5 border border-white/5 transition-all">
+                            <p class="text-[9px] font-bold text-gray-500 tracking-wider mb-1">POSISI COWO</p>
+                            <div class="flex items-center gap-3">
+                                <p class="text-3xl font-black text-[#c5a059]">#<span id="pos-1">1</span></p>
+                                <div id="icon-display-cowo" class="w-6 h-6 text-[#c5a059] opacity-50"></div>
+                            </div>
+                            <div id="piece-menu-cowo" class="hidden flex justify-between gap-1 mt-4 pt-3 border-t border-white/10"></div>
+                        </div>
+
+                        <div id="ui-cewe" class="flex-1 lg:flex-none p-3 lg:p-4 rounded-xl bg-white/5 border border-white/5 transition-all">
+                            <p class="text-[9px] font-bold text-gray-500 tracking-wider mb-1">POSISI CEWE</p>
+                            <div class="flex items-center gap-3">
+                                <p class="text-3xl font-black text-[#dc2626]">#<span id="pos-2">1</span></p>
+                                <div id="icon-display-cewe" class="w-6 h-6 text-[#dc2626] opacity-50"></div>
+                            </div>
+                            <div id="piece-menu-cewe" class="hidden flex justify-between gap-1 mt-4 pt-3 border-t border-white/10"></div>
+                        </div>
+                    </div>
+                </div>
+                
+                <button onclick="requestReset()" class="hidden lg:flex items-center gap-2 text-white/30 hover:text-white/80 transition-colors mt-6 lg:mt-auto text-[10px] uppercase font-bold tracking-widest">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+                    Reset Board
                 </button>
             </div>
-            <div class="flex gap-4">
-                <div id="ui-cowo" class="text-right opacity-30"><p class="text-[8px] font-bold text-gray-500">COWO</p><p class="text-xs font-black text-[#c5a059]">#<span id="pos-1">1</span></p></div>
-                <div id="ui-cewe" class="text-right opacity-30"><p class="text-[8px] font-bold text-gray-500">CEWE</p><p class="text-xs font-black text-red-600">#<span id="pos-2">1</span></p></div>
-            </div>
-        </header>
 
-        <div class="board-wrapper">
-            <div id="board" class="board-container">
-                <svg id="svg-overlay" viewBox="0 0 100 100" preserveAspectRatio="none"></svg>
+            <div class="flex-1 flex justify-center items-center p-3 lg:p-2 relative min-h-[45vh] lg:min-h-[60vh]">
+                <div id="board" class="board-container">
+                    <svg id="svg-overlay" viewBox="0 0 100 100" preserveAspectRatio="none"></svg>
+                </div>
+            </div>
+
+            <div class="lg:w-1/4 p-4 lg:p-6 flex flex-col justify-center items-center border-t lg:border-t-0 lg:border-l border-white/5 bg-black/40 z-40 relative gap-4 lg:gap-8">
+                <p id="turn-info" class="text-[12px] font-black uppercase tracking-widest text-gray-400 text-center">Syncing...</p>
+                
+                <button id="roll-btn" onclick="rollDice()" class="w-full max-w-[280px] py-4 lg:py-0 lg:h-40 rounded-full lg:rounded-3xl bg-gradient-to-b from-[#222] to-[#111] border-2 border-[#c5a059] flex flex-row lg:flex-col items-center justify-center gap-3 hover:bg-[#c5a059]/10 active:scale-95 transition-all disabled:opacity-30 disabled:pointer-events-none group shadow-[0_0_20px_rgba(197,160,89,0.15)] relative overflow-hidden">
+                    <div class="absolute inset-0 bg-[#c5a059]/20 translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-out"></div>
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#c5a059" stroke-width="2" class="relative z-10 group-hover:rotate-180 transition-transform duration-700 lg:w-10 lg:h-10 lg:stroke-[1.5]"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5" fill="#c5a059"></circle><circle cx="15.5" cy="15.5" r="1.5" fill="#c5a059"></circle><circle cx="15.5" cy="8.5" r="1.5" fill="#c5a059"></circle><circle cx="8.5" cy="15.5" r="1.5" fill="#c5a059"></circle><circle cx="12" cy="12" r="1.5" fill="#c5a059"></circle></svg>
+                    <span class="relative z-10 text-[#c5a059] font-black tracking-[0.2em] text-[12px] uppercase group-hover:text-white transition-colors">Roll Dice</span>
+                </button>
+
+                <button onclick="requestReset()" class="lg:hidden text-white/30 text-[10px] uppercase font-bold tracking-widest underline decoration-white/20 mt-2">Reset Game</button>
             </div>
         </div>
-
-        <footer class="flex justify-between items-center px-6">
-            <p id="turn-info" class="text-[11px] italic text-gray-400">Syncing...</p>
-            <div class="flex items-center gap-4">
-                <div id="dice-box" class="w-12 h-12 border border-[#c5a059]/40 rounded-lg flex items-center justify-center text-lg font-black text-[#c5a059] bg-white/5 shadow-[0_0_10px_rgba(197,160,89,0.2)]">?</div>
-                <button id="roll-btn" onclick="rollDice()" class="bg-[#c5a059] text-black px-8 py-3 rounded-full font-black uppercase text-[11px] tracking-widest disabled:opacity-20 active:scale-95 shadow-lg">Roll</button>
-            </div>
-        </footer>
     </div>
 
-    <div id="modal" class="fixed inset-0 bg-black/98 flex items-center justify-center p-8 hidden z-50">
-        <div class="perspective w-full max-w-[280px] aspect-[3/4]">
+    <div id="dice-overlay" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-[70] hidden flex items-center justify-center">
+        <div class="flex flex-col items-center gap-6">
+            <p id="roller-name" class="text-white/50 text-[10px] font-bold uppercase tracking-[0.3em]">Mengocok Dadu...</p>
+            <div id="big-dice" class="w-32 h-32 bg-gradient-to-br from-[#c5a059] to-[#8a6a2c] rounded-3xl flex items-center justify-center text-black text-6xl font-black shadow-[0_0_50px_rgba(197,160,89,0.5)] border-4 border-white/20">
+                ?
+            </div>
+        </div>
+    </div>
+
+    <div id="modal" class="fixed inset-0 bg-black/95 backdrop-blur-md flex items-center justify-center p-8 hidden z-[80]">
+        <div class="perspective w-full max-w-[320px] aspect-[3/4]">
             <div id="card-inner" class="card-inner" onclick="flipCard()">
-                <div class="card-front"><p class="font-black text-black text-[10px] tracking-widest text-center px-4">TAP TO REVEAL<br><span class="text-[7px] text-gray-800 tracking-normal normal-case">(Klik kartunya)</span></p></div>
-                <div class="card-back flex flex-col justify-between py-8">
-                    <span class="text-[#c5a059] text-[9px] tracking-[0.3em] uppercase font-bold">Instruction</span>
-                    <p id="modal-desc" class="serif text-[18px] leading-snug text-white px-3 my-auto"></p>
-                    <button onclick="closeModal()" class="w-full py-3 bg-white text-black rounded-full font-black uppercase text-[9px] active:scale-95">Done & Sync</button>
+                <div class="card-front">
+                    <div class="w-16 h-16 border border-black/20 rounded-full flex items-center justify-center mb-4">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+                    </div>
+                    <p class="font-black text-black text-[14px] tracking-[0.2em]">TAP TO REVEAL</p>
+                </div>
+                <div class="card-back flex flex-col justify-between py-10 px-6">
+                    <span class="text-[#c5a059] text-[10px] tracking-[0.3em] uppercase font-black">PERINTAH RITUAL</span>
+                    <p id="modal-desc" class="serif text-[20px] leading-relaxed text-white my-auto"></p>
+                    <button onclick="closeModal()" class="w-full py-4 bg-white text-black rounded-full font-black uppercase text-[11px] tracking-wider hover:bg-gray-200 active:scale-95 transition-all">Selesai & Lanjut</button>
                 </div>
             </div>
         </div>
     </div>
 
-    <div id="reset-modal" class="fixed inset-0 bg-black/95 flex items-center justify-center p-8 hidden z-[60]">
-        <div class="border border-[#c5a059] bg-[#0a0a0a] p-8 rounded-2xl text-center w-full max-w-[280px] shadow-[0_0_30px_rgba(197,160,89,0.2)]">
-            <h3 class="serif text-2xl text-[#c5a059] mb-4">Reset Ritual?</h3>
-            <p id="reset-text" class="text-[11px] text-gray-300 mb-8 leading-relaxed">...</p>
+    <div id="reset-modal" class="fixed inset-0 bg-black/95 backdrop-blur-md flex items-center justify-center p-8 hidden z-[90]">
+        <div class="border border-[#c5a059] bg-[#0a0a0a] p-8 rounded-3xl text-center w-full max-w-[300px]">
+            <h3 class="serif text-3xl text-[#c5a059] mb-4">Reset?</h3>
+            <p id="reset-text" class="text-[12px] text-gray-400 mb-8 leading-relaxed">...</p>
             <div id="reset-actions" class="flex gap-4"></div>
         </div>
     </div>
@@ -150,58 +218,169 @@
             appId: "1:1019557266823:web:0b36b080f1e735afecbf22"
         };
 
-        firebase.initializeApp(firebaseConfig);
+        if (!firebase.apps.length) {
+            firebase.initializeApp(firebaseConfig);
+        }
         const db = firebase.firestore();
-        
-        // GANTI ID BIAR BERSIH 100% UNTUK VERSI LDM ULAR TANGGA INI
-        const GAME_ID = "ritual_ldm_snake_v1";
+        const GAME_ID = "ritual_ldm_tor_v1";
+
+        const svgPieces = {
+            'king': '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M19,22H5V20H19V22M17,10C15.28,10 13.88,11.36 13.88,13.06C13.88,13.54 14,13.97 14.22,14.36L12,17.15L9.78,14.36C10,13.97 10.12,13.54 10.12,13.06C10.12,11.36 8.72,10 7,10C5.28,10 3.88,11.36 3.88,13.06C3.88,14.07 4.36,14.96 5.11,15.5L7.76,19H16.24L18.89,15.5C19.64,14.96 20.12,14.07 20.12,13.06C20.12,11.36 18.72,10 17,10M12,4L10,4L10,6L8,6L8,8L10,8L10,10L12,10L12,8L14,8L14,6L12,6L12,4Z"/></svg>',
+            'queen': '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M19,22H5V20H19V22M17.33,10C16.2,10 15.28,10.94 15.28,12.08C15.28,12.55 15.44,12.97 15.71,13.31L12,16.59L8.29,13.31C8.56,12.97 8.72,12.55 8.72,12.08C8.72,10.94 7.8,10 6.67,10C5.54,10 4.62,10.94 4.62,12.08C4.62,12.87 5.07,13.55 5.74,13.91L7.76,19H16.24L18.26,13.91C18.93,13.55 19.38,12.87 19.38,12.08C19.38,10.94 18.46,10 17.33,10M12,4A2,2 0 0,0 10,6A2,2 0 0,0 12,8A2,2 0 0,0 14,6A2,2 0 0,0 12,4Z"/></svg>',
+            'rook': '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M5,20H19V22H5V20M17,2V5H15V2H13V5H11V2H9V5H7V2H5V8H7V18H17V8H19V2H17Z"/></svg>',
+            'knight': '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M19,22H5V20H19V22M15.42,8.96C16.14,10.5 16.29,12.72 15.15,14.65L12.05,12.55L11,14L14.07,16.14C12.07,17.7 9.38,18 7,18V16C9.17,16 11.23,15.11 12.5,13.5C10.74,13.88 8.86,13.2 7.7,11.83L6.15,9.97C5.83,9.59 5.86,9 6.25,8.68L9.04,6.3C10.5,5.1 12.54,4.95 14.15,5.88L15,6.37C15,5.55 14.54,4.8 13.8,4.45L14.66,2.65C16.15,3.36 17.07,4.83 17,6.43V7.27L19.46,9.15L18.25,10.75L15.42,8.96Z"/></svg>',
+            'pawn': '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M19 22H5V20H19V22M15 18H9V16C9 14.34 10.34 13 12 13C13.66 13 15 14.34 15 16V18M12 4C13.66 4 15 5.34 15 7C15 8.66 13.66 10 12 10C10.34 10 9 8.66 9 7C9 5.34 10.34 4 12 4Z"/></svg>'
+        };
 
         const allChallenges = [
-            "START: Kirim PAP nakal pemanasan sekarang!", "Kirim VN desahan panggil nama pasangan", "Kamu maju 2 langkah!", "Rekam video 15 dtk sentuh area sensitifmu", "Dia maju 2 langkah!",
-            "Ketik fantasi terliar yang mau kamu lakuin pas ketemu", "Kirim PAP buka 1 kancing/resleting", "Rekam video jilat bibir & jari pelan-pelan", "Kamu mundur 1 langkah", "Kirim PAP no sensor (1x view)",
-            "VN rintihan pelan 10 detik", "Rekam video 20 dtk mainin dada dari luar baju", "Dia mundur 2 langkah", "Kirim foto angle dari bawah paha", "Kamu maju 1 langkah",
-            "FREE: Minta 1 PAP bebas ke pasangan", "Rekam video striptease buka 1 helai pakaian", "Kirim pesan kotor 1 paragraf", "Dia maju 1 langkah", "Rekam video 30 dtk mainin Miss V / Mr P",
-            "Kirim PAP celana dalam yang lagi dipakai", "VN bisik-bisik nakal 15 detik", "Rekam video edging (hampir klimaks lalu tahan) 1 mnt", "Lepas atasan kamu sekarang!", "Dia maju 2 langkah",
-            "Kirim PAP gigit jari dengan tatapan sange", "BONUS: Lempar dadu 1x lagi", "Dia maju 1 langkah", "FREE: Minta dia rekam video sesuai maumu", "VC Sex 3 menit: Saling mainin depan layar",
-            "Rekam video usap-usap paha sampai ke inti", "Kirim VN suara kamu lagi masturbasi", "Spill gaya favorit kamu kalau lagi LDR", "Lepas bawahan kamu sekarang!", "Rekam video mainin diri sendiri",
-            "Kirim PAP setengah telanjang", "Ceritain hal yang bikin kamu horny soal dia", "Kamu harus telanjang total sekarang!", "Rekam video cium bantal bayangin itu dia", "Kamu maju 2 langkah",
-            "VN desah kencang tanpa sensor", "Kirim video peragain gerakan maju mundur", "VC Sex 5 menit: Saling adu desah", "Dia harus telanjang total sekarang!", "Rekam video close up area basah/tegang",
-            "Kamu mundur 2 langkah", "Kirim PAP leher/dada minta digigit", "Gratis dia suruh kamu rekam video apa aja", "VC Sex sampai salah satu hampir klimaks!", "Kamu mundur 3 langkah",
-            "Gratis dia suruh kamu rekam video apa aja", "Kamu mundur 3 langkah", "FREE: Minta PAP paling barbar dari dia", "Rekam video mainin dada 30 detik", "Dia maju 2 langkah",
-            "VC Sex: Tunjukin posisi imajiner", "Kirim VN minta 'dimasukin' sekarang", "Kamu maju 1 langkah", "Rekam video main gaya doggy sendiri ke arah kamera", "Kamu mundur 2 langkah",
-            "VC Sex 5 menit di kegelapan cuma modal suara", "BONUS: Lempar dadu 1x lagi", "Kirim video 1 menit masturbasi brutal", "VC Sex: Kamera taruh di kasur, tunjukin aksimu", "Kamu maju 1 langkah",
-            "Kirim PAP pose paling terbuka", "VC Sex: Sambil mainin bawah, mainin dada", "Pasangan bebas perintah kamu 10 menit", "FREE: Kamu boleh minta video 21+ apa aja", "BONUS: Lempar dadu 1x lagi",
-            "VC Sex: Sambil berdiri & pamer bodi", "Kamu mundur 2 langkah", "Kirim 3 PAP nakal berturut-turut", "VC Sex: 69 imajiner (kamera taruh atas/bawah)", "Rekam video jilat jari lalu usap ke bawah",
-            "Rekam video main pakai jari/lotion 1 mnt", "Kirim VN bilang 'Sayang, aku mau crot/klimaks'", "Ketik skenario roleplay 21+ paling liar", "Dia maju 2 langkah", "VC Sex: Saling tatap mata pas masturbasi",
-            "Spill tempat ekstrem yang pengen dipakai sex", "BONUS: Lempar dadu 1x lagi", "Kirim video 2 mnt full eksplorasi tubuh", "Pasangan nurut perintah liar di VC 5 mnt", "VC Sex: Posisi tidur ngangkang ke kamera",
-            "Kirim PAP area paling sensitifmu (Zoom in)", "Minta dia desah panggil namamu di VN", "VC Sex: Tutup mata (blindfold) denger instruksi dia", "Kamu maju 3 langkah", "Rekam video hentakan cepat/kasar ke diri sendiri",
-            "Kamu maju 3 langkah", "FREE: Minta dia lakuin apa aja di kamera", "VC Sex: Saling main tanpa suara sama sekali 2 mnt", "VC Sex: Dia yang harus tutup mata", "Dia maju 2 langkah",
-            "Kirim pesan seberapa sange kamu sekarang", "VC Sex: 5 menit saling main heboh", "Kirim video momen klimaks kamu (No cut!)", "FREE: Minta 1 video/pap pamungkas apa aja", "FINISH: VC SEX SAMPAI KLIMAKS BARENG & TUNTAS!"
+            "START: Permainan dimulai! Siapkan hati dan kejujuranmu.",
+            "TRUTH: Apa hal pertama yang ada di pikiranmu pas bangun tidur dan ingat aku hari ini?",
+            "DARE: Kirim VN nyanyiin reff lagu yang paling ngingetin kamu sama hubungan kita.",
+            "TRUTH: Sebutin 3 hal kecil dari aku yang selalu bikin kamu merasa dicintai.",
+            "MAJU 2 LANGKAH!",
+            "DARE: Kirim PAP muka paling konyol/jelek kamu sekarang juga. Gak boleh jaim!",
+            "TRUTH: Jujur, kapan terakhir kali kamu senyum-senyum sendiri baca chat dari aku?",
+            "DARE: Coba deskripsikan aku pakai 5 emoji, lalu jelaskan alasannya!",
+            "MUNDUR 1 LANGKAH",
+            "TRUTH: Kalau kita lagi jalan berdua, kamu lebih suka gandengan tangan atau ngerangkul?",
+            "DARE: Kirim VN bilang 'Aku sayang banget sama kamu, Tsuma / Bunda / Sayang' dengan nada paling manja.",
+            "TRUTH: Apa kenangan tentang kita yang paling sering kamu putar ulang di kepala pas lagi kangen?",
+            "DIA MAJU 2 LANGKAH",
+            "TRUTH: Pernah nggak kamu pura-pura ngambek cuma biar dibujuk sama aku? Kapan?",
+            "MAJU 1 LANGKAH",
+            "FREE PASS: Kamu berhak minta aku lakuin 1 hal bebas sekarang juga!",
+            "DARE: Kirim foto barang di dekatmu yang paling ngingetin kamu sama aku.",
+            "TRUTH: Menurut kamu, sifat apa dari aku yang paling melengkapi kekurangan kamu?",
+            "DIA MAJU 1 LANGKAH",
+            "DARE: Ketik 1 paragraf panjang yang isinya alasan kenapa kamu bersyukur punya aku.",
+            "TRUTH: Baju warna apa yang paling pengen kamu lihat aku pakai pas kita ketemu nanti?",
+            "DARE: Kirim VN ketawa kamu. Coba bayangin hal paling lucu yang pernah kita alamin.",
+            "TRUTH: Apa ketakutan terbesarmu soal hubungan LDM kita, dan gimana cara kita ngelewatinnya?",
+            "DARE: Spam chat aku dengan kata 'Kangen' sebanyak 20 kali sekarang!",
+            "DIA MAJU 2 LANGKAH",
+            "TRUTH: Jujur, siapa yang menurutmu lebih cemburuan di antara kita?",
+            "BONUS: Kamu dapat keberuntungan! Lempar dadu 1x lagi!",
+            "DIA MAJU 1 LANGKAH",
+            "FREE PASS: Kamu boleh tanya 1 pertanyaan apa aja ke aku, dan aku HARUS jawab jujur.",
+            "DARE: Rekam video 15 detik kasih pesan semangat buat aku yang lagi capek/sibuk.",
+            "TRUTH: Kamu lebih suka kita ngobrol deep talk di malam hari atau bercanda receh di siang hari?",
+            "DARE: Kirim PAP pose andalan kamu kalau lagi ngerasa paling cakep/cantik.",
+            "TRUTH: Apa impian terbesar yang pengen banget kamu capai bareng aku di masa depan?",
+            "DARE: Tulis nama aku di kertas/tangan kamu, tambahin gambar hati, lalu PAP ke aku!",
+            "TRUTH: Kalau waktu bisa diulang ke hari pertama kita kenal, apa yang mau kamu lakuin beda?",
+            "DARE: Ceritain dong, menurutmu kencan ideal kita pas nanti ketemu tuh ngapain aja dari pagi sampai malam?",
+            "TRUTH: Apa satu kebiasaan burukku yang sebenarnya pengen banget kamu tegur tapi nggak enak?",
+            "DARE: Kirim screenshot history tontonan YouTube atau history dengerin lagu di Spotify kamu!",
+            "MUNDUR 2 LANGKAH",
+            "MAJU 2 LANGKAH",
+            "TRUTH: Pernah nggak ngerasa insecure sama hubungan kita? Kalau iya, pas lagi momen apa?",
+            "DARE: Telepon aku sekarang, nggak usah ngomong apa-apa, cuma mau denger nafas kamu selama 30 detik.",
+            "TRUTH: Menurutmu, bahasa cinta (Love Language) aku itu apa dan seberapa cocok sama kamu?",
+            "DARE: Cari meme paling lucu di HP kamu dan kirim ke aku sekarang.",
+            "TRUTH: Kalau hari ini adalah hari terakhir di bumi, kamu mau ngomong apa ke aku?",
+            "MUNDUR 2 LANGKAH",
+            "DARE: Kirim PAP minuman atau makanan yang lagi kamu konsumsi sekarang, atau yang terakhir dimakan.",
+            "FREE PASS: Minta aku ceritain satu rahasia kecil yang belum pernah aku ceritain ke kamu.",
+            "TRUTH: Apa yang paling bikin kamu bangga punya pasangan kaya aku?",
+            "MUNDUR 3 LANGKAH",
+            "DARE: Coba tiruin gaya bicaraku atau kata-kata yang sering banget aku sebutin lewat VN.",
+            "MUNDUR 3 LANGKAH",
+            "FREE PASS: Kamu bebas suruh aku ganti profil picture pakai foto pilihanmu selama 1 jam.",
+            "TRUTH: Hal apa yang dulu kamu benci tapi sekarang jadi suka semenjak kenal aku?",
+            "DIA MAJU 2 LANGKAH",
+            "TRUTH: Gimana caramu ngeyakinin diri sendiri pas lagi rindu berat tapi kita belum bisa ketemu?",
+            "DARE: Kirim VN ucapin selamat pagi/malam seolah-olah kita lagi tidur sebelahan.",
+            "MAJU 1 LANGKAH",
+            "TRUTH: Apa hadiah sekecil apapun yang pernah aku kasih/lakuin dan paling berkesan buatmu?",
+            "MUNDUR 2 LANGKAH",
+            "TRUTH: Di mata kamu, seberapa dewasa aku nyelesain masalah pas kita lagi berantem?",
+            "BONUS: Yes! Lempar dadu 1x lagi!",
+            "DARE: Tutup mata, ketik 'Aku sayang kamu dan aku kangen banget' tanpa lihat keyboard, lalu kirim!",
+            "TRUTH: Kalau ada satu hal dari diriku yang bisa kamu ubah, apa itu? (Jawab jujur ya!)",
+            "MAJU 1 LANGKAH",
+            "TRUTH: Apa hal yang paling kamu rindukan dari sentuhan fisik (pegangan tangan, pelukan, dll) pas LDR?",
+            "VIDEO CALL: VC sekarang! Kita saling tatap tanpa ngomong selama 1 menit penuh. Siapa ketawa duluan kalah!",
+            "DARE: Kamu harus panggil aku dengan panggilan aneh/lucu pilihanmu sampai game ini selesai.",
+            "FREE PASS: Kamu bisa nolak satu tantangan ke depannya, atau pakai ini buat kasih aku tantangan.",
+            "BONUS: Asik! Lempar dadu 1x lagi!",
+            "TRUTH: Apa topik obrolan kita yang paling bikin kamu merasa nyambung banget sama aku?",
+            "MUNDUR 2 LANGKAH",
+            "DARE: Kirim foto pemandangan di luar jendela atau pintu kamarmu saat ini.",
+            "TRUTH: Kapan momen di mana kamu merasa aku benar-benar dengerin dan ngertiin perasaanmu?",
+            "DARE: Ceritain satu kebanggaan kecilmu hari ini yang belum sempat kamu ceritain.",
+            "TRUTH: Sebutkan 1 lagu yang kalau kamu denger otomatis langsung inget aku.",
+            "DARE: Edit satu foto kita (atau fotoku) pakai stiker atau filter lucu, lalu kirim.",
+            "TRUTH: Apa ekspektasi kamu tentang hubungan kita 5 tahun dari sekarang?",
+            "DIA MAJU 2 LANGKAH",
+            "DARE: Kasih aku rating 1-10 untuk kemampuan ngelawak/humorku, dan sebutin lawakan tertengilku.",
+            "TRUTH: Pernah nggak kamu nyembunyiin rasa sedih dari aku karena nggak mau bikin khawatir?",
+            "BONUS: Keberuntungan di pihakmu! Lempar dadu 1x lagi!",
+            "DARE: Kirim PAP pakaian/outfit favorit yang pengen banget kamu pakai buat kencan bareng aku.",
+            "TRUTH: Hal apa yang bikin kamu gampang luluh pas lagi marah sama aku?",
+            "DARE: Kirim VN suara kamu lagi baca puisi receh/pantun gombal dadakan buat aku.",
+            "TRUTH: Menurut kamu, apa sih 'lem' yang bikin hubungan LDM kita ini tetep kuat sampai sekarang?",
+            "TRUTH: Kalau kita lagi marahan hebat, apa cara terbaik buat aku ngeredain emosimu?",
+            "VIDEO CALL: Coba VC sekarang, dan kasih senyum termanismu sebelum dimatiin lagi.",
+            "MAJU 3 LANGKAH",
+            "DARE: Ceritain satu mimpi aneh atau lucu yang pernah kamu alami tentang kita.",
+            "MAJU 3 LANGKAH",
+            "FREE PASS: Minta aku buat nyanyiin 1 lagu kesukaanmu lewat VN.",
+            "TRUTH: Sebutkan satu hal yang belum pernah kamu minta ke aku, tapi sebenarnya pengen banget aku lakuin.",
+            "DARE: Bikin playlist (minimal 3 lagu) dadakan buat aku dengerin hari ini.",
+            "DIA MAJU 2 LANGKAH",
+            "TRUTH: Apa satu janji ke diri sendiri tentang hubungan kita yang selalu kamu pegang erat?",
+            "DARE: Tulis pesan singkat buat aku baca pas aku lagi merasa down atau butuh semangat.",
+            "TRUTH: Seberapa bersyukur kamu ketemu dan sama-sama aku sampai detik ini?",
+            "FREE PASS: Permintaan terakhir sebelum finish! Bebas suruh aku lakuin apa aja.",
+            "FINISH: Selamat! Kita berhasil sampai akhir. Pemenangnya dapet pelukan virtual terhangat, dan bebas nentuin jadwal kencan online kita berikutnya!"
         ];
 
-        // KOORDINAT ULAR & TANGGA
-        const ladders = { 7: 29, 22: 41, 44: 76, 70: 92 }; // Tangga naik
-        const snakes = { 32: 10, 62: 38, 89: 68, 97: 78 };  // Ular turun
+        const ladders = { 4: 25, 13: 46, 33: 49, 50: 69, 42: 63, 62: 81, 74: 92 };
+        const snakes = { 27: 5, 40: 3, 43: 18, 54: 31, 66: 45, 76: 58, 89: 53, 99: 41 };
 
         let myRole = ""; 
-        let state = { p1: 1, p2: 1, turn: 'cowo', lastChallenge: "", lastRoller: "", resetRequest: "" };
+        let randomTurn = Math.random() < 0.5 ? 'cowo' : 'cewe'; 
+        let state = { p1: 1, p2: 1, turn: randomTurn, lastChallenge: "", lastRoller: "", resetRequest: "", icon_cowo: "king", icon_cewe: "queen" };
+        let localPlayerMoving = false;
 
         function selectRole(r) {
             myRole = r;
-            document.querySelectorAll('[id^="btn-"]').forEach(el => el.classList.replace('border-[var(--gold)]', 'border-white/10'));
-            document.getElementById(`btn-${r}`).classList.replace('border-white/10', 'border-[var(--gold)]');
-            const btn = document.getElementById('start-btn');
-            btn.classList.remove('opacity-0', 'pointer-events-none', 'translate-y-4');
+            document.querySelectorAll('[id^="btn-"]').forEach(el => el.classList.remove('border-[#c5a059]', 'bg-[#c5a059]/20', 'scale-105'));
+            document.getElementById(`btn-${r}`).classList.add('border-[#c5a059]', 'bg-[#c5a059]/20', 'scale-105');
+            document.getElementById('start-btn').classList.remove('opacity-0', 'pointer-events-none', 'translate-y-4');
+        }
+
+        function renderPieceMenu() {
+            let menuHTML = "";
+            Object.keys(svgPieces).forEach(key => {
+                menuHTML += `
+                    <div onclick="changePiece('${key}')" id="menu-piece-${myRole}-${key}" class="w-10 h-10 p-2 flex items-center justify-center border border-transparent rounded-lg cursor-pointer transition-all text-white/40 hover:text-white hover:bg-white/10">
+                        ${svgPieces[key]}
+                    </div>
+                `;
+            });
+            
+            document.getElementById(`piece-menu-${myRole}`).innerHTML = menuHTML;
+            document.getElementById(`piece-menu-${myRole}`).classList.remove('hidden');
+        }
+
+        function changePiece(iconKey) {
+            db.collection("games").doc(GAME_ID).update({
+                ['icon_' + myRole]: iconKey
+            });
         }
 
         function startGame() {
-            document.getElementById('selection-screen').classList.add('opacity-0', 'pointer-events-none');
-            setTimeout(() => {
-                document.getElementById('selection-screen').classList.add('hidden');
-                document.getElementById('game-screen').classList.remove('hidden');
-                createBoard();
-                listenDB();
-            }, 500);
+            document.getElementById('selection-screen').classList.add('hidden');
+            document.getElementById('game-screen').classList.remove('hidden');
+            createBoard();
+            renderPieceMenu(); 
+            
+            db.collection("games").doc(GAME_ID).set({
+                ['icon_' + myRole]: myRole === 'cowo' ? 'king' : 'queen'
+            }, { merge: true });
+
+            listenDB();
         }
 
         function getCoords(num) {
@@ -215,239 +394,316 @@
 
         function createBoard() {
             const board = document.getElementById('board');
-            const svgOverlay = document.getElementById('svg-overlay');
+            board.innerHTML = '<svg id="svg-overlay" viewBox="0 0 100 100" preserveAspectRatio="none" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 15; pointer-events: none;"></svg>';
 
             for (let row = 9; row >= 0; row--) {
                 for (let col = 0; col < 10; col++) {
                     let num = (row % 2 === 0) ? (row * 10) + (col + 1) : (row * 10) + (10 - col);
                     const cell = document.createElement('div');
-                    cell.className = 'cell'; cell.id = `c-${num}`; 
                     
-                    let content = `<span class="cell-number">${num}</span>`;
-                    let text = allChallenges[num - 1].toLowerCase();
+                    let isDark = (row + col) % 2 === 0;
+                    let bgClass = isDark ? 'bg-[#151515]/90' : 'bg-[#c5a059]/10';
                     
-                    // ICON LOGIC UPDATED FOR LDM
-                    if(text.includes('video') || text.includes('rekam') || text.includes('pap') || text.includes('vn') || text.includes('vc sex') || text.includes('foto')) {
-                        content += `<svg class="absolute opacity-40 w-5 h-5" fill="none" stroke="#ff4d4d" viewBox="0 0 24 24"><path stroke-width="2.5" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14v-4z"/><rect x="3" y="6" width="12" height="12" rx="2" stroke-width="2.5"/></svg>`;
-                    } else if(text.includes('maju') || text.includes('mundur') || text.includes('bonus')) {
-                        content += `<svg class="absolute opacity-50 w-5 h-5" fill="none" stroke="var(--gold)" viewBox="0 0 24 24"><path stroke-width="3" d="M13 7l5 5m0 0l-5 5m5-5H6"/></svg>`;
-                    } else if(text.includes('telanjang') || text.includes('lepas') || text.includes('pakaian')) {
-                        content += `<svg class="absolute opacity-40 w-5 h-5" fill="none" stroke="#ffffff" viewBox="0 0 24 24"><path stroke-width="2" d="M20.38 3.46L16 2a8.96 8.96 0 0 0-8 0l-4.38 1.46A2 2 0 0 0 2.26 5.3l1.4 6.6a2 2 0 0 0 1.96 1.58h1.22v8.5a2 2 0 0 0 2 2h6.32a2 2 0 0 0 2-2v-8.5h1.22a2 2 0 0 0 1.96-1.58l1.4-6.6a2 2 0 0 0-1.36-1.84z"/></svg>`;
-                    } else if(text.includes('ketik') || text.includes('pesan') || text.includes('spill')) {
-                        content += `<svg class="absolute opacity-50 w-5 h-5" fill="none" stroke="#ff9f43" viewBox="0 0 24 24"><path stroke-width="2" d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2v10z"/></svg>`;
-                    }
-
-                    cell.innerHTML = content;
+                    cell.className = `cell ${bgClass}`; cell.id = `c-${num}`; 
+                    cell.innerHTML = `<span class="cell-number">${num}</span>`;
                     board.appendChild(cell);
                 }
             }
 
             let svgHTML = '';
             
-            // GAMBAR TANGGA KAYU 3D
             Object.keys(ladders).forEach(start => {
                 let s = getCoords(parseInt(start)); let e = getCoords(ladders[start]);
-                let dx = e.x - s.x; let dy = e.y - s.y; let angle = Math.atan2(dy, dx);
-                let ox = Math.cos(angle + Math.PI/2) * 2.5; let oy = Math.sin(angle + Math.PI/2) * 2.5;
-                
-                svgHTML += `<line x1="${s.x-ox}" y1="${s.y-oy}" x2="${e.x-ox}" y2="${e.y-oy}" stroke="#b45309" stroke-width="2" opacity="0.9" stroke-linecap="round"/>`;
-                svgHTML += `<line x1="${s.x+ox}" y1="${s.y+oy}" x2="${e.x+ox}" y2="${e.y+oy}" stroke="#b45309" stroke-width="2" opacity="0.9" stroke-linecap="round"/>`;
-                
-                let steps = 6;
-                for(let i=1; i<=steps; i++) {
-                    let rx = s.x + dx * (i/(steps+1)); let ry = s.y + dy * (i/(steps+1));
-                    svgHTML += `<line x1="${rx-ox}" y1="${ry-oy}" x2="${rx+ox}" y2="${ry+oy}" stroke="#d97706" stroke-width="1.5" opacity="0.9" stroke-linecap="round"/>`;
+                svgHTML += `<line x1="${s.x-1.5}" y1="${s.y}" x2="${e.x-1.5}" y2="${e.y}" stroke="#d97706" stroke-width="1.2" opacity="0.9"/>`;
+                svgHTML += `<line x1="${s.x+1.5}" y1="${s.y}" x2="${e.x+1.5}" y2="${e.y}" stroke="#d97706" stroke-width="1.2" opacity="0.9"/>`;
+                for(let i=1; i<6; i++) {
+                    let mx = s.x + (e.x - s.x) * (i/6); let my = s.y + (e.y - s.y) * (i/6);
+                    let angle = Math.atan2(e.y - s.y, e.x - s.x) + Math.PI/2;
+                    let rx1 = mx + Math.cos(angle)*1.5; let ry1 = my + Math.sin(angle)*1.5;
+                    let rx2 = mx - Math.cos(angle)*1.5; let ry2 = my - Math.sin(angle)*1.5;
+                    svgHTML += `<line x1="${rx1}" y1="${ry1}" x2="${rx2}" y2="${ry2}" stroke="#d97706" stroke-width="1" opacity="0.9"/>`;
                 }
             });
 
-            // GAMBAR ULAR BENERAN (Bentuk S, Kepala, Mata, Lidah)
             Object.keys(snakes).forEach(start => {
-                let s = getCoords(parseInt(start)); // Kepala
-                let e = getCoords(snakes[start]);   // Ekor
+                let s = getCoords(parseInt(start)); let e = getCoords(snakes[start]);   
+                let dx = e.x - s.x;
+                let dy = e.y - s.y;
+                let angle = Math.atan2(dy, dx);
+                let nx = -Math.sin(angle);
+                let ny = Math.cos(angle);
+                let amp = 4; 
                 
-                let dx = e.x - s.x; let dy = e.y - s.y;
-                let dist = Math.sqrt(dx*dx + dy*dy);
-                let nx = -dy/dist; let ny = dx/dist;
-                
-                let curveStrength = 12; // Kekuatan liukan ular
-                let cp1x = s.x + dx*0.3 + nx*curveStrength;
-                let cp1y = s.y + dy*0.3 + ny*curveStrength;
-                let cp2x = s.x + dx*0.7 - nx*curveStrength;
-                let cp2y = s.y + dy*0.7 - ny*curveStrength;
+                let cx1 = s.x + dx*0.3 + nx*amp;
+                let cy1 = s.y + dy*0.3 + ny*amp;
+                let cx2 = s.x + dx*0.7 - nx*amp;
+                let cy2 = s.y + dy*0.7 - ny*amp;
 
-                // Badan ular & corak
-                svgHTML += `<path d="M ${s.x} ${s.y} C ${cp1x} ${cp1y}, ${cp2x} ${cp2y}, ${e.x} ${e.y}" fill="none" stroke="#dc2626" stroke-width="4.5" stroke-linecap="round" opacity="0.9" />`;
-                svgHTML += `<path d="M ${s.x} ${s.y} C ${cp1x} ${cp1y}, ${cp2x} ${cp2y}, ${e.x} ${e.y}" fill="none" stroke="#7f1d1d" stroke-width="4.5" stroke-dasharray="2 4" stroke-linecap="round" opacity="0.8" />`;
+                svgHTML += `<path class="path-snake" d="M ${s.x} ${s.y} C ${cx1} ${cy1}, ${cx2} ${cy2}, ${e.x} ${e.y}" fill="none" stroke="#dc2626" stroke-width="2.5" stroke-linecap="round" opacity="0.9"/>`;
                 
-                // Kepala dan Arah hadap
-                let angle = Math.atan2(cp1y - s.y, cp1x - s.x) * 180 / Math.PI;
-                svgHTML += `<g transform="translate(${s.x}, ${s.y}) rotate(${angle})">
-                    <path d="M -2 0 L -6 -2 M -2 0 L -6 2" stroke="#ff0000" stroke-width="0.8" fill="none" /> <ellipse cx="1" cy="0" rx="3.5" ry="2.5" fill="#dc2626" /> <ellipse cx="1" cy="0" rx="3.5" ry="2.5" fill="none" stroke="#7f1d1d" stroke-width="0.5" />
-                    <circle cx="2" cy="-1.2" r="0.6" fill="#fff" /><circle cx="2" cy="-1.2" r="0.2" fill="#000" /> <circle cx="2" cy="1.2" r="0.6" fill="#fff" /><circle cx="2" cy="1.2" r="0.2" fill="#000" /> </g>`;
+                let headAngle = Math.atan2(cy1 - s.y, cx1 - s.x) * 180 / Math.PI;
+                svgHTML += `<g transform="translate(${s.x}, ${s.y}) rotate(${headAngle})">
+                    <path d="M -2.5,0 L -4.5,-1 M -2.5,0 L -4.5,1" stroke="#fca5a5" stroke-width="0.5" fill="none"/>
+                    <ellipse cx="0" cy="0" rx="2.5" ry="1.8" fill="#dc2626" />
+                    <circle cx="-0.8" cy="-1" r="0.4" fill="#000"/>
+                    <circle cx="-0.8" cy="1" r="0.4" fill="#000"/>
+                </g>`;
             });
 
-            svgOverlay.innerHTML = svgHTML;
+            document.getElementById('svg-overlay').innerHTML = svgHTML;
         }
+
+        let previousTurn = "";
 
         function listenDB() {
             db.collection("games").doc(GAME_ID).onSnapshot((doc) => {
                 if (doc.exists) { 
-                    state = doc.data(); 
-                    syncUI(); 
+                    const data = doc.data();
+                    if(previousTurn !== "" && previousTurn !== data.turn && !localPlayerMoving) {
+                        showTurnToast(data.turn);
+                    }
+                    previousTurn = data.turn;
+                    syncUI(data); 
                 } else { 
-                    state.turn = Math.random() < 0.5 ? 'cowo' : 'cewe';
                     db.collection("games").doc(GAME_ID).set(state); 
                 }
             });
         }
 
-        function syncUI() {
+        function showTurnToast(turn) {
+            const toast = document.getElementById('turn-toast');
+            toast.innerText = turn === myRole ? "GILIRAN KAMU SEKARANG" : `GILIRAN DIA (${turn.toUpperCase()})`;
+            toast.style.opacity = "1";
+            toast.style.transform = "translate(-50%, 0)";
+            setTimeout(() => {
+                toast.style.opacity = "0";
+                toast.style.transform = "translate(-50%, -1rem)";
+            }, 3000);
+        }
+
+        function renderPawn(role, pos, isJumping) {
+            let pion = document.getElementById(`pion-${role}`);
+            if (!pion) {
+                pion = document.createElement('div');
+                pion.id = `pion-${role}`;
+                pion.className = `pion pion-${role}`;
+                document.getElementById('board').appendChild(pion);
+            }
+            
+            pion.innerHTML = svgPieces[state['icon_' + role]] || svgPieces[role === 'cowo' ? 'king' : 'queen'];
+            
+            let coords = getCoords(pos);
+            let offsetX = role === 'cowo' ? -6 : 6;
+            let offsetY = role === 'cowo' ? -6 : 6;
+            
+            pion.style.left = `calc(${coords.x}% + ${offsetX}px)`;
+            pion.style.top = `calc(${coords.y}% + ${offsetY}px)`;
+
+            if (isJumping) {
+                pion.classList.remove('is-jumping');
+                void pion.offsetWidth; 
+                pion.classList.add('is-jumping');
+            }
+        }
+
+        function syncUI(newData) {
+            const pos1Changed = state.p1 !== newData.p1;
+            const pos2Changed = state.p2 !== newData.p2;
+            state = newData;
+
             document.getElementById('pos-1').innerText = state.p1;
             document.getElementById('pos-2').innerText = state.p2;
             
-            document.querySelectorAll('.pion').forEach(p => p.remove());
-            const c1 = document.getElementById(`c-${state.p1}`);
-            const c2 = document.getElementById(`c-${state.p2}`);
-            if(c1) { let p1Div = document.createElement('div'); p1Div.className = 'pion pion-cowo'; c1.appendChild(p1Div); }
-            if(c2) { let p2Div = document.createElement('div'); p2Div.className = 'pion pion-cewe'; c2.appendChild(p2Div); }
+            document.getElementById('icon-display-cowo').innerHTML = svgPieces[state.icon_cowo] || svgPieces['king'];
+            document.getElementById('icon-display-cewe').innerHTML = svgPieces[state.icon_cewe] || svgPieces['queen'];
+
+            if (document.getElementById(`piece-menu-${myRole}`)) {
+                let myCurrentIcon = state['icon_' + myRole] || (myRole === 'cowo' ? 'king' : 'queen');
+                document.querySelectorAll(`#piece-menu-${myRole} div`).forEach(el => {
+                    el.classList.remove('border-[#c5a059]', 'bg-[#c5a059]/20', 'text-[#c5a059]');
+                });
+                let activeBtn = document.getElementById(`menu-piece-${myRole}-${myCurrentIcon}`);
+                if(activeBtn) activeBtn.classList.add('border-[#c5a059]', 'bg-[#c5a059]/20', 'text-[#c5a059]');
+            }
+
+            renderPawn('cowo', state.p1, pos1Changed);
+            renderPawn('cewe', state.p2, pos2Changed);
             
             const btn = document.getElementById('roll-btn');
             const info = document.getElementById('turn-info');
+            
             if (state.turn === myRole) { 
-                btn.disabled = false; info.innerText = "Gilirannya kamu!"; info.style.color = 'var(--gold)'; 
+                btn.disabled = false; 
+                info.innerText = "Giliran Kamu!"; 
+                info.className = "text-[#c5a059] text-[12px] font-black uppercase tracking-widest text-center";
+                document.getElementById(myRole === 'cowo' ? 'ui-cowo' : 'ui-cewe').classList.add('border-[#c5a059]', 'shadow-[0_0_15px_rgba(197,160,89,0.3)]');
+                document.getElementById(myRole === 'cowo' ? 'ui-cewe' : 'ui-cowo').classList.remove('border-[#c5a059]', 'shadow-[0_0_15px_rgba(197,160,89,0.3)]');
             } else { 
-                btn.disabled = true; info.innerText = `Menunggu ${state.turn.toUpperCase()}...`; info.style.color = '#777'; 
+                btn.disabled = true; 
+                info.innerText = `Giliran ${state.turn.toUpperCase()}`; 
+                info.className = "text-gray-500 text-[12px] font-bold uppercase tracking-widest text-center";
+                document.getElementById(myRole === 'cowo' ? 'ui-cewe' : 'ui-cowo').classList.add('border-[#dc2626]', 'shadow-[0_0_15px_rgba(220,38,38,0.3)]');
+                document.getElementById(myRole === 'cowo' ? 'ui-cowo' : 'ui-cewe').classList.remove('border-[#dc2626]', 'shadow-[0_0_15px_rgba(220,38,38,0.3)]');
             }
             
-            document.getElementById('ui-cowo').style.opacity = state.turn === 'cowo' ? "1" : "0.2";
-            document.getElementById('ui-cewe').style.opacity = state.turn === 'cewe' ? "1" : "0.2";
-            
             if (state.lastChallenge && state.lastChallenge !== "") {
-                document.getElementById('modal-desc').innerText = `"${state.lastChallenge}"`;
-                document.getElementById('modal').style.display = 'flex';
+                document.getElementById('modal-desc').innerText = state.lastChallenge;
+                document.getElementById('modal').classList.remove('hidden');
             } else {
-                document.getElementById('modal').style.display = 'none';
+                document.getElementById('modal').classList.add('hidden');
                 document.getElementById('card-inner').classList.remove('is-flipped');
             }
 
             const resetModal = document.getElementById('reset-modal');
-            const resetText = document.getElementById('reset-text');
-            const resetActions = document.getElementById('reset-actions');
-
             if (state.resetRequest && state.resetRequest !== "") {
                 resetModal.classList.remove('hidden');
                 if (state.resetRequest === myRole) {
-                    resetText.innerText = "Menunggu persetujuan pasangan...";
-                    resetActions.innerHTML = `<button onclick="cancelReset()" class="w-full py-3 border border-red-500/50 text-red-500 rounded-full font-black uppercase text-[10px] active:scale-95">Batal Request</button>`;
+                    document.getElementById('reset-text').innerText = "Menunggu persetujuan dia untuk reset...";
+                    document.getElementById('reset-actions').innerHTML = `<button onclick="cancelReset()" class="w-full py-4 border border-red-500/50 text-red-500 rounded-full font-black text-[11px] uppercase tracking-wider">BATAL</button>`;
                 } else {
-                    resetText.innerText = "Pasanganmu mengajak untuk mengulang ritual dari awal. Setuju?";
-                    resetActions.innerHTML = `
-                        <button onclick="cancelReset()" class="flex-1 py-3 border border-red-500/50 text-red-500 rounded-full font-black uppercase text-[10px] active:scale-95">Tolak</button>
-                        <button onclick="confirmReset()" class="flex-1 py-3 bg-[#c5a059] text-black rounded-full font-black uppercase text-[10px] active:scale-95">Setuju</button>
-                    `;
+                    document.getElementById('reset-text').innerText = "Pasanganmu mengajak mengulang ritual dari awal. Setuju?";
+                    document.getElementById('reset-actions').innerHTML = `
+                        <button onclick="cancelReset()" class="flex-1 py-4 border border-red-500/50 text-red-500 rounded-full font-black text-[11px] uppercase tracking-wider">TOLAK</button>
+                        <button onclick="confirmReset()" class="flex-1 py-4 bg-[#c5a059] text-black rounded-full font-black text-[11px] uppercase tracking-wider">SETUJU</button>`;
                 }
-            } else {
-                resetModal.classList.add('hidden');
-            }
-        }
-
-        function requestReset() {
-            if(state.resetRequest) return; 
-            db.collection("games").doc(GAME_ID).update({ resetRequest: myRole });
-        }
-
-        function confirmReset() {
-            const randomTurn = Math.random() < 0.5 ? 'cowo' : 'cewe';
-            db.collection("games").doc(GAME_ID).update({
-                p1: 1, p2: 1, turn: randomTurn, lastChallenge: "", lastRoller: "", resetRequest: ""
-            });
-        }
-
-        function cancelReset() {
-            db.collection("games").doc(GAME_ID).update({ resetRequest: "" });
+            } else { resetModal.classList.add('hidden'); }
         }
 
         function rollDice() {
-            const dice = document.getElementById('dice-box');
-            dice.classList.add('shake'); dice.innerText = "...";
+            localPlayerMoving = true;
+            const diceOverlay = document.getElementById('dice-overlay');
+            const bigDice = document.getElementById('big-dice');
+            const rollerName = document.getElementById('roller-name');
+            
+            rollerName.innerText = `Kamu sedang mengocok...`;
+            diceOverlay.classList.remove('hidden');
+            bigDice.classList.remove('dice-anim');
+            
+            let rollInterval = setInterval(() => {
+                bigDice.innerText = Math.floor(Math.random() * 6) + 1;
+            }, 50);
+            
             setTimeout(() => {
+                clearInterval(rollInterval);
                 const roll = Math.floor(Math.random() * 6) + 1;
-                dice.innerText = roll; dice.classList.remove('shake');
+                bigDice.innerText = roll; 
+                bigDice.classList.add('dice-anim');
                 
-                let np1 = state.p1, np2 = state.p2;
-                if (myRole === 'cowo') np1 = Math.min(np1 + roll, 100); 
-                else np2 = Math.min(np2 + roll, 100);
+                let startPos = (myRole === 'cowo') ? state.p1 : state.p2;
+                let targetPos = Math.min(startPos + roll, 100);
                 
-                let posisiBaru = (myRole === 'cowo') ? np1 : np2;
-                const task = allChallenges[posisiBaru - 1]; 
+                setTimeout(async () => {
+                    diceOverlay.classList.add('hidden');
+                    db.collection("games").doc(GAME_ID).update({ lastChallenge: "", lastRoller: myRole });
 
-                db.collection("games").doc(GAME_ID).update({ 
-                    p1: np1, p2: np2, lastChallenge: task, lastRoller: myRole
-                });
-            }, 600);
+                    for (let p = startPos + 1; p <= targetPos; p++) {
+                        if (myRole === 'cowo') await db.collection("games").doc(GAME_ID).update({ p1: p });
+                        else await db.collection("games").doc(GAME_ID).update({ p2: p });
+                        await new Promise(r => setTimeout(r, 400));
+                    }
+
+                    setTimeout(() => {
+                        let finalPos = targetPos;
+                        if (ladders[targetPos]) finalPos = ladders[targetPos];
+                        else if (snakes[targetPos]) finalPos = snakes[targetPos];
+
+                        let updateData = { lastChallenge: allChallenges[finalPos - 1] };
+                        if (myRole === 'cowo') updateData.p1 = finalPos;
+                        else updateData.p2 = finalPos;
+
+                        db.collection("games").doc(GAME_ID).update(updateData);
+                        localPlayerMoving = false;
+                    }, 400); 
+                }, 1000);
+
+            }, 800);
         }
 
-        function flipCard() { document.getElementById('card-inner').classList.add('is-flipped'); }
-        
+        function flipCard() { 
+            document.getElementById('card-inner').classList.add('is-flipped'); 
+        }
+
         function closeModal() {
             document.getElementById('card-inner').classList.remove('is-flipped');
             
-            setTimeout(() => {
-                document.getElementById('modal').style.display = 'none';
-                
-                if (state.lastRoller === myRole && state.lastChallenge !== "") {
-                    let taskText = state.lastChallenge.toLowerCase();
-                    let np1 = state.p1; let np2 = state.p2;
+            setTimeout(async () => {
+                if (state.lastRoller === myRole) {
                     let nextTurn = (myRole === 'cowo') ? 'cewe' : 'cowo';
-                    let newTask = ""; 
+                    let text = state.lastChallenge.toUpperCase();
+                    let np1 = state.p1, np2 = state.p2;
+                    let chainMove = 0;
+                    let opponentMove = 0;
+
+                    if (text.includes("KAMU MAJU 2") || text.includes("MAJU 2 LANGKAH")) chainMove = 2;
+                    else if (text.includes("KAMU MAJU 3") || text.includes("MAJU 3 LANGKAH")) chainMove = 3;
+                    else if (text.includes("KAMU MAJU 1") || text.includes("MAJU 1 LANGKAH")) chainMove = 1;
+                    else if (text.includes("KAMU MUNDUR 1") || text.includes("MUNDUR 1 LANGKAH")) chainMove = -1;
+                    else if (text.includes("KAMU MUNDUR 2") || text.includes("MUNDUR 2 LANGKAH")) chainMove = -2;
+                    else if (text.includes("KAMU MUNDUR 3") || text.includes("MUNDUR 3 LANGKAH")) chainMove = -3;
+                    else if (text.includes("DIA MAJU 1") || text.includes("DIA MAJU 2")) {
+                        opponentMove = text.includes("DIA MAJU 2") ? 2 : 1;
+                    }
+
+                    if (text.includes("BONUS")) nextTurn = myRole;
                     
-                    let moves = 0; let target = null;
-                    if (taskText.includes("dia maju")) { let m = taskText.match(/dia maju (\d+)/); if(m){moves=parseInt(m[1]); target=(myRole==='cowo'?'cewe':'cowo');} }
-                    else if (taskText.includes("dia mundur")) { let m = taskText.match(/dia mundur (\d+)/); if(m){moves=-parseInt(m[1]); target=(myRole==='cowo'?'cewe':'cowo');} }
-                    else if (taskText.includes("maju")) { let m = taskText.match(/maju (\d+)/); if(m){moves=parseInt(m[1]); target=myRole;} }
-                    else if (taskText.includes("mundur")) { let m = taskText.match(/mundur (\d+)/); if(m){moves=-parseInt(m[1]); target=myRole;} }
+                    db.collection("games").doc(GAME_ID).update({ lastChallenge: "" });
 
-                    if (taskText.includes("lempar dadu")) nextTurn = myRole; 
+                    if (chainMove !== 0) {
+                        let startPos = myRole === 'cowo' ? state.p1 : state.p2;
+                        let targetPos = Math.max(1, Math.min(startPos + chainMove, 100));
+                        let step = chainMove > 0 ? 1 : -1;
 
-                    let willPullNewCard = false;
-
-                    if (target !== null && moves !== 0) {
-                        if (target === 'cowo') np1 = Math.min(Math.max(np1 + moves, 1), 100);
-                        else np2 = Math.min(Math.max(np2 + moves, 1), 100);
-                        if (target === myRole) { willPullNewCard = true; nextTurn = myRole; }
-                    }
-
-                    let currentPos = (myRole === 'cowo') ? np1 : np2;
-                    if (ladders[currentPos]) {
-                        if (myRole === 'cowo') np1 = ladders[currentPos]; else np2 = ladders[currentPos];
-                        willPullNewCard = true; nextTurn = myRole;
-                    } else if (snakes[currentPos]) {
-                        if (myRole === 'cowo') np1 = snakes[currentPos]; else np2 = snakes[currentPos];
-                        willPullNewCard = true; nextTurn = myRole;
-                    }
-
-                    if (willPullNewCard) {
-                        let finalPos = (myRole === 'cowo') ? np1 : np2;
+                        for (let p = startPos + step; step > 0 ? p <= targetPos : p >= targetPos; p += step) {
+                            if (myRole === 'cowo') await db.collection("games").doc(GAME_ID).update({ p1: p });
+                            else await db.collection("games").doc(GAME_ID).update({ p2: p });
+                            await new Promise(r => setTimeout(r, 400));
+                        }
                         
-                        // HAPUS KARTU LAMA BIAR PION JALAN DULU
-                        db.collection("games").doc(GAME_ID).update({ 
-                            p1: np1, p2: np2, lastChallenge: "", turn: nextTurn 
-                        });
-
-                        // DELAY 1 DETIK, LALU TARIK KARTU BARU (Beruntun)
-                        setTimeout(() => {
-                            db.collection("games").doc(GAME_ID).update({ 
-                                lastChallenge: allChallenges[finalPos - 1] 
-                            });
-                        }, 1000);
+                        let currentPos = targetPos;
+                        if (ladders[currentPos]) currentPos = ladders[currentPos];
+                        else if (snakes[currentPos]) currentPos = snakes[currentPos];
                         
-                    } else {
-                        db.collection("games").doc(GAME_ID).update({ 
-                            p1: np1, p2: np2, lastChallenge: "", turn: nextTurn 
-                        });
+                        let finalUpdate = { lastChallenge: allChallenges[currentPos - 1] };
+                        if (myRole === 'cowo') finalUpdate.p1 = currentPos;
+                        else finalUpdate.p2 = currentPos;
+
+                        db.collection("games").doc(GAME_ID).update(finalUpdate);
+                        return; 
                     }
+
+                    if (opponentMove !== 0) {
+                        let oppRole = myRole === 'cowo' ? 'cewe' : 'cowo';
+                        let startPos = oppRole === 'cowo' ? state.p1 : state.p2;
+                        let targetPos = Math.min(startPos + opponentMove, 100);
+
+                        for (let p = startPos + 1; p <= targetPos; p++) {
+                            if (oppRole === 'cowo') await db.collection("games").doc(GAME_ID).update({ p1: p });
+                            else await db.collection("games").doc(GAME_ID).update({ p2: p });
+                            await new Promise(r => setTimeout(r, 400));
+                        }
+
+                        let currentPos = targetPos;
+                        if (ladders[currentPos]) currentPos = ladders[currentPos];
+                        else if (snakes[currentPos]) currentPos = snakes[currentPos];
+
+                        let finalUpdate = { turn: nextTurn };
+                        if (oppRole === 'cowo') finalUpdate.p1 = currentPos;
+                        else finalUpdate.p2 = currentPos;
+
+                        db.collection("games").doc(GAME_ID).update(finalUpdate);
+                        return;
+                    }
+
+                    db.collection("games").doc(GAME_ID).update({ p1: np1, p2: np2, lastChallenge: "", turn: nextTurn });
                 }
-            }, 400); 
+            }, 400);
+        }
+
+        function requestReset() { db.collection("games").doc(GAME_ID).update({ resetRequest: myRole }); }
+        function cancelReset() { db.collection("games").doc(GAME_ID).update({ resetRequest: "" }); }
+        function confirmReset() { 
+            let randomTurn = Math.random() < 0.5 ? 'cowo' : 'cewe'; 
+            db.collection("games").doc(GAME_ID).set({ p1: 1, p2: 1, turn: randomTurn, lastChallenge: "", lastRoller: "", resetRequest: "" }, { merge: true }); 
         }
     </script>
 </body>

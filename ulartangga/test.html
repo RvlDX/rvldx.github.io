@@ -223,6 +223,7 @@
         const db = firebase.firestore();
         const GAME_ID = "ritual_ldm_tor_v1";
 
+        // MASTER SVG CHESS PIECES (CLEAN VECTOR PATHS)
         const svgPieces = {
             'king': '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M19,22H5V20H19V22M17,10C15.28,10 13.88,11.36 13.88,13.06C13.88,13.54 14,13.97 14.22,14.36L12,17.15L9.78,14.36C10,13.97 10.12,13.54 10.12,13.06C10.12,11.36 8.72,10 7,10C5.28,10 3.88,11.36 3.88,13.06C3.88,14.07 4.36,14.96 5.11,15.5L7.76,19H16.24L18.89,15.5C19.64,14.96 20.12,14.07 20.12,13.06C20.12,11.36 18.72,10 17,10M12,4L10,4L10,6L8,6L8,8L10,8L10,10L12,10L12,8L14,8L14,6L12,6L12,4Z"/></svg>',
             'queen': '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M19,22H5V20H19V22M17.33,10C16.2,10 15.28,10.94 15.28,12.08C15.28,12.55 15.44,12.97 15.71,13.31L12,16.59L8.29,13.31C8.56,12.97 8.72,12.55 8.72,12.08C8.72,10.94 7.8,10 6.67,10C5.54,10 4.62,10.94 4.62,12.08C4.62,12.87 5.07,13.55 5.74,13.91L7.76,19H16.24L18.26,13.91C18.93,13.55 19.38,12.87 19.38,12.08C19.38,10.94 18.46,10 17.33,10M12,4A2,2 0 0,0 10,6A2,2 0 0,0 12,8A2,2 0 0,0 14,6A2,2 0 0,0 12,4Z"/></svg>',
@@ -341,8 +342,6 @@
         let randomTurn = Math.random() < 0.5 ? 'cowo' : 'cewe'; 
         let state = { p1: 1, p2: 1, turn: randomTurn, lastChallenge: "", lastRoller: "", resetRequest: "", icon_cowo: "king", icon_cewe: "queen" };
         let localPlayerMoving = false;
-        let isAnimatingQueue = Promise.resolve();
-        let previousTurn = "";
 
         function selectRole(r) {
             myRole = r;
@@ -351,6 +350,7 @@
             document.getElementById('start-btn').classList.remove('opacity-0', 'pointer-events-none', 'translate-y-4');
         }
 
+        // FUNGSI RENDER MENU UBAH PION (HANYA UNTUK ROLE SENDIRI)
         function renderPieceMenu() {
             let menuHTML = "";
             Object.keys(svgPieces).forEach(key => {
@@ -361,11 +361,13 @@
                 `;
             });
             
+            // Masukkan ke dalam kotak skor milik user
             document.getElementById(`piece-menu-${myRole}`).innerHTML = menuHTML;
             document.getElementById(`piece-menu-${myRole}`).classList.remove('hidden');
         }
 
         function changePiece(iconKey) {
+            // Update ke firebase langsung
             db.collection("games").doc(GAME_ID).update({
                 ['icon_' + myRole]: iconKey
             });
@@ -375,8 +377,9 @@
             document.getElementById('selection-screen').classList.add('hidden');
             document.getElementById('game-screen').classList.remove('hidden');
             createBoard();
-            renderPieceMenu(); 
+            renderPieceMenu(); // Panggil menu pion saat game mulai
             
+            // Set default icon jika belum ada
             db.collection("games").doc(GAME_ID).set({
                 ['icon_' + myRole]: myRole === 'cowo' ? 'king' : 'queen'
             }, { merge: true });
@@ -454,6 +457,8 @@
             document.getElementById('svg-overlay').innerHTML = svgHTML;
         }
 
+        let previousTurn = "";
+
         function listenDB() {
             db.collection("games").doc(GAME_ID).onSnapshot((doc) => {
                 if (doc.exists) { 
@@ -462,88 +467,37 @@
                         showTurnToast(data.turn);
                     }
                     previousTurn = data.turn;
-                    
-                    // Masukkan proses animasi ke dalam antrean (queue) agar mulus berjalan satu per satu
-                    isAnimatingQueue = isAnimatingQueue.then(() => handleDataTransition(data)); 
+                    syncUI(data); 
                 } else { 
                     db.collection("games").doc(GAME_ID).set(state); 
                 }
             });
         }
 
-        async function handleDataTransition(newData) {
-            const startP1 = state.p1;
-            const startP2 = state.p2;
-            const targetP1 = newData.p1;
-            const targetP2 = newData.p2;
+        function showTurnToast(turn) {
+            const toast = document.getElementById('turn-toast');
+            toast.innerText = turn === myRole ? "GILIRAN KAMU SEKARANG" : `GILIRAN DIA (${turn.toUpperCase()})`;
+            toast.style.opacity = "1";
+            toast.style.transform = "translate(-50%, 0)";
+            setTimeout(() => {
+                toast.style.opacity = "0";
+                toast.style.transform = "translate(-50%, -1rem)";
+            }, 3000);
+        }
 
-            // Update UI non-posisi terlebih dahulu & sembunyikan modal agar fokus ke animasi
-            state = { ...newData, p1: startP1, p2: startP2, lastChallenge: "" };
-            updateUIElements(false); 
-
-            // Animasi untuk Pihak Cowo
-            if (startP1 !== targetP1) {
-                await moveStepByStep('cowo', startP1, targetP1);
-                state.p1 = targetP1;
-            }
-
-            // Animasi untuk Pihak Cewe
-            if (startP2 !== targetP2) {
-                await moveStepByStep('cewe', startP2, targetP2);
-                state.p2 = targetP2;
-            }
-
-            // Kembalikan status asli termasuk pemicu tantangan (modal)
+        function syncUI(newData) {
+            const pos1Changed = state.p1 !== newData.p1;
+            const pos2Changed = state.p2 !== newData.p2;
             state = newData;
-            updateUIElements(true);
-        }
 
-        async function moveStepByStep(role, start, target) {
-            let current = start;
-            const isForward = target > start;
-            
-            // Jarak > 6 dianggap sebagai Ular / Tangga, animasinya langsung meluncur (teleport)
-            const isSnakeOrLadder = Math.abs(target - start) > 6;
-
-            if (isSnakeOrLadder) {
-                updatePawnPos(role, target, true);
-                await new Promise(r => setTimeout(r, 600));
-                return;
-            }
-
-            const step = isForward ? 1 : -1;
-            
-            // Proses loop jalan kotak demi kotak
-            while (current !== target) {
-                current += step;
-                updatePawnPos(role, current, true);
-                await new Promise(r => setTimeout(r, 400)); // Jeda tiap kotak
-            }
-            
-            // Jeda tambahan di akhir agar tidak terpotong mendadak
-            await new Promise(r => setTimeout(r, 200));
-        }
-
-        function updatePawnPos(role, pos, isJumping) {
-            const existing = document.querySelector(`.pion-${role}`);
-            if (existing) existing.remove();
-
-            const cell = document.getElementById(`c-${pos}`);
-            if (cell) {
-                let pDiv = document.createElement('div');
-                pDiv.className = `pion pion-${role}` + (isJumping ? ' is-jumping' : '');
-                pDiv.innerHTML = svgPieces[state[`icon_${role}`]] || svgPieces[role === 'cowo' ? 'king' : 'queen'];
-                cell.appendChild(pDiv);
-            }
-        }
-
-        function updateUIElements(showModal = true) {
             document.getElementById('pos-1').innerText = state.p1;
             document.getElementById('pos-2').innerText = state.p2;
             
+            // Render icon ke UI Skor
             document.getElementById('icon-display-cowo').innerHTML = svgPieces[state.icon_cowo] || svgPieces['king'];
             document.getElementById('icon-display-cewe').innerHTML = svgPieces[state.icon_cewe] || svgPieces['queen'];
 
+            // Update UI Menu Pion (Kasih warna ke bidak yg sedang aktif)
             if (document.getElementById(`piece-menu-${myRole}`)) {
                 let myCurrentIcon = state['icon_' + myRole] || (myRole === 'cowo' ? 'king' : 'queen');
                 document.querySelectorAll(`#piece-menu-${myRole} div`).forEach(el => {
@@ -553,20 +507,20 @@
                 if(activeBtn) activeBtn.classList.add('border-[#c5a059]', 'bg-[#c5a059]/20', 'text-[#c5a059]');
             }
 
-            // Tetapkan posisi pion berdasarkan state visual terakhir agar tidak kembali tersetting ulang
+            // Render Pion di Papan
             document.querySelectorAll('.pion').forEach(p => p.remove());
             const c1 = document.getElementById(`c-${state.p1}`);
             const c2 = document.getElementById(`c-${state.p2}`);
             
             if(c1) { 
                 let p1Div = document.createElement('div'); 
-                p1Div.className = 'pion pion-cowo'; 
+                p1Div.className = 'pion pion-cowo' + (pos1Changed ? ' is-jumping' : ''); 
                 p1Div.innerHTML = svgPieces[state.icon_cowo] || svgPieces['king'];
                 c1.appendChild(p1Div); 
             }
             if(c2) { 
                 let p2Div = document.createElement('div'); 
-                p2Div.className = 'pion pion-cewe'; 
+                p2Div.className = 'pion pion-cewe' + (pos2Changed ? ' is-jumping' : ''); 
                 p2Div.innerHTML = svgPieces[state.icon_cewe] || svgPieces['queen'];
                 c2.appendChild(p2Div); 
             }
@@ -588,7 +542,7 @@
                 document.getElementById(myRole === 'cowo' ? 'ui-cowo' : 'ui-cewe').classList.remove('border-[#dc2626]', 'shadow-[0_0_15px_rgba(220,38,38,0.3)]');
             }
             
-            if (showModal && state.lastChallenge && state.lastChallenge !== "") {
+            if (state.lastChallenge && state.lastChallenge !== "") {
                 document.getElementById('modal-desc').innerText = state.lastChallenge;
                 document.getElementById('modal').classList.remove('hidden');
             } else {
@@ -611,17 +565,9 @@
             } else { resetModal.classList.add('hidden'); }
         }
 
-        function showTurnToast(turn) {
-            const toast = document.getElementById('turn-toast');
-            toast.innerText = turn === myRole ? "GILIRAN KAMU SEKARANG" : `GILIRAN DIA (${turn.toUpperCase()})`;
-            toast.style.opacity = "1";
-            toast.style.transform = "translate(-50%, 0)";
-            setTimeout(() => {
-                toast.style.opacity = "0";
-                toast.style.transform = "translate(-50%, -1rem)";
-            }, 3000);
-        }
-
+        // ==========================================
+        // FUNGSI INI SAJA YANG DIUBAH UNTUK LOMPAT 1 PER 1
+        // ==========================================
         function rollDice() {
             localPlayerMoving = true;
             const diceOverlay = document.getElementById('dice-overlay');
@@ -642,29 +588,32 @@
                 bigDice.innerText = roll; 
                 bigDice.classList.add('dice-anim');
                 
-                let np1 = state.p1, np2 = state.p2;
-                if (myRole === 'cowo') np1 = Math.min(np1 + roll, 100); 
-                else np2 = Math.min(np2 + roll, 100);
+                let startPos = (myRole === 'cowo') ? state.p1 : state.p2;
+                let targetPos = Math.min(startPos + roll, 100);
                 
-                let currentPos = (myRole === 'cowo') ? np1 : np2;
-                
-                setTimeout(() => {
+                setTimeout(async () => {
                     diceOverlay.classList.add('hidden');
-                    db.collection("games").doc(GAME_ID).update({ p1: np1, p2: np2, lastChallenge: "", lastRoller: myRole });
+                    db.collection("games").doc(GAME_ID).update({ lastChallenge: "", lastRoller: myRole });
+
+                    // LOOPING UPDATE KE FIREBASE AGAR PION LOMPAT SATU PER SATU
+                    for (let p = startPos + 1; p <= targetPos; p++) {
+                        if (myRole === 'cowo') await db.collection("games").doc(GAME_ID).update({ p1: p });
+                        else await db.collection("games").doc(GAME_ID).update({ p2: p });
+                        await new Promise(r => setTimeout(r, 400)); // Jeda 400ms tiap kotak
+                    }
 
                     setTimeout(() => {
-                        let finalPos = currentPos;
-                        if (ladders[currentPos]) finalPos = ladders[currentPos];
-                        else if (snakes[currentPos]) finalPos = snakes[currentPos];
+                        let finalPos = targetPos;
+                        if (ladders[targetPos]) finalPos = ladders[targetPos];
+                        else if (snakes[targetPos]) finalPos = snakes[targetPos];
 
-                        if (myRole === 'cowo') np1 = finalPos; else np2 = finalPos;
-                        db.collection("games").doc(GAME_ID).update({ 
-                            p1: np1, 
-                            p2: np2, 
-                            lastChallenge: allChallenges[finalPos - 1] 
-                        });
+                        let updateData = { lastChallenge: allChallenges[finalPos - 1] };
+                        if (myRole === 'cowo') updateData.p1 = finalPos;
+                        else updateData.p2 = finalPos;
+
+                        db.collection("games").doc(GAME_ID).update(updateData);
                         localPlayerMoving = false;
-                    }, 800);
+                    }, 400); // Jeda sejenak sebelum ngecek ular/tangga
                 }, 1000);
 
             }, 800);
@@ -674,15 +623,19 @@
             document.getElementById('card-inner').classList.add('is-flipped'); 
         }
 
+        // ==========================================
+        // FUNGSI INI JUGA DIBUAT LOMPAT 1 PER 1 SAAT EFEK KARTU
+        // ==========================================
         function closeModal() {
             document.getElementById('card-inner').classList.remove('is-flipped');
             
-            setTimeout(() => {
+            setTimeout(async () => {
                 if (state.lastRoller === myRole) {
                     let nextTurn = (myRole === 'cowo') ? 'cewe' : 'cowo';
                     let text = state.lastChallenge.toUpperCase();
                     let np1 = state.p1, np2 = state.p2;
                     let chainMove = 0;
+                    let opponentMove = 0;
 
                     if (text.includes("KAMU MAJU 2") || text.includes("MAJU 2 LANGKAH")) chainMove = 2;
                     else if (text.includes("KAMU MAJU 3") || text.includes("MAJU 3 LANGKAH")) chainMove = 3;
@@ -691,29 +644,57 @@
                     else if (text.includes("KAMU MUNDUR 2") || text.includes("MUNDUR 2 LANGKAH")) chainMove = -2;
                     else if (text.includes("KAMU MUNDUR 3") || text.includes("MUNDUR 3 LANGKAH")) chainMove = -3;
                     else if (text.includes("DIA MAJU 1") || text.includes("DIA MAJU 2")) {
-                        let opponentMove = text.includes("DIA MAJU 2") ? 2 : 1;
-                        if(myRole === 'cowo') np2 = Math.min(np2 + opponentMove, 100);
-                        else np1 = Math.min(np1 + opponentMove, 100);
+                        opponentMove = text.includes("DIA MAJU 2") ? 2 : 1;
                     }
 
                     if (text.includes("BONUS")) nextTurn = myRole;
                     
+                    db.collection("games").doc(GAME_ID).update({ lastChallenge: "" });
+
                     if (chainMove !== 0) {
-                        if(myRole === 'cowo') np1 = Math.max(1, Math.min(np1 + chainMove, 100));
-                        else np2 = Math.max(1, Math.min(np2 + chainMove, 100));
+                        let startPos = myRole === 'cowo' ? state.p1 : state.p2;
+                        let targetPos = Math.max(1, Math.min(startPos + chainMove, 100));
+                        let step = chainMove > 0 ? 1 : -1;
+
+                        for (let p = startPos + step; step > 0 ? p <= targetPos : p >= targetPos; p += step) {
+                            if (myRole === 'cowo') await db.collection("games").doc(GAME_ID).update({ p1: p });
+                            else await db.collection("games").doc(GAME_ID).update({ p2: p });
+                            await new Promise(r => setTimeout(r, 400));
+                        }
                         
-                        let currentPos = (myRole === 'cowo') ? np1 : np2;
-                        
+                        let currentPos = targetPos;
                         if (ladders[currentPos]) currentPos = ladders[currentPos];
                         else if (snakes[currentPos]) currentPos = snakes[currentPos];
                         
-                        if(myRole === 'cowo') np1 = currentPos; else np2 = currentPos;
+                        let finalUpdate = { lastChallenge: allChallenges[currentPos - 1] };
+                        if (myRole === 'cowo') finalUpdate.p1 = currentPos;
+                        else finalUpdate.p2 = currentPos;
 
-                        db.collection("games").doc(GAME_ID).update({ 
-                            p1: np1, p2: np2, 
-                            lastChallenge: allChallenges[currentPos - 1] 
-                        });
+                        db.collection("games").doc(GAME_ID).update(finalUpdate);
                         return; 
+                    }
+
+                    if (opponentMove !== 0) {
+                        let oppRole = myRole === 'cowo' ? 'cewe' : 'cowo';
+                        let startPos = oppRole === 'cowo' ? state.p1 : state.p2;
+                        let targetPos = Math.min(startPos + opponentMove, 100);
+
+                        for (let p = startPos + 1; p <= targetPos; p++) {
+                            if (oppRole === 'cowo') await db.collection("games").doc(GAME_ID).update({ p1: p });
+                            else await db.collection("games").doc(GAME_ID).update({ p2: p });
+                            await new Promise(r => setTimeout(r, 400));
+                        }
+
+                        let currentPos = targetPos;
+                        if (ladders[currentPos]) currentPos = ladders[currentPos];
+                        else if (snakes[currentPos]) currentPos = snakes[currentPos];
+
+                        let finalUpdate = { turn: nextTurn };
+                        if (oppRole === 'cowo') finalUpdate.p1 = currentPos;
+                        else finalUpdate.p2 = currentPos;
+
+                        db.collection("games").doc(GAME_ID).update(finalUpdate);
+                        return;
                     }
 
                     db.collection("games").doc(GAME_ID).update({ p1: np1, p2: np2, lastChallenge: "", turn: nextTurn });

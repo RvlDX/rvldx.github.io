@@ -19,128 +19,183 @@
             color: #e5e7eb; 
             margin: 0; padding: 0;
             position: fixed; width: 100vw; height: 100dvh; overflow: hidden; 
+            background-image: radial-gradient(circle at center, #1a1a1a 0%, #000 100%);
         }
         .serif { font-family: 'Playfair Display', serif; }
 
-        header { position: absolute; top: 0; left: 0; width: 100%; height: 60px; background: rgba(0,0,0,0.9); border-bottom: 1px solid rgba(255,255,255,0.05); z-index: 40; }
-        footer { position: absolute; bottom: 0; left: 0; width: 100%; height: 80px; background: #000; border-top: 1px solid rgba(255,255,255,0.05); z-index: 40; }
-
-        .board-wrapper {
-            position: absolute;
-            top: 80px; bottom: 100px; left: 0; right: 0;
-            display: flex; justify-content: center; align-items: center;
-        }
-
+        /* Board Styling */
         .board-container {
             position: relative;
-            display: grid; grid-template-columns: repeat(10, 1fr); gap: 1.5px;
-            width: 100%; max-width: 95vw; max-height: 100%; aspect-ratio: 1/1;
-            background: rgba(197, 160, 89, 0.4); 
-            padding: 2.5px; border-radius: 6px;
-            box-shadow: 0 0 20px rgba(197, 160, 89, 0.15);
+            display: grid; grid-template-columns: repeat(10, 1fr); gap: 2px;
+            width: 100%; max-width: 95vw; max-height: 95vw; aspect-ratio: 1/1;
+            background: rgba(197, 160, 89, 0.2); 
+            padding: 3px; border-radius: 8px;
+            box-shadow: 0 0 40px rgba(197, 160, 89, 0.1);
+            margin: auto;
+        }
+
+        @media (min-width: 1024px) {
+            .board-container { max-width: 65vh; max-height: 65vh; }
         }
 
         #svg-overlay {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
             pointer-events: none; z-index: 15;
-            filter: drop-shadow(0 3px 3px rgba(0,0,0,0.9));
+            filter: drop-shadow(0 4px 6px rgba(0,0,0,0.9));
         }
 
         .cell {
             position: relative; display: flex; align-items: center; justify-content: center;
-            font-size: 10px; font-weight: 900; color: #f3f4f6; background: #0a0a0a;
-            border-radius: 2px; overflow: hidden;
+            font-size: 11px; font-weight: 900; color: #f3f4f6; background: rgba(10, 10, 10, 0.9);
+            border-radius: 4px; overflow: hidden; border: 1px solid rgba(255,255,255,0.03);
             text-shadow: 0 0 3px #000, 0 0 5px #000; z-index: 10; text-align: center;
         }
         
-        .cell-number { z-index: 20; position: relative; opacity: 0.8;}
+        .cell-number { z-index: 20; position: relative; opacity: 0.6; }
         
+        /* Pion & Animations */
         .pion {
-            width: 14px; height: 14px; border-radius: 50%; position: absolute;
-            transition: all 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
-            border: 1.5px solid #fff; box-shadow: 0 0 12px rgba(0,0,0,1);
+            width: 18px; height: 18px; border-radius: 50%; position: absolute;
+            transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+            border: 2px solid #fff; box-shadow: 0 0 15px rgba(0,0,0,0.8);
         }
-        .pion-cowo { background-color: var(--gold); top: 8%; left: 8%; z-index: 30; }
-        .pion-cewe { background-color: var(--crimson); bottom: 8%; right: 8%; z-index: 31; }
+        .pion-cowo { background-color: var(--gold); top: 10%; left: 10%; z-index: 30; }
+        .pion-cewe { background-color: var(--crimson); bottom: 10%; right: 10%; z-index: 31; }
+
+        @keyframes jump {
+            0% { transform: translateY(0) scale(1); }
+            50% { transform: translateY(-20px) scale(1.3); }
+            100% { transform: translateY(0) scale(1); }
+        }
+        .is-jumping { animation: jump 0.6s ease-in-out; }
         
+        /* Card Animations */
         .perspective { perspective: 1000px; }
         .card-inner { width: 100%; height: 100%; transition: transform 0.6s; transform-style: preserve-3d; position: relative; }
         .is-flipped { transform: rotateY(180deg); }
         .card-front, .card-back { position: absolute; width: 100%; height: 100%; backface-visibility: hidden; border-radius: 15px; display: flex; flex-direction: column; align-items: center; justify-content: center; }
-        .card-front { background: var(--gold); cursor: pointer; border: 4px solid rgba(0,0,0,0.1); }
+        .card-front { background: var(--gold); cursor: pointer; border: 4px solid rgba(0,0,0,0.1); background-image: radial-gradient(circle at top right, rgba(255,255,255,0.2), transparent); }
         .card-back { transform: rotateY(180deg); background: #111; border: 2px solid var(--gold); padding: 20px; text-align: center; }
-        .shake { animation: shake 0.4s infinite; }
-        @keyframes shake { 0% { transform: rotate(0); } 25% { transform: rotate(10deg); } 75% { transform: rotate(-10deg); } }
+        
+        /* Dice Roll Center Screen */
+        @keyframes dicePop {
+            0% { transform: scale(0.5) rotate(-15deg); opacity: 0; }
+            50% { transform: scale(1.2) rotate(10deg); opacity: 1; }
+            100% { transform: scale(1) rotate(0deg); opacity: 1; }
+        }
+        .dice-anim { animation: dicePop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
+        
+        @keyframes snakeSlither {
+            0% { stroke-dashoffset: 1000; }
+            100% { stroke-dashoffset: 0; }
+        }
+        .path-snake { stroke-dasharray: 1000; animation: snakeSlither 3s linear forwards; }
     </style>
 </head>
 <body>
 
     <div id="selection-screen" class="fixed inset-0 z-50 bg-black flex flex-col items-center justify-center p-6 text-center">
-        <h1 class="serif text-4xl text-[#c5a059] mb-4">The Ritual</h1>
-        <p class="text-gray-500 text-[10px] uppercase tracking-widest mb-10">Truth or Dare LDM Edition</p>
-        <div class="flex gap-4 w-full max-w-xs mb-8">
-            <div onclick="selectRole('cowo')" id="btn-cowo" class="flex-1 p-5 border border-white/10 rounded-xl flex flex-col items-center gap-3 transition-all bg-white/5 cursor-pointer">
-                <p class="text-[10px] font-black uppercase">Pihak Cowo</p>
+        <h1 class="serif text-5xl text-[#c5a059] mb-4 drop-shadow-[0_0_15px_rgba(197,160,89,0.3)]">The Ritual</h1>
+        <p class="text-gray-500 text-xs uppercase tracking-[0.3em] mb-12">LDM Edition</p>
+        <div class="flex gap-6 w-full max-w-sm mb-10">
+            <div onclick="selectRole('cowo')" id="btn-cowo" class="flex-1 p-6 border border-white/10 rounded-2xl flex flex-col items-center gap-3 transition-all hover:bg-white/10 cursor-pointer">
+                <p class="text-[11px] font-black uppercase tracking-wider">Pihak Cowo</p>
             </div>
-            <div onclick="selectRole('cewe')" id="btn-cewe" class="flex-1 p-5 border border-white/10 rounded-xl flex flex-col items-center gap-3 transition-all bg-white/5 cursor-pointer">
-                <p class="text-[10px] font-black uppercase">Pihak Cewe</p>
+            <div onclick="selectRole('cewe')" id="btn-cewe" class="flex-1 p-6 border border-white/10 rounded-2xl flex flex-col items-center gap-3 transition-all hover:bg-white/10 cursor-pointer">
+                <p class="text-[11px] font-black uppercase tracking-wider">Pihak Cewe</p>
             </div>
         </div>
-        <button id="start-btn" onclick="startGame()" class="opacity-0 pointer-events-none translate-y-4 transition-all duration-300 bg-[#c5a059] text-black px-12 py-3.5 rounded-full font-black uppercase text-[11px] tracking-widest active:scale-95">Mulai Ritual</button>
+        <button id="start-btn" onclick="startGame()" class="opacity-0 pointer-events-none translate-y-4 transition-all duration-300 bg-gradient-to-r from-[#d4af37] to-[#aa7c11] text-black px-14 py-4 rounded-full font-black uppercase text-[12px] tracking-widest hover:scale-105 active:scale-95 shadow-[0_0_20px_rgba(197,160,89,0.4)]">Mulai Ritual</button>
     </div>
 
-    <div id="game-screen" class="hidden h-full w-full">
-        <header class="flex justify-between items-center px-4">
-            <div class="flex items-center gap-3">
-                <h1 class="serif text-lg text-[#c5a059]">Truth or Dare</h1>
-                <button onclick="requestReset()" class="text-white/20 hover:text-white/100 p-2">
+    <div id="turn-toast" class="fixed top-10 left-1/2 -translate-x-1/2 z-[60] bg-[#c5a059] text-black px-8 py-3 rounded-full font-black uppercase text-[10px] tracking-widest opacity-0 pointer-events-none transition-all duration-500 transform -translate-y-4 shadow-[0_5px_15px_rgba(0,0,0,0.5)]">
+        Giliran Kamu
+    </div>
+
+    <div id="game-screen" class="hidden w-full h-full lg:flex lg:items-center lg:justify-center p-4 lg:p-10">
+        
+        <div class="flex flex-col lg:flex-row w-full max-w-6xl h-full lg:h-[80vh] bg-[#0a0a0a]/80 lg:border lg:border-white/5 lg:rounded-3xl lg:shadow-2xl overflow-hidden relative">
+            
+            <div class="lg:w-1/4 p-6 flex flex-col justify-between border-b lg:border-b-0 lg:border-r border-white/5 bg-black/40 z-40 relative">
+                <div>
+                    <h1 class="serif text-2xl text-[#c5a059] mb-1">Truth or Dare</h1>
+                    <p class="text-[9px] uppercase tracking-widest text-gray-500 mb-8">LDM Board</p>
+                    
+                    <div class="flex lg:flex-col gap-6 justify-between lg:justify-start">
+                        <div id="ui-cowo" class="flex-1 lg:flex-none p-4 rounded-xl bg-white/5 border border-white/5 transition-all">
+                            <p class="text-[9px] font-bold text-gray-500 tracking-wider mb-1">POSISI COWO</p>
+                            <p class="text-3xl font-black text-[#c5a059]">#<span id="pos-1">1</span></p>
+                        </div>
+                        <div id="ui-cewe" class="flex-1 lg:flex-none p-4 rounded-xl bg-white/5 border border-white/5 transition-all">
+                            <p class="text-[9px] font-bold text-gray-500 tracking-wider mb-1">POSISI CEWE</p>
+                            <p class="text-3xl font-black text-[#dc2626]">#<span id="pos-2">1</span></p>
+                        </div>
+                    </div>
+                </div>
+                
+                <button onclick="requestReset()" class="hidden lg:flex items-center gap-2 text-white/30 hover:text-white/80 transition-colors mt-auto text-[10px] uppercase font-bold tracking-widest">
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+                    Reset Board
                 </button>
             </div>
-            <div class="flex gap-4">
-                <div id="ui-cowo" class="text-right opacity-30"><p class="text-[8px] font-bold text-gray-500">COWO</p><p class="text-xs font-black text-[#c5a059]">#<span id="pos-1">1</span></p></div>
-                <div id="ui-cewe" class="text-right opacity-30"><p class="text-[8px] font-bold text-gray-500">CEWE</p><p class="text-xs font-black text-red-600">#<span id="pos-2">1</span></p></div>
-            </div>
-        </header>
 
-        <div class="board-wrapper">
-            <div id="board" class="board-container">
-                <svg id="svg-overlay" viewBox="0 0 100 100" preserveAspectRatio="none"></svg>
+            <div class="flex-1 flex justify-center items-center p-2 relative h-[60vh] lg:h-full">
+                <div id="board" class="board-container">
+                    <svg id="svg-overlay" viewBox="0 0 100 100" preserveAspectRatio="none"></svg>
+                </div>
+            </div>
+
+            <div class="lg:w-1/4 p-6 flex flex-col justify-center items-center border-t lg:border-t-0 lg:border-l border-white/5 bg-black/40 z-40 relative gap-8">
+                <p id="turn-info" class="text-[12px] font-black uppercase tracking-widest text-gray-400 text-center">Syncing...</p>
+                
+                <button id="roll-btn" onclick="rollDice()" class="w-full max-w-[200px] aspect-square lg:aspect-auto lg:h-40 rounded-full lg:rounded-3xl bg-gradient-to-b from-[#222] to-[#111] border-2 border-[#c5a059] flex flex-col items-center justify-center gap-3 hover:bg-[#c5a059]/10 active:scale-95 transition-all disabled:opacity-30 disabled:pointer-events-none group shadow-[0_0_30px_rgba(197,160,89,0.15)] relative overflow-hidden">
+                    <div class="absolute inset-0 bg-[#c5a059]/20 translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-out"></div>
+                    <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#c5a059" stroke-width="1.5" class="relative z-10 group-hover:rotate-180 transition-transform duration-700"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5" fill="#c5a059"></circle><circle cx="15.5" cy="15.5" r="1.5" fill="#c5a059"></circle><circle cx="15.5" cy="8.5" r="1.5" fill="#c5a059"></circle><circle cx="8.5" cy="15.5" r="1.5" fill="#c5a059"></circle><circle cx="12" cy="12" r="1.5" fill="#c5a059"></circle></svg>
+                    <span class="relative z-10 text-[#c5a059] font-black tracking-[0.2em] text-[11px] uppercase group-hover:text-white transition-colors">Roll Dice</span>
+                </button>
+
+                <button onclick="requestReset()" class="lg:hidden text-white/30 text-[10px] uppercase font-bold tracking-widest underline decoration-white/20 mt-4">Reset Game</button>
             </div>
         </div>
-
-        <footer class="flex justify-between items-center px-6">
-            <p id="turn-info" class="text-[10px] font-bold uppercase tracking-widest text-gray-400">Syncing...</p>
-            <div class="flex items-center gap-4">
-                <div id="dice-box" class="w-12 h-12 border border-[#c5a059]/40 rounded-lg flex items-center justify-center text-lg font-black text-[#c5a059] bg-white/5">?</div>
-                <button id="roll-btn" onclick="rollDice()" class="bg-[#c5a059] text-black px-8 py-3 rounded-full font-black uppercase text-[11px] tracking-widest disabled:opacity-20">Roll</button>
-            </div>
-        </footer>
     </div>
 
-    <div id="modal" class="fixed inset-0 bg-black/98 flex items-center justify-center p-8 hidden z-50">
-        <div class="perspective w-full max-w-[280px] aspect-[3/4]">
+    <div id="dice-overlay" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-[70] hidden flex items-center justify-center">
+        <div class="flex flex-col items-center gap-6">
+            <p id="roller-name" class="text-white/50 text-[10px] font-bold uppercase tracking-[0.3em]">Mengocok Dadu...</p>
+            <div id="big-dice" class="w-32 h-32 bg-gradient-to-br from-[#c5a059] to-[#8a6a2c] rounded-3xl flex items-center justify-center text-black text-6xl font-black shadow-[0_0_50px_rgba(197,160,89,0.5)] border-4 border-white/20">
+                ?
+            </div>
+        </div>
+    </div>
+
+    <div id="modal" class="fixed inset-0 bg-black/95 backdrop-blur-md flex items-center justify-center p-8 hidden z-[80]">
+        <div class="perspective w-full max-w-[320px] aspect-[3/4]">
             <div id="card-inner" class="card-inner" onclick="flipCard()">
-                <div class="card-front"><p class="font-black text-black text-[12px] tracking-widest">TAP TO REVEAL</p></div>
-                <div class="card-back flex flex-col justify-between py-8">
-                    <span id="card-type" class="text-[#c5a059] text-[10px] tracking-[0.3em] uppercase font-black">RITUAL</span>
-                    <p id="modal-desc" class="serif text-[18px] leading-snug text-white px-3 my-auto"></p>
-                    <button onclick="closeModal()" class="w-full py-3 bg-white text-black rounded-full font-black uppercase text-[10px]">Selesai & Sync</button>
+                <div class="card-front">
+                    <div class="w-16 h-16 border border-black/20 rounded-full flex items-center justify-center mb-4">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+                    </div>
+                    <p class="font-black text-black text-[14px] tracking-[0.2em]">TAP TO REVEAL</p>
+                </div>
+                <div class="card-back flex flex-col justify-between py-10 px-6">
+                    <span class="text-[#c5a059] text-[10px] tracking-[0.3em] uppercase font-black">PERINTAH RITUAL</span>
+                    <p id="modal-desc" class="serif text-[20px] leading-relaxed text-white my-auto"></p>
+                    <button onclick="closeModal()" class="w-full py-4 bg-white text-black rounded-full font-black uppercase text-[11px] tracking-wider hover:bg-gray-200 active:scale-95 transition-all">Selesai & Lanjut</button>
                 </div>
             </div>
         </div>
     </div>
 
-    <div id="reset-modal" class="fixed inset-0 bg-black/95 flex items-center justify-center p-8 hidden z-[60]">
-        <div class="border border-[#c5a059] bg-[#0a0a0a] p-8 rounded-2xl text-center w-full max-w-[280px]">
-            <h3 class="serif text-2xl text-[#c5a059] mb-4">Reset?</h3>
-            <p id="reset-text" class="text-[11px] text-gray-300 mb-8">...</p>
+    <div id="reset-modal" class="fixed inset-0 bg-black/95 backdrop-blur-md flex items-center justify-center p-8 hidden z-[90]">
+        <div class="border border-[#c5a059] bg-[#0a0a0a] p-8 rounded-3xl text-center w-full max-w-[300px]">
+            <h3 class="serif text-3xl text-[#c5a059] mb-4">Reset?</h3>
+            <p id="reset-text" class="text-[12px] text-gray-400 mb-8 leading-relaxed">...</p>
             <div id="reset-actions" class="flex gap-4"></div>
         </div>
     </div>
 
     <script>
-        // FIREBASE CONFIG (Tetap menggunakan punya kamu)
+        // FIREBASE CONFIG 
         const firebaseConfig = {
             apiKey: "AIzaSyBQzOliNqHDI0ccFc4ha0JrjrZNrh0TPsw",
             authDomain: "rvldx-chat.firebaseapp.com",
@@ -150,43 +205,129 @@
             appId: "1:1019557266823:web:0b36b080f1e735afecbf22"
         };
 
-        firebase.initializeApp(firebaseConfig);
+        if (!firebase.apps.length) {
+            firebase.initializeApp(firebaseConfig);
+        }
         const db = firebase.firestore();
         const GAME_ID = "ritual_ldm_tor_v1";
 
+        // Diperbarui agar instruksi spesifik, tanpa Truth/Dare, durasi VC diganti Video/lebih jelas, dan genap 100.
         const allChallenges = [
-            "START: Kirim pap wajah tercantik/terganteng sekarang!", "TRUTH: Apa kesan pertama kamu pas awal kenal aku?", "DARE: VN desah pelan panggil nama aku 5 detik", "TRUTH: Hal apa dari aku yang paling sering bikin kamu kangen?", "MAJU 2 LANGKAH!",
-            "DARE: Cari foto aku yang paling kamu suka, jadiin wallpaper HP (ss kirim!)", "TRUTH: Kapan terakhir kali kamu horny gara-gara mikirin aku?", "DARE: Kirim pap telapak tangan kamu, aku pengen bayangin pegangan tangan", "MUNDUR 1 LANGKAH", "TRUTH: Bagian tubuh aku yang mana yang paling pengen kamu gigit?",
-            "DARE: VN bilang 'I Love You' pake suara paling manja/deep", "DARE: Rekam video 10 detik kamu lagi elus-elus rambut sendiri", "DIA MAJU 2 LANGKAH", "TRUTH: Pernah nggak kamu mimpiin aku yang 'aneh-aneh'?", "MAJU 1 LANGKAH",
-            "FREE: Kamu boleh minta 1 PAP apa aja ke aku!", "DARE: Kirim pap bibir kamu (pose kiss/gigit bibir)", "TRUTH: Sebutin 3 hal yang bakal kita lakuin pertama kali pas ketemu nanti", "DIA MAJU 1 LANGKAH", "DARE: Ketik 1 paragraf 'dirty talk' yang pengen kamu lakuin ke aku",
-            "TRUTH: Apa baju yang paling cocok menurut kamu kalau aku pake?", "DARE: VN suara kamu pas lagi bangun tidur", "DARE: Rekam video 15 detik tatap kamera tanpa kedip sambil senyum nakal", "DARE: Buka satu kancing baju paling atas, terus pap!", "DIA MAJU 2 LANGKAH",
-            "TRUTH: Siapa yang lebih sering sange kalau lagi VC-an?", "BONUS: Lempar dadu 1x lagi!", "DIA MAJU 1 LANGKAH", "FREE: Kamu bebas kasih perintah apa aja ke aku (durasi 5 menit)", "VC SEKARANG: Tunjukin muka bantal/muka sange kamu selama 1 menit",
-            "TRUTH: Kamu lebih suka aku pake parfum bau manis atau maskulin?", "DARE: Kirim VN suara kamu lagi gigit jari/nahan desah", "TRUTH: Apa hal paling nakal yang pernah kamu bayangin bareng aku?", "DARE: Kirim pap leher kamu sekarang, pengen aku kasih tanda di situ", "DARE: Rekam video singkat kamu lagi bisikin hal kotor ke mic",
-            "TRUTH: Kalau kita cuma punya waktu 1 jam di kamar, mau ngapain aja?", "DARE: Pap jari manis kamu, bayangin aku lagi pasang cincin di situ", "DARE: Lepas satu pakaian yang lagi kamu pake sekarang!", "MUNDUR 2 LANGKAH", "MAJU 2 LANGKAH",
-            "TRUTH: Pernah nggak kamu cemburu sama orang yang deket sama aku?", "DARE: Kirim video 10 detik kamu lagi cium layar HP (bayangin itu aku)", "VC 3 MENIT: Saling tatap-tatapan tanpa ngomong apa-apa", "DARE: Kirim pap paha kamu dikit aja", "TRUTH: Apa rahasia tentang tubuh kamu yang belum aku tau?",
-            "MUNDUR 2 LANGKAH", "DARE: Tulis nama aku di bagian tubuh kamu pake pulpen, terus pap!", "FREE: Minta aku kirim pap bagian tubuh favorit kamu", "VC: Kamu harus nurutin semua omongan aku selama 3 menit", "MUNDUR 3 LANGKAH",
-            "DARE: Kirim pap mata kamu dari deket (pake flash)", "MUNDUR 3 LANGKAH", "FREE: Minta 1 PAP dari aku", "DARE: Rekam video kamu lagi usap-usap dada sendiri pelan-pelan", "DIA MAJU 2 LANGKAH",
-            "TRUTH: Posisi favorit kamu kalau kita nanti tidur bareng?", "DARE: VN bilang 'Sayang, aku mau...' (lanjutin sendiri)", "MAJU 1 LANGKAH", "DARE: Rekam video singkat kamu lagi gigit kaos/baju kamu", "MUNDUR 2 LANGKAH",
-            "TRUTH: Apa sifat aku yang paling bikin kamu turn-on?", "BONUS: Lempar dadu 1x lagi!", "DARE: Kirim video nakal singkat (minimal 5 detik)", "VC: Tunjukin area sensitif kamu selama 10 detik", "MAJU 1 LANGKAH",
-            "TRUTH: Pernah kepikiran buat selingkuh nggak pas kita LDR?", "VC: Kita 'main' bareng lewat kamera sampai salah satu puas", "DARE: Kamu harus nurut apa aja kata aku selama 10 menit", "FREE: Kamu boleh minta video nakal apa aja ke aku", "BONUS: Lempar dadu 1x lagi!",
-            "TRUTH: Apa yang kamu rasain pas aku manggil kamu 'Bunda'?", "MUNDUR 2 LANGKAH", "DARE: Kirim 3 foto selfie dengan ekspresi paling sange", "VC: Aku mau liat kamu lepas baju depan kamera pelan-pelan", "DARE: VN rintihan paling seksi yang bisa kamu buat",
-            "TRUTH: Kapan terakhir kali kamu self-service sambil bayangin aku?", "DARE: Kirim pap pakaian dalam yang lagi dipake", "TRUTH: Sebutin satu hal yang pengen kamu lakuin tapi takut bilang ke aku", "DIA MAJU 2 LANGKAH", "VC: Kamu lakuin apa yang aku suruh di kamera",
-            "TRUTH: Kamu lebih suka aku kasar atau lembut pas 'main'?", "BONUS: Lempar dadu 1x lagi!", "DARE: Kirim video full body dari bawah ke atas", "DARE: Kirim vn bisikan 'I'm yours' berkali-kali", "VC: Tunjukin area favorit aku ke kamera selama 30 detik",
-            "DARE: Pap lidah kamu (pose seksi)", "TRUTH: Seberapa besar rasa sayang kamu ke aku (skala 1-100)?", "VC: Saling adu desah lewat suara aja tanpa gambar", "MAJU 3 LANGKAH", "DARE: Kirim pap lagi di kamar mandi",
-            "MAJU 3 LANGKAH", "FREE: Minta video aku lagi ngelakuin apa aja", "VC: Kamu harus telanjang total di depan kamera selama 1 menit", "VC: Saling liatin area bawah masing-masing", "DIA MAJU 2 LANGKAH",
-            "TRUTH: Apa ketakutan terbesar kamu tentang hubungan kita?", "DARE: Kirim video paling liar yang pernah kamu buat", "DARE: VN bilang 'Sayang, aku pengen kamu sekarang...'", "FREE: Kamu boleh minta 1 permintaan terakhir yang harus aku turutin", "FINISH: VC SAMPAI KLIMAKS BARENG & JANJI BAKAL SETIA!"
+            "START: Kalian harus janji main jujur dan berani sampai selesai!", 
+            "KAMU: Ceritakan apa kesan pertama kamu pas awal kenal dia?", 
+            "KAMU: Kirim VN desah pelan panggil nama dia 5 detik.", 
+            "KAMU: Sebutkan hal apa dari dia yang paling sering bikin kamu kangen?", 
+            "MAJU 2 LANGKAH!",
+            "KAMU: Cari foto dia yang paling kamu suka, jadikan wallpaper HP (ss kirim!).", 
+            "KAMU: Jujur, kapan terakhir kali kamu horny gara-gara mikirin dia?", 
+            "KAMU: Kirim pap telapak tangan kamu, biar dia bisa bayangin pegangan tangan.", 
+            "MUNDUR 1 LANGKAH", 
+            "KAMU: Bagian tubuh dia yang mana yang paling pengen kamu gigit?",
+            "KAMU: Kirim VN bilang 'I Love You' pake suara paling manja/deep.", 
+            "KAMU: Rekam video 10 detik kamu lagi elus-elus rambut sendiri sambil tatap kamera.", 
+            "DIA MAJU 2 LANGKAH", 
+            "KAMU: Pernah nggak kamu mimpiin dia yang 'aneh-aneh'? Ceritain detailnya!", 
+            "MAJU 1 LANGKAH",
+            "FREE: Kamu boleh minta 1 PAP apa aja ke dia!", 
+            "KAMU: Kirim pap bibir kamu (pose kiss atau gigit bibir sedikit).", 
+            "KAMU: Sebutin 3 hal yang bakal kalian lakuin pertama kali pas ketemu nanti.", 
+            "DIA MAJU 1 LANGKAH", 
+            "KAMU: Ketik 1 paragraf 'dirty talk' apa yang pengen kamu lakuin ke dia saat ini.",
+            "KAMU: Menurutmu, baju apa yang paling cocok dan seksi kalau dia yang pake?", 
+            "KAMU: Kirim VN suara kamu pas lagi mode baru bangun tidur.", 
+            "KAMU: Rekam video 15 detik tatap kamera tanpa kedip sambil senyum nakal.", 
+            "KAMU: Buka satu kancing baju paling atas, lalu kirim pap!", 
+            "DIA MAJU 2 LANGKAH",
+            "KAMU: Jujur, siapa yang lebih sering sange duluan kalau kalian lagi ngobrol?", 
+            "BONUS: Kamu boleh lempar dadu 1x lagi!", 
+            "DIA MAJU 1 LANGKAH", 
+            "FREE: Kamu bebas kasih perintah apa aja ke dia (dia harus turuti selama 5 menit).", 
+            "KAMU: Rekam video 1 menit nunjukin ekspresi/muka sange kamu ke dia.",
+            "KAMU: Kamu lebih suka dia pake parfum wangi manis atau maskulin?", 
+            "KAMU: Kirim VN suara kamu lagi gigit jari atau nahan desah pelan.", 
+            "KAMU: Apa hal paling nakal yang pernah kamu bayangin lakuin bareng dia?", 
+            "KAMU: Kirim pap leher kamu sekarang, bayangin dia ngasih tanda di situ.", 
+            "KAMU: Rekam video singkat kamu lagi bisikin hal kotor ke dekat mic.",
+            "KAMU: Kalau kalian cuma punya waktu 1 jam di kamar berdua, mau ngapain aja?", 
+            "KAMU: Pap jari manis kamu, bayangin dia lagi masangin cincin di situ.", 
+            "KAMU: Lepas satu aksesoris/pakaian luar yang lagi kamu pake sekarang!", 
+            "MUNDUR 2 LANGKAH", 
+            "MAJU 2 LANGKAH",
+            "KAMU: Pernah nggak kamu merasa cemburu buta pas LDR gini? Ceritain!", 
+            "KAMU: Kirim video 10 detik kamu lagi cium layar HP (bayangin itu dia).", 
+            "VIDEO: Rekam dirimu selama 1 menit natap kamera tajam tanpa ngomong apa-apa.", 
+            "KAMU: Kirim pap paha kamu dikit aja (teasing).", 
+            "KAMU: Apa rahasia tentang tubuh kamu yang mungkin belum dia tau?",
+            "MUNDUR 2 LANGKAH", 
+            "KAMU: Tulis inisial/nama dia di bagian tubuh kamu pake pulpen/spidol, lalu pap!", 
+            "FREE: Kamu berhak minta dia kirim pap bagian tubuh favorit kamu.", 
+            "KAMU: Kamu harus nurutin semua ketikan/omongan dia selama 5 menit ke depan.", 
+            "MUNDUR 3 LANGKAH",
+            "KAMU: Kirim pap mata kamu dari jarak dekat (pake flash biar estetik).", 
+            "MUNDUR 3 LANGKAH", 
+            "FREE: Minta 1 gaya PAP spesifik dari dia sekarang.", 
+            "KAMU: Rekam video kamu lagi usap-usap dada/leher sendiri pelan-pelan.", 
+            "DIA MAJU 2 LANGKAH",
+            "KAMU: Kalau nanti tidur bareng, posisi pelukan favorit kamu pengennya gimana?", 
+            "KAMU: Kirim VN bilang 'Sayang, aku mau...' (lanjutin kalimatnya sendiri dengan jujur).", 
+            "MAJU 1 LANGKAH", 
+            "KAMU: Rekam video singkat kamu lagi gigit ujung baju/kaos kamu pelan.", 
+            "MUNDUR 2 LANGKAH",
+            "KAMU: Apa sifat atau kebiasaan dia yang paling bikin kamu cepat turn-on?", 
+            "BONUS: Lempar dadu 1x lagi!", 
+            "KAMU: Kirim video nakal singkat (minimal 5 detik).", 
+            "VIDEO: Rekam dan tunjukin area tubuh paling sensitif kamu selama 10 detik.", 
+            "MAJU 1 LANGKAH",
+            "KAMU: Jujur, apa godaan terberat kamu selama kalian menjalani LDM/LDR ini?", 
+            "VIDEO CALL: Telepon dia sekarang, kalian harus 'main' bareng lewat kamera (Minimal 10 Menit).", 
+            "KAMU: Kamu harus turuti skenario roleplay apapun dari dia selama 10 menit.", 
+            "FREE: Kamu boleh minta 1 video rekaman nakal khusus dari dia.", 
+            "BONUS: Lempar dadu 1x lagi!",
+            "KAMU: Apa yang kamu rasain pertama kali pas manggil/dipanggil dengan sebutan sayang (Bunda/Tsuma/dll)?", 
+            "MUNDUR 2 LANGKAH", 
+            "KAMU: Kirim 3 foto selfie berturut-turut dengan ekspresi paling menggoda.", 
+            "VIDEO: Rekam detik-detik kamu ngelepas satu helai baju depan kamera pelan-pelan.", 
+            "KAMU: Kirim VN rintihan paling seksi yang bisa kamu buat sekarang.",
+            "KAMU: Kapan terakhir kali kamu self-service sambil ngebayangin muka dia?", 
+            "KAMU: Kirim pap sebagian kecil pakaian dalam yang lagi dipake (teasing edge).", 
+            "KAMU: Sebutin satu fantasi liar yang pengen kamu lakuin tapi malu bilang ke dia.", 
+            "DIA MAJU 2 LANGKAH", 
+            "VIDEO: Bikin video 1 menit ngelakuin apa aja yang dia ketik di chat sekarang.",
+            "KAMU: Kamu lebih suka dia main kasar (dominan) atau lembut pelan-pelan?", 
+            "BONUS: Lempar dadu 1x lagi!", 
+            "KAMU: Kirim video full body nyorot dari kaki naik pelan-pelan ke wajah.", 
+            "KAMU: Kirim VN bisikan kata 'I'm yours' berkali-kali di dekat mic.", 
+            "VIDEO: Rekam dan tunjukin area yang jadi favorit dia di tubuhmu selama 20 detik.",
+            "KAMU: Kirim pap lidah kamu (pose seksi/teasing).", 
+            "KAMU: Kalau rindu ini ada wujudnya, seberapa besar wujudnya sekarang?", 
+            "VIDEO CALL: Telepon dia, saling adu desah lewat suara aja tanpa nunjukin muka.", 
+            "MAJU 3 LANGKAH", 
+            "KAMU: Pindah ke kamar mandi, basahin area leher/dada sedikit, lalu kirim pap.",
+            "MAJU 3 LANGKAH", 
+            "FREE: Minta video dia lagi ngelakuin satu hal spesifik yang kamu mau.", 
+            "VIDEO CALL: Telepon dia 1 jam penuh. Kalian bebas ngapain aja, ini waktu privasi penuh!", 
+            "VIDEO: Saling kirim video 30 detik pamerin area bawah (teasing).", 
+            "DIA MAJU 2 LANGKAH",
+            "KAMU: Apa ketakutan terbesar kamu tentang hubungan LDM ini yang mau kamu lewatin bareng dia?", 
+            "KAMU: Kirim satu video koleksi pribadi paling berani yang pernah kamu simpan buat dia.", 
+            "KAMU: Kirim VN bilang 'Sayang, aku udah nggak tahan pengen kamu sekarang...'", 
+            "FREE: Ini permintaan mutlak! Kamu bebas minta 1 hal terakhir yang HARUS dia turuti.", 
+            "FINISH: VIDEO CALL SEKARANG! Saling tatap, ungkapin janji bakal setia, dan berikan klimaks manis bareng!"
         ];
 
+        // Koordinat Ular Tangga
         const ladders = { 7: 29, 22: 41, 44: 76, 70: 92 };
         const snakes = { 32: 10, 62: 38, 89: 68, 97: 78 };
 
         let myRole = ""; 
         let state = { p1: 1, p2: 1, turn: 'cowo', lastChallenge: "", lastRoller: "", resetRequest: "" };
+        let localPlayerMoving = false;
 
         function selectRole(r) {
             myRole = r;
-            document.querySelectorAll('[id^="btn-"]').forEach(el => el.classList.remove('border-[#c5a059]', 'bg-[#c5a059]/10'));
-            document.getElementById(`btn-${r}`).classList.add('border-[#c5a059]', 'bg-[#c5a059]/10');
+            document.querySelectorAll('[id^="btn-"]').forEach(el => el.classList.remove('border-[#c5a059]', 'bg-[#c5a059]/20', 'scale-105'));
+            let activeBtn = document.getElementById(`btn-${r}`);
+            activeBtn.classList.add('border-[#c5a059]', 'bg-[#c5a059]/20', 'scale-105');
             document.getElementById('start-btn').classList.remove('opacity-0', 'pointer-events-none', 'translate-y-4');
         }
 
@@ -209,7 +350,7 @@
         function createBoard() {
             const board = document.getElementById('board');
             const svgOverlay = document.getElementById('svg-overlay');
-            board.innerHTML = '<svg id="svg-overlay" viewBox="0 0 100 100" preserveAspectRatio="none"></svg>';
+            board.innerHTML = '<svg id="svg-overlay" viewBox="0 0 100 100" preserveAspectRatio="none" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 15; pointer-events: none;"></svg>';
 
             for (let row = 9; row >= 0; row--) {
                 for (let col = 0; col < 10; col++) {
@@ -221,51 +362,114 @@
                 }
             }
 
+            // Draw SVG Snakes and Ladders
             let svgHTML = '';
+            
+            // Ladders (Emas/Coklat)
             Object.keys(ladders).forEach(start => {
                 let s = getCoords(parseInt(start)); let e = getCoords(ladders[start]);
-                svgHTML += `<line x1="${s.x}" y1="${s.y}" x2="${e.x}" y2="${e.y}" stroke="#b45309" stroke-width="1.5" opacity="0.6" stroke-dasharray="2"/>`;
+                // Main rail
+                svgHTML += `<line x1="${s.x-1.5}" y1="${s.y}" x2="${e.x-1.5}" y2="${e.y}" stroke="#b45309" stroke-width="1.2" opacity="0.8"/>`;
+                svgHTML += `<line x1="${s.x+1.5}" y1="${s.y}" x2="${e.x+1.5}" y2="${e.y}" stroke="#b45309" stroke-width="1.2" opacity="0.8"/>`;
+                // Rungs
+                for(let i=1; i<5; i++) {
+                    let mx = s.x + (e.x - s.x) * (i/5); let my = s.y + (e.y - s.y) * (i/5);
+                    let angle = Math.atan2(e.y - s.y, e.x - s.x) + Math.PI/2;
+                    let rx1 = mx + Math.cos(angle)*1.5; let ry1 = my + Math.sin(angle)*1.5;
+                    let rx2 = mx - Math.cos(angle)*1.5; let ry2 = my - Math.sin(angle)*1.5;
+                    svgHTML += `<line x1="${rx1}" y1="${ry1}" x2="${rx2}" y2="${ry2}" stroke="#b45309" stroke-width="1" opacity="0.8"/>`;
+                }
             });
+
+            // Snakes (Merah)
             Object.keys(snakes).forEach(start => {
                 let s = getCoords(parseInt(start)); let e = getCoords(snakes[start]);   
-                svgHTML += `<path d="M ${s.x} ${s.y} Q ${(s.x+e.x)/2 + 10} ${(s.y+e.y)/2} ${e.x} ${e.y}" fill="none" stroke="#dc2626" stroke-width="1.5" opacity="0.6" />`;
+                let midX = (s.x+e.x)/2 + (Math.random() > 0.5 ? 10 : -10);
+                let midY = (s.y+e.y)/2;
+                svgHTML += `<path class="path-snake" d="M ${s.x} ${s.y} Q ${midX} ${midY} ${e.x} ${e.y}" fill="none" stroke="#dc2626" stroke-width="2" opacity="0.8" stroke-linecap="round"/>`;
+                // Snake Head
+                svgHTML += `<circle cx="${s.x}" cy="${s.y}" r="2" fill="#dc2626" opacity="0.9"/>`;
             });
+
             document.getElementById('svg-overlay').innerHTML = svgHTML;
         }
+
+        let previousTurn = "";
 
         function listenDB() {
             db.collection("games").doc(GAME_ID).onSnapshot((doc) => {
                 if (doc.exists) { 
-                    state = doc.data(); 
-                    syncUI(); 
+                    const data = doc.data();
+                    
+                    // Show Turn Toast if turn changed
+                    if(previousTurn !== "" && previousTurn !== data.turn && !localPlayerMoving) {
+                        showTurnToast(data.turn);
+                    }
+                    previousTurn = data.turn;
+
+                    // Update UI with jump animation flag
+                    syncUI(data); 
                 } else { 
                     db.collection("games").doc(GAME_ID).set(state); 
                 }
             });
         }
 
-        function syncUI() {
+        function showTurnToast(turn) {
+            const toast = document.getElementById('turn-toast');
+            toast.innerText = turn === myRole ? "GILIRAN KAMU SEKARANG" : `GILIRAN DIA (${turn.toUpperCase()})`;
+            toast.style.opacity = "1";
+            toast.style.transform = "translate(-50%, 0)";
+            setTimeout(() => {
+                toast.style.opacity = "0";
+                toast.style.transform = "translate(-50%, -1rem)";
+            }, 3000);
+        }
+
+        function syncUI(newData) {
+            const pos1Changed = state.p1 !== newData.p1;
+            const pos2Changed = state.p2 !== newData.p2;
+            state = newData;
+
             document.getElementById('pos-1').innerText = state.p1;
             document.getElementById('pos-2').innerText = state.p2;
             
+            // Re-render pions
             document.querySelectorAll('.pion').forEach(p => p.remove());
             const c1 = document.getElementById(`c-${state.p1}`);
             const c2 = document.getElementById(`c-${state.p2}`);
-            if(c1) { let p1Div = document.createElement('div'); p1Div.className = 'pion pion-cowo'; c1.appendChild(p1Div); }
-            if(c2) { let p2Div = document.createElement('div'); p2Div.className = 'pion pion-cewe'; c2.appendChild(p2Div); }
             
-            const btn = document.getElementById('roll-btn');
-            const info = document.getElementById('turn-info');
-            if (state.turn === myRole) { 
-                btn.disabled = false; info.innerText = "Giliran Kamu"; info.className = "text-[#c5a059] text-[10px] font-black uppercase tracking-widest";
-            } else { 
-                btn.disabled = true; info.innerText = `Giliran ${state.turn.toUpperCase()}`; info.className = "text-gray-600 text-[10px] font-bold uppercase tracking-widest";
+            if(c1) { 
+                let p1Div = document.createElement('div'); 
+                p1Div.className = 'pion pion-cowo' + (pos1Changed ? ' is-jumping' : ''); 
+                c1.appendChild(p1Div); 
+            }
+            if(c2) { 
+                let p2Div = document.createElement('div'); 
+                p2Div.className = 'pion pion-cewe' + (pos2Changed ? ' is-jumping' : ''); 
+                c2.appendChild(p2Div); 
             }
             
+            // UI Button Logic
+            const btn = document.getElementById('roll-btn');
+            const info = document.getElementById('turn-info');
+            
+            if (state.turn === myRole) { 
+                btn.disabled = false; 
+                info.innerText = "Giliran Kamu!"; 
+                info.className = "text-[#c5a059] text-[12px] font-black uppercase tracking-widest text-center";
+                document.getElementById(myRole === 'cowo' ? 'ui-cowo' : 'ui-cewe').classList.add('border-[#c5a059]', 'shadow-[0_0_15px_rgba(197,160,89,0.3)]');
+                document.getElementById(myRole === 'cowo' ? 'ui-cewe' : 'ui-cowo').classList.remove('border-[#c5a059]', 'shadow-[0_0_15px_rgba(197,160,89,0.3)]');
+            } else { 
+                btn.disabled = true; 
+                info.innerText = `Giliran ${state.turn.toUpperCase()}`; 
+                info.className = "text-gray-500 text-[12px] font-bold uppercase tracking-widest text-center";
+                document.getElementById(myRole === 'cowo' ? 'ui-cewe' : 'ui-cowo').classList.add('border-[#dc2626]', 'shadow-[0_0_15px_rgba(220,38,38,0.3)]');
+                document.getElementById(myRole === 'cowo' ? 'ui-cowo' : 'ui-cewe').classList.remove('border-[#dc2626]', 'shadow-[0_0_15px_rgba(220,38,38,0.3)]');
+            }
+            
+            // Modal Logic
             if (state.lastChallenge && state.lastChallenge !== "") {
-                const isTruth = state.lastChallenge.startsWith("TRUTH");
-                const isDare = state.lastChallenge.startsWith("DARE");
-                document.getElementById('card-type').innerText = isTruth ? "TRUTH" : (isDare ? "DARE" : "RITUAL");
                 document.getElementById('modal-desc').innerText = state.lastChallenge;
                 document.getElementById('modal').classList.remove('hidden');
             } else {
@@ -278,55 +482,118 @@
             if (state.resetRequest && state.resetRequest !== "") {
                 resetModal.classList.remove('hidden');
                 if (state.resetRequest === myRole) {
-                    document.getElementById('reset-text').innerText = "Menunggu persetujuan dia...";
-                    document.getElementById('reset-actions').innerHTML = `<button onclick="cancelReset()" class="w-full py-3 border border-red-500/50 text-red-500 rounded-full font-black text-[10px]">BATAL</button>`;
+                    document.getElementById('reset-text').innerText = "Menunggu persetujuan dia untuk reset...";
+                    document.getElementById('reset-actions').innerHTML = `<button onclick="cancelReset()" class="w-full py-4 border border-red-500/50 text-red-500 rounded-full font-black text-[11px] uppercase tracking-wider">BATAL</button>`;
                 } else {
-                    document.getElementById('reset-text').innerText = "Dia mengajak mengulang ritual. Setuju?";
+                    document.getElementById('reset-text').innerText = "Pasanganmu mengajak mengulang ritual dari awal. Setuju?";
                     document.getElementById('reset-actions').innerHTML = `
-                        <button onclick="cancelReset()" class="flex-1 py-3 border border-red-500/50 text-red-500 rounded-full font-black text-[10px]">TOLAK</button>
-                        <button onclick="confirmReset()" class="flex-1 py-3 bg-[#c5a059] text-black rounded-full font-black text-[10px]">SETUJU</button>`;
+                        <button onclick="cancelReset()" class="flex-1 py-4 border border-red-500/50 text-red-500 rounded-full font-black text-[11px] uppercase tracking-wider">TOLAK</button>
+                        <button onclick="confirmReset()" class="flex-1 py-4 bg-[#c5a059] text-black rounded-full font-black text-[11px] uppercase tracking-wider">SETUJU</button>`;
                 }
             } else { resetModal.classList.add('hidden'); }
         }
 
         function rollDice() {
-            const dice = document.getElementById('dice-box');
-            dice.classList.add('shake'); dice.innerText = "...";
+            localPlayerMoving = true;
+            const diceOverlay = document.getElementById('dice-overlay');
+            const bigDice = document.getElementById('big-dice');
+            const rollerName = document.getElementById('roller-name');
+            
+            rollerName.innerText = `Kamu sedang mengocok...`;
+            diceOverlay.classList.remove('hidden');
+            bigDice.classList.remove('dice-anim');
+            
+            // Simulate fast rolling
+            let rollInterval = setInterval(() => {
+                bigDice.innerText = Math.floor(Math.random() * 6) + 1;
+            }, 50);
             
             setTimeout(() => {
+                clearInterval(rollInterval);
                 const roll = Math.floor(Math.random() * 6) + 1;
-                dice.innerText = roll; dice.classList.remove('shake');
+                bigDice.innerText = roll; 
+                bigDice.classList.add('dice-anim');
                 
                 let np1 = state.p1, np2 = state.p2;
                 if (myRole === 'cowo') np1 = Math.min(np1 + roll, 100); 
                 else np2 = Math.min(np2 + roll, 100);
                 
                 let currentPos = (myRole === 'cowo') ? np1 : np2;
-                db.collection("games").doc(GAME_ID).update({ p1: np1, p2: np2, lastChallenge: "", lastRoller: myRole });
-
+                
+                // Show jump, hide dice overlay
                 setTimeout(() => {
-                    let finalPos = currentPos;
-                    if (ladders[currentPos]) finalPos = ladders[currentPos];
-                    else if (snakes[currentPos]) finalPos = snakes[currentPos];
+                    diceOverlay.classList.add('hidden');
+                    db.collection("games").doc(GAME_ID).update({ p1: np1, p2: np2, lastChallenge: "", lastRoller: myRole });
 
-                    if (myRole === 'cowo') np1 = finalPos; else np2 = finalPos;
-                    db.collection("games").doc(GAME_ID).update({ p1: np1, p2: np2, lastChallenge: allChallenges[finalPos - 1] });
-                }, 800);
-            }, 600);
+                    // Evaluate Snake/Ladder after move
+                    setTimeout(() => {
+                        let finalPos = currentPos;
+                        if (ladders[currentPos]) finalPos = ladders[currentPos];
+                        else if (snakes[currentPos]) finalPos = snakes[currentPos];
+
+                        if (myRole === 'cowo') np1 = finalPos; else np2 = finalPos;
+                        db.collection("games").doc(GAME_ID).update({ 
+                            p1: np1, 
+                            p2: np2, 
+                            lastChallenge: allChallenges[finalPos - 1] 
+                        });
+                        localPlayerMoving = false;
+                    }, 800);
+                }, 1000);
+
+            }, 800);
         }
 
-        function flipCard() { document.getElementById('card-inner').classList.add('is-flipped'); }
+        function flipCard() { 
+            document.getElementById('card-inner').classList.add('is-flipped'); 
+        }
+
         function closeModal() {
             document.getElementById('card-inner').classList.remove('is-flipped');
+            
             setTimeout(() => {
                 if (state.lastRoller === myRole) {
                     let nextTurn = (myRole === 'cowo') ? 'cewe' : 'cowo';
-                    if (state.lastChallenge.includes("BONUS")) nextTurn = myRole;
-                    
-                    let np1 = state.p1, np2 = state.p2;
                     let text = state.lastChallenge;
-                    if (text.includes("MAJU 2")) { if(myRole==='cowo') np1+=2; else np2+=2; }
-                    if (text.includes("DIA MAJU 1")) { if(myRole==='cowo') np2+=1; else np1+=1; }
+                    let np1 = state.p1, np2 = state.p2;
+                    let chainMove = 0;
+
+                    // Chain Move Logic (Maju/Mundur Ekstra)
+                    if (text.includes("MAJU 2")) chainMove = 2;
+                    else if (text.includes("MAJU 3")) chainMove = 3;
+                    else if (text.includes("MAJU 1")) chainMove = 1;
+                    else if (text.includes("MUNDUR 1")) chainMove = -1;
+                    else if (text.includes("MUNDUR 2")) chainMove = -2;
+                    else if (text.includes("MUNDUR 3")) chainMove = -3;
+                    else if (text.includes("DIA MAJU 1") || text.includes("DIA MAJU 2")) {
+                        // Lawan yang maju
+                        let opponentMove = text.includes("DIA MAJU 2") ? 2 : 1;
+                        if(myRole === 'cowo') np2 = Math.min(np2 + opponentMove, 100);
+                        else np1 = Math.min(np1 + opponentMove, 100);
+                    }
+
+                    if (text.includes("BONUS")) nextTurn = myRole;
+                    
+                    if (chainMove !== 0) {
+                        // Apply Move
+                        if(myRole === 'cowo') np1 = Math.max(1, Math.min(np1 + chainMove, 100));
+                        else np2 = Math.max(1, Math.min(np2 + chainMove, 100));
+                        
+                        let currentPos = (myRole === 'cowo') ? np1 : np2;
+                        
+                        // Cek Ular Tangga lagi (opsional)
+                        if (ladders[currentPos]) currentPos = ladders[currentPos];
+                        else if (snakes[currentPos]) currentPos = snakes[currentPos];
+                        
+                        if(myRole === 'cowo') np1 = currentPos; else np2 = currentPos;
+
+                        // Rantai Hukuman! (Tampilkan modal berikutnya tanpa ganti giliran)
+                        db.collection("games").doc(GAME_ID).update({ 
+                            p1: np1, p2: np2, 
+                            lastChallenge: allChallenges[currentPos - 1] 
+                        });
+                        return; // Berhenti di sini biar turn tidak ganti
+                    }
 
                     db.collection("games").doc(GAME_ID).update({ p1: np1, p2: np2, lastChallenge: "", turn: nextTurn });
                 }

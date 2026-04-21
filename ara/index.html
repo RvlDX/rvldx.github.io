@@ -3,225 +3,273 @@
 <head>
     <meta charset="utf-8"/>
     <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-    <title>ARA Calculator Pro</title>
+    <title>Kalkulator ARA & ARB - Bento UI</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700;800&display=swap" rel="stylesheet"/>
+    <script src="https://unpkg.com/feather-icons"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        dark: {
+                            bg: '#0B0E14',
+                            panel: '#151822',
+                            border: '#2A2E39',
+                            input: '#0F1219'
+                        },
+                        trade: {
+                            green: '#00C853',
+                            greenBg: 'rgba(0, 200, 83, 0.1)',
+                            red: '#FF3D00',
+                            redBg: 'rgba(255, 61, 0, 0.1)'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                    }
+                }
+            }
+        }
+    </script>
     <style>
-        :root {
-            --bg-dark: #0f1115;
-            --panel-dark: #181a20;
-            --border-dark: #2b3139;
-            --accent-green: #0ecb81;
-            --accent-blue: #2962ff;
-        }
-        body { 
-            font-family: 'Inter', sans-serif; 
-            background-color: var(--bg-dark); 
-            color: #EAECEF;
-            min-height: 100vh;
-        }
-        .font-mono-num { font-family: 'JetBrains Mono', monospace; }
+        body { background-color: #0B0E14; color: #E0E3EB; }
         
-        /* Custom Scrollbar untuk Terminal Vibe */
-        ::-webkit-scrollbar { width: 6px; }
-        ::-webkit-scrollbar-track { background: var(--bg-dark); }
-        ::-webkit-scrollbar-thumb { background: #2b3139; border-radius: 4px; }
-        ::-webkit-scrollbar-thumb:hover { background: #474d57; }
-
-        /* Sembunyikan panah input number */
+        /* Hilangkan panah input number */
         input[type="number"]::-webkit-outer-spin-button,
         input[type="number"]::-webkit-inner-spin-button {
-            -webkit-appearance: none;
-            margin: 0;
+            -webkit-appearance: none; margin: 0;
         }
         input[type="number"] { -moz-appearance: textfield; }
 
-        .glass-panel {
-            background: var(--panel-dark);
-            border: 1px solid var(--border-dark);
-        }
+        /* Custom Scrollbar untuk Timeline dalam Grid */
+        .custom-scroll::-webkit-scrollbar { width: 4px; }
+        .custom-scroll::-webkit-scrollbar-track { background: transparent; }
+        .custom-scroll::-webkit-scrollbar-thumb { background: #2A2E39; border-radius: 4px; }
+        .custom-scroll::-webkit-scrollbar-thumb:hover { background: #404656; }
         
-        /* Timeline styling */
-        .timeline-dot::before {
-            content: '';
-            position: absolute;
-            left: -5px;
-            top: 6px;
-            width: 10px;
-            height: 10px;
-            border-radius: 50%;
-            background-color: var(--accent-green);
-            box-shadow: 0 0 10px rgba(14, 203, 129, 0.5);
-        }
+        /* Animasi */
+        .fade-in { animation: fadeIn 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
+        @keyframes fadeIn { from { opacity: 0; transform: scale(0.98); } to { opacity: 1; transform: scale(1); } }
     </style>
 </head>
-<body class="antialiased flex flex-col items-center py-6 md:py-10 px-4 sm:px-6">
+<body class="antialiased min-h-screen flex flex-col items-center py-6 lg:py-8 px-4">
 
-    <header class="w-full max-w-5xl mb-8 flex justify-center md:justify-start items-center gap-3">
-        <div class="w-8 h-8 rounded-lg bg-blue-600 flex items-center justify-center font-bold text-white shadow-[0_0_15px_rgba(41,98,255,0.4)]">
-            A
+    <header class="w-full max-w-[1200px] mb-6 flex justify-between items-center">
+        <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-xl bg-dark-panel border border-dark-border flex items-center justify-center shadow-lg">
+                <i data-feather="grid" class="text-white w-5 h-5"></i>
+            </div>
+            <div>
+                <h1 class="text-xl font-bold tracking-tight text-white leading-none">Market<span class="text-gray-500">Calc</span></h1>
+                <p class="text-[10px] text-gray-500 tracking-widest uppercase mt-1">Bento Architecture</p>
+            </div>
         </div>
-        <h1 class="text-xl md:text-2xl font-bold tracking-tight text-white">ARA<span class="text-gray-400 font-medium">PRO</span></h1>
     </header>
 
-    <main class="w-full max-w-5xl flex flex-col md:flex-row gap-6 lg:gap-8">
+    <main class="w-full max-w-[1200px] flex flex-col lg:grid lg:grid-cols-5 lg:grid-rows-[repeat(4,minmax(120px,1fr))] gap-4 lg:gap-6 lg:h-[700px]">
         
-        <aside class="w-full md:w-5/12 lg:w-1/3 flex flex-col gap-6">
-            <div class="glass-panel rounded-2xl p-6 shadow-xl sticky top-6">
-                <h2 class="text-sm font-semibold uppercase tracking-wider text-gray-400 mb-6">Parameter Trading</h2>
-                
-                <div class="flex flex-col gap-5">
-                    <div class="flex flex-col gap-2">
-                        <label class="text-sm font-medium text-gray-300" for="harga-beli">Harga Entry</label>
-                        <div class="relative flex items-center">
-                            <span class="absolute left-4 text-gray-500 font-mono-num">Rp</span>
-                            <input class="w-full bg-[#0b0e14] border border-[#2b3139] text-white font-mono-num text-lg rounded-xl pl-12 pr-4 py-3 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-colors" id="harga-beli" placeholder="0" type="number"/>
-                        </div>
-                    </div>
-
-                    <div class="flex flex-col gap-2">
-                        <label class="text-sm font-medium text-gray-300" for="jumlah-lot">Volume (Lot)</label>
-                        <div class="relative flex items-center">
-                            <input class="w-full bg-[#0b0e14] border border-[#2b3139] text-white font-mono-num text-lg rounded-xl pl-4 pr-12 py-3 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-colors" id="jumlah-lot" placeholder="0" type="number"/>
-                            <span class="absolute right-4 text-gray-500 text-sm">Lot</span>
-                        </div>
-                    </div>
-
-                    <div class="flex flex-col gap-2">
-                        <label class="text-sm font-medium text-gray-300" for="jumlah-ara">Target Hari ARA</label>
-                        <div class="relative flex items-center">
-                            <input class="w-full bg-[#0b0e14] border border-[#2b3139] text-white font-mono-num text-lg rounded-xl pl-4 pr-12 py-3 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-colors" id="jumlah-ara" placeholder="1-10" type="number"/>
-                            <span class="absolute right-4 text-gray-500 text-sm">Hari</span>
-                        </div>
-                    </div>
-                </div>
-
-                <button onclick="hitungAra()" class="mt-8 w-full bg-blue-600 hover:bg-blue-500 text-white font-semibold text-base py-4 rounded-xl transition-all duration-200 active:scale-[0.98] shadow-[0_4px_20px_rgba(41,98,255,0.3)]">
-                    Kalkulasi Profit
+        <aside class="div1 lg:col-start-1 lg:row-start-1 lg:row-span-4 bg-dark-panel border border-dark-border rounded-2xl p-5 flex flex-col h-full shadow-lg">
+            
+            <div class="flex p-1 bg-dark-input rounded-lg border border-dark-border mb-6 relative">
+                <button id="btn-ara" onclick="setMode('ARA')" class="flex-1 py-2 text-sm font-bold rounded-md transition-all text-trade-green bg-trade-greenBg">
+                    ARA
+                </button>
+                <button id="btn-arb" onclick="setMode('ARB')" class="flex-1 py-2 text-sm font-bold rounded-md transition-all text-gray-500 hover:text-white">
+                    ARB
                 </button>
             </div>
+
+            <div class="flex flex-col gap-5 flex-grow">
+                <div>
+                    <label class="text-[11px] font-bold text-gray-400 uppercase tracking-widest mb-2 block">Harga Entry</label>
+                    <div class="relative">
+                        <span class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-600 font-mono text-sm">Rp</span>
+                        <input class="w-full bg-dark-input border border-dark-border text-white font-mono text-base rounded-xl pl-11 pr-4 py-3 focus:outline-none focus:border-gray-500 transition-colors" id="harga-beli" placeholder="0" type="number"/>
+                    </div>
+                </div>
+
+                <div>
+                    <label class="text-[11px] font-bold text-gray-400 uppercase tracking-widest mb-2 block">Volume (Lot)</label>
+                    <div class="relative">
+                        <input class="w-full bg-dark-input border border-dark-border text-white font-mono text-base rounded-xl pl-4 pr-12 py-3 focus:outline-none focus:border-gray-500 transition-colors" id="jumlah-lot" placeholder="0" type="number"/>
+                        <span class="absolute right-4 top-1/2 -translate-y-1/2 text-gray-600 text-sm">Lot</span>
+                    </div>
+                </div>
+
+                <div>
+                    <label class="text-[11px] font-bold text-gray-400 uppercase tracking-widest mb-2 block">Target Durasi</label>
+                    <div class="relative">
+                        <input class="w-full bg-dark-input border border-dark-border text-white font-mono text-base rounded-xl pl-4 pr-12 py-3 focus:outline-none focus:border-gray-500 transition-colors" id="jumlah-hari" placeholder="1-10" type="number" value="1"/>
+                        <span class="absolute right-4 top-1/2 -translate-y-1/2 text-gray-600 text-sm">Hari</span>
+                    </div>
+                </div>
+            </div>
+
+            <button onclick="hitungSimulasi()" id="btn-hitung" class="mt-auto w-full bg-trade-green hover:bg-[#00E676] text-[#0B0E14] font-bold text-sm py-4 rounded-xl transition-all active:scale-[0.98]">
+                KALKULASI
+            </button>
         </aside>
 
-        <section class="w-full md:w-7/12 lg:w-2/3 flex flex-col gap-6">
+        <div class="div3 lg:col-start-2 lg:row-start-1 bg-dark-panel border border-dark-border rounded-2xl p-5 flex flex-col justify-center gap-1 shadow-lg">
+            <span class="text-[10px] font-bold text-gray-500 uppercase tracking-widest">Modal Capital</span>
+            <span class="text-xl font-bold text-white font-mono truncate" id="modal-awal">Rp 0</span>
+        </div>
+
+        <div class="div7 lg:col-start-3 lg:row-start-1 bg-dark-panel border border-dark-border rounded-2xl p-5 flex flex-col justify-center gap-1 shadow-lg">
+            <span id="label-saldo" class="text-[10px] font-bold text-gray-500 uppercase tracking-widest">Total Asset Baru</span>
+            <span class="text-xl font-bold text-white font-mono truncate" id="saldo-akhir">Rp 0</span>
+        </div>
+
+        <div class="div4 lg:col-start-2 lg:col-span-2 lg:row-start-2 lg:row-span-3 bg-dark-panel border border-dark-border rounded-2xl p-8 relative overflow-hidden flex flex-col justify-center items-center text-center shadow-lg">
+            <div id="hero-glow" class="absolute inset-0 bg-gradient-to-b from-trade-green/10 to-transparent opacity-50 transition-colors duration-300"></div>
             
-            <div class="glass-panel rounded-2xl p-6 md:p-8 relative overflow-hidden flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-                <div class="absolute top-0 right-0 w-64 h-64 bg-[#0ecb81] opacity-5 rounded-full blur-3xl pointer-events-none -translate-y-1/2 translate-x-1/3"></div>
+            <div class="z-10 flex flex-col items-center gap-4 w-full">
+                <span id="badge-percent" class="bg-trade-greenBg text-trade-green border border-trade-green/20 text-xs font-bold px-3 py-1.5 rounded-full font-mono">
+                    0.00%
+                </span>
                 
-                <div class="flex flex-col gap-2 z-10 w-full">
-                    <h2 class="text-sm font-semibold uppercase tracking-wider text-gray-400">Estimasi Net Profit</h2>
-                    <div class="text-4xl md:text-5xl font-bold text-[#0ecb81] font-mono-num tracking-tight" id="hero-cuan">
-                        Rp 0
-                    </div>
-                    <div class="flex items-center gap-2 mt-1">
-                        <span class="bg-[#0ecb81] bg-opacity-10 text-[#0ecb81] border border-[#0ecb81]/20 text-xs font-bold px-2.5 py-1 rounded-md font-mono-num" id="hero-percent">
-                            +0.00%
-                        </span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="grid grid-cols-2 gap-4 md:gap-6">
-                <div class="glass-panel rounded-2xl p-5 md:p-6 flex flex-col gap-1.5 border-l-4 border-l-gray-600">
-                    <span class="text-xs font-semibold uppercase tracking-wider text-gray-500">Capital (Modal)</span>
-                    <span class="text-lg md:text-xl font-bold text-white font-mono-num" id="modal-awal">Rp 0</span>
-                </div>
-                <div class="glass-panel rounded-2xl p-5 md:p-6 flex flex-col gap-1.5 border-l-4 border-l-blue-600">
-                    <span class="text-xs font-semibold uppercase tracking-wider text-gray-500">Total Asset (Saldo)</span>
-                    <span class="text-lg md:text-xl font-bold text-white font-mono-num" id="saldo-akhir">Rp 0</span>
-                </div>
-            </div>
-
-            <div class="glass-panel rounded-2xl p-6 md:p-8 hidden" id="breakdown-container">
-                <h3 class="text-base font-semibold text-white mb-6 flex items-center gap-2">
-                    <div class="w-2 h-2 rounded-full bg-blue-500"></div>
-                    Proyeksi Kenaikan Harga
-                </h3>
+                <span id="label-hero" class="text-xs font-bold text-gray-400 uppercase tracking-widest">Estimasi Profit (Net)</span>
                 
-                <div class="relative border-l border-[#2b3139] ml-2 pl-6 flex flex-col gap-6" id="daily-breakdown">
-                    </div>
+                <div id="hero-value" class="text-5xl md:text-6xl font-extrabold text-trade-green font-mono tracking-tighter truncate w-full">
+                    Rp 0
+                </div>
             </div>
+        </div>
 
-        </section>
+        <div class="div2 lg:col-start-4 lg:col-span-2 lg:row-start-1 lg:row-span-4 bg-dark-panel border border-dark-border rounded-2xl p-5 flex flex-col overflow-hidden shadow-lg">
+            <div class="flex justify-between items-center mb-4 pb-4 border-b border-dark-border shrink-0">
+                <h3 class="text-xs font-bold uppercase tracking-widest text-white">Timeline Market</h3>
+                <i data-feather="activity" class="text-gray-500 w-4 h-4"></i>
+            </div>
+            
+            <div class="flex flex-col gap-3 overflow-y-auto custom-scroll pr-2 pb-2 h-full hidden fade-in" id="breakdown-container">
+                </div>
+            
+            <div id="empty-state" class="flex-1 flex items-center justify-center text-gray-600 text-xs font-mono text-center">
+                Belum ada kalkulasi.<br>Masukkan parameter di panel.
+            </div>
+        </div>
+
     </main>
 
 <script>
+    feather.replace(); // Initialize icons
+
+    let currentMode = 'ARA'; 
     const formatRp = (num) => new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0, maximumFractionDigits: 0 }).format(num);
 
-    function hitungAra() {
+    function setMode(mode) {
+        currentMode = mode;
+        const btnAra = document.getElementById('btn-ara');
+        const btnArb = document.getElementById('btn-arb');
+        const btnHitung = document.getElementById('btn-hitung');
+        const glow = document.getElementById('hero-glow');
+        
+        if (mode === 'ARA') {
+            btnAra.className = "flex-1 py-2 text-sm font-bold rounded-md transition-all text-trade-green bg-trade-greenBg";
+            btnArb.className = "flex-1 py-2 text-sm font-bold rounded-md transition-all text-gray-500 hover:text-white";
+            btnHitung.className = "mt-auto w-full font-bold text-sm py-4 rounded-xl transition-all active:scale-[0.98] bg-trade-green hover:bg-[#00E676] text-[#0B0E14]";
+            glow.className = "absolute inset-0 bg-gradient-to-b from-trade-green/10 to-transparent opacity-50 transition-colors duration-300";
+        } else {
+            btnArb.className = "flex-1 py-2 text-sm font-bold rounded-md transition-all text-trade-red bg-trade-redBg";
+            btnAra.className = "flex-1 py-2 text-sm font-bold rounded-md transition-all text-gray-500 hover:text-white";
+            btnHitung.className = "mt-auto w-full font-bold text-sm py-4 rounded-xl transition-all active:scale-[0.98] bg-trade-red hover:bg-[#FF5252] text-white";
+            glow.className = "absolute inset-0 bg-gradient-to-b from-trade-red/10 to-transparent opacity-50 transition-colors duration-300";
+        }
+        
+        if(document.getElementById('harga-beli').value) hitungSimulasi();
+    }
+
+    function getFraksi(harga) {
+        if (harga < 200) return 1;
+        if (harga < 500) return 2;
+        if (harga < 2000) return 5;
+        if (harga < 5000) return 10;
+        return 25;
+    }
+
+    function hitungSimulasi() {
         const inputHarga = parseFloat(document.getElementById('harga-beli').value);
         const inputLot = parseInt(document.getElementById('jumlah-lot').value);
-        const inputAra = parseInt(document.getElementById('jumlah-ara').value);
+        const inputHari = parseInt(document.getElementById('jumlah-hari').value);
 
-        if (!inputHarga || !inputLot || !inputAra) {
-            alert('Harap isi Harga Entry, Volume Lot, dan Target Hari.');
-            return;
-        }
+        if (!inputHarga || !inputLot || !inputHari) return;
 
         const modalAwal = inputHarga * inputLot * 100;
         let currentPrice = inputHarga;
         let htmlRows = '';
 
-        for (let i = 1; i <= inputAra; i++) {
-            // Aturan Persentase ARA BEI Simetris
-            let persenAra = currentPrice >= 5000 ? 0.20 : (currentPrice >= 200 ? 0.25 : 0.35);
-            let hargaMax = currentPrice + (currentPrice * persenAra);
+        const colorClass = currentMode === 'ARA' ? 'text-trade-green' : 'text-trade-red';
+        const bgClass = currentMode === 'ARA' ? 'bg-trade-greenBg border-trade-green/20' : 'bg-trade-redBg border-trade-red/20';
+        const sign = currentMode === 'ARA' ? '+' : '-';
 
-            // Penentuan Fraksi Harga (Tick Size BEI)
-            let fraksi = 1;
-            if (hargaMax < 200) fraksi = 1;
-            else if (hargaMax < 500) fraksi = 2;
-            else if (hargaMax < 2000) fraksi = 5;
-            else if (hargaMax < 5000) fraksi = 10;
-            else fraksi = 25;
+        for (let i = 1; i <= inputHari; i++) {
+            let persenBatas = currentPrice >= 5000 ? 0.20 : (currentPrice >= 200 ? 0.25 : 0.35);
+            let hargaBatas = currentMode === 'ARA' ? currentPrice + (currentPrice * persenBatas) : currentPrice - (currentPrice * persenBatas);
 
-            // Dibulatkan ke bawah sesuai fraksi BEI
-            let hargaAraFinal = Math.floor(hargaMax / fraksi) * fraksi;
-            let saldoHariIni = hargaAraFinal * inputLot * 100;
+            let fraksi = getFraksi(hargaBatas);
+            let hargaFinal = currentMode === 'ARA' 
+                ? Math.floor(hargaBatas / fraksi) * fraksi 
+                : Math.ceil(hargaBatas / fraksi) * fraksi;
+            
+            if (hargaFinal < 50) hargaFinal = 50;
+
+            let realPersen = Math.abs((hargaFinal - currentPrice) / currentPrice * 100);
+            let saldoHariIni = hargaFinal * inputLot * 100;
 
             htmlRows += `
-                <div class="relative timeline-dot">
-                    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 sm:gap-0 bg-[#0b0e14] border border-[#2b3139] p-4 rounded-xl hover:border-gray-600 transition-colors">
-                        
-                        <div class="flex flex-col gap-1">
-                            <span class="text-[10px] sm:text-xs font-bold text-gray-500 uppercase tracking-wider">HARI KE-${i}</span>
-                            <div class="flex items-end gap-3">
-                                <span class="text-white font-mono-num text-lg font-bold">Rp ${hargaAraFinal.toLocaleString('id-ID')}</span>
-                                <span class="text-[#0ecb81] text-xs font-bold mb-1 border border-[#0ecb81]/30 bg-[#0ecb81]/10 px-1.5 py-0.5 rounded">
-                                    +${(persenAra*100)}%
-                                </span>
-                            </div>
+                <div class="flex items-center justify-between p-3 rounded-xl bg-dark-input border border-dark-border">
+                    <div class="flex items-center gap-3">
+                        <div class="w-7 h-7 rounded-md bg-[#1A1E29] flex items-center justify-center font-bold text-[10px] text-gray-400 shrink-0">
+                            H${i}
                         </div>
-
-                        <div class="flex flex-col items-start sm:items-end w-full sm:w-auto mt-2 sm:mt-0 pt-2 sm:pt-0 border-t border-[#2b3139] sm:border-0">
-                            <span class="text-[10px] sm:text-xs font-bold text-gray-500 uppercase tracking-wider">EST. ASSET</span>
-                            <span class="text-gray-300 font-mono-num text-sm sm:text-base font-semibold">${formatRp(saldoHariIni)}</span>
+                        <div class="flex flex-col">
+                            <span class="font-mono text-white font-bold text-sm">Rp ${hargaFinal.toLocaleString('id-ID')}</span>
+                            <span class="text-[10px] text-gray-500 font-medium">Asset: ${formatRp(saldoHariIni)}</span>
                         </div>
+                    </div>
+                    <div class="${colorClass} ${bgClass} border px-2 py-1 rounded text-xs font-bold font-mono shrink-0">
+                        ${sign}${realPersen.toFixed(1)}%
                     </div>
                 </div>
             `;
 
-            currentPrice = hargaAraFinal;
+            currentPrice = hargaFinal;
+            if(hargaFinal <= 50 && currentMode === 'ARB') break; 
         }
 
         const totalSaldoAkhir = currentPrice * inputLot * 100;
-        const totalCuan = totalSaldoAkhir - modalAwal;
-        const totalPersenCuan = (totalCuan / modalAwal) * 100;
+        const selisih = totalSaldoAkhir - modalAwal;
+        const totalPersen = (selisih / modalAwal) * 100;
 
-        // Render hasil ke UI
+        // Render Data
         document.getElementById('modal-awal').innerText = formatRp(modalAwal);
         document.getElementById('saldo-akhir').innerText = formatRp(totalSaldoAkhir);
-        document.getElementById('hero-cuan').innerText = formatRp(totalCuan);
-        document.getElementById('hero-percent').innerText = `+${totalPersenCuan.toFixed(2)}% TOTAL KANTONG`;
-        document.getElementById('daily-breakdown').innerHTML = htmlRows;
         
-        // Tampilkan animasi transisi kontainer
-        const breakdownContainer = document.getElementById('breakdown-container');
-        breakdownContainer.classList.remove('hidden');
-        breakdownContainer.style.opacity = 0;
-        setTimeout(() => {
-            breakdownContainer.style.transition = 'opacity 0.5s ease';
-            breakdownContainer.style.opacity = 1;
-        }, 50);
+        // Update Hero Card
+        const heroValue = document.getElementById('hero-value');
+        const badgePercent = document.getElementById('badge-percent');
+        const labelHero = document.getElementById('label-hero');
+
+        heroValue.innerText = formatRp(Math.abs(selisih));
+        heroValue.className = `text-5xl md:text-6xl font-extrabold font-mono tracking-tighter truncate w-full ${colorClass}`;
+        
+        badgePercent.innerText = `${sign}${Math.abs(totalPersen).toFixed(2)}% TOTAL`;
+        badgePercent.className = `${colorClass} ${bgClass} border text-xs font-bold px-3 py-1.5 rounded-full font-mono`;
+
+        labelHero.innerText = currentMode === 'ARA' ? 'Estimasi Profit (Net)' : 'Estimasi Floating Loss';
+
+        document.getElementById('breakdown-container').innerHTML = htmlRows;
+        document.getElementById('empty-state').classList.add('hidden');
+        
+        // Animasi reset form container
+        const bContainer = document.getElementById('breakdown-container');
+        bContainer.classList.remove('hidden');
+        bContainer.classList.remove('fade-in');
+        void bContainer.offsetWidth; // trigger reflow
+        bContainer.classList.add('fade-in');
     }
 </script>
 </body>

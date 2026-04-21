@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8"/>
     <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-    <title>Kalkulator ARA & ARB - Bento UI</title>
+    <title>Kalkulator ARA & ARB - Bento UI V2</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700;800&display=swap" rel="stylesheet"/>
     <script src="https://unpkg.com/feather-icons"></script>
@@ -36,20 +36,17 @@
     <style>
         body { background-color: #0B0E14; color: #E0E3EB; }
         
-        /* Hilangkan panah input number */
         input[type="number"]::-webkit-outer-spin-button,
         input[type="number"]::-webkit-inner-spin-button {
             -webkit-appearance: none; margin: 0;
         }
         input[type="number"] { -moz-appearance: textfield; }
 
-        /* Custom Scrollbar untuk Timeline dalam Grid */
         .custom-scroll::-webkit-scrollbar { width: 4px; }
         .custom-scroll::-webkit-scrollbar-track { background: transparent; }
         .custom-scroll::-webkit-scrollbar-thumb { background: #2A2E39; border-radius: 4px; }
         .custom-scroll::-webkit-scrollbar-thumb:hover { background: #404656; }
         
-        /* Animasi */
         .fade-in { animation: fadeIn 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
         @keyframes fadeIn { from { opacity: 0; transform: scale(0.98); } to { opacity: 1; transform: scale(1); } }
     </style>
@@ -63,16 +60,16 @@
             </div>
             <div>
                 <h1 class="text-xl font-bold tracking-tight text-white leading-none">Market<span class="text-gray-500">Calc</span></h1>
-                <p class="text-[10px] text-gray-500 tracking-widest uppercase mt-1">Bento Architecture</p>
+                <p class="text-[10px] text-gray-500 tracking-widest uppercase mt-1">Bento Architecture V2</p>
             </div>
         </div>
     </header>
 
-    <main class="w-full max-w-[1200px] flex flex-col lg:grid lg:grid-cols-5 lg:grid-rows-[repeat(4,minmax(120px,1fr))] gap-4 lg:gap-6 lg:h-[700px]">
+    <main class="w-full max-w-[1200px] flex flex-col lg:grid lg:grid-cols-5 lg:grid-rows-[repeat(5,minmax(110px,1fr))] gap-4 lg:gap-6 lg:h-[750px]">
         
-        <aside class="div1 lg:col-start-1 lg:row-start-1 lg:row-span-4 bg-dark-panel border border-dark-border rounded-2xl p-5 flex flex-col h-full shadow-lg">
+        <aside class="div1 lg:col-start-1 lg:row-start-1 lg:row-span-3 bg-dark-panel border border-dark-border rounded-2xl p-5 flex flex-col h-full shadow-lg">
             
-            <div class="flex p-1 bg-dark-input rounded-lg border border-dark-border mb-6 relative">
+            <div class="flex p-1 bg-dark-input rounded-lg border border-dark-border mb-6 relative shrink-0">
                 <button id="btn-ara" onclick="setMode('ARA')" class="flex-1 py-2 text-sm font-bold rounded-md transition-all text-trade-green bg-trade-greenBg">
                     ARA
                 </button>
@@ -81,33 +78,33 @@
                 </button>
             </div>
 
-            <div class="flex flex-col gap-5 flex-grow">
+            <div class="flex flex-col gap-4 flex-grow overflow-y-auto custom-scroll pr-1">
                 <div>
-                    <label class="text-[11px] font-bold text-gray-400 uppercase tracking-widest mb-2 block">Harga Entry</label>
+                    <label class="text-[11px] font-bold text-gray-400 uppercase tracking-widest mb-1.5 block">Harga Entry</label>
                     <div class="relative">
                         <span class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-600 font-mono text-sm">Rp</span>
-                        <input class="w-full bg-dark-input border border-dark-border text-white font-mono text-base rounded-xl pl-11 pr-4 py-3 focus:outline-none focus:border-gray-500 transition-colors" id="harga-beli" placeholder="0" type="number"/>
+                        <input class="w-full bg-dark-input border border-dark-border text-white font-mono text-sm rounded-xl pl-11 pr-4 py-2.5 focus:outline-none focus:border-gray-500 transition-colors" id="harga-beli" placeholder="0" type="number"/>
                     </div>
                 </div>
 
                 <div>
-                    <label class="text-[11px] font-bold text-gray-400 uppercase tracking-widest mb-2 block">Volume (Lot)</label>
+                    <label class="text-[11px] font-bold text-gray-400 uppercase tracking-widest mb-1.5 block">Volume (Lot)</label>
                     <div class="relative">
-                        <input class="w-full bg-dark-input border border-dark-border text-white font-mono text-base rounded-xl pl-4 pr-12 py-3 focus:outline-none focus:border-gray-500 transition-colors" id="jumlah-lot" placeholder="0" type="number"/>
+                        <input class="w-full bg-dark-input border border-dark-border text-white font-mono text-sm rounded-xl pl-4 pr-12 py-2.5 focus:outline-none focus:border-gray-500 transition-colors" id="jumlah-lot" placeholder="0" type="number"/>
                         <span class="absolute right-4 top-1/2 -translate-y-1/2 text-gray-600 text-sm">Lot</span>
                     </div>
                 </div>
 
                 <div>
-                    <label class="text-[11px] font-bold text-gray-400 uppercase tracking-widest mb-2 block">Target Durasi</label>
+                    <label class="text-[11px] font-bold text-gray-400 uppercase tracking-widest mb-1.5 block">Target Durasi</label>
                     <div class="relative">
-                        <input class="w-full bg-dark-input border border-dark-border text-white font-mono text-base rounded-xl pl-4 pr-12 py-3 focus:outline-none focus:border-gray-500 transition-colors" id="jumlah-hari" placeholder="1-10" type="number" value="1"/>
+                        <input class="w-full bg-dark-input border border-dark-border text-white font-mono text-sm rounded-xl pl-4 pr-12 py-2.5 focus:outline-none focus:border-gray-500 transition-colors" id="jumlah-hari" placeholder="1-10" type="number" value="1"/>
                         <span class="absolute right-4 top-1/2 -translate-y-1/2 text-gray-600 text-sm">Hari</span>
                     </div>
                 </div>
             </div>
 
-            <button onclick="hitungSimulasi()" id="btn-hitung" class="mt-auto w-full bg-trade-green hover:bg-[#00E676] text-[#0B0E14] font-bold text-sm py-4 rounded-xl transition-all active:scale-[0.98]">
+            <button onclick="hitungSimulasi()" id="btn-hitung" class="mt-4 shrink-0 w-full bg-trade-green hover:bg-[#00E676] text-[#0B0E14] font-bold text-sm py-3.5 rounded-xl transition-all active:scale-[0.98]">
                 KALKULASI
             </button>
         </aside>
@@ -122,17 +119,17 @@
             <span class="text-xl font-bold text-white font-mono truncate" id="saldo-akhir">Rp 0</span>
         </div>
 
-        <div class="div4 lg:col-start-2 lg:col-span-2 lg:row-start-2 lg:row-span-3 bg-dark-panel border border-dark-border rounded-2xl p-8 relative overflow-hidden flex flex-col justify-center items-center text-center shadow-lg">
+        <div class="div4 lg:col-start-2 lg:col-span-2 lg:row-start-2 lg:row-span-2 bg-dark-panel border border-dark-border rounded-2xl p-6 relative overflow-hidden flex flex-col justify-center items-center text-center shadow-lg">
             <div id="hero-glow" class="absolute inset-0 bg-gradient-to-b from-trade-green/10 to-transparent opacity-50 transition-colors duration-300"></div>
             
-            <div class="z-10 flex flex-col items-center gap-4 w-full">
+            <div class="z-10 flex flex-col items-center justify-center gap-3 w-full h-full">
                 <span id="badge-percent" class="bg-trade-greenBg text-trade-green border border-trade-green/20 text-xs font-bold px-3 py-1.5 rounded-full font-mono">
                     0.00%
                 </span>
                 
                 <span id="label-hero" class="text-xs font-bold text-gray-400 uppercase tracking-widest">Estimasi Profit (Net)</span>
                 
-                <div id="hero-value" class="text-5xl md:text-6xl font-extrabold text-trade-green font-mono tracking-tighter truncate w-full">
+                <div id="hero-value" class="text-4xl md:text-5xl font-extrabold text-trade-green font-mono tracking-tighter truncate w-full">
                     Rp 0
                 </div>
             </div>
@@ -155,7 +152,7 @@
     </main>
 
 <script>
-    feather.replace(); // Initialize icons
+    feather.replace();
 
     let currentMode = 'ARA'; 
     const formatRp = (num) => new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0, maximumFractionDigits: 0 }).format(num);
@@ -170,12 +167,12 @@
         if (mode === 'ARA') {
             btnAra.className = "flex-1 py-2 text-sm font-bold rounded-md transition-all text-trade-green bg-trade-greenBg";
             btnArb.className = "flex-1 py-2 text-sm font-bold rounded-md transition-all text-gray-500 hover:text-white";
-            btnHitung.className = "mt-auto w-full font-bold text-sm py-4 rounded-xl transition-all active:scale-[0.98] bg-trade-green hover:bg-[#00E676] text-[#0B0E14]";
+            btnHitung.className = "mt-4 shrink-0 w-full font-bold text-sm py-3.5 rounded-xl transition-all active:scale-[0.98] bg-trade-green hover:bg-[#00E676] text-[#0B0E14]";
             glow.className = "absolute inset-0 bg-gradient-to-b from-trade-green/10 to-transparent opacity-50 transition-colors duration-300";
         } else {
             btnArb.className = "flex-1 py-2 text-sm font-bold rounded-md transition-all text-trade-red bg-trade-redBg";
             btnAra.className = "flex-1 py-2 text-sm font-bold rounded-md transition-all text-gray-500 hover:text-white";
-            btnHitung.className = "mt-auto w-full font-bold text-sm py-4 rounded-xl transition-all active:scale-[0.98] bg-trade-red hover:bg-[#FF5252] text-white";
+            btnHitung.className = "mt-4 shrink-0 w-full font-bold text-sm py-3.5 rounded-xl transition-all active:scale-[0.98] bg-trade-red hover:bg-[#FF5252] text-white";
             glow.className = "absolute inset-0 bg-gradient-to-b from-trade-red/10 to-transparent opacity-50 transition-colors duration-300";
         }
         
@@ -244,17 +241,15 @@
         const selisih = totalSaldoAkhir - modalAwal;
         const totalPersen = (selisih / modalAwal) * 100;
 
-        // Render Data
         document.getElementById('modal-awal').innerText = formatRp(modalAwal);
         document.getElementById('saldo-akhir').innerText = formatRp(totalSaldoAkhir);
         
-        // Update Hero Card
         const heroValue = document.getElementById('hero-value');
         const badgePercent = document.getElementById('badge-percent');
         const labelHero = document.getElementById('label-hero');
 
         heroValue.innerText = formatRp(Math.abs(selisih));
-        heroValue.className = `text-5xl md:text-6xl font-extrabold font-mono tracking-tighter truncate w-full ${colorClass}`;
+        heroValue.className = `text-4xl md:text-5xl font-extrabold font-mono tracking-tighter truncate w-full ${colorClass}`;
         
         badgePercent.innerText = `${sign}${Math.abs(totalPersen).toFixed(2)}% TOTAL`;
         badgePercent.className = `${colorClass} ${bgClass} border text-xs font-bold px-3 py-1.5 rounded-full font-mono`;
@@ -264,11 +259,10 @@
         document.getElementById('breakdown-container').innerHTML = htmlRows;
         document.getElementById('empty-state').classList.add('hidden');
         
-        // Animasi reset form container
         const bContainer = document.getElementById('breakdown-container');
         bContainer.classList.remove('hidden');
         bContainer.classList.remove('fade-in');
-        void bContainer.offsetWidth; // trigger reflow
+        void bContainer.offsetWidth; 
         bContainer.classList.add('fade-in');
     }
 </script>

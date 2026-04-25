@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Kalkulator Profit Saham - Bento UI V2</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700;800&display=swap" rel="stylesheet"/>
+    <script src="https://unpkg.com/feather-icons"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        dark: {
+                            bg: '#0B0E14',
+                            panel: '#151822',
+                            border: '#2A2E39',
+                            input: '#0F1219'
+                        },
+                        trade: {
+                            green: '#00C853',
+                            greenBg: 'rgba(0, 200, 83, 0.1)',
+                            red: '#FF3D00',
+                            redBg: 'rgba(255, 61, 0, 0.1)',
+                            blue: '#2962FF',
+                            blueBg: 'rgba(41, 98, 255, 0.1)'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { background-color: #0B0E14; color: #E0E3EB; }
+
+        input[type="number"]::-webkit-outer-spin-button,
+        input[type="number"]::-webkit-inner-spin-button {
+            -webkit-appearance: none; margin: 0;
+        }
+        input[type="number"] { -moz-appearance: textfield; }
+
+        .custom-scroll::-webkit-scrollbar { width: 4px; }
+        .custom-scroll::-webkit-scrollbar-track { background: transparent; }
+        .custom-scroll::-webkit-scrollbar-thumb { background: #2A2E39; border-radius: 4px; }
+        .custom-scroll::-webkit-scrollbar-thumb:hover { background: #404656; }
+
+        .fade-in { animation: fadeIn 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
+        @keyframes fadeIn { from { opacity: 0; transform: scale(0.98); } to { opacity: 1; transform: scale(1); } }
+    </style>
+</head>
+<body class="antialiased min-h-screen flex flex-col items-center py-6 lg:py-8 px-4">
+
+    <header class="w-full max-w-[1200px] mb-6 flex justify-between items-center">
+        <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-xl bg-dark-panel border border-dark-border flex items-center justify-center shadow-lg">
+                <i data-feather="pie-chart" class="text-white w-5 h-5"></i>
+            </div>
+            <div>
+                <h1 class="text-xl font-bold tracking-tight text-white leading-none">Trade<span class="text-gray-500">Calc</span></h1>
+                <p class="text-[10px] text-gray-500 tracking-widest uppercase mt-1">Profit & Loss Estimator</p>
+            </div>
+        </div>
+    </header>
+
+    <main class="w-full max-w-[1200px] flex flex-col lg:grid lg:grid-cols-5 lg:grid-rows-[repeat(5,minmax(110px,1fr))] gap-4 lg:gap-6 lg:h-[750px]">
+
+        <aside class="div1 lg:col-start-1 lg:row-start-1 lg:row-span-3 bg-dark-panel border border-dark-border rounded-2xl p-5 flex flex-col h-full shadow-lg">
+            
+            <div class="mb-4 pb-4 border-b border-dark-border shrink-0">
+                <h2 class="text-sm font-bold text-white uppercase tracking-widest flex items-center gap-2">
+                    <i data-feather="sliders" class="w-4 h-4 text-trade-blue"></i> Parameter Trading
+                </h2>
+            </div>
+
+            <div class="flex flex-col gap-4 flex-grow overflow-y-auto custom-scroll pr-1">
+                <div>
+                    <label class="text-[11px] font-bold text-gray-400 uppercase tracking-widest mb-1.5 block">Harga Beli</label>
+                    <div class="relative">
+                        <span class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-600 font-mono text-sm">Rp</span>
+                        <input class="w-full bg-dark-input border border-dark-border text-white font-mono text-sm rounded-xl pl-11 pr-4 py-2.5 focus:outline-none focus:border-trade-blue transition-colors" id="harga-beli" placeholder="0" type="number"/>
+                    </div>
+                </div>
+
+                <div>
+                    <label class="text-[11px] font-bold text-gray-400 uppercase tracking-widest mb-1.5 block">Harga Jual / Target</label>
+                    <div class="relative">
+                        <span class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-600 font-mono text-sm">Rp</span>
+                        <input class="w-full bg-dark-input border border-dark-border text-white font-mono text-sm rounded-xl pl-11 pr-4 py-2.5 focus:outline-none focus:border-trade-blue transition-colors" id="harga-jual" placeholder="0" type="number"/>
+                    </div>
+                </div>
+
+                <div>
+                    <label class="text-[11px] font-bold text-gray-400 uppercase tracking-widest mb-1.5 block">Volume</label>
+                    <div class="relative">
+                        <input class="w-full bg-dark-input border border-dark-border text-white font-mono text-sm rounded-xl pl-4 pr-12 py-2.5 focus:outline-none focus:border-trade-blue transition-colors" id="jumlah-lot" placeholder="0" type="number"/>
+                        <span class="absolute right-4 top-1/2 -translate-y-1/2 text-gray-600 text-sm">Lot</span>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="text-[11px] font-bold text-gray-400 uppercase tracking-widest mb-1.5 block">Fee Beli</label>
+                        <div class="relative">
+                            <input class="w-full bg-dark-input border border-dark-border text-white font-mono text-sm rounded-xl pl-3 pr-8 py-2 focus:outline-none focus:border-trade-blue transition-colors" id="fee-beli" placeholder="0.15" type="number" step="0.01" value="0.15"/>
+                            <span class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-600 text-sm">%</span>
+                        </div>
+                    </div>
+                    <div>
+                        <label class="text-[11px] font-bold text-gray-400 uppercase tracking-widest mb-1.5 block">Fee Jual</label>
+                        <div class="relative">
+                            <input class="w-full bg-dark-input border border-dark-border text-white font-mono text-sm rounded-xl pl-3 pr-8 py-2 focus:outline-none focus:border-trade-blue transition-colors" id="fee-jual" placeholder="0.25" type="number" step="0.01" value="0.25"/>
+                            <span class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-600 text-sm">%</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <button onclick="hitungSimulasi()" id="btn-hitung" class="mt-4 shrink-0 w-full bg-trade-blue hover:bg-[#448AFF] text-white font-bold text-sm py-3.5 rounded-xl transition-all active:scale-[0.98]">
+                KALKULASI
+            </button>
+        </aside>
+
+        <div class="div3 lg:col-start-2 lg:row-start-1 bg-dark-panel border border-dark-border rounded-2xl p-5 flex flex-col justify-center gap-1 shadow-lg">
+            <span class="text-[10px] font-bold text-gray-500 uppercase tracking-widest">Modal Keluar (Net)</span>
+            <span class="text-xl font-bold text-white font-mono truncate" id="modal-awal">Rp 0</span>
+        </div>
+
+        <div class="div7 lg:col-start-3 lg:row-start-1 bg-dark-panel border border-dark-border rounded-2xl p-5 flex flex-col justify-center gap-1 shadow-lg">
+            <span class="text-[10px] font-bold text-gray-500 uppercase tracking-widest">Dana Diterima (Net)</span>
+            <span class="text-xl font-bold text-white font-mono truncate" id="saldo-akhir">Rp 0</span>
+        </div>
+
+        <div class="div4 lg:col-start-2 lg:col-span-2 lg:row-start-2 lg:row-span-2 bg-dark-panel border border-dark-border rounded-2xl p-6 relative overflow-hidden flex flex-col justify-center items-center text-center shadow-lg transition-colors duration-300" id="hero-panel">
+            <div id="hero-glow" class="absolute inset-0 bg-gradient-to-b from-gray-500/10 to-transparent opacity-50 transition-colors duration-500"></div>
+
+            <div class="z-10 flex flex-col items-center justify-center gap-3 w-full h-full">
+                <span id="badge-percent" class="bg-gray-800 text-gray-400 border border-gray-700 text-xs font-bold px-3 py-1.5 rounded-full font-mono transition-all duration-300">
+                    0.00%
+                </span>
+
+                <span id="label-hero" class="text-xs font-bold text-gray-400 uppercase tracking-widest">Estimasi Profit/Loss (Net)</span>
+
+                <div id="hero-value" class="text-4xl md:text-5xl font-extrabold text-white font-mono tracking-tighter truncate w-full transition-colors duration-300">
+                    Rp 0
+                </div>
+            </div>
+        </div>
+
+        <div class="div2 lg:col-start-4 lg:col-span-2 lg:row-start-1 lg:row-span-4 bg-dark-panel border border-dark-border rounded-2xl p-5 flex flex-col overflow-hidden shadow-lg">
+            <div class="flex justify-between items-center mb-4 pb-4 border-b border-dark-border shrink-0">
+                <h3 class="text-xs font-bold uppercase tracking-widest text-white">Rincian Transaksi</h3>
+                <i data-feather="file-text" class="text-gray-500 w-4 h-4"></i>
+            </div>
+
+            <div class="flex flex-col gap-3 overflow-y-auto custom-scroll pr-2 pb-2 h-full hidden fade-in" id="breakdown-container">
+                </div>
+
+            <div id="empty-state" class="flex-1 flex items-center justify-center text-gray-600 text-xs font-mono text-center">
+                Belum ada data.<br>Masukkan parameter untuk melihat rincian.
+            </div>
+        </div>
+
+    </main>
+
+<script>
+    feather.replace();
+
+    const formatRp = (num) => new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0, maximumFractionDigits: 0 }).format(num);
+
+    function hitungSimulasi() {
+        const inputHargaBeli = parseFloat(document.getElementById('harga-beli').value);
+        const inputHargaJual = parseFloat(document.getElementById('harga-jual').value);
+        const inputLot = parseInt(document.getElementById('jumlah-lot').value);
+        const feeBeliPersen = parseFloat(document.getElementById('fee-beli').value) || 0;
+        const feeJualPersen = parseFloat(document.getElementById('fee-jual').value) || 0;
+
+        if (!inputHargaBeli || !inputHargaJual || !inputLot) return;
+
+        const totalLembar = inputLot * 100;
+
+        // Kalkulasi Beli
+        const grossBeli = inputHargaBeli * totalLembar;
+        const nominalFeeBeli = grossBeli * (feeBeliPersen / 100);
+        const netModalKeluar = grossBeli + nominalFeeBeli;
+
+        // Kalkulasi Jual
+        const grossJual = inputHargaJual * totalLembar;
+        const nominalFeeJual = grossJual * (feeJualPersen / 100);
+        const netDanaDiterima = grossJual - nominalFeeJual;
+
+        // Kalkulasi Profit / Loss
+        const profitLossRp = netDanaDiterima - netModalKeluar;
+        const profitLossPersen = (profitLossRp / netModalKeluar) * 100;
+        const isProfit = profitLossRp >= 0;
+
+        // Update UI Atas
+        document.getElementById('modal-awal').innerText = formatRp(netModalKeluar);
+        document.getElementById('saldo-akhir').innerText = formatRp(netDanaDiterima);
+
+        // Styling Dynamic Hero (Hijau untuk Profit, Merah untuk Loss)
+        const heroValue = document.getElementById('hero-value');
+        const badgePercent = document.getElementById('badge-percent');
+        const labelHero = document.getElementById('label-hero');
+        const heroGlow = document.getElementById('hero-glow');
+        const heroPanel = document.getElementById('hero-panel');
+
+        const colorText = isProfit ? 'text-trade-green' : 'text-trade-red';
+        const colorBg = isProfit ? 'bg-trade-greenBg' : 'bg-trade-redBg';
+        const colorBorder = isProfit ? 'border-trade-green/30' : 'border-trade-red/30';
+        const colorGlow = isProfit ? 'from-trade-green/20' : 'from-trade-red/20';
+        const sign = isProfit ? '+' : '';
+
+        heroValue.innerText = `${sign}${formatRp(profitLossRp)}`;
+        heroValue.className = `text-4xl md:text-5xl font-extrabold font-mono tracking-tighter truncate w-full ${colorText} transition-colors duration-300`;
+
+        badgePercent.innerText = `${sign}${profitLossPersen.toFixed(2)}% TOTAL`;
+        badgePercent.className = `${colorText} ${colorBg} ${colorBorder} border text-xs font-bold px-3 py-1.5 rounded-full font-mono transition-all duration-300`;
+
+        heroGlow.className = `absolute inset-0 bg-gradient-to-b ${colorGlow} to-transparent opacity-50 transition-colors duration-500`;
+        heroPanel.className = `div4 lg:col-start-2 lg:col-span-2 lg:row-start-2 lg:row-span-2 bg-dark-panel border ${colorBorder} rounded-2xl p-6 relative overflow-hidden flex flex-col justify-center items-center text-center shadow-lg transition-colors duration-300`;
+
+        labelHero.innerText = isProfit ? 'Estimasi Profit Bersih' : 'Estimasi Kerugian Bersih';
+
+        // Render Rincian Transaksi
+        const breakdownHTML = `
+            <div class="flex items-center justify-between p-3 rounded-xl bg-dark-input border border-dark-border mb-1">
+                <div class="flex items-center gap-3">
+                    <div class="w-8 h-8 rounded-lg bg-trade-blueBg flex items-center justify-center text-trade-blue shrink-0">
+                        <i data-feather="shopping-cart" class="w-4 h-4"></i>
+                    </div>
+                    <div class="flex flex-col">
+                        <span class="text-xs text-gray-400 font-medium">Nilai Beli (Gross)</span>
+                        <span class="font-mono text-white text-sm font-bold">${formatRp(grossBeli)}</span>
+                    </div>
+                </div>
+            </div>
+            <div class="flex items-center justify-between p-3 rounded-xl bg-dark-input border border-dark-border">
+                <div class="flex items-center gap-3">
+                    <div class="w-8 h-8 rounded-lg bg-[#1A1E29] flex items-center justify-center text-gray-400 shrink-0">
+                        <i data-feather="percent" class="w-4 h-4"></i>
+                    </div>
+                    <div class="flex flex-col">
+                        <span class="text-xs text-gray-400 font-medium">Fee Beli (${feeBeliPersen}%)</span>
+                        <span class="font-mono text-trade-red text-sm font-bold">-${formatRp(nominalFeeBeli)}</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="w-full h-px bg-dark-border my-1"></div>
+
+            <div class="flex items-center justify-between p-3 rounded-xl bg-dark-input border border-dark-border mb-1">
+                <div class="flex items-center gap-3">
+                    <div class="w-8 h-8 rounded-lg bg-trade-blueBg flex items-center justify-center text-trade-blue shrink-0">
+                        <i data-feather="tag" class="w-4 h-4"></i>
+                    </div>
+                    <div class="flex flex-col">
+                        <span class="text-xs text-gray-400 font-medium">Nilai Jual (Gross)</span>
+                        <span class="font-mono text-white text-sm font-bold">${formatRp(grossJual)}</span>
+                    </div>
+                </div>
+            </div>
+            <div class="flex items-center justify-between p-3 rounded-xl bg-dark-input border border-dark-border">
+                <div class="flex items-center gap-3">
+                    <div class="w-8 h-8 rounded-lg bg-[#1A1E29] flex items-center justify-center text-gray-400 shrink-0">
+                        <i data-feather="percent" class="w-4 h-4"></i>
+                    </div>
+                    <div class="flex flex-col">
+                        <span class="text-xs text-gray-400 font-medium">Fee Jual (${feeJualPersen}%)</span>
+                        <span class="font-mono text-trade-red text-sm font-bold">-${formatRp(nominalFeeJual)}</span>
+                    </div>
+                </div>
+            </div>
+        `;
+
+        document.getElementById('breakdown-container').innerHTML = breakdownHTML;
+        document.getElementById('empty-state').classList.add('hidden');
+
+        feather.replace(); // Re-render icons
+
+        const bContainer = document.getElementById('breakdown-container');
+        bContainer.classList.remove('hidden');
+        bContainer.classList.remove('fade-in');
+        void bContainer.offsetWidth; 
+        bContainer.classList.add('fade-in');
+    }
+
+    // Auto-calculate if inputs are typed (optional polish)
+    document.querySelectorAll('input').forEach(input => {
+        input.addEventListener('input', () => {
+            if(document.getElementById('harga-beli').value && document.getElementById('harga-jual').value) {
+                hitungSimulasi();
+            }
+        });
+    });
+</script>
+</body>
+</html>

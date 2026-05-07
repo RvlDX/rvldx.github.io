@@ -3,143 +3,289 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FumiPro | Solusi Pengendalian Hama Profesional</title>
+    <title>FumiPro | Premium Pest Control</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         body { font-family: 'Plus Jakarta Sans', sans-serif; }
-        .mobile-menu-open { overflow: hidden; }
-        #mobile-menu { transition: transform 0.3s ease-in-out; }
+        .page-content { display: none; }
+        .active-page { display: block; animation: pageTransition 0.4s ease-out; }
+        
+        @keyframes pageTransition {
+            from { opacity: 0; transform: scale(0.98); }
+            to { opacity: 1; transform: scale(1); }
+        }
+        
+        /* State untuk menu aktif */
+        .nav-link-active { 
+            color: #10b981 !important; 
+            background-color: #f0fdf4;
+            border-radius: 9999px;
+        }
+        
+        .desktop-nav-active {
+            color: #10b981 !important;
+        }
+        .desktop-nav-active::after {
+            content: '';
+            display: block;
+            width: 100%;
+            height: 2px;
+            background: #10b981;
+            margin-top: 4px;
+        }
     </style>
 </head>
-<body class="bg-[#FAFAFA] text-slate-900">
+<body class="bg-slate-50 text-slate-900">
 
-    <div class="bg-slate-900 text-white py-2 text-center text-[10px] sm:text-xs font-medium tracking-widest uppercase">
-        Sertifikasi ASPPHAMI & Izin Operasional Kemenkes RI
-    </div>
-
-    <header class="sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b border-slate-100">
+    <header class="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-slate-100">
         <div class="max-w-7xl mx-auto px-6 h-20 flex justify-between items-center">
-            <div class="text-2xl font-extrabold tracking-tight flex items-center gap-2 text-slate-900">
-                <div class="w-8 h-8 bg-emerald-600 rounded flex items-center justify-center">
-                    <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>
+            <a href="javascript:void(0)" onclick="showPage('home')" class="flex items-center gap-2 group">
+                <div class="bg-emerald-600 p-2 rounded-lg group-hover:rotate-12 transition-transform">
+                    <i data-lucide="shield-check" class="text-white w-6 h-6"></i>
                 </div>
-                <span>FUMI<span class="text-emerald-600">PRO</span></span>
-            </div>
+                <span class="text-2xl font-extrabold tracking-tighter">FUMI<span class="text-emerald-600">PRO</span></span>
+            </a>
             
-            <nav class="hidden lg:flex items-center gap-8 text-[13px] font-bold uppercase tracking-wider text-slate-600">
-                <a href="#" class="hover:text-emerald-600 transition">Home</a>
-                <a href="#" class="hover:text-emerald-600 transition">Anti Rayap</a>
-                <a href="#" class="hover:text-emerald-600 transition">Pest Control</a>
-                <a href="#" class="hover:text-emerald-600 transition">About Us</a>
-                <a href="#" class="hover:text-emerald-600 transition">Branch</a>
-                <a href="#" class="hover:text-emerald-600 transition">News</a>
-                <a href="#" class="hover:text-emerald-600 transition text-emerald-600">Contact</a>
+            <nav id="desktop-nav" class="hidden lg:flex items-center gap-8 text-[13px] font-bold uppercase tracking-wider text-slate-500">
+                <a href="javascript:void(0)" onclick="showPage('home')" class="hover:text-emerald-600 transition nav-item" data-page="home">Home</a>
+                <a href="javascript:void(0)" onclick="showPage('anti-rayap')" class="hover:text-emerald-600 transition nav-item" data-page="anti-rayap">Anti Rayap</a>
+                <a href="javascript:void(0)" onclick="showPage('pest-control')" class="hover:text-emerald-600 transition nav-item" data-page="pest-control">Pest Control</a>
+                <a href="javascript:void(0)" onclick="showPage('about')" class="hover:text-emerald-600 transition nav-item" data-page="about">About Us</a>
+                <a href="javascript:void(0)" onclick="showPage('branch')" class="hover:text-emerald-600 transition nav-item" data-page="branch">Branch</a>
+                <a href="javascript:void(0)" onclick="showPage('news')" class="hover:text-emerald-600 transition nav-item" data-page="news">News</a>
+                <a href="javascript:void(0)" onclick="showPage('contact')" class="bg-emerald-600 text-white px-6 py-2.5 rounded-full hover:bg-emerald-700 transition shadow-lg shadow-emerald-100">Contact</a>
             </nav>
 
-            <button id="menu-btn" class="lg:hidden p-2 text-slate-900">
-                <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
-            </button>
+            <button id="menu-toggle" class="lg:hidden p-2"><i data-lucide="menu"></i></button>
         </div>
     </header>
 
-    <div id="mobile-menu" class="fixed inset-0 z-[60] bg-white transform translate-x-full lg:hidden">
-        <div class="p-6 flex flex-col h-full">
-            <div class="flex justify-between items-center mb-12">
-                <span class="text-xl font-bold italic">FUMIPRO</span>
-                <button id="close-btn" class="p-2 text-slate-900">
-                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
-                </button>
+    <main id="page-home" class="page-content active-page">
+        <section class="max-w-7xl mx-auto px-6 py-16 grid lg:grid-cols-2 gap-12 items-center">
+            <div class="space-y-8">
+                <h1 class="text-6xl font-black leading-tight">Rumah Nyaman Tanpa <span class="text-emerald-600 underline">Hama.</span></h1>
+                <p class="text-lg text-slate-500 leading-relaxed">Solusi cerdas pengendalian hama dengan metode ramah lingkungan untuk hunian dan kantor Anda.</p>
+                <div class="flex gap-4">
+                    <button onclick="showPage('contact')" class="bg-slate-900 text-white px-8 py-4 rounded-2xl font-bold hover:bg-emerald-600 transition shadow-xl">Konsultasi Sekarang</button>
+                    <div class="flex items-center gap-3 px-4">
+                        <i data-lucide="phone-call" class="text-emerald-600"></i>
+                        <span class="font-bold">021-1234-567</span>
+                    </div>
+                </div>
             </div>
-            <nav class="flex flex-col gap-6 text-2xl font-bold text-slate-900">
-                <a href="#">Home</a>
-                <a href="#">Anti Rayap</a>
-                <a href="#">Pest Control</a>
-                <a href="#">About Us</a>
-                <a href="#">Branch</a>
-                <a href="#">News</a>
-                <a href="#" class="text-emerald-600">Contact</a>
-            </nav>
-            <div class="mt-auto py-10 border-t border-slate-100 text-center">
-                <p class="text-slate-500 text-sm mb-4">Butuh bantuan mendesak?</p>
-                <a href="#" class="text-xl font-extrabold text-emerald-600">021-1234-5678</a>
+            <div class="relative">
+                <img src="https://images.unsplash.com/photo-1581578731548-c64695cc6954?q=80&w=1000&auto=format&fit=crop" class="rounded-[3rem] shadow-2xl object-cover h-[500px] w-full" alt="Home Clean">
+                <div class="absolute -bottom-6 -right-6 bg-white p-6 rounded-3xl shadow-2xl border border-slate-100">
+                    <i data-lucide="award" class="text-emerald-600 w-10 h-10 mb-2"></i>
+                    <p class="font-bold text-sm">Terakreditasi <br> Kemenkes</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <main id="page-anti-rayap" class="page-content py-20 px-6 max-w-7xl mx-auto">
+        <div class="text-center mb-16">
+            <h2 class="text-4xl font-black mb-4 uppercase italic">Layanan Anti Rayap</h2>
+            <p class="text-slate-500">Proteksi Struktur Bangunan Bergaransi 3-5 Tahun</p>
+        </div>
+        <div class="grid md:grid-cols-2 gap-12 items-center">
+            <img src="https://images.unsplash.com/photo-1504307651254-35680f356dfd?q=80&w=1000&auto=format&fit=crop" class="rounded-[2.5rem] shadow-xl" alt="Kayu Rayap">
+            <div class="space-y-6">
+                <div class="flex gap-4 p-6 bg-white rounded-3xl border border-slate-100 hover:border-emerald-200 transition">
+                    <i data-lucide="home" class="text-emerald-600 w-8 h-8 shrink-0"></i>
+                    <div>
+                        <h4 class="font-bold mb-1 text-lg">Pra-Konstruksi</h4>
+                        <p class="text-slate-500 text-sm">Perlindungan tanah sebelum lantai semen dicor. Sangat efektif untuk bangunan baru.</p>
+                    </div>
+                </div>
+                <div class="flex gap-4 p-6 bg-white rounded-3xl border border-slate-100 hover:border-emerald-200 transition">
+                    <i data-lucide="drill" class="text-emerald-600 w-8 h-8 shrink-0"></i>
+                    <div>
+                        <h4 class="font-bold mb-1 text-lg">Pasca-Konstruksi</h4>
+                        <p class="text-slate-500 text-sm">Sistem injeksi dan pipa untuk bangunan yang sudah berdiri dan furnitur yang terserang.</p>
+                    </div>
+                </div>
             </div>
         </div>
+    </main>
+
+    <main id="page-pest-control" class="page-content py-20 px-6 max-w-7xl mx-auto">
+        <h2 class="text-4xl font-black text-center mb-16 uppercase">General Pest Control</h2>
+        <div class="grid md:grid-cols-3 gap-8">
+            <div class="bg-white p-10 rounded-[2.5rem] border border-slate-100 text-center hover:-translate-y-2 transition shadow-sm hover:shadow-xl group">
+                <div class="bg-slate-50 w-20 h-20 rounded-3xl flex items-center justify-center mx-auto mb-8 group-hover:bg-emerald-600 transition">
+                    <i data-lucide="bug" class="w-10 h-10 text-emerald-600 group-hover:text-white transition"></i>
+                </div>
+                <h3 class="text-xl font-bold mb-4">Serangga Merayap</h3>
+                <p class="text-slate-500 text-sm leading-relaxed italic">Pembasmian kecoa, semut, dan kutu busuk dengan metode gel baiting.</p>
+            </div>
+            <div class="bg-white p-10 rounded-[2.5rem] border border-slate-100 text-center hover:-translate-y-2 transition shadow-sm hover:shadow-xl group">
+                <div class="bg-slate-50 w-20 h-20 rounded-3xl flex items-center justify-center mx-auto mb-8 group-hover:bg-emerald-600 transition">
+                    <i data-lucide="mouse-pointer-2" class="w-10 h-10 text-emerald-600 group-hover:text-white transition rotate-45"></i>
+                </div>
+                <h3 class="text-xl font-bold mb-4">Rodent Control</h3>
+                <p class="text-slate-500 text-sm leading-relaxed italic">Sistem pengendalian tikus terintegrasi untuk rumah dan area bisnis.</p>
+            </div>
+            <div class="bg-white p-10 rounded-[2.5rem] border border-slate-100 text-center hover:-translate-y-2 transition shadow-sm hover:shadow-xl group">
+                <div class="bg-slate-50 w-20 h-20 rounded-3xl flex items-center justify-center mx-auto mb-8 group-hover:bg-emerald-600 transition">
+                    <i data-lucide="wind" class="w-10 h-10 text-emerald-600 group-hover:text-white transition"></i>
+                </div>
+                <h3 class="text-xl font-bold mb-4">Fogging Nyamuk</h3>
+                <p class="text-slate-500 text-sm leading-relaxed italic">Pengasapan intensif untuk area luar ruangan memutus rantai demam berdarah.</p>
+            </div>
+        </div>
+    </main>
+
+    <main id="page-about" class="page-content py-20 px-6 max-w-7xl mx-auto">
+        <div class="grid lg:grid-cols-2 gap-16 items-center">
+            <img src="https://images.unsplash.com/photo-1521737604893-d14cc237f11d?q=80&w=1000&auto=format&fit=crop" class="rounded-[3rem] grayscale hover:grayscale-0 transition duration-1000 shadow-2xl h-[500px] object-cover" alt="Our Team">
+            <div class="space-y-6">
+                <h2 class="text-4xl font-black mb-6">Mitra Terpercaya Sejak 2010</h2>
+                <p class="text-slate-500 text-lg leading-relaxed">Kami bukan sekadar pembasmi hama. Kami adalah konsultan sanitasi Anda yang berfokus pada hasil jangka panjang dan keamanan ekosistem.</p>
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="bg-white p-6 rounded-3xl border border-slate-100">
+                        <i data-lucide="users" class="text-emerald-600 mb-2"></i>
+                        <h5 class="font-black text-2xl">200+</h5>
+                        <p class="text-xs font-bold text-slate-400 uppercase tracking-widest">Teknisi Ahli</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-3xl border border-slate-100">
+                        <i data-lucide="check-circle" class="text-emerald-600 mb-2"></i>
+                        <h5 class="font-black text-2xl">5K+</h5>
+                        <p class="text-xs font-bold text-slate-400 uppercase tracking-widest">Proyek Selesai</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <main id="page-branch" class="page-content py-20 px-6 max-w-7xl mx-auto text-center">
+        <h2 class="text-4xl font-black mb-12">Area Jangkauan Kami</h2>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+            <div class="p-8 bg-white rounded-3xl border border-slate-100 hover:bg-emerald-600 hover:text-white transition group shadow-sm">
+                <i data-lucide="map-pin" class="mx-auto mb-4 text-emerald-600 group-hover:text-white"></i>
+                <span class="font-bold">Jakarta</span>
+            </div>
+            <div class="p-8 bg-white rounded-3xl border border-slate-100 hover:bg-emerald-600 hover:text-white transition group shadow-sm">
+                <i data-lucide="map-pin" class="mx-auto mb-4 text-emerald-600 group-hover:text-white"></i>
+                <span class="font-bold">Bandung</span>
+            </div>
+            <div class="p-8 bg-white rounded-3xl border border-slate-100 hover:bg-emerald-600 hover:text-white transition group shadow-sm">
+                <i data-lucide="map-pin" class="mx-auto mb-4 text-emerald-600 group-hover:text-white"></i>
+                <span class="font-bold">Surabaya</span>
+            </div>
+            <div class="p-8 bg-white rounded-3xl border border-slate-100 hover:bg-emerald-600 hover:text-white transition group shadow-sm">
+                <i data-lucide="map-pin" class="mx-auto mb-4 text-emerald-600 group-hover:text-white"></i>
+                <span class="font-bold">Medan</span>
+            </div>
+        </div>
+    </main>
+
+    <main id="page-news" class="page-content py-20 px-6 max-w-7xl mx-auto">
+        <h2 class="text-4xl font-black mb-12">Berita & Edukasi</h2>
+        <div class="grid md:grid-cols-2 gap-12">
+            <div class="group cursor-pointer">
+                <div class="overflow-hidden rounded-[2.5rem] mb-6 shadow-lg">
+                    <img src="https://images.unsplash.com/photo-1595433707802-68267d83760a?q=80&w=800&auto=format&fit=crop" class="group-hover:scale-110 transition duration-700 h-64 w-full object-cover" alt="Blog 1">
+                </div>
+                <h3 class="text-xl font-black group-hover:text-emerald-600 transition">Cara Alami Mengusir Tikus dari Plafon Rumah</h3>
+                <p class="text-slate-400 text-sm mt-2">7 Mei 2026 • Tips Sanitasi</p>
+            </div>
+            <div class="group cursor-pointer">
+                <div class="overflow-hidden rounded-[2.5rem] mb-6 shadow-lg">
+                    <img src="https://images.unsplash.com/photo-1584622781564-1d9876a13d00?q=80&w=800&auto=format&fit=crop" class="group-hover:scale-110 transition duration-700 h-64 w-full object-cover" alt="Blog 2">
+                </div>
+                <h3 class="text-xl font-black group-hover:text-emerald-600 transition">Pentingnya Inspeksi Rayap Berkala untuk Aset Kayu</h3>
+                <p class="text-slate-400 text-sm mt-2">5 Mei 2026 • Edukasi Hama</p>
+            </div>
+        </div>
+    </main>
+
+    <main id="page-contact" class="page-content py-20 px-6 max-w-4xl mx-auto">
+        <div class="bg-white p-12 rounded-[3.5rem] shadow-2xl border border-slate-50">
+            <h2 class="text-3xl font-black text-center mb-8 uppercase tracking-tighter">Hubungi Kami Sekarang</h2>
+            <div class="grid gap-6">
+                <div class="grid md:grid-cols-2 gap-6">
+                    <input type="text" placeholder="Nama Anda" class="bg-slate-50 p-5 rounded-2xl outline-none focus:ring-2 focus:ring-emerald-500 transition border-none">
+                    <input type="email" placeholder="Email" class="bg-slate-50 p-5 rounded-2xl outline-none focus:ring-2 focus:ring-emerald-500 transition border-none">
+                </div>
+                <textarea rows="4" placeholder="Keluhan hama atau layanan yang dibutuhkan?" class="bg-slate-50 p-5 rounded-2xl outline-none focus:ring-2 focus:ring-emerald-500 transition border-none"></textarea>
+                <button class="bg-emerald-600 text-white font-black py-5 rounded-2xl hover:bg-emerald-700 transition shadow-xl uppercase tracking-widest">Kirim Permintaan</button>
+            </div>
+        </div>
+    </main>
+
+    <footer class="bg-white py-16 border-t border-slate-100">
+        <div class="max-w-7xl mx-auto px-6 text-center">
+            <div class="flex justify-center gap-6 mb-8">
+                <a href="#" class="p-3 bg-slate-100 rounded-full hover:bg-emerald-600 hover:text-white transition"><i data-lucide="instagram" class="w-5 h-5"></i></a>
+                <a href="#" class="p-3 bg-slate-100 rounded-full hover:bg-emerald-600 hover:text-white transition"><i data-lucide="facebook" class="w-5 h-5"></i></a>
+                <a href="#" class="p-3 bg-slate-100 rounded-full hover:bg-emerald-600 hover:text-white transition"><i data-lucide="twitter" class="w-5 h-5"></i></a>
+            </div>
+            <p class="text-slate-400 text-xs font-bold uppercase tracking-widest">&copy; 2026 FumiPro. All Rights Reserved.</p>
+        </div>
+    </footer>
+
+    <div id="mobile-menu" class="fixed inset-0 z-[60] bg-white translate-x-full transition-transform duration-500 flex flex-col p-8">
+        <div class="flex justify-between items-center mb-16">
+            <span class="text-2xl font-black italic">FUMIPRO</span>
+            <button id="close-menu"><i data-lucide="x" class="w-8 h-8"></i></button>
+        </div>
+        <nav class="flex flex-col gap-6">
+            <a href="javascript:void(0)" onclick="showPage('home')" class="mobile-nav-item text-3xl font-black p-4" data-page="home">Home</a>
+            <a href="javascript:void(0)" onclick="showPage('anti-rayap')" class="mobile-nav-item text-3xl font-black p-4" data-page="anti-rayap">Anti Rayap</a>
+            <a href="javascript:void(0)" onclick="showPage('pest-control')" class="mobile-nav-item text-3xl font-black p-4" data-page="pest-control">Pest Control</a>
+            <a href="javascript:void(0)" onclick="showPage('about')" class="mobile-nav-item text-3xl font-black p-4" data-page="about">About Us</a>
+            <a href="javascript:void(0)" onclick="showPage('branch')" class="mobile-nav-item text-3xl font-black p-4" data-page="branch">Branch</a>
+            <a href="javascript:void(0)" onclick="showPage('news')" class="mobile-nav-item text-3xl font-black p-4" data-page="news">News</a>
+        </nav>
     </div>
 
-    <section class="py-20 px-6 max-w-7xl mx-auto grid lg:grid-cols-2 gap-16 items-center">
-        <div>
-            <h1 class="text-5xl lg:text-7xl font-extrabold leading-[1.1] text-slate-900 mb-8">
-                Solusi Higienis Untuk <span class="text-emerald-600 underline decoration-emerald-200">Bisnis & Hunian.</span>
-            </h1>
-            <p class="text-lg text-slate-500 mb-10 leading-relaxed max-w-md">
-                Layanan pest control berbasis teknologi dengan standarisasi Fumida. Kami memastikan properti Anda bebas hama secara permanen.
-            </p>
-            <div class="flex flex-wrap gap-4">
-                <button class="bg-slate-900 text-white px-8 py-4 rounded-full font-bold hover:bg-emerald-600 transition-all shadow-xl">
-                    Konsultasi Sekarang
-                </button>
-            </div>
-        </div>
-        <div class="relative group">
-            <img src="https://images.unsplash.com/photo-1516550817367-635ef70197f3?auto=format&fit=crop&q=80&w=1000" 
-                 alt="Professional Service" 
-                 class="rounded-[2.5rem] shadow-2xl object-cover grayscale group-hover:grayscale-0 transition-all duration-700">
-        </div>
-    </section>
-
-    <section class="bg-white py-24 px-6">
-        <div class="max-w-7xl mx-auto">
-            <div class="mb-16">
-                <h2 class="text-3xl font-extrabold mb-4">Layanan Utama</h2>
-                <div class="h-1 w-20 bg-emerald-600"></div>
-            </div>
-
-            <div class="grid md:grid-cols-3 gap-10">
-                <div class="group">
-                    <div class="w-12 h-12 mb-6 text-emerald-600 group-hover:scale-110 transition-transform">
-                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" class="w-full h-full"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path></svg>
-                    </div>
-                    <h3 class="text-xl font-bold mb-3">Layanan Anti Rayap</h3>
-                    <p class="text-slate-500 text-sm leading-relaxed mb-4">Perlindungan struktur kayu dan beton dari investasi rayap jangka panjang dengan garansi sertifikat.</p>
-                    <a href="#" class="text-xs font-black uppercase tracking-tighter text-emerald-600">Detail Layanan →</a>
-                </div>
-
-                <div class="group">
-                    <div class="w-12 h-12 mb-6 text-emerald-600 group-hover:scale-110 transition-transform">
-                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" class="w-full h-full"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>
-                    </div>
-                    <h3 class="text-xl font-bold mb-3">General Pest Control</h3>
-                    <p class="text-slate-500 text-sm leading-relaxed mb-4">Pembasmian hama umum seperti kecoa, semut, tikus, dan lalat menggunakan metode baiting & spraying.</p>
-                    <a href="#" class="text-xs font-black uppercase tracking-tighter text-emerald-600">Detail Layanan →</a>
-                </div>
-
-                <div class="group">
-                    <div class="w-12 h-12 mb-6 text-emerald-600 group-hover:scale-110 transition-transform">
-                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" class="w-full h-full"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
-                    </div>
-                    <h3 class="text-xl font-bold mb-3">Sektor Komersial</h3>
-                    <p class="text-slate-500 text-sm leading-relaxed mb-4">Solusi khusus untuk restoran, hotel, dan pabrik guna memenuhi standar Audit sanitasi & HACCP.</p>
-                    <a href="#" class="text-xs font-black uppercase tracking-tighter text-emerald-600">Detail Layanan →</a>
-                </div>
-            </div>
-        </div>
-    </section>
-
     <script>
-        const menuBtn = document.getElementById('menu-btn');
-        const closeBtn = document.getElementById('close-btn');
+        // Inisialisasi Icon Lucide
+        lucide.createIcons();
+
+        function showPage(pageId) {
+            // Sembunyikan semua konten
+            document.querySelectorAll('.page-content').forEach(p => p.classList.remove('active-page'));
+            
+            // Tampilkan halaman terpilih
+            document.getElementById('page-' + pageId).classList.add('active-page');
+            
+            // Update Active State Desktop
+            document.querySelectorAll('.nav-item').forEach(nav => {
+                nav.classList.toggle('desktop-nav-active', nav.getAttribute('data-page') === pageId);
+            });
+
+            // Update Active State Mobile
+            document.querySelectorAll('.mobile-nav-item').forEach(nav => {
+                nav.classList.toggle('nav-link-active', nav.getAttribute('data-page') === pageId);
+            });
+
+            // Tutup menu mobile jika terbuka
+            document.getElementById('mobile-menu').classList.add('translate-x-full');
+            document.body.style.overflow = 'auto';
+
+            window.scrollTo(0, 0);
+        }
+
+        // Hamburger Logic
+        const menuToggle = document.getElementById('menu-toggle');
+        const closeMenu = document.getElementById('close-menu');
         const mobileMenu = document.getElementById('mobile-menu');
 
-        menuBtn.addEventListener('click', () => {
+        menuToggle.onclick = () => {
             mobileMenu.classList.remove('translate-x-full');
-            document.body.classList.add('mobile-menu-open');
-        });
-
-        closeBtn.addEventListener('click', () => {
+            document.body.style.overflow = 'hidden';
+        };
+        closeMenu.onclick = () => {
             mobileMenu.classList.add('translate-x-full');
-            document.body.classList.remove('mobile-menu-open');
-        });
+            document.body.style.overflow = 'auto';
+        };
+
+        // Set Home sebagai active pertama kali
+        showPage('home');
     </script>
 </body>
 </html>

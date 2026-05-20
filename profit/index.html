@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport"/>
+    <title>TradeCalc Mobile</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet"/>
+    <script src="https://unpkg.com/feather-icons"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        app: {
+                            bg: '#0F1115',
+                            card: '#1B1F26',
+                            border: '#2D333E',
+                            accent: '#3D5AFE',
+                            success: '#00E676',
+                            danger: '#FF5252'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Plus Jakarta Sans', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { background-color: #0F1115; color: #F8FAFC; -webkit-tap-highlight-color: transparent; }
+        .tab-active { background: #3D5AFE; color: white; box-shadow: 0 4px 12px rgba(61, 90, 254, 0.3); }
+        input[type="number"] { font-size: 16px !important; } /* Mencegah auto-zoom di iOS */
+        .glass-effect { background: rgba(27, 31, 38, 0.8); backdrop-filter: blur(10px); }
+    </style>
+</head>
+<body class="antialiased font-sans pb-32">
+
+    <!-- Mobile Header -->
+    <nav class="sticky top-0 z-50 glass-effect border-b border-app-border px-6 py-4 flex justify-between items-center">
+        <div>
+            <h1 class="text-lg font-bold">Trade<span class="text-app-accent">Calc</span></h1>
+            <p class="text-[10px] text-gray-500 font-bold uppercase tracking-widest">Mobile Edition</p>
+        </div>
+        <div class="flex bg-black/40 p-1 rounded-full border border-app-border">
+            <button onclick="setMode('saham')" id="btn-saham" class="px-4 py-1.5 text-[11px] font-bold rounded-full transition-all tab-active uppercase">Saham</button>
+            <button onclick="setMode('crypto')" id="btn-crypto" class="px-4 py-1.5 text-[11px] font-bold rounded-full transition-all text-gray-500 uppercase">Crypto</button>
+        </div>
+    </nav>
+
+    <main class="px-5 py-6 space-y-6 max-w-md mx-auto">
+        
+        <!-- Result Hero -->
+        <section class="bg-gradient-to-br from-app-card to-[#252a35] border border-app-border rounded-[2rem] p-6 text-center shadow-2xl overflow-hidden relative">
+            <div id="hero-glow" class="absolute -top-10 -left-10 w-32 h-32 bg-app-accent/10 blur-[50px] rounded-full"></div>
+            <p id="label-hero" class="text-xs font-bold text-gray-400 uppercase tracking-widest mb-2">Estimasi Profit Bersih</p>
+            <h2 id="val-hero" class="text-4xl font-extrabold font-mono tracking-tighter mb-3">Rp 0</h2>
+            <div class="inline-flex items-center gap-2 px-3 py-1 bg-white/5 border border-white/10 rounded-full">
+                <span id="val-percent" class="text-sm font-bold font-mono text-gray-400">0.00%</span>
+            </div>
+        </section>
+
+        <!-- Stats Row -->
+        <div class="grid grid-cols-2 gap-3">
+            <div class="bg-app-card border border-app-border rounded-2xl p-4">
+                <p class="text-[10px] text-gray-500 font-bold uppercase mb-1">Modal Out</p>
+                <p id="val-modal" class="text-sm font-mono font-bold">Rp 0</p>
+            </div>
+            <div class="bg-app-card border border-app-border rounded-2xl p-4">
+                <p class="text-[10px] text-gray-500 font-bold uppercase mb-1">Saldo In</p>
+                <p id="val-saldo" class="text-sm font-mono font-bold">Rp 0</p>
+            </div>
+        </div>
+
+        <!-- Input Section -->
+        <section class="space-y-4">
+            <h3 class="text-xs font-bold text-gray-500 uppercase tracking-[0.2em] ml-1">Input Parameter</h3>
+            
+            <div class="space-y-3">
+                <div class="bg-app-card border border-app-border rounded-2xl p-4 focus-within:border-app-accent transition-colors">
+                    <label class="text-[10px] font-bold text-gray-500 uppercase block mb-2">Harga Beli</label>
+                    <div class="flex items-center gap-3">
+                        <span id="sym-1" class="text-app-accent font-bold font-mono">Rp</span>
+                        <input type="number" id="in-beli" class="bg-transparent w-full focus:outline-none font-mono text-xl" placeholder="0">
+                    </div>
+                </div>
+
+                <div class="bg-app-card border border-app-border rounded-2xl p-4 focus-within:border-app-accent transition-colors">
+                    <label class="text-[10px] font-bold text-gray-500 uppercase block mb-2">Harga Jual Target</label>
+                    <div class="flex items-center gap-3">
+                        <span id="sym-2" class="text-app-accent font-bold font-mono">Rp</span>
+                        <input type="number" id="in-jual" class="bg-transparent w-full focus:outline-none font-mono text-xl" placeholder="0">
+                    </div>
+                </div>
+
+                <div class="bg-app-card border border-app-border rounded-2xl p-4 focus-within:border-app-accent transition-colors">
+                    <label id="lbl-vol" class="text-[10px] font-bold text-gray-500 uppercase block mb-2">Jumlah Lot</label>
+                    <div class="flex items-center gap-3">
+                        <input type="number" id="in-vol" class="bg-transparent w-full focus:outline-none font-mono text-xl" placeholder="0">
+                        <span id="unit-suffix" class="text-gray-600 text-xs font-bold">LOT</span>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-3">
+                    <div class="bg-app-card border border-app-border rounded-2xl p-4">
+                        <label class="text-[10px] font-bold text-gray-500 uppercase block mb-1">Fee Beli (%)</label>
+                        <input type="number" id="in-fee-beli" class="bg-transparent w-full focus:outline-none font-mono text-lg" value="0.15" step="0.01">
+                    </div>
+                    <div class="bg-app-card border border-app-border rounded-2xl p-4">
+                        <label class="text-[10px] font-bold text-gray-500 uppercase block mb-1">Fee Jual (%)</label>
+                        <input type="number" id="in-fee-jual" class="bg-transparent w-full focus:outline-none font-mono text-lg" value="0.25" step="0.01">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Bottom Action Button (Sticky for Mobile) -->
+    <div class="fixed bottom-0 left-0 right-0 p-6 glass-effect border-t border-app-border flex justify-center">
+        <button onclick="hitung()" class="w-full max-w-md bg-app-accent hover:scale-[1.02] active:scale-[0.98] text-white font-bold py-4 rounded-2xl shadow-xl shadow-app-accent/20 transition-all flex items-center justify-center gap-3 uppercase tracking-widest text-sm">
+            <i data-feather="calculate" class="w-5 h-5"></i> Kalkulasi Profit
+        </button>
+    </div>
+
+<script>
+    feather.replace();
+
+    let mode = 'saham';
+
+    function setMode(newMode) {
+        mode = newMode;
+        const bSaham = document.getElementById('btn-saham');
+        const bCrypto = document.getElementById('btn-crypto');
+        const lVol = document.getElementById('lbl-vol');
+        const uSuf = document.getElementById('unit-suffix');
+        const feeB = document.getElementById('in-fee-beli');
+        const feeJ = document.getElementById('in-fee-jual');
+
+        if(mode === 'saham') {
+            bSaham.className = "px-4 py-1.5 text-[11px] font-bold rounded-full transition-all tab-active uppercase";
+            bCrypto.className = "px-4 py-1.5 text-[11px] font-bold rounded-full transition-all text-gray-500 uppercase";
+            lVol.innerText = "Jumlah Lot";
+            uSuf.innerText = "LOT";
+            feeB.value = "0.15";
+            feeJ.value = "0.25";
+        } else {
+            bCrypto.className = "px-4 py-1.5 text-[11px] font-bold rounded-full transition-all tab-active uppercase";
+            bSaham.className = "px-4 py-1.5 text-[11px] font-bold rounded-full transition-all text-gray-500 uppercase";
+            lVol.innerText = "Kuantitas Unit";
+            uSuf.innerText = "UNIT";
+            feeB.value = "0.1";
+            feeJ.value = "0.1";
+        }
+        hitung();
+    }
+
+    function formatIDR(val) {
+        return new Intl.NumberFormat('id-ID', {
+            style: 'currency',
+            currency: 'IDR',
+            minimumFractionDigits: mode === 'crypto' ? 2 : 0,
+            maximumFractionDigits: 8
+        }).format(val).replace("Rp", "Rp ");
+    }
+
+    function hitung() {
+        const beli = parseFloat(document.getElementById('in-beli').value) || 0;
+        const jual = parseFloat(document.getElementById('in-jual').value) || 0;
+        const vol = parseFloat(document.getElementById('in-vol').value) || 0;
+        const fBuy = (parseFloat(document.getElementById('in-fee-beli').value) || 0) / 100;
+        const fSell = (parseFloat(document.getElementById('in-fee-jual').value) || 0) / 100;
+
+        if(!beli || !jual || !vol) return;
+
+        const totalUnit = mode === 'saham' ? vol * 100 : vol;
+        
+        const grossBeli = beli * totalUnit;
+        const netBeli = grossBeli + (grossBeli * fBuy);
+        
+        const grossJual = jual * totalUnit;
+        const netJual = grossJual - (grossJual * fSell);
+        
+        const profit = netJual - netBeli;
+        const percent = (profit / netBeli) * 100;
+
+        // UI Updates
+        const hero = document.getElementById('val-hero');
+        const pct = document.getElementById('val-percent');
+        const lbl = document.getElementById('label-hero');
+
+        document.getElementById('val-modal').innerText = formatIDR(netBeli);
+        document.getElementById('val-saldo').innerText = formatIDR(netJual);
+        
+        hero.innerText = (profit >= 0 ? '+' : '') + formatIDR(profit);
+        pct.innerText = (profit >= 0 ? '+' : '') + percent.toFixed(2) + '%';
+        
+        if(profit >= 0) {
+            hero.className = "text-4xl font-extrabold font-mono tracking-tighter mb-3 text-app-success";
+            pct.className = "text-sm font-bold font-mono text-app-success";
+            lbl.innerText = "Estimasi Profit Bersih";
+        } else {
+            hero.className = "text-4xl font-extrabold font-mono tracking-tighter mb-3 text-app-danger";
+            pct.className = "text-sm font-bold font-mono text-app-danger";
+            lbl.innerText = "Estimasi Kerugian Bersih";
+        }
+    }
+
+    // Auto-hit on typing
+    document.querySelectorAll('input').forEach(i => i.addEventListener('input', hitung));
+</script>
+</body>
+</html>
